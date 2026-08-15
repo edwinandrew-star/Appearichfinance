@@ -1,630 +1,1327 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Appearich Finance</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        gold: {
-                            DEFAULT: '#D4AF37',
-                            light: '#F3E5AB',
-                            dark: '#AA8C2C',
-                            muted: 'rgba(212, 175, 55, 0.15)'
-                        },
-                        dark: {
-                            bg: '#0A0A0A',
-                            card: '#141414',
-                            border: '#262626',
-                            hover: '#1F1F1F'
-                        }
-                    }
-                }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appearich Finance Command Center</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Space Grotesk"', 'sans-serif']
+          },
+          colors: {
+            brand: {
+              bg: '#FFFFFF',
+              surface: '#F8F9FA',
+              card: '#FFFFFF',
+              black: '#0A0A0C',
+              muted: '#6C727F',
+              border: '#E5E7EB',
+              gold: '#D4AF37',
+              goldLight: '#FFFDF0',
+              goldDark: '#997B15',
+              success: '#10B981',
+              danger: '#EF4444'
             }
+          },
+          boxShadow: {
+            'premium': '0 10px 30px -5px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02)',
+            'gold-glow': '0 0 20px rgba(212, 175, 55, 0.25)',
+            'card-hover': '0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.03)'
+          }
         }
-    </script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    </style>
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #FFFFFF;
+      color: #0A0A0C;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #B8860B 0%, #D4AF37 50%, #AA771C 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .gold-gradient-bg {
+      background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+    }
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .accordion-content.expanded {
+      max-height: 1200px;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
 </head>
-<body class="bg-dark-bg text-gray-100 min-h-screen flex flex-col antialiased selection:bg-gold/30 selection:text-gold">
+<body class="bg-brand-bg min-h-screen pb-28 text-brand-black">
 
-    <!-- TOP HEADER -->
-    <header class="sticky top-0 z-50 bg-dark-bg/80 backdrop-blur-md border-b border-dark-border px-4 py-3 flex items-center justify-between">
-        <div class="flex items-center space-x-3">
-            <div class="w-9 h-9 rounded-xl bg-gold-muted border border-gold/30 flex items-center justify-center text-gold">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            </div>
-            <div>
-                <h1 class="font-bold tracking-wider text-sm text-gold">APPEARICH FINANCE</h1>
-                <p class="text-xs text-gray-400">Build. Track. Grow.</p>
-            </div>
+  <!-- TOP APP HEADER -->
+  <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100 px-4 lg:px-8 py-4">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-2xl bg-brand-black flex items-center justify-center text-brand-gold shadow-gold-glow">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
         </div>
-        <div class="flex items-center space-x-2">
-            <button onclick="resetAllData()" class="text-xs text-gray-500 hover:text-red-400 border border-dark-border px-2 py-1 rounded-lg transition">Reset Data</button>
+        <div>
+          <h1 class="font-display font-bold text-xl tracking-tight text-brand-black">APPEARICH</h1>
+          <p class="text-[10px] font-bold tracking-widest text-brand-gold uppercase">Track Your Money. Build Your Business. See Your Growth.</p>
         </div>
-    </header>
-
-    <!-- MAIN VIEW CONTAINER -->
-    <main class="flex-1 pb-24 max-w-md mx-auto w-full px-4 pt-4">
-
-        <!-- VIEW: HOME -->
-        <section id="view-home" class="space-y-4">
-            <!-- Hero Banner -->
-            <div class="relative rounded-2xl overflow-hidden border border-dark-border h-44 shadow-lg group">
-                <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&q=80&w=1000" alt="Finance Hero" class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-dark-bg via-dark-bg/40 to-transparent flex flex-col justify-end p-5">
-                    <span class="text-xs uppercase tracking-widest text-gold font-semibold">Welcome Back</span>
-                    <h2 class="text-xl font-bold text-white mt-0.5">Your Money at a Glance</h2>
-                    <p class="text-xs text-gray-300 mt-1">Real-time overview of your wealth journey.</p>
-                </div>
-            </div>
-
-            <!-- Financial Summary Compact Cards -->
-            <div class="grid grid-cols-2 gap-3">
-                <div onclick="switchTab('progress')" class="bg-dark-card border border-dark-border rounded-2xl p-4 cursor-pointer hover:border-gold/50 transition">
-                    <div class="flex items-center justify-between text-gray-400 text-xs mb-1">
-                        <span>Total Income</span>
-                        <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"/></svg>
-                    </div>
-                    <div id="home-total-income" class="text-lg font-bold text-white">0 Sh</div>
-                </div>
-                <div class="bg-dark-card border border-dark-border rounded-2xl p-4">
-                    <div class="flex items-center justify-between text-gray-400 text-xs mb-1">
-                        <span>GOD (10%)</span>
-                        <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707"/></svg>
-                    </div>
-                    <div id="home-total-god" class="text-lg font-bold text-gold">0 Sh</div>
-                </div>
-                <div onclick="switchTab('accounts')" class="bg-dark-card border border-dark-border rounded-2xl p-4 cursor-pointer hover:border-gold/50 transition">
-                    <div class="flex items-center justify-between text-gray-400 text-xs mb-1">
-                        <span>Total Money</span>
-                        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-                    </div>
-                    <div id="home-total-money" class="text-lg font-bold text-white">0 Sh</div>
-                </div>
-                <div onclick="switchTab('budget')" class="bg-dark-card border border-dark-border rounded-2xl p-4 cursor-pointer hover:border-gold/50 transition">
-                    <div class="flex items-center justify-between text-gray-400 text-xs mb-1">
-                        <span>Available Budget</span>
-                        <svg class="w-4 h-4 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/></svg>
-                    </div>
-                    <div id="home-available-budget" class="text-lg font-bold text-white">0 Sh</div>
-                </div>
-            </div>
-
-            <!-- Quick Actions -->
-            <div class="bg-dark-card border border-dark-border rounded-2xl p-4 space-y-3">
-                <h3 class="text-xs uppercase tracking-wider text-gray-400 font-semibold">Quick Actions</h3>
-                <div class="grid grid-cols-4 gap-2 text-center">
-                    <button onclick="openModal('income')" class="flex flex-col items-center justify-center p-3 rounded-xl bg-dark-bg border border-dark-border hover:border-gold/50 transition">
-                        <svg class="w-5 h-5 text-gold mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                        <span class="text-[10px] font-medium text-gray-300">Income</span>
-                    </button>
-                    <button onclick="addBoom()" class="flex flex-col items-center justify-center p-3 rounded-xl bg-dark-bg border border-dark-border hover:border-gold/50 transition">
-                        <svg class="w-5 h-5 text-gold mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                        <span class="text-[10px] font-medium text-gray-300">BOOM</span>
-                    </button>
-                    <button onclick="openModal('sale')" class="flex flex-col items-center justify-center p-3 rounded-xl bg-dark-bg border border-dark-border hover:border-gold/50 transition">
-                        <svg class="w-5 h-5 text-gold mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-                        <span class="text-[10px] font-medium text-gray-300">Sale</span>
-                    </button>
-                    <button onclick="openModal('expense')" class="flex flex-col items-center justify-center p-3 rounded-xl bg-dark-bg border border-dark-border hover:border-gold/50 transition">
-                        <svg class="w-5 h-5 text-gold mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>
-                        <span class="text-[10px] font-medium text-gray-300">Expense</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Detailed Cards Summary on Home -->
-            <div class="space-y-3">
-                <h3 class="text-xs uppercase tracking-wider text-gray-400 font-semibold">Core Modules</h3>
-                
-                <!-- Investment Card Summary -->
-                <div onclick="switchTab('budget')" class="bg-dark-card border border-dark-border rounded-2xl p-4 flex items-center justify-between cursor-pointer hover:border-gold/50 transition">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-xl bg-gold-muted flex items-center justify-center text-gold">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-                        </div>
-                        <div>
-                            <h4 class="text-sm font-bold text-white">Investment Tracker</h4>
-                            <p id="home-inv-summary" class="text-xs text-gray-400">Total: 0 Sh • Gain: 0 Sh</p>
-                        </div>
-                    </div>
-                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                </div>
-
-                <!-- Appearich Business Summary -->
-                <div onclick="switchTab('budget')" class="bg-dark-card border border-dark-border rounded-2xl p-4 flex items-center justify-between cursor-pointer hover:border-gold/50 transition">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-xl bg-gold-muted flex items-center justify-center text-gold">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-                        </div>
-                        <div>
-                            <h4 class="text-sm font-bold text-white">Appearich Business</h4>
-                            <p id="home-bus-summary" class="text-xs text-gray-400">Sales: 0 Sh • Profit: 0 Sh</p>
-                        </div>
-                    </div>
-                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                </div>
-            </div>
-        </section>
-
-        <!-- VIEW: BUDGET & MODULES -->
-        <section id="view-budget" class="space-y-4 hidden">
-            <h2 class="text-lg font-bold text-white">Budget & Operations</h2>
-
-            <!-- Income Manager Card -->
-            <div class="bg-dark-card border border-dark-border rounded-2xl p-4 space-y-3">
-                <div class="flex justify-between items-center">
-                    <h3 class="text-sm font-bold text-gold flex items-center space-x-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        <span>Income Sources</span>
-                    </h3>
-                    <button onclick="openModal('income')" class="text-xs text-gold border border-gold/30 px-2 py-1 rounded-lg">+ Add Income</button>
-                </div>
-                <div class="space-y-2 text-xs">
-                    <div class="flex justify-between p-2 bg-dark-bg rounded-lg border border-dark-border">
-                        <span class="text-gray-300">Appearich Income</span>
-                        <span id="inc-appearich-val" class="font-bold text-white">0 Sh</span>
-                    </div>
-                    <div class="flex justify-between p-2 bg-dark-bg rounded-lg border border-dark-border">
-                        <span class="text-gray-300">BOOM Income (<span id="boom-count">0</span> added)</span>
-                        <span id="inc-boom-val" class="font-bold text-white">0 Sh</span>
-                    </div>
-                    <div class="flex justify-between p-2 bg-dark-bg rounded-lg border border-dark-border">
-                        <span class="text-gray-300">Other Income</span>
-                        <span id="inc-other-val" class="font-bold text-white">0 Sh</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Utilities Expandable Card -->
-            <div class="bg-dark-card border border-dark-border rounded-2xl p-4 space-y-3">
-                <div onclick="toggleUtilities()" class="flex justify-between items-center cursor-pointer">
-                    <h3 class="text-sm font-bold text-white flex items-center space-x-2">
-                        <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-                        <span>UTILITIES & EXPENSES</span>
-                    </h3>
-                    <div class="flex items-center space-x-2 text-xs text-gray-400">
-                        <span id="util-summary-text">25% Allocated</span>
-                        <svg id="util-chevron" class="w-4 h-4 transition transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                    </div>
-                </div>
-                <div id="util-dropdown" class="hidden space-y-2 pt-2 border-t border-dark-border text-xs">
-                    <div class="p-2 bg-dark-bg rounded-lg flex justify-between"><span class="text-gray-300">Internet</span><span id="util-internet" class="font-bold text-white">0 Sh</span></div>
-                    <div class="p-2 bg-dark-bg rounded-lg flex justify-between"><span class="text-gray-300">Umeme</span><span id="util-umeme" class="font-bold text-white">0 Sh</span></div>
-                    <div class="p-2 bg-dark-bg rounded-lg flex justify-between"><span class="text-gray-300">Taka</span><span id="util-taka" class="font-bold text-white">0 Sh</span></div>
-                    <div class="p-2 bg-dark-bg rounded-lg flex justify-between"><span class="text-gray-300">Transport</span><span id="util-transport" class="font-bold text-white">0 Sh</span></div>
-                </div>
-            </div>
-
-            <!-- Investment Tracker Card -->
-            <div class="bg-dark-card border border-dark-border rounded-2xl p-4 space-y-3">
-                <div class="flex justify-between items-center">
-                    <h3 class="text-sm font-bold text-white flex items-center space-x-2">
-                        <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-                        <span>Investment Tracker</span>
-                    </h3>
-                    <button onclick="openModal('investment')" class="text-xs text-gold border border-gold/30 px-2 py-1 rounded-lg">Update Value</button>
-                </div>
-                <div class="grid grid-cols-2 gap-2 text-xs">
-                    <div class="p-2.5 bg-dark-bg rounded-xl border border-dark-border"><span class="text-gray-400 block mb-1">Total Invested</span><span id="inv-total" class="font-bold text-white text-sm">0 Sh</span></div>
-                    <div class="p-2.5 bg-dark-bg rounded-xl border border-dark-border"><span class="text-gray-400 block mb-1">Current Value</span><span id="inv-current" class="font-bold text-white text-sm">0 Sh</span></div>
-                    <div class="p-2.5 bg-dark-bg rounded-xl border border-dark-border"><span class="text-gray-400 block mb-1">Gain / Loss</span><span id="inv-gain" class="font-bold text-emerald-400 text-sm">0 Sh</span></div>
-                    <div class="p-2.5 bg-dark-bg rounded-xl border border-dark-border"><span class="text-gray-400 block mb-1">Return %</span><span id="inv-return" class="font-bold text-emerald-400 text-sm">0%</span></div>
-                </div>
-            </div>
-
-            <!-- Appearich Business Card -->
-            <div class="bg-dark-card border border-dark-border rounded-2xl p-4 space-y-3">
-                <div class="flex justify-between items-center">
-                    <h3 class="text-sm font-bold text-white flex items-center space-x-2">
-                        <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-                        <span>Appearich Business</span>
-                    </h3>
-                    <button onclick="openModal('sale')" class="text-xs text-gold border border-gold/30 px-2 py-1 rounded-lg">+ Add Sale</button>
-                </div>
-                <div class="grid grid-cols-2 gap-2 text-xs">
-                    <div class="p-2.5 bg-dark-bg rounded-xl border border-dark-border"><span class="text-gray-400 block mb-1">Total Sales</span><span id="bus-sales" class="font-bold text-white text-sm">0 Sh</span></div>
-                    <div class="p-2.5 bg-dark-bg rounded-xl border border-dark-border"><span class="text-gray-400 block mb-1">Total Profit</span><span id="bus-profit" class="font-bold text-emerald-400 text-sm">0 Sh</span></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- VIEW: ACCOUNTS -->
-        <section id="view-accounts" class="space-y-4 hidden">
-            <h2 class="text-lg font-bold text-white">Accounts & Money Flow</h2>
-            
-            <div class="bg-gradient-to-r from-gold/20 to-dark-card border border-gold/30 rounded-2xl p-4 text-center">
-                <span class="text-xs text-gold uppercase tracking-wider block mb-1">Total Money across Accounts</span>
-                <div id="acc-total-money" class="text-2xl font-bold text-white">0 Sh</div>
-            </div>
-
-            <div class="space-y-2.5" id="accounts-list-container">
-                <!-- Rendered dynamically -->
-            </div>
-
-            <!-- Transfer Section -->
-            <div class="bg-dark-card border border-dark-border rounded-2xl p-4 space-y-3">
-                <h3 class="text-xs uppercase tracking-wider text-gray-400 font-semibold">Account Transfer</h3>
-                <div class="grid grid-cols-2 gap-2">
-                    <select id="transfer-from" class="bg-dark-bg border border-dark-border rounded-xl px-3 py-2 text-xs text-gray-200 outline-none">
-                        <option value="CRDB">CRDB</option>
-                        <option value="SELCOM">SELCOM</option>
-                        <option value="MPESA">MPESA</option>
-                        <option value="LIPA NAMBA">LIPA NAMBA</option>
-                        <option value="CASH">CASH</option>
-                    </select>
-                    <select id="transfer-to" class="bg-dark-bg border border-dark-border rounded-xl px-3 py-2 text-xs text-gray-200 outline-none">
-                        <option value="MPESA">MPESA</option>
-                        <option value="CRDB">CRDB</option>
-                        <option value="SELCOM">SELCOM</option>
-                        <option value="LIPA NAMBA">LIPA NAMBA</option>
-                        <option value="CASH">CASH</option>
-                    </select>
-                </div>
-                <input type="number" id="transfer-amount" placeholder="Amount (Sh)" class="w-full bg-dark-bg border border-dark-border rounded-xl px-3 py-2 text-xs text-gray-200 outline-none">
-                <button onclick="executeTransfer()" class="w-full py-2 bg-gold text-dark-bg font-bold text-xs rounded-xl hover:bg-gold-light transition">Transfer Funds</button>
-            </div>
-        </section>
-
-        <!-- VIEW: PROGRESS -->
-        <section id="view-progress" class="space-y-4 hidden">
-            <h2 class="text-lg font-bold text-white">Progress Center</h2>
-
-            <!-- Overall Financial Progress Score -->
-            <div class="bg-dark-card border border-dark-border rounded-2xl p-5 text-center space-y-3">
-                <span class="text-xs text-gray-400 uppercase tracking-wider">Financial Progress Score</span>
-                <div class="relative w-28 h-28 mx-auto flex items-center justify-center rounded-full border-4 border-gold/20">
-                    <div id="progress-score-text" class="text-2xl font-bold text-white">0%</div>
-                </div>
-                <p class="text-xs text-gray-400">Calculated from income, investment growth & business performance.</p>
-            </div>
-
-            <!-- Chart Section -->
-            <div class="bg-dark-card border border-dark-border rounded-2xl p-4 space-y-3">
-                <h3 class="text-xs uppercase tracking-wider text-gray-400 font-semibold">Performance Analytics</h3>
-                <div class="h-48 relative">
-                    <canvas id="progressChart"></canvas>
-                </div>
-            </div>
-        </section>
-
-        <!-- VIEW: PROFILE -->
-        <section id="view-profile" class="space-y-4 hidden">
-            <h2 class="text-lg font-bold text-white">Profile & Settings</h2>
-            <div class="bg-dark-card border border-dark-border rounded-2xl p-4 space-y-3 text-center">
-                <div class="w-16 h-16 rounded-full bg-gold-muted border border-gold/30 mx-auto flex items-center justify-center text-gold text-xl font-bold">AF</div>
-                <div>
-                    <h3 class="text-sm font-bold text-white">Appearich User</h3>
-                    <p class="text-xs text-gray-400">Premium Personal & Business Tier</p>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- BOTTOM NAVIGATION -->
-    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-dark-bg/90 backdrop-blur-md border-t border-dark-border px-4 py-2 flex justify-between items-center z-40">
-        <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center space-y-1 text-gold flex-1 py-1">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-            <span class="text-[10px] font-medium">Home</span>
+      </div>
+      <div class="flex items-center space-x-3">
+        <button onclick="openModal('addTransactionModal')" class="hidden sm:flex items-center space-x-2 bg-brand-black text-white px-4 py-2.5 rounded-xl font-medium text-sm hover:bg-gray-800 transition shadow-sm">
+          <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          <span>+ Expense</span>
         </button>
-        <button onclick="switchTab('budget')" id="nav-budget" class="flex flex-col items-center space-y-1 text-gray-400 flex-1 py-1">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/></svg>
-            <span class="text-[10px] font-medium">Budget</span>
-        </button>
-        <button onclick="switchTab('accounts')" id="nav-accounts" class="flex flex-col items-center space-y-1 text-gray-400 flex-1 py-1">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-            <span class="text-[10px] font-medium">Accounts</span>
-        </button>
-        <button onclick="switchTab('progress')" id="nav-progress" class="flex flex-col items-center space-y-1 text-gray-400 flex-1 py-1">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-            <span class="text-[10px] font-medium">Progress</span>
-        </button>
-        <button onclick="switchTab('profile')" id="nav-profile" class="flex flex-col items-center space-y-1 text-gray-400 flex-1 py-1">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-            <span class="text-[10px] font-medium">Profile</span>
-        </button>
-    </nav>
-
-    <!-- UNIVERSAL MODAL -->
-    <div id="modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-dark-card border border-dark-border w-full max-w-sm rounded-2xl p-5 space-y-4">
-            <div class="flex justify-between items-center">
-                <h3 id="modal-title" class="text-sm font-bold text-white">Modal Action</h3>
-                <button onclick="closeModal()" class="text-gray-400 hover:text-white">✕</button>
-            </div>
-            <div id="modal-body" class="space-y-3">
-                <!-- Dynamic form fields -->
-            </div>
-            <button onclick="submitModal()" class="w-full py-2.5 bg-gold text-dark-bg font-bold text-xs rounded-xl hover:bg-gold-light transition">Confirm</button>
+        <div class="w-10 h-10 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center font-bold text-xs text-brand-black">
+          TZ
         </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-6xl mx-auto px-4 lg:px-8 pt-6 space-y-8">
+
+    <!-- 1. HERO HOME SECTION (Only on Dashboard) -->
+    <div id="hero-section" class="relative rounded-3xl overflow-hidden bg-brand-black text-white shadow-2xl p-6 lg:p-10">
+      <!-- Background Elegant Financial Image with Dark Overlay -->
+      <div class="absolute inset-0 opacity-25 mix-blend-overlay bg-cover bg-center pointer-events-none" style="background-image: url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1600&auto=format&fit=crop');"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-brand-black via-brand-black/90 to-transparent"></div>
+      
+      <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div class="space-y-2 max-w-lg">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-gold/20 text-brand-gold text-xs font-bold tracking-wider">
+            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            <span>APPEARICH FINANCE</span>
+          </div>
+          <h2 class="font-display font-extrabold text-3xl lg:text-4xl tracking-tight">Build. Track. Grow.</h2>
+          <p class="text-xs lg:text-sm text-gray-300">Your complete wealth ecosystem at a glance. Intelligent automated 10% GOD allocation and robust multi-account management.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+          <button onclick="switchTab('budget')" class="px-5 py-3 rounded-xl bg-brand-gold text-brand-black font-bold text-xs uppercase tracking-wider hover:bg-yellow-400 transition shadow-gold-glow text-center">
+            View Budget Structure
+          </button>
+          <button onclick="switchTab('progress')" class="px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider transition border border-white/10 text-center">
+            See Financial Growth
+          </button>
+        </div>
+      </div>
     </div>
 
-    <!-- SCRIPT LOGIC -->
-    <script>
-        // State Management (Zero Starting Balance)
-        let state = {
-            appearichIncome: 0,
-            boomCount: 0,
-            boomTotal: 0,
-            otherIncome: 0,
-            totalIncome: 0,
-            totalGod: 0,
-            availableBudget: 0,
-            accounts: { CRDB: 0, SELCOM: 0, MPESA: 0, 'LIPA NAMBA': 0, CASH: 0 },
-            investment: { total: 0, current: 0 },
-            business: { sales: 0, profit: 0 },
-            utilities: { internet: 0, umeme: 0, taka: 0, transport: 0 }
-        };
+    <!-- VIEW TABS NAVIGATION SWITCHER -->
+    <div class="flex items-center space-x-2 border-b border-gray-200 overflow-x-auto no-scrollbar pb-2">
+      <button id="nav-dashboard" onclick="switchTab('dashboard')" class="nav-tab active px-5 py-2.5 rounded-xl text-sm font-semibold transition flex items-center space-x-2 bg-brand-black text-white shadow-sm flex-shrink-0">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+        <span>Home</span>
+      </button>
+      <button id="nav-income" onclick="switchTab('income')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span>Income & GOD</span>
+      </button>
+      <button id="nav-budget" onclick="switchTab('budget')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" /></svg>
+        <span>Budget</span>
+      </button>
+      <button id="nav-investment" onclick="switchTab('investment')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+        <span>Investment</span>
+      </button>
+      <button id="nav-appearich" onclick="switchTab('appearich')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+        <span>Appearich Business</span>
+      </button>
+      <button id="nav-accounts" onclick="switchTab('accounts')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+        <span>Accounts</span>
+      </button>
+      <button id="nav-progress" onclick="switchTab('progress')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+        <span>Progress</span>
+      </button>
+    </div>
 
-        let activeModalType = '';
-        let chartInstance = null;
+    <!-- ==================== TAB 1: HOME DASHBOARD ==================== -->
+    <div id="tab-dashboard" class="tab-content space-y-8">
+      
+      <!-- 2. HOME DASHBOARD COMPACT CARDS -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="font-bold text-base text-brand-black">Your Money At A Glance</h3>
+          <span class="text-xs text-brand-muted">Real-time calculations</span>
+        </div>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Total Income -->
+          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between">
+            <div class="flex items-center justify-between text-brand-muted">
+              <span class="text-xs font-semibold uppercase tracking-wider">Total Income</span>
+              <svg class="w-4 h-4 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </div>
+            <div class="mt-4">
+              <p id="dash-total-income" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-black">0 Sh</p>
+            </div>
+          </div>
+          <!-- GOD 10% -->
+          <div class="p-5 rounded-2xl bg-brand-black text-white shadow-premium relative overflow-hidden flex flex-col justify-between">
+            <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-brand-gold/10 rounded-full blur-xl pointer-events-none"></div>
+            <div class="flex items-center justify-between text-brand-gold">
+              <span class="text-xs font-semibold uppercase tracking-wider">GOD — 10%</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>
+            </div>
+            <div class="mt-4">
+              <p id="dash-god-amount" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-gold">0 Sh</p>
+            </div>
+          </div>
+          <!-- Total Money (Liquid Accounts) -->
+          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between">
+            <div class="flex items-center justify-between text-brand-muted">
+              <span class="text-xs font-semibold uppercase tracking-wider">Total Money</span>
+              <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+            </div>
+            <div class="mt-4">
+              <p id="dash-total-money" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-black">0 Sh</p>
+            </div>
+          </div>
+          <!-- Remaining Budget -->
+          <div class="p-5 rounded-2xl bg-white border border-brand-black/10 shadow-premium flex flex-col justify-between">
+            <div class="flex items-center justify-between text-brand-muted">
+              <span class="text-xs font-semibold uppercase tracking-wider text-brand-black">Remaining</span>
+              <svg class="w-4 h-4 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </div>
+            <div class="mt-4">
+              <p id="dash-remaining-budget" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-black">0 Sh</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        function initApp() {
-            renderAccounts();
-            updateUI();
-            initChart();
-        }
+      <!-- 3. QUICK ACTIONS BAR -->
+      <div class="p-4 rounded-2xl bg-brand-surface border border-gray-100 flex flex-wrap items-center justify-between gap-3">
+        <span class="text-xs font-bold uppercase tracking-wider text-brand-muted">Quick Actions:</span>
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="openModal('addIncomeModal')" class="px-4 py-2 rounded-xl bg-white border border-gray-200 hover:border-brand-black text-xs font-bold flex items-center space-x-1.5 transition shadow-sm">
+            <svg class="w-3.5 h-3.5 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+            <span>+ INCOME</span>
+          </button>
+          <button onclick="openModal('addSaleModal')" class="px-4 py-2 rounded-xl bg-white border border-gray-200 hover:border-brand-black text-xs font-bold flex items-center space-x-1.5 transition shadow-sm">
+            <svg class="w-3.5 h-3.5 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+            <span>+ SALE</span>
+          </button>
+          <button onclick="openModal('addTransactionModal')" class="px-4 py-2 rounded-xl bg-white border border-gray-200 hover:border-brand-black text-xs font-bold flex items-center space-x-1.5 transition shadow-sm">
+            <svg class="w-3.5 h-3.5 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <span>+ EXPENSE</span>
+          </button>
+          <button onclick="openModal('transferModal')" class="px-4 py-2 rounded-xl bg-white border border-gray-200 hover:border-brand-black text-xs font-bold flex items-center space-x-1.5 transition shadow-sm">
+            <svg class="w-3.5 h-3.5 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
+            <span>TRANSFER</span>
+          </button>
+          <button onclick="switchTab('investment')" class="px-4 py-2 rounded-xl bg-white border border-gray-200 hover:border-brand-black text-xs font-bold flex items-center space-x-1.5 transition shadow-sm">
+            <svg class="w-3.5 h-3.5 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+            <span>INVESTMENT</span>
+          </button>
+          <button onclick="switchTab('progress')" class="px-4 py-2 rounded-xl bg-brand-black text-white text-xs font-bold flex items-center space-x-1.5 transition shadow-sm">
+            <svg class="w-3.5 h-3.5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+            <span>PROGRESS</span>
+          </button>
+        </div>
+      </div>
 
-        function switchTab(tabId) {
-            ['home', 'budget', 'accounts', 'progress', 'profile'].forEach(t => {
-                document.getElementById(`view-${t}`).classList.add('hidden');
-                document.getElementById(`nav-${t}`).classList.remove('text-gold');
-                document.getElementById(`nav-${t}`).classList.add('text-gray-400');
-            });
-            document.getElementById(`view-${tabId}`).classList.remove('hidden');
-            document.getElementById(`nav-${tabId}`).classList.remove('text-gray-400');
-            document.getElementById(`nav-${tabId}`).classList.add('text-gold');
-        }
+      <!-- 4. MAIN FINANCE CATEGORIES CARDS SECTION -->
+      <div class="space-y-4">
+        <h3 class="font-bold text-lg text-brand-black">MONEY MANAGEMENT</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          
+          <!-- INCOME CARD -->
+          <div onclick="switchTab('income')" class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition cursor-pointer flex flex-col justify-between space-y-4 group">
+            <div class="flex items-center justify-between">
+              <div class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
+              </div>
+              <svg class="w-4 h-4 text-brand-muted group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+            </div>
+            <div>
+              <h4 class="font-bold text-base text-brand-black">INCOME</h4>
+              <p class="text-xs text-brand-muted mt-0.5">Total Income & GOD 10% Allocation</p>
+            </div>
+            <div class="pt-3 border-t border-gray-100 flex justify-between items-center text-xs">
+              <span class="text-brand-muted">Tap to manage sources</span>
+              <span id="card-income-val" class="font-bold text-brand-black">0 Sh</span>
+            </div>
+          </div>
 
-        function toggleUtilities() {
-            const drop = document.getElementById('util-dropdown');
-            const chev = document.getElementById('util-chevron');
-            drop.classList.toggle('hidden');
-            chev.classList.toggle('rotate-180');
-        }
+          <!-- BUDGET CARD -->
+          <div onclick="switchTab('budget')" class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition cursor-pointer flex flex-col justify-between space-y-4 group">
+            <div class="flex items-center justify-between">
+              <div class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" /></svg>
+              </div>
+              <svg class="w-4 h-4 text-brand-muted group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+            </div>
+            <div>
+              <h4 class="font-bold text-base text-brand-black">BUDGET</h4>
+              <p class="text-xs text-brand-muted mt-0.5">90% Available Complete Structure</p>
+            </div>
+            <div class="pt-3 border-t border-gray-100 flex justify-between items-center text-xs">
+              <span class="text-brand-muted">Utilities, Invest, Expenses</span>
+              <span id="card-budget-val" class="font-bold text-brand-black">0 Sh</span>
+            </div>
+          </div>
 
-        function renderAccounts() {
-            const container = document.getElementById('accounts-list-container');
-            container.innerHTML = '';
-            for (let [acc, val] of Object.entries(state.accounts)) {
-                container.innerHTML += `
-                    <div class="bg-dark-card border border-dark-border rounded-2xl p-4 flex items-center justify-between">
-                        <div>
-                            <span class="text-xs text-gray-400 block">${acc}</span>
-                            <span class="text-base font-bold text-white">${val.toLocaleString()} Sh</span>
-                        </div>
-                        <button onclick="openAddMoneyModal('${acc}')" class="text-xs text-gold border border-gold/30 px-3 py-1 rounded-lg">+ Add</button>
-                    </div>
-                `;
-            }
-        }
+          <!-- INVESTMENT CARD -->
+          <div onclick="switchTab('investment')" class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition cursor-pointer flex flex-col justify-between space-y-4 group">
+            <div class="flex items-center justify-between">
+              <div class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+              </div>
+              <svg class="w-4 h-4 text-brand-muted group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+            </div>
+            <div>
+              <h4 class="font-bold text-base text-brand-black">INVESTMENT</h4>
+              <p class="text-xs text-brand-muted mt-0.5">Smart Growth Tracking System</p>
+            </div>
+            <div class="pt-3 border-t border-gray-100 flex justify-between items-center text-xs">
+              <span class="text-brand-muted">Current Value</span>
+              <span id="card-invest-val" class="font-bold text-emerald-600">+0 Sh</span>
+            </div>
+          </div>
 
-        function updateUI() {
-            // Calculations
-            state.totalIncome = state.appearichIncome + state.boomTotal + state.otherIncome;
-            state.totalGod = state.totalIncome * 0.10;
-            state.availableBudget = state.totalIncome - state.totalGod;
+          <!-- APPEARICH BUSINESS CARD -->
+          <div onclick="switchTab('appearich')" class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition cursor-pointer flex flex-col justify-between space-y-4 group">
+            <div class="flex items-center justify-between">
+              <div class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+              </div>
+              <svg class="w-4 h-4 text-brand-muted group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+            </div>
+            <div>
+              <h4 class="font-bold text-base text-brand-black">APPEARICH</h4>
+              <p class="text-xs text-brand-muted mt-0.5">Today's Sales & Business Profit</p>
+            </div>
+            <div class="pt-3 border-t border-gray-100 flex justify-between items-center text-xs">
+              <span class="text-brand-muted">Profit Today</span>
+              <span id="card-appearich-profit" class="font-bold text-emerald-600">0 Sh</span>
+            </div>
+          </div>
 
-            let totalMoney = Object.values(state.accounts).reduce((a, b) => a + b, 0);
+          <!-- ACCOUNTS CARD -->
+          <div onclick="switchTab('accounts')" class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition cursor-pointer flex flex-col justify-between space-y-4 group">
+            <div class="flex items-center justify-between">
+              <div class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+              </div>
+              <svg class="w-4 h-4 text-brand-muted group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+            </div>
+            <div>
+              <h4 class="font-bold text-base text-brand-black">ACCOUNTS</h4>
+              <p class="text-xs text-brand-muted mt-0.5">CRDB, SELCOM, MPESA, LIPA NAMBA, CASH</p>
+            </div>
+            <div class="pt-3 border-t border-gray-100 flex justify-between items-center text-xs">
+              <span class="text-brand-muted">Total Money</span>
+              <span id="card-accounts-val" class="font-bold text-brand-black">0 Sh</span>
+            </div>
+          </div>
 
-            // Home Summary
-            document.getElementById('home-total-income').innerText = `${state.totalIncome.toLocaleString()} Sh`;
-            document.getElementById('home-total-god').innerText = `${state.totalGod.toLocaleString()} Sh`;
-            document.getElementById('home-total-money').innerText = `${totalMoney.toLocaleString()} Sh`;
-            document.getElementById('home-available-budget').innerText = `${state.availableBudget.toLocaleString()} Sh`;
+          <!-- PROGRESS CARD -->
+          <div onclick="switchTab('progress')" class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition cursor-pointer flex flex-col justify-between space-y-4 group">
+            <div class="flex items-center justify-between">
+              <div class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+              </div>
+              <svg class="w-4 h-4 text-brand-muted group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+            </div>
+            <div>
+              <h4 class="font-bold text-base text-brand-black">PROGRESS</h4>
+              <p class="text-xs text-brand-muted mt-0.5">Weekly / Monthly / Yearly Growth</p>
+            </div>
+            <div class="pt-3 border-t border-gray-100 flex justify-between items-center text-xs">
+              <span class="text-brand-muted">Growth Score</span>
+              <span class="font-bold text-emerald-600">+18.5%</span>
+            </div>
+          </div>
 
-            // Budget Summary
-            document.getElementById('inc-appearich-val').innerText = `${state.appearichIncome.toLocaleString()} Sh`;
-            document.getElementById('inc-boom-val').innerText = `${state.boomTotal.toLocaleString()} Sh`;
-            document.getElementById('boom-count').innerText = state.boomCount;
-            document.getElementById('inc-other-val').innerText = `${state.otherIncome.toLocaleString()} Sh`;
+        </div>
+      </div>
+    </div>
 
-            // Investment
-            let invGain = state.investment.current - state.investment.total;
-            let invReturn = state.investment.total > 0 ? (invGain / state.investment.total) * 100 : 0;
-            document.getElementById('inv-total').innerText = `${state.investment.total.toLocaleString()} Sh`;
-            document.getElementById('inv-current').innerText = `${state.investment.current.toLocaleString()} Sh`;
-            document.getElementById('inv-gain').innerText = `${invGain >= 0 ? '+' : ''}${invGain.toLocaleString()} Sh`;
-            document.getElementById('inv-return').innerText = `${invReturn.toFixed(1)}%`;
-            document.getElementById('home-inv-summary').innerText = `Total: ${state.investment.total.toLocaleString()} Sh • Gain: ${invGain.toLocaleString()} Sh`;
+    <!-- ==================== TAB 2: INCOME & GOD ==================== -->
+    <div id="tab-income" class="tab-content hidden space-y-8">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="font-display font-bold text-2xl text-brand-black">Income Sources & GOD Allocation</h2>
+          <p class="text-xs text-brand-muted">Multiple income tracking with automatic 10% sacred GOD reservation.</p>
+        </div>
+        <button onclick="openModal('addIncomeModal')" class="bg-brand-black text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-sm hover:bg-gray-800 transition">
+          <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+          <span>+ Add Income Source</span>
+        </button>
+      </div>
 
-            // Business
-            document.getElementById('bus-sales').innerText = `${state.business.sales.toLocaleString()} Sh`;
-            document.getElementById('bus-profit').innerText = `${state.business.profit.toLocaleString()} Sh`;
-            document.getElementById('home-bus-summary').innerText = `Sales: ${state.business.sales.toLocaleString()} Sh • Profit: ${state.business.profit.toLocaleString()} Sh`;
+      <!-- GOD Banner -->
+      <div class="p-8 rounded-3xl bg-brand-black text-white shadow-premium relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-brand-gold/20 rounded-full blur-3xl"></div>
+        <div class="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+          <div class="flex items-center space-x-6">
+            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-gold/30 to-brand-black border border-brand-gold/40 flex items-center justify-center shadow-gold-glow flex-shrink-0 text-brand-gold">
+              <svg class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-dasharray="2 2" />
+                <polygon points="12,3 15,9 21,12 15,15 12,21 9,15 3,12 9,9" fill="rgba(212, 175, 55, 0.2)" stroke="currentColor"/>
+                <circle cx="12" cy="12" r="3" fill="currentColor"/>
+              </svg>
+            </div>
+            <div>
+              <span class="text-xs font-bold text-brand-gold tracking-widest uppercase">Sacred Allocation</span>
+              <h3 class="font-display font-bold text-3xl mt-1 text-white">GOD 10% RESERVE</h3>
+              <p class="text-xs text-gray-400 mt-1">Automatically deducted from every individual income stream.</p>
+            </div>
+          </div>
+          <div class="text-right w-full md:w-auto border-t md:border-t-0 border-gray-800 pt-4 md:pt-0">
+            <p class="text-xs text-gray-400 font-medium">Total Reserved</p>
+            <p id="income-god-total" class="font-display text-4xl font-extrabold text-brand-gold mt-1">0 Sh</p>
+          </div>
+        </div>
+      </div>
 
-            // Accounts
-            document.getElementById('acc-total-money').innerText = `${totalMoney.toLocaleString()} Sh`;
+      <div class="space-y-4">
+        <h3 class="font-bold text-lg text-brand-black">Active Income Streams</h3>
+        <div id="income-list-container" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+      </div>
+    </div>
 
-            // Progress Score
-            let score = state.totalIncome > 0 ? Math.min(100, Math.floor((state.business.profit + invGain + state.totalIncome) / 10000)) : 0;
-            document.getElementById('progress-score-text').innerText = `${score}%`;
+    <!-- ==================== TAB 3: BUDGET ==================== -->
+    <div id="tab-budget" class="tab-content hidden space-y-8">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="font-display font-bold text-2xl text-brand-black">Budget Structure (90% Available)</h2>
+          <p class="text-xs text-brand-muted">Utilities, Investment, Appearich, Expenses, and Other allocations.</p>
+        </div>
+        <button onclick="openModal('addCategoryModal')" class="bg-brand-black text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-sm hover:bg-gray-800 transition">
+          <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+          <span>+ Custom Category</span>
+        </button>
+      </div>
 
-            renderAccounts();
-        }
+      <!-- Pool summary -->
+      <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col md:flex-row items-center justify-between gap-6">
+        <div>
+          <p class="text-xs font-bold text-brand-muted uppercase tracking-wider">Available Budget Pool (90%)</p>
+          <p id="budget-pool-total" class="font-display text-3xl font-bold text-brand-black mt-1">0 Sh</p>
+        </div>
+        <div class="w-full md:w-1/2 space-y-2">
+          <div class="flex justify-between text-xs font-semibold">
+            <span class="text-brand-muted">Allocated Percentage</span>
+            <span id="budget-allocated-percent">0%</span>
+          </div>
+          <div class="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
+            <div id="budget-allocated-bar" class="h-full bg-brand-black transition-all duration-500" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
 
-        function addBoom() {
-            state.boomCount += 1;
-            state.boomTotal += 600000;
-            state.accounts['MPESA'] += 540000; // 90% goes to MPESA default
-            updateUI();
-        }
+      <div class="space-y-4">
+        <h3 class="font-bold text-lg text-brand-black">Primary Categories</h3>
 
-        function openModal(type) {
-            activeModalType = type;
-            const modal = document.getElementById('modal');
-            const title = document.getElementById('modal-title');
-            const body = document.getElementById('modal-body');
-            modal.classList.remove('hidden');
+        <!-- UTILITIES EXPANDABLE CARD -->
+        <div class="rounded-3xl bg-white border border-gray-100 shadow-premium overflow-hidden transition-all duration-300">
+          <div onclick="toggleUtilitiesAccordion()" class="p-6 flex items-center justify-between cursor-pointer hover:bg-gray-50/50 transition">
+            <div class="flex items-center space-x-4">
+              <div class="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center text-brand-black">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+              </div>
+              <div>
+                <div class="flex items-center space-x-2">
+                  <h4 class="font-bold text-base text-brand-black">UTILITIES</h4>
+                  <span class="px-2.5 py-0.5 rounded-full bg-gray-100 text-brand-black text-[11px] font-bold">25%</span>
+                </div>
+                <p class="text-xs text-brand-muted mt-0.5">Internet, Umeme, Taka, Transport</p>
+              </div>
+            </div>
+            <div class="flex items-center space-x-6">
+              <div class="text-right hidden sm:block">
+                <p id="utilities-planned" class="font-display font-bold text-base text-brand-black">0 Sh</p>
+                <p id="utilities-spent-summary" class="text-xs text-brand-muted">Spent: 0 Sh</p>
+              </div>
+              <svg id="utilities-chevron" class="w-6 h-6 text-brand-black transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+            </div>
+          </div>
+          <!-- Accordion Content -->
+          <div id="utilities-accordion" class="accordion-content border-t border-gray-100 bg-brand-surface p-6 space-y-4">
+            <p class="text-xs font-semibold text-brand-muted uppercase tracking-wider">Subcategory Breakdown</p>
+            <div id="utilities-subcategories-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+          </div>
+        </div>
 
-            if (type === 'income') {
-                title.innerText = 'Add Income';
-                body.innerHTML = `
-                    <select id="m-inc-type" class="w-full bg-dark-bg border border-dark-border rounded-xl px-3 py-2 text-xs text-gray-200 outline-none">
-                        <option value="appearich">Appearich Income</option>
-                        <option value="other">Other Income</option>
-                    </select>
-                    <input type="number" id="m-inc-amount" placeholder="Amount (Sh)" class="w-full bg-dark-bg border border-dark-border rounded-xl px-3 py-2 text-xs text-gray-200 outline-none">
-                    <select id="m-inc-account" class="w-full bg-dark-bg border border-dark-border rounded-xl px-3 py-2 text-xs text-gray-200 outline-none">
-                        <option value="CRDB">CRDB</option>
-                        <option value="SELCOM">SELCOM</option>
-                        <option value="MPESA">MPESA</option>
-                        <option value="LIPA NAMBA">LIPA NAMBA</option>
-                        <option value="CASH">CASH</option>
-                    </select>
-                `;
-            } else if (type === 'sale') {
-                title.innerText = 'Add Appearich Sale';
-                body.innerHTML = `
-                    <input type="text" id="m-sale-name" placeholder="Product Name" class="w-full bg-dark-bg border border-dark-border rounded-xl px-3 py-2 text-xs text-gray-200 outline-none">
-                    <input type="number" id="m-sale-qty" placeholder="Quantity" class="w-full bg-dark-bg border border-dark-border rounded-xl px-3 py-2 text-xs text-gray-200 outline-none">
-                    <input type="number" id="m-sale-buy" placeholder="Buying Price (Per unit)" class="w-full bg-dark-bg border border-dark-border rounded-xl px-3 py-2 text-xs text-gray-200 outline-none">
-                    <input type="number" id="m-sale-sell" placeholder="Selling Price (Per unit)" class="w-full bg-dark-bg border border-dark-border rounded-xl px-3 py-2 text-xs text-gray-200 outline-none">
-                `;
-            } else if (type === 'investment') {
-                title.innerText = 'Update Investment';
-                body.innerHTML = `
-                    <input type="number" id="m-inv-add" placeholder="Add Initial/New Investment (Sh)" class="w-full bg-dark-bg border border-dark-border rounded-xl px-3 py-2 text-xs text-gray-200 outline-none">
-                    <input type="number" id="m-inv-curr" placeholder="Current Value (Sh)" class="w-full bg-dark-bg border border-dark-border rounded-xl px-3 py-2 text-xs text-gray-200 outline-none">
-                `;
-            } else if (type === 'expense') {
-                title.innerText = 'Add Expense';
-                body.innerHTML = `
-                    <input type="text" id="m-exp-name" placeholder="Expense Name" class="w-full bg-dark-bg border border-dark-border rounded-xl px-3 py-2 text-xs text-gray-200 outline-none">
-                    <input type="number" id="m-exp-amount" placeholder="Amount (Sh)" class="w-full bg-dark-bg border border-dark-border rounded-xl px-3 py-2 text-xs text-gray-200 outline-none">
-                    <select id="m-exp-acc" class="w-full bg-dark-bg border border-dark-border rounded-xl px-3 py-2 text-xs text-gray-200 outline-none">
-                        <option value="CRDB">CRDB</option>
-                        <option value="SELCOM">SELCOM</option>
-                        <option value="MPESA">MPESA</option>
-                        <option value="LIPA NAMBA">LIPA NAMBA</option>
-                        <option value="CASH">CASH</option>
-                    </select>
-                `;
-            }
-        }
+        <!-- OTHER CATEGORIES CONTAINER -->
+        <div id="main-categories-list" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+      </div>
+    </div>
 
-        let targetAccountForAdd = '';
-        function openAddMoneyModal(acc) {
-            targetAccountForAdd = acc;
-            activeModalType = 'add_money_account';
-            const modal = document.getElementById('modal');
-            const title = document.getElementById('modal-title');
-            const body = document.getElementById('modal-body');
-            modal.classList.remove('hidden');
-            title.innerText = `Add Funds to ${acc}`;
-            body.innerHTML = `
-                <input type="number" id="m-acc-amount" placeholder="Amount (Sh)" class="w-full bg-dark-bg border border-dark-border rounded-xl px-3 py-2 text-xs text-gray-200 outline-none">
-            `;
-        }
+    <!-- ==================== TAB 4: INVESTMENT ==================== -->
+    <div id="tab-investment" class="tab-content hidden space-y-8">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="font-display font-bold text-2xl text-brand-black">Investment — Smart Growth Tracking</h2>
+          <p class="text-xs text-brand-muted">Track principal capital additions and market valuation growth separately.</p>
+        </div>
+        <div class="flex items-center space-x-2">
+          <button onclick="openModal('addInvestmentModal')" class="bg-gray-100 text-brand-black hover:bg-gray-200 px-4 py-2.5 rounded-xl font-medium text-sm transition">
+            + Add Capital
+          </button>
+          <button onclick="openModal('updateInvestmentModal')" class="bg-brand-black text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-sm hover:bg-gray-800 transition">
+            <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+            <span>Update Value</span>
+          </button>
+        </div>
+      </div>
 
-        function closeModal() {
-            document.getElementById('modal').classList.add('hidden');
-        }
+      <!-- Investment Master Status -->
+      <div class="p-8 rounded-3xl bg-white border border-gray-100 shadow-premium grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div>
+          <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">Total Invested</span>
+          <p id="inv-total-invested" class="font-display text-3xl font-extrabold text-brand-black mt-1">0 Sh</p>
+        </div>
+        <div>
+          <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">Current Value</span>
+          <p id="inv-current-value" class="font-display text-3xl font-extrabold text-brand-black mt-1">0 Sh</p>
+        </div>
+        <div>
+          <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">Growth / Gain</span>
+          <p id="inv-gain-loss" class="font-display text-3xl font-extrabold text-emerald-600 mt-1">+0 Sh</p>
+        </div>
+        <div>
+          <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">Return %</span>
+          <p id="inv-percentage-return" class="font-display text-3xl font-extrabold text-emerald-600 mt-1">+0.00%</p>
+        </div>
+      </div>
 
-        function submitModal() {
-            if (activeModalType === 'income') {
-                let type = document.getElementById('m-inc-type').value;
-                let amt = parseFloat(document.getElementById('m-inc-amount').value) || 0;
-                let acc = document.getElementById('m-inc-account').value;
-                if (type === 'appearich') state.appearichIncome += amt;
-                else state.otherIncome += amt;
-                state.accounts[acc] += (amt * 0.90); // 90% goes to account
-            } else if (activeModalType === 'sale') {
-                let qty = parseFloat(document.getElementById('m-sale-qty').value) || 0;
-                let buy = parseFloat(document.getElementById('m-sale-buy').value) || 0;
-                let sell = parseFloat(document.getElementById('m-sale-sell').value) || 0;
-                let rev = sell * qty;
-                let cost = buy * qty;
-                let profit = rev - cost;
-                state.business.sales += rev;
-                state.business.profit += profit;
-                state.accounts['MPESA'] += rev; // Revenue into MPESA
-            } else if (activeModalType === 'investment') {
-                let add = parseFloat(document.getElementById('m-inv-add').value) || 0;
-                let curr = parseFloat(document.getElementById('m-inv-curr').value) || 0;
-                if (add > 0) state.investment.total += add;
-                if (curr > 0) state.investment.current = curr;
-            } else if (activeModalType === 'expense') {
-                let amt = parseFloat(document.getElementById('m-exp-amount').value) || 0;
-                let acc = document.getElementById('m-exp-acc').value;
-                state.accounts[acc] = Math.max(0, state.accounts[acc] - amt);
-            } else if (activeModalType === 'add_money_account') {
-                let amt = parseFloat(document.getElementById('m-acc-amount').value) || 0;
-                state.accounts[targetAccountForAdd] += amt;
-            }
-            closeModal();
-            updateUI();
-        }
+      <!-- Investment Chart -->
+      <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
+        <h3 class="font-bold text-base text-brand-black">Investment Performance Trend</h3>
+        <div class="h-72 w-full">
+          <canvas id="investmentMainChart"></canvas>
+        </div>
+      </div>
 
-        function executeTransfer() {
-            let from = document.getElementById('transfer-from').value;
-            let to = document.getElementById('transfer-to').value;
-            let amt = parseFloat(document.getElementById('transfer-amount').value) || 0;
-            if (from === to || amt <= 0) return;
-            if (state.accounts[from] >= amt) {
-                state.accounts[from] -= amt;
-                state.accounts[to] += amt;
-                updateUI();
-            }
-        }
+      <!-- Valuation History -->
+      <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
+        <h3 class="font-bold text-base text-brand-black">Investment History Log</h3>
+        <div id="investment-history-list" class="divide-y divide-gray-100"></div>
+      </div>
+    </div>
 
-        function resetAllData() {
-            state = {
-                appearichIncome: 0,
-                boomCount: 0,
-                boomTotal: 0,
-                otherIncome: 0,
-                totalIncome: 0,
-                totalGod: 0,
-                availableBudget: 0,
-                accounts: { CRDB: 0, SELCOM: 0, MPESA: 0, 'LIPA NAMBA': 0, CASH: 0 },
-                investment: { total: 0, current: 0 },
-                business: { sales: 0, profit: 0 },
-                utilities: { internet: 0, umeme: 0, taka: 0, transport: 0 }
-            };
-            updateUI();
-        }
+    <!-- ==================== TAB 5: APPEARICH BUSINESS ==================== -->
+    <div id="tab-appearich" class="tab-content hidden space-y-8">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="font-display font-bold text-2xl text-brand-black">Appearich Business & Sales System</h2>
+          <p class="text-xs text-brand-muted">Dedicated business sales tracking, profit margins, and customer analytics.</p>
+        </div>
+        <button onclick="openModal('addSaleModal')" class="bg-brand-black text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-sm hover:bg-gray-800 transition">
+          <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+          <span>+ ADD SALE</span>
+        </button>
+      </div>
 
-        function initChart() {
-            const ctx = document.getElementById('progressChart').getContext('2d');
-            chartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-                    datasets: [{
-                        label: 'Growth Trend',
-                        data: [0, 0, 0, 0],
-                        borderColor: '#D4AF37',
-                        backgroundColor: 'rgba(212, 175, 55, 0.1)',
-                        fill: true,
-                        tension: 0.3
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { grid: { color: '#262626' }, ticks: { color: '#888', font: { size: 10 } } },
-                        y: { grid: { color: '#262626' }, ticks: { color: '#888', font: { size: 10 } } }
-                    }
-                }
-            });
-        }
+      <!-- Business Metric Cards -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium">
+          <p class="text-xs font-semibold text-brand-muted">TODAY'S SALES</p>
+          <p id="app-today-sales" class="font-display text-2xl font-bold text-brand-black mt-2">0 Sh</p>
+        </div>
+        <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium">
+          <p class="text-xs font-semibold text-brand-muted">TODAY'S PROFIT</p>
+          <p id="app-today-profit" class="font-display text-2xl font-bold text-emerald-600 mt-2">0 Sh</p>
+        </div>
+        <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium">
+          <p class="text-xs font-semibold text-brand-muted">THIS MONTH REVENUE</p>
+          <p id="app-month-revenue" class="font-display text-2xl font-bold text-brand-black mt-2">0 Sh</p>
+        </div>
+        <div class="p-5 rounded-2xl bg-brand-black text-white shadow-gold-glow">
+          <p class="text-xs font-semibold text-brand-gold">TOTAL BUSINESS PROFIT</p>
+          <p id="app-total-profit" class="font-display text-2xl font-bold text-brand-gold mt-2">0 Sh</p>
+        </div>
+      </div>
 
-        window.onload = initApp;
-    </script>
+      <!-- Performance Period & Chart -->
+      <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-4">
+          <div class="flex space-x-2">
+            <button onclick="switchAppearichPeriod('day')" id="app-period-day" class="app-period-btn active px-4 py-1.5 rounded-lg text-xs font-bold bg-brand-black text-white">DAY</button>
+            <button onclick="switchAppearichPeriod('week')" id="app-period-week" class="app-period-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-brand-muted hover:text-brand-black">WEEK</button>
+            <button onclick="switchAppearichPeriod('month')" id="app-period-month" class="app-period-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-brand-muted hover:text-brand-black">MONTH</button>
+            <button onclick="switchAppearichPeriod('year')" id="app-period-year" class="app-period-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-brand-muted hover:text-brand-black">YEAR</button>
+          </div>
+          <span class="text-xs font-bold text-emerald-600">Profit Growth: +25%</span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+          <div class="p-3 rounded-xl bg-gray-50"><p class="text-[10px] text-brand-muted uppercase font-bold">Products Sold</p><p id="app-period-sold" class="font-display font-bold text-lg text-brand-black">0</p></div>
+          <div class="p-3 rounded-xl bg-gray-50"><p class="text-[10px] text-brand-muted uppercase font-bold">Total Revenue</p><p id="app-period-revenue" class="font-display font-bold text-lg text-brand-black">0 Sh</p></div>
+          <div class="p-3 rounded-xl bg-gray-50"><p class="text-[10px] text-brand-muted uppercase font-bold">Buying Cost</p><p id="app-period-cost" class="font-display font-bold text-lg text-brand-black">0 Sh</p></div>
+          <div class="p-3 rounded-xl bg-gray-50"><p class="text-[10px] text-brand-muted uppercase font-bold">Profit Margin</p><p id="app-period-margin" class="font-display font-bold text-lg text-emerald-600">0%</p></div>
+        </div>
+        <div class="h-64 w-full">
+          <canvas id="appearichSalesChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Top Products & Customers -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
+          <h3 class="font-bold text-base text-brand-black">Best Products</h3>
+          <div id="appearich-top-products" class="divide-y divide-gray-100"></div>
+        </div>
+        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
+          <h3 class="font-bold text-base text-brand-black">Customer Tracking</h3>
+          <div id="appearich-customers-list" class="divide-y divide-gray-100"></div>
+        </div>
+      </div>
+
+      <!-- Sales Log Table -->
+      <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
+        <h3 class="font-bold text-base text-brand-black">Sales Transactions Log</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="border-b border-gray-100 text-brand-muted font-semibold uppercase">
+                <th class="pb-3">Date</th>
+                <th class="pb-3">Product</th>
+                <th class="pb-3">Customer</th>
+                <th class="pb-3">Qty</th>
+                <th class="pb-3">Buy Price</th>
+                <th class="pb-3">Sell Price</th>
+                <th class="pb-3">Profit</th>
+                <th class="pb-3">Status</th>
+              </tr>
+            </thead>
+            <tbody id="appearich-sales-table" class="divide-y divide-gray-100 font-medium"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 6: ACCOUNTS ==================== -->
+    <div id="tab-accounts" class="tab-content hidden space-y-8">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="font-display font-bold text-2xl text-brand-black">Accounts — Where is my money?</h2>
+          <p class="text-xs text-brand-muted">CRDB, SELCOM, MPESA, LIPA NAMBA, and CASH liquid asset distribution.</p>
+        </div>
+        <div class="flex space-x-2">
+          <button onclick="openModal('addMoneyModal')" class="bg-gray-100 text-brand-black hover:bg-gray-200 px-4 py-2.5 rounded-xl font-medium text-sm transition">
+            + Add Money
+          </button>
+          <button onclick="openModal('transferModal')" class="bg-brand-black text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-sm hover:bg-gray-800 transition">
+            <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
+            <span>Transfer Funds</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Aggregate Total Money -->
+      <div class="p-8 rounded-3xl bg-brand-black text-white shadow-premium flex flex-col sm:flex-row items-center justify-between gap-6 border border-brand-black">
+        <div>
+          <span class="text-xs font-bold text-brand-gold uppercase tracking-widest">TOTAL MONEY (Liquid Net Worth)</span>
+          <p id="accounts-total-money" class="font-display text-4xl font-extrabold text-white mt-1">0 Sh</p>
+        </div>
+        <span class="px-3 py-1 rounded-full bg-brand-gold/20 text-brand-gold text-xs font-bold">5 Active Accounts</span>
+      </div>
+
+      <!-- Account Cards Grid -->
+      <div id="account-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </div>
+
+    <!-- ==================== TAB 7: PROGRESS ==================== -->
+    <div id="tab-progress" class="tab-content hidden space-y-8">
+      <div>
+        <h2 class="font-display font-bold text-2xl text-brand-black">Progress Center</h2>
+        <p class="text-xs text-brand-muted">Weekly, monthly, and yearly performance metrics and financial growth tracking.</p>
+      </div>
+
+      <!-- Score & Insights Banner -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="p-6 rounded-3xl bg-brand-black text-white shadow-premium flex flex-col items-center justify-center text-center space-y-4 relative overflow-hidden">
+          <p class="text-xs font-bold text-brand-gold uppercase tracking-wider">FINANCIAL GROWTH SCORE</p>
+          <div class="relative w-32 h-32 flex items-center justify-center">
+            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+              <path class="text-gray-800" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              <path class="text-brand-gold" stroke-dasharray="85, 100" stroke-width="3" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            </svg>
+            <span class="absolute font-display font-extrabold text-3xl text-white">+18.5%</span>
+          </div>
+          <p class="text-xs text-gray-400">Consistent upward momentum across business and investments.</p>
+        </div>
+        <div class="lg:col-span-2 p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center space-x-2 text-brand-black mb-2">
+              <svg class="w-5 h-5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+              <h3 class="font-bold text-base">Smart Growth Insights</h3>
+            </div>
+            <div id="progress-insights-list" class="space-y-2 text-xs text-brand-black font-medium"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Weekly / Monthly Charts -->
+      <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-6">
+        <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+          <div class="flex space-x-2">
+            <button onclick="switchProgressTab('weekly')" id="prog-tab-weekly" class="prog-tab-btn active px-4 py-1.5 rounded-lg text-xs font-bold bg-brand-black text-white">WEEKLY</button>
+            <button onclick="switchProgressTab('monthly')" id="prog-tab-monthly" class="prog-tab-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-brand-muted hover:text-brand-black">MONTHLY</button>
+          </div>
+          <span class="text-xs font-bold text-emerald-600">Status: Growing</span>
+        </div>
+        <div id="prog-weekly-panel" class="space-y-4">
+          <div class="h-64 w-full">
+            <canvas id="progressWeeklyChart"></canvas>
+          </div>
+        </div>
+        <div id="prog-monthly-panel" class="space-y-4 hidden">
+          <div class="h-64 w-full">
+            <canvas id="progressMonthlyChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- 13. SIMPLE BOTTOM NAVIGATION -->
+  <nav class="fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-t border-gray-200 px-4 py-2.5">
+    <div class="max-w-md mx-auto flex items-center justify-between">
+      <button onclick="switchTab('dashboard')" id="bnav-dashboard" class="bnav-btn flex flex-col items-center space-y-1 text-brand-black">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+        <span class="text-[10px] font-bold">Home</span>
+      </button>
+      <button onclick="switchTab('budget')" id="bnav-budget" class="bnav-btn flex flex-col items-center space-y-1 text-brand-muted hover:text-brand-black">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" /></svg>
+        <span class="text-[10px] font-bold">Budget</span>
+      </button>
+      <button onclick="openModal('addTransactionModal')" class="flex flex-col items-center justify-center w-11 h-11 rounded-2xl bg-brand-black text-white shadow-gold-glow -mt-5 hover:scale-105 transition">
+        <svg class="w-6 h-6 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+      </button>
+      <button onclick="switchTab('accounts')" id="bnav-accounts" class="bnav-btn flex flex-col items-center space-y-1 text-brand-muted hover:text-brand-black">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+        <span class="text-[10px] font-bold">Accounts</span>
+      </button>
+      <button onclick="switchTab('progress')" id="bnav-progress" class="bnav-btn flex flex-col items-center space-y-1 text-brand-muted hover:text-brand-black">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+        <span class="text-[10px] font-bold">Progress</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ==================== MODALS ==================== -->
+  <!-- Add Income Modal -->
+  <div id="addIncomeModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-lg text-brand-black">Add Income Source</h3>
+        <button onclick="closeModal('addIncomeModal')" class="text-gray-400 hover:text-black">&times;</button>
+      </div>
+      <form onsubmit="handleAddIncome(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-brand-black uppercase mb-1">Source Name</label>
+          <input id="income-name-input" type="text" required placeholder="e.g. Consulting" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-brand-black uppercase mb-1">Amount (Sh)</label>
+          <input id="income-amount-input" type="number" required placeholder="500000" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm">
+        </div>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Save Income</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Sale Modal -->
+  <div id="addSaleModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-lg w-full space-y-4 shadow-2xl border border-gray-100 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-lg text-brand-black">Record Appearich Business Sale</h3>
+        <button onclick="closeModal('addSaleModal')" class="text-gray-400 hover:text-black">&times;</button>
+      </div>
+      <form onsubmit="handleAddSale(event)" class="space-y-4">
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-bold uppercase mb-1">Date</label><input id="sale-date" type="date" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+          <div><label class="block text-xs font-bold uppercase mb-1">Quantity</label><input id="sale-qty" type="number" value="1" min="1" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        </div>
+        <div><label class="block text-xs font-bold uppercase mb-1">Product Name</label><input id="sale-product" type="text" required placeholder="Item Name" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        <div><label class="block text-xs font-bold uppercase mb-1">Customer Name</label><input id="sale-customer" type="text" required placeholder="Customer" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-bold uppercase mb-1">Buying Price (Sh)</label><input id="sale-buy-price" type="number" required placeholder="35000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+          <div><label class="block text-xs font-bold uppercase mb-1">Selling Price (Sh)</label><input id="sale-sell-price" type="number" required placeholder="55000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        </div>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Record Sale</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Expense Transaction Modal -->
+  <div id="addTransactionModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-lg text-brand-black">Add Expense Transaction</h3>
+        <button onclick="closeModal('addTransactionModal')" class="text-gray-400 hover:text-black">&times;</button>
+      </div>
+      <form onsubmit="handleAddTransaction(event)" class="space-y-4">
+        <div><label class="block text-xs font-bold uppercase mb-1">Description</label><input id="tx-name" type="text" required placeholder="e.g. Internet" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold uppercase mb-1">Category</label>
+            <select id="tx-category" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
+              <option value="Internet">Internet</option>
+              <option value="Umeme">Umeme</option>
+              <option value="Taka">Taka</option>
+              <option value="Transport">Transport</option>
+              <option value="Appearich">Appearich</option>
+              <option value="Expenses">Expenses</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase mb-1">Account</label>
+            <select id="tx-account" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
+              <option value="CRDB">CRDB</option>
+              <option value="SELCOM">SELCOM</option>
+              <option value="MPESA">MPESA</option>
+              <option value="LIPA NAMBA">LIPA NAMBA</option>
+              <option value="CASH">CASH</option>
+            </select>
+          </div>
+        </div>
+        <div><label class="block text-xs font-bold uppercase mb-1">Amount (Sh)</label><input id="tx-amount" type="number" required placeholder="40000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Execute Expense</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Transfer Modal -->
+  <div id="transferModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-lg text-brand-black">Transfer Between Accounts</h3>
+        <button onclick="closeModal('transferModal')" class="text-gray-400 hover:text-black">&times;</button>
+      </div>
+      <form onsubmit="handleTransfer(event)" class="space-y-4">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold uppercase mb-1">From</label>
+            <select id="tr-from" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
+              <option value="CRDB">CRDB</option><option value="SELCOM">SELCOM</option><option value="MPESA">MPESA</option><option value="LIPA NAMBA">LIPA NAMBA</option><option value="CASH">CASH</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase mb-1">To</label>
+            <select id="tr-to" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
+              <option value="MPESA">MPESA</option><option value="CRDB">CRDB</option><option value="SELCOM">SELCOM</option><option value="LIPA NAMBA">LIPA NAMBA</option><option value="CASH">CASH</option>
+            </select>
+          </div>
+        </div>
+        <div><label class="block text-xs font-bold uppercase mb-1">Amount (Sh)</label><input id="tr-amount" type="number" required placeholder="50000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Transfer Funds</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Money Modal -->
+  <div id="addMoneyModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-lg text-brand-black">Add Money to Account</h3>
+        <button onclick="closeModal('addMoneyModal')" class="text-gray-400 hover:text-black">&times;</button>
+      </div>
+      <form onsubmit="handleAddMoneyAccount(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold uppercase mb-1">Account</label>
+          <select id="am-account" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
+            <option value="CRDB">CRDB</option><option value="SELCOM">SELCOM</option><option value="MPESA">MPESA</option><option value="LIPA NAMBA">LIPA NAMBA</option><option value="CASH">CASH</option>
+          </select>
+        </div>
+        <div><label class="block text-xs font-bold uppercase mb-1">Amount (Sh)</label><input id="am-amount" type="number" required placeholder="100000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Deposit</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Capital Investment Modal -->
+  <div id="addInvestmentModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-lg text-brand-black">Add Investment Capital</h3>
+        <button onclick="closeModal('addInvestmentModal')" class="text-gray-400 hover:text-black">&times;</button>
+      </div>
+      <form onsubmit="handleAddInvestmentCapital(event)" class="space-y-4">
+        <div><label class="block text-xs font-bold uppercase mb-1">Additional Amount (Sh)</label><input id="inv-add-amount" type="number" required placeholder="100000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Add Capital</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Update Investment Valuation Modal -->
+  <div id="updateInvestmentModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-lg text-brand-black">Update Investment Portfolio Value</h3>
+        <button onclick="closeModal('updateInvestmentModal')" class="text-gray-400 hover:text-black">&times;</button>
+      </div>
+      <form onsubmit="handleUpdateInvestmentValue(event)" class="space-y-4">
+        <div><label class="block text-xs font-bold uppercase mb-1">Current Total Value (Sh)</label><input id="inv-update-value" type="number" required placeholder="700000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Update Valuation</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Custom Budget Category Modal -->
+  <div id="addCategoryModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-lg text-brand-black">Add Custom Budget Category</h3>
+        <button onclick="closeModal('addCategoryModal')" class="text-gray-400 hover:text-black">&times;</button>
+      </div>
+      <form onsubmit="handleAddCategory(event)" class="space-y-4">
+        <div><label class="block text-xs font-bold uppercase mb-1">Category Name</label><input id="cat-name-input" type="text" required placeholder="e.g. Health" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm"></div>
+        <div><label class="block text-xs font-bold uppercase mb-1">Percentage (%)</label><input id="cat-percent-input" type="number" step="0.1" required placeholder="5" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm"></div>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Create Category</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== JAVASCRIPT APP ENGINE ==================== -->
+  <script>
+    const state = {
+      incomes: [
+        { id: '1', name: 'APPEARICH', amount: 450000, fixed: false },
+        { id: '2', name: 'BOOM', amount: 600000, fixed: true },
+        { id: '3', name: 'OTHER INCOME', amount: 300000, fixed: false }
+      ],
+      categories: [
+        { id: 'cat-utilities', name: 'Utilities', percent: 25, isExpandable: true },
+        { id: 'cat-investment', name: 'Investment', percent: 20, isExpandable: false },
+        { id: 'cat-appearich', name: 'Appearich', percent: 20, isExpandable: false },
+        { id: 'cat-expenses', name: 'Expenses', percent: 20, isExpandable: false },
+        { id: 'cat-other', name: 'Other', percent: 5, isExpandable: false }
+      ],
+      utilitiesSub: [
+        { name: 'Internet', percent: 8, spent: 40000 },
+        { name: 'Umeme', percent: 7, spent: 20000 },
+        { name: 'Taka', percent: 4, spent: 10000 },
+        { name: 'Transport', percent: 6, spent: 30000 }
+      ],
+      categorySpent: { 'Appearich': 80000, 'Expenses': 120000, 'Other': 15000 },
+      investment: {
+        totalInvested: 600000,
+        currentValue: 700000,
+        history: [
+          { date: 'Aug 1', value: 500000 },
+          { date: 'Aug 7', value: 540000 },
+          { date: 'Aug 14', value: 700000 }
+        ]
+      },
+      sales: [
+        { id: 's1', date: '2026-08-14', product: 'Premium Perfume', customer: 'John Doe', qty: 2, buyPrice: 35000, sellPrice: 55000, status: 'SOLD' },
+        { id: 's2', date: '2026-08-14', product: 'Silk Designer Shirt', customer: 'Amina Salum', qty: 1, buyPrice: 40000, sellPrice: 80000, status: 'SOLD' }
+      ],
+      accounts: { 'CRDB': 450000, 'SELCOM': 120000, 'MPESA': 280000, 'LIPA NAMBA': 150000, 'CASH': 100000 },
+      currentTab: 'dashboard',
+      appearichPeriod: 'day',
+      utilitiesExpanded: false
+    };
+
+    let dashInvChart, invMainChart, appearichChart, progWeeklyChart, progMonthlyChart;
+
+    function formatSh(amount) {
+      return new Intl.NumberFormat('en-US').format(Math.round(amount)) + ' Sh';
+    }
+
+    function getCalculations() {
+      const totalIncome = state.incomes.reduce((sum, inc) => sum + inc.amount, 0);
+      const godTotal = totalIncome * 0.10;
+      const availableBudget = totalIncome - godTotal;
+      let totalSpent = 0;
+      state.utilitiesSub.forEach(s => totalSpent += s.spent);
+      Object.values(state.categorySpent).forEach(v => totalSpent += v);
+      const remainingBudget = availableBudget - totalSpent;
+      const invGainLoss = state.investment.currentValue - state.investment.totalInvested;
+      const invReturnPercent = state.investment.totalInvested > 0 ? (invGainLoss / state.investment.totalInvested) * 100 : 0;
+      const totalLiquidMoney = Object.values(state.accounts).reduce((sum, val) => sum + val, 0);
+      let appTotalRevenue = 0, appTotalCost = 0;
+      state.sales.forEach(sale => {
+        appTotalRevenue += (sale.sellPrice * sale.qty);
+        appTotalCost += (sale.buyPrice * sale.qty);
+      });
+      const appTotalProfit = appTotalRevenue - appTotalCost;
+      return { totalIncome, godTotal, availableBudget, totalSpent, remainingBudget, invGainLoss, invReturnPercent, totalLiquidMoney, appTotalRevenue, appTotalCost, appTotalProfit };
+    }
+
+    function renderAll() {
+      const calc = getCalculations();
+      document.getElementById('dash-total-income').innerText = formatSh(calc.totalIncome);
+      document.getElementById('dash-god-amount').innerText = formatSh(calc.godTotal);
+      document.getElementById('dash-total-money').innerText = formatSh(calc.totalLiquidMoney);
+      document.getElementById('dash-remaining-budget').innerText = formatSh(calc.remainingBudget);
+      document.getElementById('card-income-val').innerText = formatSh(calc.totalIncome);
+      document.getElementById('card-budget-val').innerText = formatSh(calc.availableBudget);
+      document.getElementById('card-invest-val').innerText = '+' + formatSh(calc.invGainLoss);
+      document.getElementById('card-appearich-profit').innerText = formatSh(calc.appTotalProfit);
+      document.getElementById('card-accounts-val').innerText = formatSh(calc.totalLiquidMoney);
+
+      // Income Tab
+      document.getElementById('income-god-total').innerText = formatSh(calc.godTotal);
+      renderIncomeCards();
+
+      // Budget Tab
+      document.getElementById('budget-pool-total').innerText = formatSh(calc.availableBudget);
+      renderBudgetCategoryList(calc.availableBudget);
+
+      // Investment Tab
+      document.getElementById('inv-total-invested').innerText = formatSh(state.investment.totalInvested);
+      document.getElementById('inv-current-value').innerText = formatSh(state.investment.currentValue);
+      document.getElementById('inv-gain-loss').innerText = (calc.invGainLoss >= 0 ? '+' : '') + formatSh(calc.invGainLoss);
+      document.getElementById('inv-percentage-return').innerText = (calc.invReturnPercent >= 0 ? '+' : '') + calc.invReturnPercent.toFixed(2) + '%';
+      renderInvestmentHistoryList();
+
+      // Appearich Tab
+      document.getElementById('app-today-sales').innerText = formatSh(calc.appTotalRevenue * 0.4);
+      document.getElementById('app-today-profit').innerText = formatSh(calc.appTotalProfit * 0.4);
+      document.getElementById('app-month-revenue').innerText = formatSh(calc.appTotalRevenue);
+      document.getElementById('app-total-profit').innerText = formatSh(calc.appTotalProfit);
+      renderAppearichDashboard(calc);
+
+      // Accounts Tab
+      document.getElementById('accounts-total-money').innerText = formatSh(calc.totalLiquidMoney);
+      renderAccountCards(calc.totalLiquidMoney);
+
+      // Progress Insights
+      renderProgressInsights(calc);
+      updateAllCharts();
+    }
+
+    function renderIncomeCards() {
+      const container = document.getElementById('income-list-container');
+      container.innerHTML = '';
+      state.incomes.forEach(inc => {
+        const godShare = inc.amount * 0.10;
+        const card = document.createElement('div');
+        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4";
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-brand-black">${inc.name}</span>
+            ${inc.fixed ? '<span class="px-2.5 py-0.5 rounded-full bg-gray-100 text-[10px] font-bold text-brand-black">FIXED</span>' : '<span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-[10px] font-bold text-emerald-600">FLEXIBLE</span>'}
+          </div>
+          <div><p class="text-[11px] text-brand-muted">Amount</p><p class="font-display font-extrabold text-2xl text-brand-black">${formatSh(inc.amount)}</p></div>
+          <div class="pt-3 border-t border-gray-100 flex items-center justify-between bg-brand-surface p-3 rounded-2xl">
+            <span class="text-xs font-bold text-brand-gold">GOD 10%</span>
+            <span class="font-display font-bold text-sm text-brand-black">${formatSh(godShare)}</span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderBudgetCategoryList(availablePool) {
+      const utilsList = document.getElementById('utilities-subcategories-list');
+      utilsList.innerHTML = '';
+      let utilsPlannedTotal = 0, utilsSpentTotal = 0;
+      state.utilitiesSub.forEach(sub => {
+        const plannedSh = (availablePool * sub.percent) / 100;
+        utilsPlannedTotal += plannedSh;
+        utilsSpentTotal += sub.spent;
+        const remaining = plannedSh - sub.spent;
+        const subCard = document.createElement('div');
+        subCard.className = "p-4 bg-white rounded-2xl border border-gray-100 space-y-2";
+        subCard.innerHTML = `
+          <div class="flex justify-between items-center"><span class="font-bold text-sm text-brand-black">${sub.name}</span><span class="text-xs text-brand-muted">${sub.percent}% → ${formatSh(plannedSh)}</span></div>
+          <div class="flex justify-between text-xs"><span class="text-brand-muted">Spent: ${formatSh(sub.spent)}</span><span class="font-bold text-emerald-600">Rem: ${formatSh(remaining)}</span></div>
+        `;
+        utilsList.appendChild(subCard);
+      });
+      document.getElementById('utilities-planned').innerText = formatSh(utilsPlannedTotal);
+      document.getElementById('utilities-spent-summary').innerText = `Spent: ${formatSh(utilsSpentTotal)}`;
+
+      const mainList = document.getElementById('main-categories-list');
+      mainList.innerHTML = '';
+      let totalAllocatedPercent = 25;
+      state.categories.filter(c => !c.isExpandable).forEach(cat => {
+        totalAllocatedPercent += cat.percent;
+        const plannedSh = (availablePool * cat.percent) / 100;
+        const spentSh = state.categorySpent[cat.name] || 0;
+        const card = document.createElement('div');
+        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4";
+        card.innerHTML = `
+          <div class="flex justify-between items-center"><h4 class="font-bold text-base text-brand-black">${cat.name} (${cat.percent}%)</h4><span class="font-display font-bold text-lg text-brand-black">${formatSh(plannedSh)}</span></div>
+          <div class="flex justify-between text-xs pt-2 border-t border-gray-100"><span class="text-brand-muted">Spent: ${formatSh(spentSh)}</span><span class="font-bold text-emerald-600">Remaining: ${formatSh(plannedSh - spentSh)}</span></div>
+        `;
+        mainList.appendChild(card);
+      });
+      document.getElementById('budget-allocated-percent').innerText = `${totalAllocatedPercent.toFixed(1)}%`;
+      document.getElementById('budget-allocated-bar').style.width = `${Math.min(totalAllocatedPercent, 100)}%`;
+    }
+
+    function renderInvestmentHistoryList() {
+      const list = document.getElementById('investment-history-list');
+      list.innerHTML = '';
+      state.investment.history.forEach(item => {
+        const row = document.createElement('div');
+        row.className = "py-3 flex justify-between items-center text-xs";
+        row.innerHTML = `<span class="font-medium text-brand-muted">${item.date}</span><span class="font-display font-bold text-sm text-brand-black">${formatSh(item.value)}</span>`;
+        list.appendChild(row);
+      });
+    }
+
+    function renderAppearichDashboard(calc) {
+      const table = document.getElementById('appearich-sales-table');
+      table.innerHTML = '';
+      state.sales.forEach(sale => {
+        const profit = (sale.sellPrice - sale.buyPrice) * sale.qty;
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-gray-50/50 transition";
+        tr.innerHTML = `<td class="py-3">${sale.date}</td><td class="py-3 font-bold text-brand-black">${sale.product}</td><td class="py-3">${sale.customer}</td><td class="py-3">${sale.qty}</td><td class="py-3">${formatSh(sale.buyPrice)}</td><td class="py-3">${formatSh(sale.sellPrice)}</td><td class="py-3 font-bold text-emerald-600">+${formatSh(profit)}</td><td class="py-3"><span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 font-bold text-[10px]">SOLD</span></td>`;
+        table.appendChild(tr);
+      });
+    }
+
+    function renderAccountCards(totalLiquid) {
+      const container = document.getElementById('account-cards-grid');
+      container.innerHTML = '';
+      Object.keys(state.accounts).forEach(accName => {
+        const balance = state.accounts[accName];
+        const card = document.createElement('div');
+        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4 hover:border-brand-black transition";
+        card.innerHTML = `
+          <div class="flex justify-between items-center"><span class="font-bold text-sm uppercase text-brand-black">${accName}</span><span class="px-2 py-0.5 rounded-full bg-gray-100 text-[10px] font-bold">VAULT</span></div>
+          <div><p class="text-[11px] text-brand-muted">Available Balance</p><p class="font-display font-bold text-2xl text-brand-black">${formatSh(balance)}</p></div>
+          <div class="pt-3 border-t border-gray-100 flex justify-between items-center text-xs">
+            <button onclick="openModal('addMoneyModal')" class="font-semibold text-brand-black hover:underline">+ Add Money</button>
+            <button onclick="openModal('transferModal')" class="font-semibold text-brand-muted hover:text-brand-black">Transfer</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderProgressInsights(calc) {
+      const list = document.getElementById('progress-insights-list');
+      list.innerHTML = `
+        <p>• Your business revenue is robust, generating <span class="font-bold text-emerald-600">${formatSh(calc.appTotalRevenue)}</span> this period.</p>
+        <p>• GOD allocation is fully secured at <span class="font-bold text-brand-gold">${formatSh(calc.godTotal)}</span>.</p>
+        <p>• Investment growth is yielding a <span class="font-bold text-emerald-600">${calc.invReturnPercent.toFixed(2)}%</span> return rate.</p>
+      `;
+    }
+
+    function updateAllCharts() {
+      const ctx1 = document.getElementById('investmentMainChart').getContext('2d');
+      if (invMainChart) invMainChart.destroy();
+      invMainChart = new Chart(ctx1, {
+        type: 'line',
+        data: {
+          labels: state.investment.history.map(h => h.date),
+          datasets: [{ label: 'Portfolio Value', data: state.investment.history.map(h => h.value), borderColor: '#0A0A0C', backgroundColor: 'rgba(10,10,12,0.05)', fill: true, tension: 0.3 }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+      });
+
+      const ctx2 = document.getElementById('appearichSalesChart').getContext('2d');
+      if (appearichChart) appearichChart.destroy();
+      appearichChart = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          datasets: [{ label: 'Sales Revenue', data: [120000, 250000, 180000, 320000, 450000, 520000, 410000], backgroundColor: '#D4AF37', borderRadius: 8 }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+      });
+
+      const ctx3 = document.getElementById('progressWeeklyChart').getContext('2d');
+      if (progWeeklyChart) progWeeklyChart.destroy();
+      progWeeklyChart = new Chart(ctx3, {
+        type: 'line',
+        data: {
+          labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+          datasets: [{ label: 'Net Growth', data: [800000, 950000, 1100000, 1350000], borderColor: '#10B981', backgroundColor: 'rgba(16,185,129,0.1)', fill: true, tension: 0.3 }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+      });
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.getElementById('tab-' + tabId).classList.remove('hidden');
+
+      document.querySelectorAll('.nav-tab').forEach(el => {
+        el.classList.remove('bg-brand-black', 'text-white', 'shadow-sm');
+        el.classList.add('text-brand-muted');
+      });
+      const activeNav = document.getElementById('nav-' + tabId);
+      if (activeNav) {
+        activeNav.classList.add('bg-brand-black', 'text-white', 'shadow-sm');
+        activeNav.classList.remove('text-brand-muted');
+      }
+
+      // Hide/show hero section on dashboard
+      const hero = document.getElementById('hero-section');
+      if (tabId === 'dashboard') hero.classList.remove('hidden');
+      else hero.classList.add('hidden');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleUtilitiesAccordion() {
+      const acc = document.getElementById('utilities-accordion');
+      const chev = document.getElementById('utilities-chevron');
+      acc.classList.toggle('expanded');
+      chev.classList.toggle('rotate-180');
+    }
+
+    function switchAppearichPeriod(period) {
+      document.querySelectorAll('.app-period-btn').forEach(btn => {
+        btn.classList.remove('bg-brand-black', 'text-white');
+        btn.classList.add('bg-gray-100', 'text-brand-muted');
+      });
+      document.getElementById('app-period-' + period).classList.add('bg-brand-black', 'text-white');
+      document.getElementById('app-period-' + period).classList.remove('bg-gray-100', 'text-brand-muted');
+    }
+
+    function switchProgressTab(period) {
+      document.querySelectorAll('.prog-tab-btn').forEach(btn => {
+        btn.classList.remove('bg-brand-black', 'text-white');
+        btn.classList.add('bg-gray-100', 'text-brand-muted');
+      });
+      document.getElementById('prog-tab-' + period).classList.add('bg-brand-black', 'text-white');
+      document.getElementById('prog-tab-' + period).classList.remove('bg-gray-100', 'text-brand-muted');
+
+      if (period === 'weekly') {
+        document.getElementById('prog-weekly-panel').classList.remove('hidden');
+        document.getElementById('prog-monthly-panel').classList.add('hidden');
+      } else {
+        document.getElementById('prog-weekly-panel').classList.add('hidden');
+        document.getElementById('prog-monthly-panel').classList.remove('hidden');
+      }
+    }
+
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+    function handleAddIncome(e) {
+      e.preventDefault();
+      const name = document.getElementById('income-name-input').value.toUpperCase();
+      const amount = parseFloat(document.getElementById('income-amount-input').value);
+      state.incomes.push({ id: Date.now().toString(), name, amount, fixed: false });
+      closeModal('addIncomeModal');
+      renderAll();
+    }
+
+    function handleAddSale(e) {
+      e.preventDefault();
+      const date = document.getElementById('sale-date').value;
+      const qty = parseInt(document.getElementById('sale-qty').value);
+      const product = document.getElementById('sale-product').value;
+      const customer = document.getElementById('sale-customer').value;
+      const buyPrice = parseFloat(document.getElementById('sale-buy-price').value);
+      const sellPrice = parseFloat(document.getElementById('sale-sell-price').value);
+      state.sales.unshift({ id: Date.now().toString(), date, product, customer, qty, buyPrice, sellPrice, status: 'SOLD' });
+      closeModal('addSaleModal');
+      renderAll();
+    }
+
+    function handleAddTransaction(e) {
+      e.preventDefault();
+      const category = document.getElementById('tx-category').value;
+      const account = document.getElementById('tx-account').value;
+      const amount = parseFloat(document.getElementById('tx-amount').value);
+      
+      // Deduct from account
+      if (state.accounts[account] !== undefined) {
+        state.accounts[account] -= amount;
+      }
+      // Add to category spent
+      if (state.categorySpent[category] !== undefined) {
+        state.categorySpent[category] += amount;
+      } else {
+        state.categorySpent[category] = amount;
+      }
+      closeModal('addTransactionModal');
+      renderAll();
+    }
+
+    function handleTransfer(e) {
+      e.preventDefault();
+      const from = document.getElementById('tr-from').value;
+      const to = document.getElementById('tr-to').value;
+      const amount = parseFloat(document.getElementById('tr-amount').value);
+      if (from !== to && state.accounts[from] >= amount) {
+        state.accounts[from] -= amount;
+        state.accounts[to] += amount;
+      }
+      closeModal('transferModal');
+      renderAll();
+    }
+
+    function handleAddMoneyAccount(e) {
+      e.preventDefault();
+      const acc = document.getElementById('am-account').value;
+      const amt = parseFloat(document.getElementById('am-amount').value);
+      state.accounts[acc] += amt;
+      closeModal('addMoneyModal');
+      renderAll();
+    }
+
+    function handleAddInvestmentCapital(e) {
+      e.preventDefault();
+      const amt = parseFloat(document.getElementById('inv-add-amount').value);
+      state.investment.totalInvested += amt;
+      state.investment.currentValue += amt;
+      state.investment.history.push({ date: 'Today', value: state.investment.currentValue });
+      closeModal('addInvestmentModal');
+      renderAll();
+    }
+
+    function handleUpdateInvestmentValue(e) {
+      e.preventDefault();
+      const val = parseFloat(document.getElementById('inv-update-value').value);
+      state.investment.currentValue = val;
+      state.investment.history.push({ date: 'Today', value: val });
+      closeModal('updateInvestmentModal');
+      renderAll();
+    }
+
+    function handleAddCategory(e) {
+      e.preventDefault();
+      const name = document.getElementById('cat-name-input').value;
+      const percent = parseFloat(document.getElementById('cat-percent-input').value);
+      state.categories.push({ id: 'cat-' + Date.now(), name, percent, isExpandable: false });
+      closeModal('addCategoryModal');
+      renderAll();
+    }
+
+    // Initialize App on load
+    window.onload = () => {
+      renderAll();
+    };
+  </script>
 </body>
 </html>
