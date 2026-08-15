@@ -6,8 +6,6 @@
   <title>Appearich Finance Command Center</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,7 +37,8 @@
           boxShadow: {
             'premium': '0 10px 30px -5px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02)',
             'gold-glow': '0 0 20px rgba(212, 175, 55, 0.25)',
-            'card-hover': '0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.03)'
+            'card-hover': '0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.03)',
+            'pop': '0 12px 24px -6px rgba(0, 0, 0, 0.08), 0 4px 8px -2px rgba(0, 0, 0, 0.04)'
           }
         }
       }
@@ -108,29 +107,10 @@
 
   <!-- MAIN CONTAINER -->
   <main class="max-w-6xl mx-auto px-4 lg:px-8 pt-6 space-y-8">
-    <!-- 1. HERO HOME SECTION (Only on Dashboard) -->
-    <div id="hero-section" class="relative rounded-3xl overflow-hidden bg-brand-black text-white shadow-2xl p-6 lg:p-10">
-      <div class="absolute inset-0 opacity-25 mix-blend-overlay bg-cover bg-center pointer-events-none" style="background-image: url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1600&auto=format&fit=crop');"></div>
-      <div class="absolute inset-0 bg-gradient-to-r from-brand-black via-brand-black/90 to-transparent"></div>
-      
-      <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-        <div class="space-y-2 max-w-lg">
-          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-gold/20 text-brand-gold text-xs font-bold tracking-wider">
-            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-            <span>APPEARICH FINANCE</span>
-          </div>
-          <h2 class="font-display font-extrabold text-3xl lg:text-4xl tracking-tight">Build. Track. Grow.</h2>
-          <p class="text-xs lg:text-sm text-gray-300">Your complete wealth ecosystem at a glance. Intelligent automated 10% GOD allocation and robust multi-account management.</p>
-        </div>
-        <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-          <button onclick="switchTab('budget')" class="px-5 py-3 rounded-xl bg-brand-gold text-brand-black font-bold text-xs uppercase tracking-wider hover:bg-yellow-400 transition shadow-gold-glow text-center">
-            View Budget Structure
-          </button>
-          <button onclick="switchTab('progress')" class="px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider transition border border-white/10 text-center">
-            See Financial Growth
-          </button>
-        </div>
-      </div>
+    
+    <!-- 1. HERO HOME SECTION (Clean Image, No Text, Dynamic Image Updating) -->
+    <div id="hero-section" class="relative rounded-3xl overflow-hidden shadow-2xl h-56 lg:h-72 w-full bg-brand-black">
+      <img id="hero-bg-img" src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1600&auto=format&fit=crop" alt="Hero Banner" class="w-full h-full object-cover">
     </div>
 
     <!-- VIEW TABS NAVIGATION SWITCHER -->
@@ -168,208 +148,92 @@
     <!-- ==================== TAB 1: HOME DASHBOARD ==================== -->
     <div id="tab-dashboard" class="tab-content space-y-8">
       
-      <!-- 2. HOME DASHBOARD COMPACT CARDS -->
+      <!-- 2. TITHE & INCOME OVERVIEW (Circular / Ring Progress Indicators) -->
       <div class="space-y-3">
         <div class="flex items-center justify-between">
-          <h3 class="font-bold text-base text-brand-black">Your Money At A Glance</h3>
-          <span class="text-xs text-brand-muted">Real-time calculations</span>
+          <h3 class="font-bold text-base text-brand-black">Monthly Overview</h3>
+          <span class="text-xs text-brand-muted">Auto-resets monthly</span>
         </div>
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <!-- Total Income -->
-          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between">
-            <div class="flex items-center justify-between text-brand-muted">
-              <span class="text-xs font-semibold uppercase tracking-wider">Total Income</span>
-              <svg class="w-4 h-4 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- Left Circle – Tithe -->
+          <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-pop flex items-center justify-between transition-all hover:-translate-y-1">
+            <div class="space-y-1">
+              <span class="text-xs font-bold uppercase tracking-wider text-brand-gold">TITHE (10% GOD)</span>
+              <p id="dash-god-amount" class="font-display text-2xl lg:text-3xl font-extrabold text-brand-black">0 Sh</p>
+              <p class="text-[11px] text-brand-muted">Monthly Tithe Goal Track</p>
             </div>
-            <div class="mt-4">
-              <p id="dash-total-income" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-black">0 Sh</p>
-            </div>
-          </div>
-          <!-- GOD 10% -->
-          <div class="p-5 rounded-2xl bg-brand-black text-white shadow-premium relative overflow-hidden flex flex-col justify-between">
-            <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-brand-gold/10 rounded-full blur-xl pointer-events-none"></div>
-            <div class="flex items-center justify-between text-brand-gold">
-              <span class="text-xs font-semibold uppercase tracking-wider">GOD — 10%</span>
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>
-            </div>
-            <div class="mt-4">
-              <p id="dash-god-amount" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-gold">0 Sh</p>
+            <div class="relative w-24 h-24 flex items-center justify-center flex-shrink-0">
+              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                <path class="text-gray-100" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="text-brand-gold" stroke-dasharray="100, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <span class="absolute font-display font-bold text-sm text-brand-gold">10%</span>
             </div>
           </div>
-          <!-- Total Money (Liquid Accounts) -->
-          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between">
-            <div class="flex items-center justify-between text-brand-muted">
-              <span class="text-xs font-semibold uppercase tracking-wider">Total Money</span>
-              <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+
+          <!-- Right Circle – Total Income -->
+          <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-pop flex items-center justify-between transition-all hover:-translate-y-1">
+            <div class="space-y-1">
+              <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">TOTAL INCOME</span>
+              <p id="dash-total-income" class="font-display text-2xl lg:text-3xl font-extrabold text-brand-black">0 Sh</p>
+              <p class="text-[11px] text-brand-muted">Current Month Earnings</p>
             </div>
-            <div class="mt-4">
-              <p id="dash-total-money" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-black">0 Sh</p>
-            </div>
-          </div>
-          <!-- Remaining Budget -->
-          <div class="p-5 rounded-2xl bg-white border border-brand-black/10 shadow-premium flex flex-col justify-between">
-            <div class="flex items-center justify-between text-brand-muted">
-              <span class="text-xs font-semibold uppercase tracking-wider text-brand-black">Remaining</span>
-              <svg class="w-4 h-4 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-            </div>
-            <div class="mt-4">
-              <p id="dash-remaining-budget" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-black">0 Sh</p>
+            <div class="relative w-24 h-24 flex items-center justify-center flex-shrink-0">
+              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                <path class="text-gray-100" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="text-emerald-500" stroke-dasharray="85, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <svg class="w-6 h-6 text-emerald-500 absolute" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             </div>
           </div>
+
         </div>
       </div>
 
-      <!-- 3. QUICK ACTIONS BAR -->
-      <div class="p-4 rounded-2xl bg-brand-surface border border-gray-100 flex flex-wrap items-center justify-between gap-3">
-        <span class="text-xs font-bold uppercase tracking-wider text-brand-muted">Quick Actions:</span>
-        <div class="flex flex-wrap items-center gap-2">
-          <button onclick="openModal('addIncomeModal')" class="px-4 py-2 rounded-xl bg-white border border-gray-200 hover:border-brand-black text-xs font-bold flex items-center space-x-1.5 transition shadow-sm">
-            <svg class="w-3.5 h-3.5 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+      <!-- 3. BUDGET CATEGORIES HORIZONTAL SCROLLING LAYOUT -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="font-bold text-base text-brand-black">Budget Categories</h3>
+          <span class="text-xs text-brand-muted">Scroll horizontally →</span>
+        </div>
+        <div id="home-budget-horizontal-container" class="flex gap-4 overflow-x-auto no-scrollbar pb-4 pt-1">
+          <!-- Dynamic Pop-Up Horizontal Cards Rendered via JS -->
+        </div>
+      </div>
+
+      <!-- 4. QUICK ACTIONS GRID -->
+      <div class="p-6 rounded-3xl bg-brand-surface border border-gray-200/80 space-y-3 shadow-sm">
+        <span class="text-xs font-bold uppercase tracking-wider text-brand-muted block">Quick Actions</span>
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+          <button onclick="openModal('addIncomeModal')" class="p-3.5 rounded-2xl bg-white border border-gray-200 hover:border-brand-black text-xs font-bold flex flex-col items-center justify-center space-y-2 transition shadow-pop hover:-translate-y-1 text-center">
+            <svg class="w-5 h-5 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
             <span>+ INCOME</span>
           </button>
-          <button onclick="openModal('addSaleModal')" class="px-4 py-2 rounded-xl bg-white border border-gray-200 hover:border-brand-black text-xs font-bold flex items-center space-x-1.5 transition shadow-sm">
-            <svg class="w-3.5 h-3.5 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+          <button onclick="openModal('addSaleModal')" class="p-3.5 rounded-2xl bg-white border border-gray-200 hover:border-brand-black text-xs font-bold flex flex-col items-center justify-center space-y-2 transition shadow-pop hover:-translate-y-1 text-center">
+            <svg class="w-5 h-5 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
             <span>+ SALE</span>
           </button>
-          <button onclick="openModal('addTransactionModal')" class="px-4 py-2 rounded-xl bg-white border border-gray-200 hover:border-brand-black text-xs font-bold flex items-center space-x-1.5 transition shadow-sm">
-            <svg class="w-3.5 h-3.5 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <button onclick="openModal('addTransactionModal')" class="p-3.5 rounded-2xl bg-white border border-gray-200 hover:border-brand-black text-xs font-bold flex flex-col items-center justify-center space-y-2 transition shadow-pop hover:-translate-y-1 text-center">
+            <svg class="w-5 h-5 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             <span>+ EXPENSE</span>
           </button>
-          <button onclick="openModal('addLoanModal')" class="px-4 py-2 rounded-xl bg-white border border-gray-200 hover:border-brand-black text-xs font-bold flex items-center space-x-1.5 transition shadow-sm">
-            <svg class="w-3.5 h-3.5 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+          <button onclick="openModal('addLoanModal')" class="p-3.5 rounded-2xl bg-white border border-gray-200 hover:border-brand-black text-xs font-bold flex flex-col items-center justify-center space-y-2 transition shadow-pop hover:-translate-y-1 text-center">
+            <svg class="w-5 h-5 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
             <span>+ LOAN</span>
           </button>
-          <button onclick="openModal('transferModal')" class="px-4 py-2 rounded-xl bg-white border border-gray-200 hover:border-brand-black text-xs font-bold flex items-center space-x-1.5 transition shadow-sm">
-            <svg class="w-3.5 h-3.5 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
+          <button onclick="openModal('transferModal')" class="p-3.5 rounded-2xl bg-white border border-gray-200 hover:border-brand-black text-xs font-bold flex flex-col items-center justify-center space-y-2 transition shadow-pop hover:-translate-y-1 text-center">
+            <svg class="w-5 h-5 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
             <span>TRANSFER</span>
           </button>
-          <button onclick="switchTab('investment')" class="px-4 py-2 rounded-xl bg-white border border-gray-200 hover:border-brand-black text-xs font-bold flex items-center space-x-1.5 transition shadow-sm">
-            <svg class="w-3.5 h-3.5 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+          <button onclick="switchTab('investment')" class="p-3.5 rounded-2xl bg-white border border-gray-200 hover:border-brand-black text-xs font-bold flex flex-col items-center justify-center space-y-2 transition shadow-pop hover:-translate-y-1 text-center">
+            <svg class="w-5 h-5 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
             <span>INVESTMENT</span>
           </button>
-          <button onclick="switchTab('progress')" class="px-4 py-2 rounded-xl bg-brand-black text-white text-xs font-bold flex items-center space-x-1.5 transition shadow-sm">
-            <svg class="w-3.5 h-3.5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+          <button onclick="switchTab('progress')" class="p-3.5 rounded-2xl bg-brand-black text-white text-xs font-bold flex flex-col items-center justify-center space-y-2 transition shadow-pop hover:-translate-y-1 text-center col-span-2 sm:col-span-1">
+            <svg class="w-5 h-5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
             <span>PROGRESS</span>
           </button>
-        </div>
-      </div>
-
-      <!-- 4. MAIN FINANCE CATEGORIES CARDS SECTION (BOXED LAYOUT) -->
-      <div class="space-y-4">
-        <h3 class="font-bold text-lg text-brand-black">MONEY MANAGEMENT</h3>
-        <!-- Box Container for Cards -->
-        <div class="p-6 rounded-3xl bg-brand-surface border border-gray-200 shadow-sm">
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            
-            <!-- INCOME CARD -->
-            <div onclick="switchTab('income')" class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition cursor-pointer flex flex-col justify-between space-y-4 group">
-              <div class="flex items-center justify-between">
-                <div class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
-                </div>
-                <svg class="w-4 h-4 text-brand-muted group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-              </div>
-              <div>
-                <h4 class="font-bold text-base text-brand-black">INCOME</h4>
-                <p class="text-xs text-brand-muted mt-0.5">Total Income & GOD 10% Allocation</p>
-              </div>
-              <div class="pt-3 border-t border-gray-100 flex justify-between items-center text-xs">
-                <span class="text-brand-muted">Tap to manage sources</span>
-                <span id="card-income-val" class="font-bold text-brand-black">0 Sh</span>
-              </div>
-            </div>
-
-            <!-- BUDGET CARD -->
-            <div onclick="switchTab('budget')" class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition cursor-pointer flex flex-col justify-between space-y-4 group">
-              <div class="flex items-center justify-between">
-                <div class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" /></svg>
-                </div>
-                <svg class="w-4 h-4 text-brand-muted group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-              </div>
-              <div>
-                <h4 class="font-bold text-base text-brand-black">BUDGET</h4>
-                <p class="text-xs text-brand-muted mt-0.5">90% Available Complete Structure</p>
-              </div>
-              <div class="pt-3 border-t border-gray-100 flex justify-between items-center text-xs">
-                <span class="text-brand-muted">Utilities, Invest, Expenses</span>
-                <span id="card-budget-val" class="font-bold text-brand-black">0 Sh</span>
-              </div>
-            </div>
-
-            <!-- INVESTMENT CARD -->
-            <div onclick="switchTab('investment')" class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition cursor-pointer flex flex-col justify-between space-y-4 group">
-              <div class="flex items-center justify-between">
-                <div class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-                </div>
-                <svg class="w-4 h-4 text-brand-muted group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-              </div>
-              <div>
-                <h4 class="font-bold text-base text-brand-black">INVESTMENT</h4>
-                <p class="text-xs text-brand-muted mt-0.5">Smart Growth Tracking System</p>
-              </div>
-              <div class="pt-3 border-t border-gray-100 flex justify-between items-center text-xs">
-                <span class="text-brand-muted">Current Value</span>
-                <span id="card-invest-val" class="font-bold text-emerald-600">+0 Sh</span>
-              </div>
-            </div>
-
-            <!-- APPEARICH BUSINESS CARD -->
-            <div onclick="switchTab('appearich')" class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition cursor-pointer flex flex-col justify-between space-y-4 group">
-              <div class="flex items-center justify-between">
-                <div class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
-                </div>
-                <svg class="w-4 h-4 text-brand-muted group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-              </div>
-              <div>
-                <h4 class="font-bold text-base text-brand-black">APPEARICH</h4>
-                <p class="text-xs text-brand-muted mt-0.5">Today's Sales & Business Profit</p>
-              </div>
-              <div class="pt-3 border-t border-gray-100 flex justify-between items-center text-xs">
-                <span class="text-brand-muted">Profit Today</span>
-                <span id="card-appearich-profit" class="font-bold text-emerald-600">0 Sh</span>
-              </div>
-            </div>
-
-            <!-- ACCOUNTS CARD -->
-            <div onclick="switchTab('accounts')" class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition cursor-pointer flex flex-col justify-between space-y-4 group">
-              <div class="flex items-center justify-between">
-                <div class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                </div>
-                <svg class="w-4 h-4 text-brand-muted group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-              </div>
-              <div>
-                <h4 class="font-bold text-base text-brand-black">ACCOUNTS</h4>
-                <p class="text-xs text-brand-muted mt-0.5">CRDB, SELCOM, MPESA, LIPA NAMBA, CASH</p>
-              </div>
-              <div class="pt-3 border-t border-gray-100 flex justify-between items-center text-xs">
-                <span class="text-brand-muted">Total Money</span>
-                <span id="card-accounts-val" class="font-bold text-brand-black">0 Sh</span>
-              </div>
-            </div>
-
-            <!-- PROGRESS CARD -->
-            <div onclick="switchTab('progress')" class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition cursor-pointer flex flex-col justify-between space-y-4 group">
-              <div class="flex items-center justify-between">
-                <div class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
-                </div>
-                <svg class="w-4 h-4 text-brand-muted group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-              </div>
-              <div>
-                <h4 class="font-bold text-base text-brand-black">PROGRESS</h4>
-                <p class="text-xs text-brand-muted mt-0.5">Weekly / Monthly / Yearly Growth</p>
-              </div>
-              <div class="pt-3 border-t border-gray-100 flex justify-between items-center text-xs">
-                <span class="text-brand-muted">Growth Score</span>
-                <span class="font-bold text-emerald-600">+0.0%</span>
-              </div>
-            </div>
-
-          </div>
         </div>
       </div>
 
@@ -385,19 +249,16 @@
             <span>+ Record Loan</span>
           </button>
         </div>
-
-        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-6">
+        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-pop space-y-6">
           <div class="flex items-center justify-between border-b border-gray-100 pb-4">
             <span class="text-xs font-bold uppercase tracking-wider text-brand-muted">Total Outstanding Debt Owed To You</span>
             <span id="loan-total-owed" class="font-display text-2xl font-extrabold text-brand-black">0 Sh</span>
           </div>
-
           <div id="loan-cards-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <!-- Dynamic Loan Cards rendered via JS -->
           </div>
         </div>
       </div>
-
     </div>
 
     <!-- ==================== TAB 2: INCOME & GOD ==================== -->
@@ -412,9 +273,8 @@
           <span>+ Add Income Source</span>
         </button>
       </div>
-
       <!-- GOD Banner -->
-      <div class="p-8 rounded-3xl bg-brand-black text-white shadow-premium relative overflow-hidden">
+      <div class="p-8 rounded-3xl bg-brand-black text-white shadow-pop relative overflow-hidden">
         <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-brand-gold/20 rounded-full blur-3xl"></div>
         <div class="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
           <div class="flex items-center space-x-6">
@@ -437,7 +297,6 @@
           </div>
         </div>
       </div>
-
       <div class="space-y-4">
         <h3 class="font-bold text-lg text-brand-black">Active Income Streams</h3>
         <div id="income-list-container" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
@@ -456,9 +315,8 @@
           <span>+ Custom Category</span>
         </button>
       </div>
-
       <!-- Pool summary -->
-      <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-pop flex flex-col md:flex-row items-center justify-between gap-6">
         <div>
           <p class="text-xs font-bold text-brand-muted uppercase tracking-wider">Available Budget Pool (90%)</p>
           <p id="budget-pool-total" class="font-display text-3xl font-bold text-brand-black mt-1">0 Sh</p>
@@ -473,11 +331,10 @@
           </div>
         </div>
       </div>
-
       <div class="space-y-4">
         <h3 class="font-bold text-lg text-brand-black">Primary Categories</h3>
         <!-- UTILITIES EXPANDABLE CARD -->
-        <div class="rounded-3xl bg-white border border-gray-100 shadow-premium overflow-hidden transition-all duration-300">
+        <div class="rounded-3xl bg-white border border-gray-100 shadow-pop overflow-hidden transition-all duration-300">
           <div onclick="toggleUtilitiesAccordion()" class="p-6 flex items-center justify-between cursor-pointer hover:bg-gray-50/50 transition">
             <div class="flex items-center space-x-4">
               <div class="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center text-brand-black">
@@ -505,7 +362,6 @@
             <div id="utilities-subcategories-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
           </div>
         </div>
-
         <!-- OTHER CATEGORIES CONTAINER -->
         <div id="main-categories-list" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
       </div>
@@ -528,9 +384,8 @@
           </button>
         </div>
       </div>
-
       <!-- Investment Master Status -->
-      <div class="p-8 rounded-3xl bg-white border border-gray-100 shadow-premium grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div class="p-8 rounded-3xl bg-white border border-gray-100 shadow-pop grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div>
           <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">Total Invested</span>
           <p id="inv-total-invested" class="font-display text-3xl font-extrabold text-brand-black mt-1">0 Sh</p>
@@ -548,19 +403,10 @@
           <p id="inv-percentage-return" class="font-display text-3xl font-extrabold text-emerald-600 mt-1">+0.00%</p>
         </div>
       </div>
-
-      <!-- Investment Chart -->
-      <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
-        <h3 class="font-bold text-base text-brand-black">Investment Performance Trend</h3>
-        <div class="h-72 w-full">
-          <canvas id="investmentMainChart"></canvas>
-        </div>
-      </div>
-
       <!-- Valuation History -->
-      <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
+      <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-pop space-y-4">
         <h3 class="font-bold text-base text-brand-black">Investment History Log</h3>
-        <div id="investment-history-list" class="divide-y divide-gray-100"></div>
+        <div id="investment-history-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
       </div>
     </div>
 
@@ -576,36 +422,34 @@
           <span>+ ADD SALE</span>
         </button>
       </div>
-
       <!-- Business Metric Cards -->
       <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
-        <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium">
+        <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-pop transition-all hover:-translate-y-1">
           <p class="text-xs font-semibold text-brand-muted">TODAY'S RECEIVED</p>
           <p id="app-today-sales" class="font-display text-2xl font-bold text-brand-black mt-2">0 Sh</p>
         </div>
-        <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium">
+        <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-pop transition-all hover:-translate-y-1">
           <p class="text-xs font-semibold text-brand-muted">TODAY'S PROFIT</p>
           <p id="app-today-profit" class="font-display text-2xl font-bold text-emerald-600 mt-2">0 Sh</p>
         </div>
-        <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium">
+        <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-pop transition-all hover:-translate-y-1">
           <p class="text-xs font-semibold text-brand-muted">THIS MONTH REVENUE</p>
           <p id="app-month-revenue" class="font-display text-2xl font-bold text-brand-black mt-2">0 Sh</p>
         </div>
-        <div class="p-5 rounded-2xl bg-white border border-red-200 shadow-premium">
+        <div class="p-5 rounded-2xl bg-white border border-red-200 shadow-pop transition-all hover:-translate-y-1">
           <p class="text-xs font-semibold text-red-500 flex items-center gap-1">
             <span class="w-2 h-2 rounded-full bg-red-500 inline-block animate-pulse"></span>
             OUTSTANDING
           </p>
           <p id="app-total-outstanding" class="font-display text-2xl font-bold text-red-600 mt-2">0 Sh</p>
         </div>
-        <div class="p-5 rounded-2xl bg-brand-black text-white shadow-gold-glow">
+        <div class="p-5 rounded-2xl bg-brand-black text-white shadow-gold-glow transition-all hover:-translate-y-1">
           <p class="text-xs font-semibold text-brand-gold">TOTAL PROFIT</p>
           <p id="app-total-profit" class="font-display text-2xl font-bold text-brand-gold mt-2">0 Sh</p>
         </div>
       </div>
-
-      <!-- Performance Period & Chart -->
-      <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-6">
+      <!-- Performance Period & Highlights -->
+      <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-pop space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-4">
           <div class="flex space-x-2">
             <button onclick="switchAppearichPeriod('day')" id="app-period-day" class="app-period-btn active px-4 py-1.5 rounded-lg text-xs font-bold bg-brand-black text-white">DAY</button>
@@ -616,47 +460,28 @@
           <span class="text-xs font-bold text-emerald-600">Profit Growth: +0%</span>
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-          <div class="p-3 rounded-xl bg-gray-50"><p class="text-[10px] text-brand-muted uppercase font-bold">Products Sold</p><p id="app-period-sold" class="font-display font-bold text-lg text-brand-black">0</p></div>
-          <div class="p-3 rounded-xl bg-gray-50"><p class="text-[10px] text-brand-muted uppercase font-bold">Total Revenue</p><p id="app-period-revenue" class="font-display font-bold text-lg text-brand-black">0 Sh</p></div>
-          <div class="p-3 rounded-xl bg-gray-50"><p class="text-[10px] text-brand-muted uppercase font-bold">Buying Cost</p><p id="app-period-cost" class="font-display font-bold text-lg text-brand-black">0 Sh</p></div>
-          <div class="p-3 rounded-xl bg-gray-50"><p class="text-[10px] text-brand-muted uppercase font-bold">Profit Margin</p><p id="app-period-margin" class="font-display font-bold text-lg text-emerald-600">0%</p></div>
-        </div>
-        <div class="h-64 w-full">
-          <canvas id="appearichSalesChart"></canvas>
+          <div class="p-4 rounded-2xl bg-brand-surface shadow-sm"><p class="text-[10px] text-brand-muted uppercase font-bold">Products Sold</p><p id="app-period-sold" class="font-display font-bold text-xl text-brand-black mt-1">0</p></div>
+          <div class="p-4 rounded-2xl bg-brand-surface shadow-sm"><p class="text-[10px] text-brand-muted uppercase font-bold">Total Revenue</p><p id="app-period-revenue" class="font-display font-bold text-xl text-brand-black mt-1">0 Sh</p></div>
+          <div class="p-4 rounded-2xl bg-brand-surface shadow-sm"><p class="text-[10px] text-brand-muted uppercase font-bold">Buying Cost</p><p id="app-period-cost" class="font-display font-bold text-xl text-brand-black mt-1">0 Sh</p></div>
+          <div class="p-4 rounded-2xl bg-brand-surface shadow-sm"><p class="text-[10px] text-brand-muted uppercase font-bold">Profit Margin</p><p id="app-period-margin" class="font-display font-bold text-xl text-emerald-600 mt-1">0%</p></div>
         </div>
       </div>
-
-      <!-- Top Products & Customers -->
+      <!-- Top Products & Customers Cards -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
+        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-pop space-y-4">
           <h3 class="font-bold text-base text-brand-black">Best Products</h3>
-          <div id="appearich-top-products" class="divide-y divide-gray-100 text-xs text-brand-muted">No products sold yet.</div>
+          <div id="appearich-top-products" class="grid grid-cols-1 gap-3">No products sold yet.</div>
         </div>
-        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
+        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-pop space-y-4">
           <h3 class="font-bold text-base text-brand-black">Customer Tracking</h3>
-          <div id="appearich-customers-list" class="divide-y divide-gray-100 text-xs text-brand-muted">No customers recorded yet.</div>
+          <div id="appearich-customers-list" class="grid grid-cols-1 gap-3">No customers recorded yet.</div>
         </div>
       </div>
-
-      <!-- Sales Log Table -->
-      <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
+      <!-- Sales Log Cards Grid Layout -->
+      <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-pop space-y-4">
         <h3 class="font-bold text-base text-brand-black">Sales Transactions Log</h3>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs">
-            <thead>
-              <tr class="border-b border-gray-100 text-brand-muted font-semibold uppercase">
-                <th class="pb-3">Date</th>
-                <th class="pb-3">Product</th>
-                <th class="pb-3">Customer</th>
-                <th class="pb-3">Total Value</th>
-                <th class="pb-3">Amount Paid</th>
-                <th class="pb-3">Unpaid Balance</th>
-                <th class="pb-3">Status</th>
-                <th class="pb-3">Action</th>
-              </tr>
-            </thead>
-            <tbody id="appearich-sales-table" class="divide-y divide-gray-100 font-medium"></tbody>
-          </table>
+        <div id="appearich-sales-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Dynamic Pop-up Sales Cards Rendered via JS -->
         </div>
       </div>
     </div>
@@ -678,30 +503,27 @@
           </button>
         </div>
       </div>
-
       <!-- Aggregate Total Money -->
-      <div class="p-8 rounded-3xl bg-brand-black text-white shadow-premium flex flex-col sm:flex-row items-center justify-between gap-6 border border-brand-black">
+      <div class="p-8 rounded-3xl bg-brand-black text-white shadow-pop flex flex-col sm:flex-row items-center justify-between gap-6 border border-brand-black">
         <div>
           <span class="text-xs font-bold text-brand-gold uppercase tracking-widest">TOTAL MONEY (Liquid Net Worth)</span>
           <p id="accounts-total-money" class="font-display text-4xl font-extrabold text-white mt-1">0 Sh</p>
         </div>
         <span class="px-3 py-1 rounded-full bg-brand-gold/20 text-brand-gold text-xs font-bold">5 Active Accounts</span>
       </div>
-
       <!-- Account Cards Grid -->
       <div id="account-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </div>
 
-    <!-- ==================== TAB 7: PROGRESS ==================== -->
+    <!-- ==================== TAB 7: PROGRESS & PROFILE ==================== -->
     <div id="tab-progress" class="tab-content hidden space-y-8">
       <div>
         <h2 class="font-display font-bold text-2xl text-brand-black">Progress Center</h2>
         <p class="text-xs text-brand-muted">Weekly, monthly, and yearly performance metrics and financial growth tracking.</p>
       </div>
-
       <!-- Score & Insights Banner -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="p-6 rounded-3xl bg-brand-black text-white shadow-premium flex flex-col items-center justify-center text-center space-y-4 relative overflow-hidden">
+        <div class="p-6 rounded-3xl bg-brand-black text-white shadow-pop flex flex-col items-center justify-center text-center space-y-4 relative overflow-hidden">
           <p class="text-xs font-bold text-brand-gold uppercase tracking-wider">FINANCIAL GROWTH SCORE</p>
           <div class="relative w-32 h-32 flex items-center justify-center">
             <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
@@ -712,42 +534,32 @@
           </div>
           <p class="text-xs text-gray-400">Consistent upward momentum across business and investments.</p>
         </div>
-
-        <div class="lg:col-span-2 p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4 flex flex-col justify-between">
+        <div class="lg:col-span-2 p-6 rounded-3xl bg-white border border-gray-100 shadow-pop space-y-4 flex flex-col justify-between">
           <div>
             <div class="flex items-center space-x-2 text-brand-black mb-2">
               <svg class="w-5 h-5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
               <h3 class="font-bold text-base">Smart Growth Insights</h3>
             </div>
-            <div id="progress-insights-list" class="space-y-2 text-xs text-brand-black font-medium"></div>
+            <div id="progress-insights-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-brand-black font-medium"></div>
           </div>
         </div>
       </div>
 
-      <!-- Weekly / Monthly Charts -->
-      <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-6">
-        <div class="flex items-center justify-between border-b border-gray-100 pb-4">
-          <div class="flex space-x-2">
-            <button onclick="switchProgressTab('weekly')" id="prog-tab-weekly" class="prog-tab-btn active px-4 py-1.5 rounded-lg text-xs font-bold bg-brand-black text-white">WEEKLY</button>
-            <button onclick="switchProgressTab('monthly')" id="prog-tab-monthly" class="prog-tab-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-brand-muted hover:text-brand-black">MONTHLY</button>
-          </div>
-          <span class="text-xs font-bold text-emerald-600">Status: Active</span>
-        </div>
-        <div id="prog-weekly-panel" class="space-y-4">
-          <div class="h-64 w-full">
-            <canvas id="progressWeeklyChart"></canvas>
-          </div>
-        </div>
-        <div id="prog-monthly-panel" class="space-y-4 hidden">
-          <div class="h-64 w-full">
-            <canvas id="progressMonthlyChart"></canvas>
-          </div>
+      <!-- PROFILE & SETTINGS SECTION -->
+      <div class="p-6 rounded-3xl bg-brand-surface border border-gray-200/80 space-y-4">
+        <h3 class="font-bold text-base text-brand-black">Profile & Visual Preferences</h3>
+        <p class="text-xs text-brand-muted">Manage your personal settings and customize your Home screen hero image dynamically.</p>
+        <div class="pt-2">
+          <button onclick="openModal('changeHeroModal')" class="px-5 py-3 rounded-2xl bg-brand-black text-white text-xs font-bold hover:bg-gray-800 transition shadow-pop flex items-center space-x-2">
+            <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+            <span>Change Hero Image</span>
+          </button>
         </div>
       </div>
     </div>
   </main>
 
-  <!-- 13. SIMPLE BOTTOM NAVIGATION -->
+  <!-- BOTTOM NAVIGATION -->
   <nav class="fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-t border-gray-200 px-4 py-2.5">
     <div class="max-w-md mx-auto flex items-center justify-between">
       <button onclick="switchTab('dashboard')" id="bnav-dashboard" class="bnav-btn flex flex-col items-center space-y-1 text-brand-black">
@@ -773,6 +585,22 @@
   </nav>
 
   <!-- ==================== MODALS ==================== -->
+  <!-- Change Hero Image Modal -->
+  <div id="changeHeroModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-lg text-brand-black">Update Hero Image URL</h3>
+        <button onclick="closeModal('changeHeroModal')" class="text-gray-400 hover:text-black">&times;</button>
+      </div>
+      <form onsubmit="handleChangeHeroImage(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-brand-black uppercase mb-1">Image URL</label>
+          <input id="hero-url-input" type="url" required placeholder="https://images.unsplash.com/..." class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm">
+        </div>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Update Image</button>
+      </form>
+    </div>
+  </div>
 
   <!-- Add Income Modal -->
   <div id="addIncomeModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
@@ -822,12 +650,10 @@
             <option value="PARTIAL">Partial Payment</option>
           </select>
         </div>
-
         <div id="sale-partial-container" class="hidden">
           <label class="block text-xs font-bold uppercase mb-1 text-red-600">Amount Paid So Far (Sh)</label>
           <input id="sale-paid-amount" type="number" placeholder="Enter amount paid" class="w-full px-3 py-2 rounded-xl border border-red-300 text-sm">
         </div>
-
         <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Record Sale</button>
       </form>
     </div>
@@ -1028,9 +854,12 @@
 
   <!-- ==================== JAVASCRIPT APP ENGINE ==================== -->
   <script>
-    // INITIAL STATE: ALL FINANCIAL AMOUNTS START AT ZERO (0)
+    // INITIAL STATE & AUTOMATIC MONTHLY REFRESH/RESET LOGIC FOR TITHE & INCOME
+    const currentMonthKey = new Date().toISOString().slice(0, 7);
+    const savedMonthKey = localStorage.getItem('appearich_last_month_key');
+
     const state = {
-      incomes: [],
+      incomes: (savedMonthKey === currentMonthKey) ? JSON.parse(localStorage.getItem('appearich_incomes') || '[]') : [],
       categories: [
         { id: 'cat-utilities', name: 'Utilities', percent: 25, isExpandable: true },
         { id: 'cat-investment', name: 'Investment', percent: 20, isExpandable: false },
@@ -1058,7 +887,10 @@
       utilitiesExpanded: false
     };
 
-    let invMainChart, appearichChart, progWeeklyChart, progMonthlyChart;
+    if (savedMonthKey !== currentMonthKey) {
+      localStorage.setItem('appearich_last_month_key', currentMonthKey);
+      localStorage.setItem('appearich_incomes', JSON.stringify([]));
+    }
 
     function formatSh(amount) {
       return new Intl.NumberFormat('en-US').format(Math.round(amount || 0)) + ' Sh';
@@ -1082,16 +914,13 @@
         const totalCost = sale.buyPrice * sale.qty;
         const paid = sale.paymentStatus === 'FULL' ? totalValue : (sale.amountPaid || 0);
         const unpaid = totalValue - paid;
-
         appTotalRevenue += totalValue;
         appTotalCost += totalCost;
         appTotalReceived += paid;
         appTotalOutstanding += unpaid;
       });
-
       const appTotalProfit = appTotalReceived - appTotalCost;
       const totalLoanOwed = state.loans.reduce((sum, loan) => sum + (loan.amount - loan.paid), 0);
-
       return { 
         totalIncome, 
         godTotal, 
@@ -1112,16 +941,14 @@
 
     function renderAll() {
       const calc = getCalculations();
+      
+      // Overview Tithe & Total Income Updates
       document.getElementById('dash-total-income').innerText = formatSh(calc.totalIncome);
       document.getElementById('dash-god-amount').innerText = formatSh(calc.godTotal);
-      document.getElementById('dash-total-money').innerText = formatSh(calc.totalLiquidMoney);
-      document.getElementById('dash-remaining-budget').innerText = formatSh(calc.remainingBudget);
-      document.getElementById('card-income-val').innerText = formatSh(calc.totalIncome);
-      document.getElementById('card-budget-val').innerText = formatSh(calc.availableBudget);
-      document.getElementById('card-invest-val').innerText = (calc.invGainLoss >= 0 ? '+' : '') + formatSh(calc.invGainLoss);
-      document.getElementById('card-appearich-profit').innerText = formatSh(calc.appTotalProfit);
-      document.getElementById('card-accounts-val').innerText = formatSh(calc.totalLiquidMoney);
       
+      // Horizontal Budget Categories Section (Home)
+      renderHomeBudgetHorizontal(calc.availableBudget);
+
       // Income Tab
       document.getElementById('income-god-total').innerText = formatSh(calc.godTotal);
       renderIncomeCards();
@@ -1155,7 +982,48 @@
       
       // Progress Insights
       renderProgressInsights(calc);
-      updateAllCharts();
+    }
+
+    // Dynamic Hero Image Handler
+    function handleChangeHeroImage(e) {
+      e.preventDefault();
+      const newUrl = document.getElementById('hero-url-input').value;
+      if (newUrl) {
+        document.getElementById('hero-bg-img').src = newUrl;
+        closeModal('changeHeroModal');
+      }
+    }
+
+    // Render Home Horizontal Budget Cards
+    function renderHomeBudgetHorizontal(availablePool) {
+      const container = document.getElementById('home-budget-horizontal-container');
+      container.innerHTML = '';
+      
+      state.categories.forEach(cat => {
+        const plannedSh = (availablePool * cat.percent) / 100;
+        let spentSh = 0;
+        if (cat.isExpandable) {
+          state.utilitiesSub.forEach(sub => spentSh += sub.spent);
+        } else {
+          spentSh = state.categorySpent[cat.name] || 0;
+        }
+        
+        const card = document.createElement('div');
+        card.className = "flex-shrink-0 w-64 p-5 rounded-3xl bg-white border border-gray-100 shadow-pop space-y-3 cursor-pointer hover:-translate-y-1 transition-all";
+        card.onclick = () => switchTab('budget');
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <h4 class="font-bold text-sm text-brand-black">${cat.name}</h4>
+            <span class="px-2.5 py-0.5 rounded-full bg-gray-100 text-[10px] font-bold text-brand-black">${cat.percent}%</span>
+          </div>
+          <p class="font-display font-extrabold text-xl text-brand-black">${formatSh(plannedSh)}</p>
+          <div class="pt-2 border-t border-gray-100 flex justify-between items-center text-xs">
+            <span class="text-brand-muted">Spent: ${formatSh(spentSh)}</span>
+            <span class="font-bold text-emerald-600">${formatSh(plannedSh - spentSh)} left</span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
     }
 
     function renderIncomeCards() {
@@ -1168,11 +1036,11 @@
       state.incomes.forEach(inc => {
         const godShare = inc.amount * 0.10;
         const card = document.createElement('div');
-        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4";
+        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-pop flex flex-col justify-between space-y-4 hover:-translate-y-1 transition-all";
         card.innerHTML = `
           <div class="flex items-center justify-between">
             <span class="text-xs font-bold uppercase tracking-wider text-brand-black">${inc.name}</span>
-            ${inc.fixed ? '<span class="px-2.5 py-0.5 rounded-full bg-gray-100 text-[10px] font-bold text-brand-black">FIXED</span>' : '<span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-[10px] font-bold text-emerald-600">FLEXIBLE</span>'}
+            <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-[10px] font-bold text-emerald-600">ACTIVE</span>
           </div>
           <div><p class="text-[11px] text-brand-muted">Amount</p><p class="font-display font-extrabold text-2xl text-brand-black">${formatSh(inc.amount)}</p></div>
           <div class="pt-3 border-t border-gray-100 flex items-center justify-between bg-brand-surface p-3 rounded-2xl">
@@ -1194,7 +1062,7 @@
         utilsSpentTotal += sub.spent;
         const remaining = plannedSh - sub.spent;
         const subCard = document.createElement('div');
-        subCard.className = "p-4 bg-white rounded-2xl border border-gray-100 space-y-2";
+        subCard.className = "p-4 bg-white rounded-2xl border border-gray-100 space-y-2 shadow-sm hover:-translate-y-0.5 transition-all";
         subCard.innerHTML = `
           <div class="flex justify-between items-center"><span class="font-bold text-sm text-brand-black">${sub.name}</span><span class="text-xs text-brand-muted">${sub.percent}% → ${formatSh(plannedSh)}</span></div>
           <div class="flex justify-between text-xs"><span class="text-brand-muted">Spent: ${formatSh(sub.spent)}</span><span class="font-bold text-emerald-600">Rem: ${formatSh(remaining)}</span></div>
@@ -1203,7 +1071,6 @@
       });
       document.getElementById('utilities-planned').innerText = formatSh(utilsPlannedTotal);
       document.getElementById('utilities-spent-summary').innerText = `Spent: ${formatSh(utilsSpentTotal)}`;
-
       const mainList = document.getElementById('main-categories-list');
       mainList.innerHTML = '';
       let totalAllocatedPercent = 25;
@@ -1212,7 +1079,7 @@
         const plannedSh = (availablePool * cat.percent) / 100;
         const spentSh = state.categorySpent[cat.name] || 0;
         const card = document.createElement('div');
-        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4";
+        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-pop space-y-4 hover:-translate-y-1 transition-all";
         card.innerHTML = `
           <div class="flex justify-between items-center"><h4 class="font-bold text-base text-brand-black">${cat.name} (${cat.percent}%)</h4><span class="font-display font-bold text-lg text-brand-black">${formatSh(plannedSh)}</span></div>
           <div class="flex justify-between text-xs pt-2 border-t border-gray-100"><span class="text-brand-muted">Spent: ${formatSh(spentSh)}</span><span class="font-bold text-emerald-600">Remaining: ${formatSh(plannedSh - spentSh)}</span></div>
@@ -1227,54 +1094,52 @@
       const list = document.getElementById('investment-history-list');
       list.innerHTML = '';
       if (state.investment.history.length === 0) {
-        list.innerHTML = `<div class="py-4 text-center text-xs text-brand-muted">No valuation history recorded yet.</div>`;
+        list.innerHTML = `<div class="col-span-full py-4 text-center text-xs text-brand-muted">No valuation history recorded yet.</div>`;
         return;
       }
       state.investment.history.forEach(item => {
-        const row = document.createElement('div');
-        row.className = "py-3 flex justify-between items-center text-xs";
-        row.innerHTML = `<span class="font-medium text-brand-muted">${item.date}</span><span class="font-display font-bold text-sm text-brand-black">${formatSh(item.value)}</span>`;
-        list.appendChild(row);
+        const card = document.createElement('div');
+        card.className = "p-4 rounded-2xl bg-white border border-gray-100 shadow-pop flex justify-between items-center text-xs hover:-translate-y-0.5 transition-all";
+        card.innerHTML = `<span class="font-medium text-brand-muted">${item.date}</span><span class="font-display font-bold text-sm text-brand-black">${formatSh(item.value)}</span>`;
+        list.appendChild(card);
       });
     }
 
     function renderAppearichDashboard(calc) {
-      const table = document.getElementById('appearich-sales-table');
-      table.innerHTML = '';
+      const grid = document.getElementById('appearich-sales-grid');
+      grid.innerHTML = '';
       if (state.sales.length === 0) {
-        table.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-brand-muted text-xs">No sales recorded yet. Click + ADD SALE to record transactions.</td></tr>`;
+        grid.innerHTML = `<div class="col-span-full py-6 text-center text-brand-muted text-xs">No sales recorded yet. Click + ADD SALE to record transactions.</div>`;
         return;
       }
-
       state.sales.forEach(sale => {
         const totalValue = sale.sellPrice * sale.qty;
         const paid = sale.paymentStatus === 'FULL' ? totalValue : (sale.amountPaid || 0);
         const remaining = totalValue - paid;
         const isPartial = sale.paymentStatus === 'PARTIAL' && remaining > 0;
-
-        const tr = document.createElement('tr');
-        tr.className = "hover:bg-gray-50/50 transition";
-        tr.innerHTML = `
-          <td class="py-3">${sale.date}</td>
-          <td class="py-3 font-bold text-brand-black">${sale.product}</td>
-          <td class="py-3">${sale.customer}</td>
-          <td class="py-3 font-bold">${formatSh(totalValue)}</td>
-          <td class="py-3 text-emerald-600 font-bold">${formatSh(paid)}</td>
-          <td class="py-3 ${isPartial ? 'text-red-600 font-bold' : 'text-gray-400'}">${formatSh(remaining)}</td>
-          <td class="py-3">
+        
+        const card = document.createElement('div');
+        card.className = "p-5 rounded-2xl bg-white border border-gray-100 shadow-pop space-y-3 flex flex-col justify-between hover:-translate-y-1 transition-all";
+        card.innerHTML = `
+          <div class="flex justify-between items-start">
+            <div>
+              <span class="text-[10px] font-bold text-brand-muted uppercase">${sale.date}</span>
+              <h4 class="font-bold text-sm text-brand-black">${sale.product}</h4>
+              <p class="text-xs text-brand-muted">Customer: ${sale.customer}</p>
+            </div>
             ${isPartial 
-              ? `<span class="px-2.5 py-1 rounded-full bg-red-100 text-red-600 font-bold text-[10px] flex items-center gap-1 w-max">
-                  <span class="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></span>
-                  PARTIAL (OWED)
-                 </span>` 
-              : `<span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-600 font-bold text-[10px]">FULL PAYMENT</span>`
+              ? `<span class="px-2.5 py-0.5 rounded-full bg-red-100 text-red-600 font-bold text-[10px]">PARTIAL</span>`
+              : `<span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-600 font-bold text-[10px]">FULL</span>`
             }
-          </td>
-          <td class="py-3">
-            <button onclick="openEditSaleModal('${sale.id}')" class="text-[11px] font-bold text-brand-black hover:underline">Update</button>
-          </td>
+          </div>
+          <div class="grid grid-cols-3 gap-2 text-xs pt-2 border-t border-gray-100">
+            <div><span class="text-[10px] text-brand-muted uppercase">Total</span><p class="font-bold text-brand-black">${formatSh(totalValue)}</p></div>
+            <div><span class="text-[10px] text-brand-muted uppercase">Paid</span><p class="font-bold text-emerald-600">${formatSh(paid)}</p></div>
+            <div><span class="text-[10px] text-brand-muted uppercase">Balance</span><p class="font-bold ${isPartial ? 'text-red-600' : 'text-gray-400'}">${formatSh(remaining)}</p></div>
+          </div>
+          <button onclick="openEditSaleModal('${sale.id}')" class="w-full py-1.5 rounded-xl bg-gray-50 hover:bg-gray-100 font-bold text-xs text-brand-black transition">Update Payment Status</button>
         `;
-        table.appendChild(tr);
+        grid.appendChild(card);
       });
     }
 
@@ -1285,12 +1150,11 @@
         container.innerHTML = `<div class="col-span-2 text-center py-6 text-brand-muted text-xs">No loan records active. Click "+ Record Loan" to add one.</div>`;
         return;
       }
-
       state.loans.forEach(loan => {
         const remaining = loan.amount - loan.paid;
         const isPaid = remaining <= 0;
         const card = document.createElement('div');
-        card.className = "p-4 rounded-2xl border border-gray-100 bg-brand-surface space-y-3 flex flex-col justify-between";
+        card.className = "p-4 rounded-2xl border border-gray-100 bg-white shadow-pop space-y-3 flex flex-col justify-between hover:-translate-y-1 transition-all";
         card.innerHTML = `
           <div class="flex justify-between items-start">
             <div>
@@ -1307,151 +1171,106 @@
             <div><span class="text-[10px] text-brand-muted uppercase">Paid</span><p class="font-bold text-emerald-600">${formatSh(loan.paid)}</p></div>
             <div><span class="text-[10px] text-brand-muted uppercase">Remaining</span><p class="font-bold ${isPaid ? 'text-gray-400' : 'text-red-600'}">${formatSh(remaining)}</p></div>
           </div>
-          <div class="pt-1 flex justify-end">
-            <button onclick="openEditLoanModal('${loan.id}')" class="text-xs font-bold text-brand-black hover:underline">+ Update Payment</button>
-          </div>
+          ${!isPaid ? `<button onclick="openEditLoanModal('${loan.id}')" class="w-full py-1.5 rounded-xl bg-gray-50 hover:bg-gray-100 font-bold text-xs text-brand-black transition">Update Repayment</button>` : ''}
         `;
         container.appendChild(card);
       });
     }
 
     function renderAccountCards() {
-      const container = document.getElementById('account-cards-grid');
-      container.innerHTML = '';
-      Object.keys(state.accounts).forEach(accName => {
-        const balance = state.accounts[accName];
+      const grid = document.getElementById('account-cards-grid');
+      grid.innerHTML = '';
+      Object.entries(state.accounts).forEach(([name, balance]) => {
         const card = document.createElement('div');
-        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4 hover:border-brand-black transition";
+        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-pop space-y-4 hover:-translate-y-1 transition-all";
         card.innerHTML = `
-          <div class="flex justify-between items-center"><span class="font-bold text-sm uppercase text-brand-black">${accName}</span><span class="px-2 py-0.5 rounded-full bg-gray-100 text-[10px] font-bold">VAULT</span></div>
-          <div><p class="text-[11px] text-brand-muted">Available Balance</p><p class="font-display font-bold text-2xl text-brand-black">${formatSh(balance)}</p></div>
-          <div class="pt-3 border-t border-gray-100 flex justify-between items-center text-xs">
-            <button onclick="openModal('addMoneyModal')" class="font-semibold text-brand-black hover:underline">+ Add Money</button>
-            <button onclick="openModal('transferModal')" class="font-semibold text-brand-muted hover:text-brand-black">Transfer</button>
-          </div>
+          <div class="flex justify-between items-center"><h4 class="font-bold text-base text-brand-black">${name}</h4><span class="px-2.5 py-0.5 rounded-full bg-gray-100 text-[10px] font-bold text-brand-black">LIQUID</span></div>
+          <p class="font-display font-extrabold text-2xl text-brand-black">${formatSh(balance)}</p>
         `;
-        container.appendChild(card);
+        grid.appendChild(card);
       });
     }
 
     function renderProgressInsights(calc) {
       const list = document.getElementById('progress-insights-list');
       list.innerHTML = `
-        <p>• Your business received total is <span class="font-bold text-emerald-600">${formatSh(calc.appTotalReceived)}</span>.</p>
-        <p>• Outstanding business unpaid amount is <span class="font-bold text-red-600">${formatSh(calc.appTotalOutstanding)}</span>.</p>
-        <p>• GOD allocation is secured at <span class="font-bold text-brand-gold">${formatSh(calc.godTotal)}</span>.</p>
+        <div class="p-4 rounded-2xl bg-brand-surface shadow-sm border border-gray-100 space-y-1">
+          <p class="text-brand-muted uppercase text-[10px] font-bold">Total Liquid Capital</p>
+          <p class="font-bold text-brand-black text-sm">${formatSh(calc.totalLiquidMoney)}</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-brand-surface shadow-sm border border-gray-100 space-y-1">
+          <p class="text-brand-muted uppercase text-[10px] font-bold">Business Profit Realized</p>
+          <p class="font-bold text-emerald-600 text-sm">${formatSh(calc.appTotalProfit)}</p>
+        </div>
       `;
     }
 
-    function updateAllCharts() {
-      const ctx1 = document.getElementById('investmentMainChart').getContext('2d');
-      if (invMainChart) invMainChart.destroy();
-      invMainChart = new Chart(ctx1, {
-        type: 'line',
-        data: {
-          labels: state.investment.history.length > 0 ? state.investment.history.map(h => h.date) : ['Start'],
-          datasets: [{ label: 'Portfolio Value', data: state.investment.history.length > 0 ? state.investment.history.map(h => h.value) : [0], borderColor: '#0A0A0C', backgroundColor: 'rgba(10,10,12,0.05)', fill: true, tension: 0.3 }]
-        },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-      });
-
-      const ctx2 = document.getElementById('appearichSalesChart').getContext('2d');
-      if (appearichChart) appearichChart.destroy();
-      appearichChart = new Chart(ctx2, {
-        type: 'bar',
-        data: {
-          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          datasets: [{ label: 'Sales Received', data: [0, 0, 0, 0, 0, 0, 0], backgroundColor: '#D4AF37', borderRadius: 8 }]
-        },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-      });
-
-      const ctx3 = document.getElementById('progressWeeklyChart').getContext('2d');
-      if (progWeeklyChart) progWeeklyChart.destroy();
-      progWeeklyChart = new Chart(ctx3, {
-        type: 'line',
-        data: {
-          labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-          datasets: [{ label: 'Net Growth', data: [0, 0, 0, 0], borderColor: '#10B981', backgroundColor: 'rgba(16,185,129,0.1)', fill: true, tension: 0.3 }]
-        },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-      });
-    }
-
-    function switchTab(tabId) {
+    // TAB SWITCHING NAVIGATION
+    function switchTab(tabName) {
+      state.currentTab = tabName;
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.getElementById('tab-' + tabId).classList.remove('hidden');
       document.querySelectorAll('.nav-tab').forEach(el => {
-        el.classList.remove('bg-brand-black', 'text-white', 'shadow-sm');
+        el.classList.remove('active', 'bg-brand-black', 'text-white', 'shadow-sm');
         el.classList.add('text-brand-muted');
       });
-      const activeNav = document.getElementById('nav-' + tabId);
-      if (activeNav) {
-        activeNav.classList.add('bg-brand-black', 'text-white', 'shadow-sm');
-        activeNav.classList.remove('text-brand-muted');
+      document.querySelectorAll('.bnav-btn').forEach(el => {
+        el.classList.remove('text-brand-black');
+        el.classList.add('text-brand-muted');
+      });
+
+      const activeTabContent = document.getElementById(`tab-${tabName}`);
+      if (activeTabContent) activeTabContent.classList.remove('hidden');
+
+      const activeNavTab = document.getElementById(`nav-${tabName}`);
+      if (activeNavTab) {
+        activeNavTab.classList.add('active', 'bg-brand-black', 'text-white', 'shadow-sm');
+        activeNavTab.classList.remove('text-brand-muted');
       }
-      const hero = document.getElementById('hero-section');
-      if (tabId === 'dashboard') hero.classList.remove('hidden');
-      else hero.classList.add('hidden');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      const activeBnav = document.getElementById(`bnav-${tabName}`);
+      if (activeBnav) {
+        activeBnav.classList.add('text-brand-black');
+        activeBnav.classList.remove('text-brand-muted');
+      }
     }
 
+    // MODAL CONTROL HELPERS
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+    // ACCORDION TOGGLE
     function toggleUtilitiesAccordion() {
-      const acc = document.getElementById('utilities-accordion');
-      const chev = document.getElementById('utilities-chevron');
-      acc.classList.toggle('expanded');
-      chev.classList.toggle('rotate-180');
+      state.utilitiesExpanded = !state.utilitiesExpanded;
+      const content = document.getElementById('utilities-accordion');
+      const chevron = document.getElementById('utilities-chevron');
+      if (state.utilitiesExpanded) {
+        content.classList.add('expanded');
+        chevron.classList.add('rotate-180');
+      } else {
+        content.classList.remove('expanded');
+        chevron.classList.remove('rotate-180');
+      }
+    }
+
+    // EVENT HANDLERS FOR FORMS
+    function handleAddIncome(e) {
+      e.preventDefault();
+      const name = document.getElementById('income-name-input').value;
+      const amount = parseFloat(document.getElementById('income-amount-input').value) || 0;
+      if (name && amount > 0) {
+        state.incomes.push({ name, amount });
+        localStorage.setItem('appearich_incomes', JSON.stringify(state.incomes));
+        closeModal('addIncomeModal');
+        e.target.reset();
+        renderAll();
+      }
     }
 
     function toggleSalePartialInput() {
       const status = document.getElementById('sale-payment-status').value;
-      const partialBox = document.getElementById('sale-partial-container');
-      if (status === 'PARTIAL') partialBox.classList.remove('hidden');
-      else partialBox.classList.add('hidden');
-    }
-
-    function toggleEditSalePartialInput() {
-      const status = document.getElementById('edit-sale-status').value;
-      const partialBox = document.getElementById('edit-sale-paid-container');
-      if (status === 'PARTIAL') partialBox.classList.remove('hidden');
-      else partialBox.classList.add('hidden');
-    }
-
-    function switchAppearichPeriod(period) {
-      document.querySelectorAll('.app-period-btn').forEach(btn => {
-        btn.classList.remove('bg-brand-black', 'text-white');
-        btn.classList.add('bg-gray-100', 'text-brand-muted');
-      });
-      document.getElementById('app-period-' + period).classList.add('bg-brand-black', 'text-white');
-      document.getElementById('app-period-' + period).classList.remove('bg-gray-100', 'text-brand-muted');
-    }
-
-    function switchProgressTab(period) {
-      document.querySelectorAll('.prog-tab-btn').forEach(btn => {
-        btn.classList.remove('bg-brand-black', 'text-white');
-        btn.classList.add('bg-gray-100', 'text-brand-muted');
-      });
-      document.getElementById('prog-tab-' + period).classList.add('bg-brand-black', 'text-white');
-      document.getElementById('prog-tab-' + period).classList.remove('bg-gray-100', 'text-brand-muted');
-      if (period === 'weekly') {
-        document.getElementById('prog-weekly-panel').classList.remove('hidden');
-        document.getElementById('prog-monthly-panel').classList.add('hidden');
-      } else {
-        document.getElementById('prog-weekly-panel').classList.add('hidden');
-        document.getElementById('prog-monthly-panel').classList.remove('hidden');
-      }
-    }
-
-    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-
-    function handleAddIncome(e) {
-      e.preventDefault();
-      const name = document.getElementById('income-name-input').value.toUpperCase();
-      const amount = parseFloat(document.getElementById('income-amount-input').value) || 0;
-      state.incomes.push({ id: Date.now().toString(), name, amount, fixed: false });
-      closeModal('addIncomeModal');
-      renderAll();
+      const container = document.getElementById('sale-partial-container');
+      if (status === 'PARTIAL') container.classList.remove('hidden');
+      else container.classList.add('hidden');
     }
 
     function handleAddSale(e) {
@@ -1463,40 +1282,43 @@
       const buyPrice = parseFloat(document.getElementById('sale-buy-price').value) || 0;
       const sellPrice = parseFloat(document.getElementById('sale-sell-price').value) || 0;
       const paymentStatus = document.getElementById('sale-payment-status').value;
-      
-      let amountPaid = sellPrice * qty;
-      if (paymentStatus === 'PARTIAL') {
-        amountPaid = parseFloat(document.getElementById('sale-paid-amount').value) || 0;
-      }
+      const amountPaid = paymentStatus === 'PARTIAL' ? (parseFloat(document.getElementById('sale-paid-amount').value) || 0) : (sellPrice * qty);
 
-      state.sales.unshift({ id: Date.now().toString(), date, product, customer, qty, buyPrice, sellPrice, paymentStatus, amountPaid });
+      state.sales.push({ id: 'sale-' + Date.now(), date, qty, product, customer, buyPrice, sellPrice, paymentStatus, amountPaid });
       closeModal('addSaleModal');
+      e.target.reset();
       renderAll();
     }
 
-    function openEditSaleModal(saleId) {
-      const sale = state.sales.find(s => s.id === saleId);
-      if (!sale) return;
-      document.getElementById('edit-sale-id').value = sale.id;
-      document.getElementById('edit-sale-status').value = sale.paymentStatus;
-      document.getElementById('edit-sale-paid-amount').value = sale.amountPaid || (sale.sellPrice * sale.qty);
-      toggleEditSalePartialInput();
-      openModal('updateSalePaymentModal');
+    function openEditSaleModal(id) {
+      const sale = state.sales.find(s => s.id === id);
+      if (sale) {
+        document.getElementById('edit-sale-id').value = sale.id;
+        document.getElementById('edit-sale-status').value = sale.paymentStatus;
+        document.getElementById('edit-sale-paid-amount').value = sale.amountPaid || 0;
+        openModal('updateSalePaymentModal');
+      }
+    }
+
+    function toggleEditSalePartialInput() {
+      const status = document.getElementById('edit-sale-status').value;
+      const container = document.getElementById('edit-sale-paid-container');
+      if (status === 'PARTIAL') container.classList.remove('hidden');
+      else container.classList.add('hidden');
     }
 
     function handleUpdateSalePayment(e) {
       e.preventDefault();
-      const saleId = document.getElementById('edit-sale-id').value;
+      const id = document.getElementById('edit-sale-id').value;
       const status = document.getElementById('edit-sale-status').value;
-      const paidAmt = parseFloat(document.getElementById('edit-sale-paid-amount').value) || 0;
-
-      const sale = state.sales.find(s => s.id === saleId);
+      const paid = parseFloat(document.getElementById('edit-sale-paid-amount').value) || 0;
+      const sale = state.sales.find(s => s.id === id);
       if (sale) {
         sale.paymentStatus = status;
-        sale.amountPaid = status === 'FULL' ? (sale.sellPrice * sale.qty) : paidAmt;
+        sale.amountPaid = status === 'FULL' ? (sale.sellPrice * sale.qty) : paid;
+        closeModal('updateSalePaymentModal');
+        renderAll();
       }
-      closeModal('updateSalePaymentModal');
-      renderAll();
     }
 
     function handleAddLoan(e) {
@@ -1507,46 +1329,48 @@
       const paid = parseFloat(document.getElementById('loan-paid').value) || 0;
       const note = document.getElementById('loan-note').value;
 
-      state.loans.unshift({ id: Date.now().toString(), borrower, amount, date, paid, note });
+      state.loans.push({ id: 'loan-' + Date.now(), borrower, amount, date, paid, note });
       closeModal('addLoanModal');
+      e.target.reset();
       renderAll();
     }
 
-    function openEditLoanModal(loanId) {
-      const loan = state.loans.find(l => l.id === loanId);
-      if (!loan) return;
-      document.getElementById('edit-loan-id').value = loan.id;
-      document.getElementById('edit-loan-paid').value = loan.paid;
-      openModal('updateLoanModal');
+    function openEditLoanModal(id) {
+      const loan = state.loans.find(l => l.id === id);
+      if (loan) {
+        document.getElementById('edit-loan-id').value = loan.id;
+        document.getElementById('edit-loan-paid').value = loan.paid;
+        openModal('updateLoanModal');
+      }
     }
 
     function handleUpdateLoan(e) {
       e.preventDefault();
-      const loanId = document.getElementById('edit-loan-id').value;
-      const paidAmt = parseFloat(document.getElementById('edit-loan-paid').value) || 0;
-      const loan = state.loans.find(l => l.id === loanId);
+      const id = document.getElementById('edit-loan-id').value;
+      const paid = parseFloat(document.getElementById('edit-loan-paid').value) || 0;
+      const loan = state.loans.find(l => l.id === id);
       if (loan) {
-        loan.paid = paidAmt;
+        loan.paid = paid;
+        closeModal('updateLoanModal');
+        renderAll();
       }
-      closeModal('updateLoanModal');
-      renderAll();
     }
 
     function handleAddTransaction(e) {
       e.preventDefault();
+      const name = document.getElementById('tx-name').value;
       const category = document.getElementById('tx-category').value;
       const account = document.getElementById('tx-account').value;
       const amount = parseFloat(document.getElementById('tx-amount').value) || 0;
-      
-      if (state.accounts[account] !== undefined) {
-        state.accounts[account] -= amount;
-      }
-      if (state.categorySpent[category] !== undefined) {
-        state.categorySpent[category] += amount;
-      } else {
-        state.categorySpent[category] = amount;
-      }
+
+      const utilSub = state.utilitiesSub.find(u => u.name === category);
+      if (utilSub) utilSub.spent += amount;
+      else if (state.categorySpent[category] !== undefined) state.categorySpent[category] += amount;
+
+      if (state.accounts[account] !== undefined) state.accounts[account] -= amount;
+
       closeModal('addTransactionModal');
+      e.target.reset();
       renderAll();
     }
 
@@ -1555,56 +1379,85 @@
       const from = document.getElementById('tr-from').value;
       const to = document.getElementById('tr-to').value;
       const amount = parseFloat(document.getElementById('tr-amount').value) || 0;
-      if (from !== to) {
+
+      if (from !== to && state.accounts[from] !== undefined && state.accounts[to] !== undefined) {
         state.accounts[from] -= amount;
         state.accounts[to] += amount;
+        closeModal('transferModal');
+        e.target.reset();
+        renderAll();
       }
-      closeModal('transferModal');
-      renderAll();
     }
 
     function handleAddMoneyAccount(e) {
       e.preventDefault();
-      const acc = document.getElementById('am-account').value;
-      const amt = parseFloat(document.getElementById('am-amount').value) || 0;
-      state.accounts[acc] += amt;
-      closeModal('addMoneyModal');
-      renderAll();
+      const account = document.getElementById('am-account').value;
+      const amount = parseFloat(document.getElementById('am-amount').value) || 0;
+
+      if (state.accounts[account] !== undefined) {
+        state.accounts[account] += amount;
+        closeModal('addMoneyModal');
+        e.target.reset();
+        renderAll();
+      }
     }
 
     function handleAddInvestmentCapital(e) {
       e.preventDefault();
-      const amt = parseFloat(document.getElementById('inv-add-amount').value) || 0;
-      state.investment.totalInvested += amt;
-      state.investment.currentValue += amt;
-      state.investment.history.push({ date: 'Today', value: state.investment.currentValue });
-      closeModal('addInvestmentModal');
-      renderAll();
+      const amount = parseFloat(document.getElementById('inv-add-amount').value) || 0;
+      if (amount > 0) {
+        state.investment.totalInvested += amount;
+        state.investment.currentValue += amount;
+        state.investment.history.push({ date: new Date().toLocaleDateString(), value: state.investment.currentValue });
+        closeModal('addInvestmentModal');
+        e.target.reset();
+        renderAll();
+      }
     }
 
     function handleUpdateInvestmentValue(e) {
       e.preventDefault();
       const val = parseFloat(document.getElementById('inv-update-value').value) || 0;
-      state.investment.currentValue = val;
-      state.investment.history.push({ date: 'Today', value: val });
-      closeModal('updateInvestmentModal');
-      renderAll();
+      if (val >= 0) {
+        state.investment.currentValue = val;
+        state.investment.history.push({ date: new Date().toLocaleDateString(), value: val });
+        closeModal('updateInvestmentModal');
+        e.target.reset();
+        renderAll();
+      }
     }
 
     function handleAddCategory(e) {
       e.preventDefault();
       const name = document.getElementById('cat-name-input').value;
       const percent = parseFloat(document.getElementById('cat-percent-input').value) || 0;
-      state.categories.push({ id: 'cat-' + Date.now(), name, percent, isExpandable: false });
-      state.categorySpent[name] = 0;
-      closeModal('addCategoryModal');
-      renderAll();
+
+      if (name && percent > 0) {
+        state.categories.push({ id: 'cat-' + Date.now(), name, percent, isExpandable: false });
+        state.categorySpent[name] = 0;
+        closeModal('addCategoryModal');
+        e.target.reset();
+        renderAll();
+      }
     }
 
-    // Initialize application on page load
-    window.onload = () => {
+    function switchAppearichPeriod(period) {
+      state.appearichPeriod = period;
+      document.querySelectorAll('.app-period-btn').forEach(btn => {
+        btn.classList.remove('active', 'bg-brand-black', 'text-white');
+        btn.classList.add('bg-gray-100', 'text-brand-muted');
+      });
+      const activeBtn = document.getElementById(`app-period-${period}`);
+      if (activeBtn) {
+        activeBtn.classList.add('active', 'bg-brand-black', 'text-white');
+        activeBtn.classList.remove('bg-gray-100', 'text-brand-muted');
+      }
+    }
+
+    // INITIAL APP INITIALIZATION
+    document.addEventListener('DOMContentLoaded', () => {
       renderAll();
-    };
+    });
   </script>
 </body>
 </html>
