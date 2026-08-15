@@ -95,7 +95,6 @@
       </div>
     </div>
   </header>
-
   <!-- MAIN CONTAINER -->
   <main class="max-w-6xl mx-auto px-4 lg:px-8 pt-6 space-y-8">
     
@@ -128,7 +127,6 @@
         </div>
       </div>
     </div>
-
     <!-- VIEW TABS NAVIGATION SWITCHER -->
     <div class="flex items-center space-x-2 border-b border-gray-200 overflow-x-auto no-scrollbar pb-2">
       <button id="nav-dashboard" onclick="switchTab('dashboard')" class="nav-tab active px-5 py-2.5 rounded-xl text-sm font-semibold transition flex items-center space-x-2 bg-brand-black text-white shadow-sm flex-shrink-0">
@@ -164,7 +162,6 @@
         <span>Progress</span>
       </button>
     </div>
-
     <!-- ==================== TAB 1: HOME DASHBOARD ==================== -->
     <div id="tab-dashboard" class="tab-content space-y-8">
       
@@ -218,7 +215,6 @@
           </div>
         </div>
       </div>
-
       <!-- REORGANIZED GRID QUICK ACTIONS BAR -->
       <div class="p-5 rounded-3xl bg-brand-surface border border-gray-200 shadow-sm space-y-3">
         <div class="flex items-center justify-between">
@@ -245,7 +241,6 @@
               <p class="text-[10px] text-brand-muted">Record Business</p>
             </div>
           </button>
-
           <button onclick="openModal('addTransactionModal')" class="p-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-2xl shadow-sm transition text-left flex items-center space-x-3 group">
             <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition flex-shrink-0">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -255,7 +250,6 @@
               <p class="text-[10px] text-brand-muted">Track Outflow</p>
             </div>
           </button>
-
           <button onclick="openModal('transferModal')" class="p-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-2xl shadow-sm transition text-left flex items-center space-x-3 group">
             <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition flex-shrink-0">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
@@ -265,7 +259,6 @@
               <p class="text-[10px] text-brand-muted">Move Money</p>
             </div>
           </button>
-
           <button onclick="openModal('addLoanModal')" class="p-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-2xl shadow-sm transition text-left flex items-center space-x-3 group">
             <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition flex-shrink-0">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
@@ -275,7 +268,6 @@
               <p class="text-[10px] text-brand-muted">Record Debt</p>
             </div>
           </button>
-
           <button onclick="switchTab('investment')" class="p-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-2xl shadow-sm transition text-left flex items-center space-x-3 group">
             <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition flex-shrink-0">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
@@ -285,7 +277,6 @@
               <p class="text-[10px] text-brand-muted">Portfolio</p>
             </div>
           </button>
-
           <button onclick="switchTab('progress')" class="p-3 bg-brand-black hover:bg-gray-800 text-white rounded-2xl shadow-sm transition text-left flex items-center space-x-3 group col-span-2 sm:col-span-1">
             <div class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-brand-gold flex-shrink-0">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
@@ -299,7 +290,6 @@
       </div>
       <!-- Home Screen cleanly ends here below Quick Actions -->
     </div>
-
     <!-- ==================== TAB 2: INCOME & GOD ==================== -->
     <div id="tab-income" class="tab-content hidden space-y-8">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -316,7 +306,6 @@
           </button>
         </div>
       </div>
-
       <!-- GOD Tithe Banner -->
       <div class="p-8 rounded-3xl bg-brand-black text-white shadow-premium relative overflow-hidden">
         <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-brand-gold/20 rounded-full blur-3xl"></div>
@@ -341,7 +330,6 @@
           </div>
         </div>
       </div>
-
       <div class="space-y-4">
         <div class="flex items-center justify-between">
           <h3 id="income-list-heading" class="font-bold text-lg text-brand-black">Income Records</h3>
@@ -350,7 +338,6 @@
         <div id="income-list-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
       </div>
     </div>
-
     <!-- ==================== TAB 3: BUDGET ==================== -->
     <div id="tab-budget" class="tab-content hidden space-y-8">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -363,7 +350,6 @@
           <span>+ Custom Category</span>
         </button>
       </div>
-
       <!-- Pool summary -->
       <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col md:flex-row items-center justify-between gap-6">
         <div>
@@ -380,44 +366,50 @@
           </div>
         </div>
       </div>
-
       <div class="space-y-4">
         <h3 class="font-bold text-lg text-brand-black">Primary Categories</h3>
-        <!-- UTILITIES EXPANDABLE CARD -->
-        <div class="rounded-3xl bg-white border border-gray-100 shadow-premium overflow-hidden transition-all duration-300">
-          <div onclick="toggleUtilitiesAccordion()" class="p-6 flex items-center justify-between cursor-pointer hover:bg-gray-50/50 transition">
-            <div class="flex items-center space-x-4">
-              <div class="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center text-brand-black">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-              </div>
-              <div>
-                <div class="flex items-center space-x-2">
-                  <h4 class="font-bold text-base text-brand-black">UTILITIES</h4>
-                  <span class="px-2.5 py-0.5 rounded-full bg-gray-100 text-brand-black text-[11px] font-bold">25%</span>
+        <!-- Horizontal-by-vertical grid layout for budget categories -->
+        <div id="budget-categories-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- UTILITIES EXPANDABLE CARD -->
+          <div class="rounded-3xl bg-white border border-gray-100 shadow-premium overflow-hidden transition-all duration-300 flex flex-col justify-between">
+            <div onclick="toggleUtilitiesAccordion()" class="p-6 flex items-center justify-between cursor-pointer hover:bg-gray-50/50 transition">
+              <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center text-brand-black">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                 </div>
-                <p class="text-xs text-brand-muted mt-0.5">Internet, Umeme, Taka, Transport</p>
+                <div>
+                  <div class="flex items-center space-x-2">
+                    <h4 class="font-bold text-base text-brand-black">UTILITIES</h4>
+                    <span id="utilities-percent-badge" class="px-2.5 py-0.5 rounded-full bg-gray-100 text-brand-black text-[11px] font-bold">0%</span>
+                  </div>
+                  <p class="text-xs text-brand-muted mt-0.5">Internet, Umeme, Taka, Transport</p>
+                </div>
+              </div>
+              <div class="flex items-center space-x-3">
+                <svg id="utilities-chevron" class="w-6 h-6 text-brand-black transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
               </div>
             </div>
-            <div class="flex items-center space-x-6">
-              <div class="text-right hidden sm:block">
-                <p id="utilities-planned" class="font-display font-bold text-base text-brand-black">0 Sh</p>
-                <p id="utilities-spent-summary" class="text-xs text-brand-muted">Spent: 0 Sh</p>
+            <div class="px-6 pb-6 pt-0 space-y-3">
+              <div>
+                <label class="block text-xs font-bold text-brand-muted uppercase mb-1">Target Amount (Sh)</label>
+                <input type="number" id="cat-amount-cat-utilities" oninput="handleCategoryAmountInput('cat-utilities', this.value)" placeholder="Enter amount" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm font-bold text-brand-black">
               </div>
-              <svg id="utilities-chevron" class="w-6 h-6 text-brand-black transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+              <div class="flex justify-between text-xs pt-2 border-t border-gray-100">
+                <span id="utilities-spent-summary" class="text-brand-muted">Spent: 0 Sh</span>
+                <span id="utilities-remaining-summary" class="font-bold text-emerald-600">Remaining: 0 Sh</span>
+              </div>
+            </div>
+            <!-- Accordion Content -->
+            <div id="utilities-accordion" class="accordion-content border-t border-gray-100 bg-brand-surface p-6 space-y-4">
+              <p class="text-xs font-semibold text-brand-muted uppercase tracking-wider">Subcategory Breakdown</p>
+              <div id="utilities-subcategories-list" class="grid grid-cols-1 gap-4"></div>
             </div>
           </div>
-          <!-- Accordion Content -->
-          <div id="utilities-accordion" class="accordion-content border-t border-gray-100 bg-brand-surface p-6 space-y-4">
-            <p class="text-xs font-semibold text-brand-muted uppercase tracking-wider">Subcategory Breakdown</p>
-            <div id="utilities-subcategories-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-          </div>
+          <!-- OTHER CATEGORIES Dynamic Container -->
+          <div id="main-categories-list" class="contents"></div>
         </div>
-
-        <!-- OTHER CATEGORIES CONTAINER -->
-        <div id="main-categories-list" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
       </div>
     </div>
-
     <!-- ==================== TAB 4: INVESTMENT ==================== -->
     <div id="tab-investment" class="tab-content hidden space-y-8">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -435,8 +427,7 @@
           </button>
         </div>
       </div>
-
-      <!-- Investment Master Status Cards Grid -->
+      <!-- Investment Master Status Cards Grid (horizontal-by-vertical grid) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium">
           <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">Total Invested</span>
@@ -455,27 +446,24 @@
           <p id="inv-percentage-return" class="font-display text-3xl font-extrabold text-emerald-600 mt-1">+0.00%</p>
         </div>
       </div>
-
-      <!-- Valuation History Cards Grid (Replaced Graph) -->
+      <!-- Valuation History Cards Grid (Horizontal-by-vertical grid) -->
       <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
         <h3 class="font-bold text-base text-brand-black">Investment History Log</h3>
         <div id="investment-history-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
       </div>
     </div>
-
     <!-- ==================== TAB 5: APPEARICH BUSINESS ==================== -->
     <div id="tab-appearich" class="tab-content hidden space-y-8">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 class="font-display font-bold text-2xl text-brand-black">Appearich Business System</h2>
-          <p class="text-xs text-brand-muted">Dedicated business sales tracking, payment status management, and customer log.</p>
+          <p class="text-xs text-brand-muted">Dedicated business sales tracking and payment status management.</p>
         </div>
         <button onclick="openModal('addSaleModal')" class="bg-brand-black text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-sm hover:bg-gray-800 transition">
           <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
           <span>+ ADD SALE</span>
         </button>
       </div>
-
       <!-- Business Metric Cards -->
       <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
         <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium">
@@ -502,8 +490,7 @@
           <p id="app-total-profit" class="font-display text-2xl font-bold text-brand-gold mt-2">0 Sh</p>
         </div>
       </div>
-
-      <!-- Performance Summary Grid (Replaced Graph) -->
+      <!-- Performance Summary Grid -->
       <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-4">
           <div class="flex space-x-2">
@@ -521,19 +508,6 @@
           <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100"><p class="text-[10px] text-brand-muted uppercase font-bold">Profit Margin</p><p id="app-period-margin" class="font-display font-bold text-xl text-emerald-600 mt-1">0%</p></div>
         </div>
       </div>
-
-      <!-- Top Products & Customers Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
-          <h3 class="font-bold text-base text-brand-black">Best Products</h3>
-          <div id="appearich-top-products" class="grid grid-cols-1 gap-3 text-xs text-brand-muted">No products sold yet.</div>
-        </div>
-        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
-          <h3 class="font-bold text-base text-brand-black">Customer Tracking</h3>
-          <div id="appearich-customers-list" class="grid grid-cols-1 gap-3 text-xs text-brand-muted">No customers recorded yet.</div>
-        </div>
-      </div>
-
       <!-- Sales Log Table -->
       <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
         <h3 class="font-bold text-base text-brand-black">Sales Transactions Log</h3>
@@ -556,7 +530,6 @@
         </div>
       </div>
     </div>
-
     <!-- ==================== TAB 6: ACCOUNTS ==================== -->
     <div id="tab-accounts" class="tab-content hidden space-y-8">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -574,7 +547,6 @@
           </button>
         </div>
       </div>
-
       <!-- Aggregate Total Money -->
       <div class="p-8 rounded-3xl bg-brand-black text-white shadow-premium flex flex-col sm:flex-row items-center justify-between gap-6 border border-brand-black">
         <div>
@@ -583,11 +555,9 @@
         </div>
         <span class="px-3 py-1 rounded-full bg-brand-gold/20 text-brand-gold text-xs font-bold">5 Active Accounts</span>
       </div>
-
-      <!-- Account Cards Grid -->
+      <!-- Account Cards Grid (horizontal-by-vertical grid) -->
       <div id="account-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </div>
-
     <!-- ==================== TAB 7: LOANS MANAGEMENT (DEDICATED SECTION) ==================== -->
     <div id="tab-loans" class="tab-content hidden space-y-8">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -600,7 +570,6 @@
           <span>+ Record Loan</span>
         </button>
       </div>
-
       <!-- Total Loan Debt Summary Card -->
       <div class="p-8 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
@@ -609,21 +578,18 @@
         </div>
         <span class="px-3 py-1 rounded-full bg-yellow-50 text-yellow-700 border border-yellow-200 text-xs font-bold">Active Records</span>
       </div>
-
       <!-- Loan List Grid Layout -->
       <div class="space-y-4">
         <h3 class="font-bold text-lg text-brand-black">Active Loans</h3>
         <div id="loan-cards-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
       </div>
     </div>
-
     <!-- ==================== TAB 8: PROGRESS (PROFIT ONLY) ==================== -->
     <div id="tab-progress" class="tab-content hidden space-y-8">
       <div>
         <h2 class="font-display font-bold text-2xl text-brand-black">Overall Profit Progress</h2>
         <p class="text-xs text-brand-muted">Aggregated combined total profit across all saved historical months.</p>
       </div>
-
       <!-- Overall Profit Highlights Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="p-8 rounded-3xl bg-brand-black text-white shadow-premium flex flex-col justify-between space-y-4 relative overflow-hidden">
@@ -634,7 +600,6 @@
           </div>
           <p class="text-xs text-gray-400">Summed total net profit from all stored months to date.</p>
         </div>
-
         <div class="p-8 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4">
           <div>
             <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">ACTIVE MONTH PROFIT</span>
@@ -643,7 +608,6 @@
           <p id="progress-active-month-name" class="text-xs text-brand-muted font-semibold">Current Month Profit</p>
         </div>
       </div>
-
       <!-- Monthly Profit History Grid (Replaced Graph) -->
       <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
         <div class="flex items-center justify-between border-b border-gray-100 pb-4">
@@ -653,9 +617,7 @@
         <div id="progress-monthly-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
       </div>
     </div>
-
   </main>
-
   <!-- SIMPLE BOTTOM NAVIGATION -->
   <nav class="fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-t border-gray-200 px-4 py-2.5">
     <div class="max-w-md mx-auto flex items-center justify-between">
@@ -680,7 +642,6 @@
       </button>
     </div>
   </nav>
-
   <!-- ==================== MODALS ==================== -->
   <!-- Add Income Modal -->
   <div id="addIncomeModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
@@ -702,7 +663,6 @@
       </form>
     </div>
   </div>
-
   <!-- Add Sale Modal -->
   <div id="addSaleModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-lg w-full space-y-4 shadow-2xl border border-gray-100 max-h-[90vh] overflow-y-auto">
@@ -737,7 +697,6 @@
       </form>
     </div>
   </div>
-
   <!-- Update Business Payment Modal -->
   <div id="updateSalePaymentModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
@@ -762,7 +721,6 @@
       </form>
     </div>
   </div>
-
   <!-- Add Loan Modal -->
   <div id="addLoanModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
@@ -782,7 +740,6 @@
       </form>
     </div>
   </div>
-
   <!-- Update Loan Repayment Modal -->
   <div id="updateLoanModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
@@ -800,7 +757,6 @@
       </form>
     </div>
   </div>
-
   <!-- Add Expense Transaction Modal -->
   <div id="addTransactionModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
@@ -839,7 +795,6 @@
       </form>
     </div>
   </div>
-
   <!-- Transfer Modal -->
   <div id="transferModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
@@ -867,7 +822,6 @@
       </form>
     </div>
   </div>
-
   <!-- Add Money Modal -->
   <div id="addMoneyModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
@@ -887,7 +841,6 @@
       </form>
     </div>
   </div>
-
   <!-- Add Capital Investment Modal -->
   <div id="addInvestmentModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
@@ -901,7 +854,6 @@
       </form>
     </div>
   </div>
-
   <!-- Update Investment Valuation Modal -->
   <div id="updateInvestmentModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
@@ -915,7 +867,6 @@
       </form>
     </div>
   </div>
-
   <!-- Custom Budget Category Modal -->
   <div id="addCategoryModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
@@ -925,12 +876,11 @@
       </div>
       <form onsubmit="handleAddCategory(event)" class="space-y-4">
         <div><label class="block text-xs font-bold uppercase mb-1">Category Name</label><input id="cat-name-input" type="text" required placeholder="e.g. Health" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm"></div>
-        <div><label class="block text-xs font-bold uppercase mb-1">Percentage (%)</label><input id="cat-percent-input" type="number" step="0.1" required placeholder="5" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm"></div>
+        <div><label class="block text-xs font-bold uppercase mb-1">Target Amount (Sh)</label><input id="cat-amount-input" type="number" required placeholder="50000" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm"></div>
         <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Create Category</button>
       </form>
     </div>
   </div>
-
   <!-- ==================== JAVASCRIPT ENGINE ==================== -->
   <script>
     function getCurrentMonthKey() {
@@ -939,7 +889,6 @@
       const month = String(now.getMonth() + 1).padStart(2, '0');
       return `${year}-${month}`;
     }
-
     const state = {
       activeMonth: getCurrentMonthKey(),
       monthlyData: {
@@ -952,17 +901,17 @@
       },
       heroImageUrl: localStorage.getItem('appearich_hero_img') || 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1600&auto=format&fit=crop',
       categories: [
-        { id: 'cat-utilities', name: 'Utilities', percent: 25, isExpandable: true },
-        { id: 'cat-investment', name: 'Investment', percent: 20, isExpandable: false },
-        { id: 'cat-appearich', name: 'Appearich', percent: 20, isExpandable: false },
-        { id: 'cat-expenses', name: 'Expenses', percent: 20, isExpandable: false },
-        { id: 'cat-other', name: 'Other', percent: 5, isExpandable: false }
+        { id: 'cat-utilities', name: 'Utilities', amount: 0, isExpandable: true },
+        { id: 'cat-investment', name: 'Investment', amount: 0, isExpandable: false },
+        { id: 'cat-appearich', name: 'Appearich', amount: 0, isExpandable: false },
+        { id: 'cat-expenses', name: 'Expenses', amount: 0, isExpandable: false },
+        { id: 'cat-other', name: 'Other', amount: 0, isExpandable: false }
       ],
       utilitiesSub: [
-        { name: 'Internet', percent: 8 },
-        { name: 'Umeme', percent: 7 },
-        { name: 'Taka', percent: 4 },
-        { name: 'Transport', percent: 6 }
+        { name: 'Internet' },
+        { name: 'Umeme' },
+        { name: 'Taka' },
+        { name: 'Transport' }
       ],
       investment: {
         totalInvested: 0,
@@ -975,7 +924,6 @@
       appearichPeriod: 'day',
       utilitiesExpanded: false
     };
-
     function ensureMonthExists(monthKey) {
       if (!state.monthlyData[monthKey]) {
         state.monthlyData[monthKey] = {
@@ -986,11 +934,9 @@
         };
       }
     }
-
     function formatSh(amount) {
       return new Intl.NumberFormat('en-US').format(Math.round(amount || 0)) + ' Sh';
     }
-
     function calculateMonthMetrics(monthKey) {
       ensureMonthExists(monthKey);
       const data = state.monthlyData[monthKey];
@@ -1000,7 +946,6 @@
       let salesCost = 0;
       let salesReceived = 0;
       let salesOutstanding = 0;
-
       data.sales.forEach(sale => {
         const totalValue = sale.sellPrice * sale.qty;
         const totalCost = sale.buyPrice * sale.qty;
@@ -1010,18 +955,14 @@
         salesReceived += paid;
         salesOutstanding += (totalValue - paid);
       });
-
       const totalIncome = generalIncome + salesReceived;
       const godTithe = totalIncome * 0.10;
       const availableBudget = totalIncome - godTithe;
       const salesProfit = salesReceived - salesCost;
-
       let totalSpent = 0;
       Object.values(data.utilitiesSubSpent).forEach(v => totalSpent += v);
       Object.values(data.categorySpent).forEach(v => totalSpent += v);
-
       const remainingBudget = availableBudget - totalSpent;
-
       return {
         generalIncome,
         salesIncome,
@@ -1036,25 +977,20 @@
         remainingBudget
       };
     }
-
     function getCalculations() {
       const activeCalc = calculateMonthMetrics(state.activeMonth);
-
       // Global calculations
       let overallProfit = 0;
       const monthlyProfits = {};
-
       Object.keys(state.monthlyData).forEach(mKey => {
         const mCalc = calculateMonthMetrics(mKey);
         monthlyProfits[mKey] = mCalc.salesProfit;
         overallProfit += mCalc.salesProfit;
       });
-
       const invGainLoss = state.investment.currentValue - state.investment.totalInvested;
       const invReturnPercent = state.investment.totalInvested > 0 ? (invGainLoss / state.investment.totalInvested) * 100 : 0;
       const totalLiquidMoney = Object.values(state.accounts).reduce((sum, val) => sum + val, 0);
       const totalLoanOwed = state.loans.reduce((sum, loan) => sum + (loan.amount - loan.paid), 0);
-
       return {
         ...activeCalc,
         overallProfit,
@@ -1065,36 +1001,29 @@
         totalLoanOwed
       };
     }
-
     function renderAll() {
       const calc = getCalculations();
-
       // Set Hero Image
       document.getElementById('hero-bg-img').style.backgroundImage = `url('${state.heroImageUrl}')`;
-
       // Home Dashboard Cards
       document.getElementById('dash-total-income').innerText = formatSh(calc.totalIncome);
       document.getElementById('dash-god-amount').innerText = formatSh(calc.godTithe);
       document.getElementById('dash-total-money').innerText = formatSh(calc.totalLiquidMoney);
       document.getElementById('dash-remaining-budget').innerText = formatSh(calc.remainingBudget);
-
       // Income Tab
       document.getElementById('income-god-total').innerText = formatSh(calc.godTithe);
       document.getElementById('income-month-picker').value = state.activeMonth;
       document.getElementById('income-month-label').innerText = `Active Month: ${state.activeMonth}`;
       renderIncomeCards();
-
       // Budget Tab
       document.getElementById('budget-pool-total').innerText = formatSh(calc.availableBudget);
       renderBudgetCategoryList(calc.availableBudget);
-
       // Investment Tab
       document.getElementById('inv-total-invested').innerText = formatSh(state.investment.totalInvested);
       document.getElementById('inv-current-value').innerText = formatSh(state.investment.currentValue);
       document.getElementById('inv-gain-loss').innerText = (calc.invGainLoss >= 0 ? '+' : '') + formatSh(calc.invGainLoss);
       document.getElementById('inv-percentage-return').innerText = (calc.invReturnPercent >= 0 ? '+' : '') + calc.invReturnPercent.toFixed(2) + '%';
       renderInvestmentHistoryList();
-
       // Appearich Business Tab
       document.getElementById('app-today-sales').innerText = formatSh(calc.salesReceived);
       document.getElementById('app-today-profit').innerText = formatSh(calc.salesProfit);
@@ -1102,32 +1031,26 @@
       document.getElementById('app-total-outstanding').innerText = formatSh(calc.salesOutstanding);
       document.getElementById('app-total-profit').innerText = formatSh(calc.salesProfit);
       renderAppearichDashboard(calc);
-
       // Loans Tab
       document.getElementById('loan-total-owed').innerText = formatSh(calc.totalLoanOwed);
       renderLoansList();
-
       // Accounts Tab
       document.getElementById('accounts-total-money').innerText = formatSh(calc.totalLiquidMoney);
       renderAccountCards();
-
       // Progress Tab
       document.getElementById('progress-overall-profit').innerText = formatSh(calc.overallProfit);
       document.getElementById('progress-active-month-profit').innerText = formatSh(calc.salesProfit);
       document.getElementById('progress-active-month-name').innerText = `Profit for ${state.activeMonth}`;
       renderProgressMonthlyGrid(calc.monthlyProfits);
     }
-
     function renderIncomeCards() {
       const container = document.getElementById('income-list-container');
       container.innerHTML = '';
       const monthData = state.monthlyData[state.activeMonth];
-
       if (!monthData || monthData.incomes.length === 0) {
         container.innerHTML = `<div class="col-span-full text-center py-8 text-brand-muted text-xs">No income streams entered for ${state.activeMonth}. Click above to add one.</div>`;
         return;
       }
-
       monthData.incomes.forEach(inc => {
         const godShare = inc.amount * 0.10;
         const netAmount = inc.amount - godShare;
@@ -1157,53 +1080,88 @@
       });
     }
 
+    function handleCategoryAmountInput(categoryId, val) {
+      const amt = parseFloat(val) || 0;
+      const cat = state.categories.find(c => c.id === categoryId);
+      if (cat) {
+        cat.amount = amt;
+      }
+      const calc = getCalculations();
+      renderBudgetCategoryList(calc.availableBudget);
+    }
+
     function renderBudgetCategoryList(availablePool) {
-      const utilsList = document.getElementById('utilities-subcategories-list');
-      utilsList.innerHTML = '';
-      let utilsPlannedTotal = 0;
-      let utilsSpentTotal = 0;
-
       const monthData = state.monthlyData[state.activeMonth];
+      
+      // Calculate Total Targeted Amounts
+      const totalTargeted = state.categories.reduce((sum, c) => sum + (c.amount || 0), 0);
+      
+      // Update Utilities percentage badge and card remaining summary
+      const utilCat = state.categories.find(c => c.id === 'cat-utilities');
+      const utilAmount = utilCat ? utilCat.amount || 0 : 0;
+      const utilPercent = availablePool > 0 ? (utilAmount / availablePool) * 100 : 0;
+      const utilPercentBadge = document.getElementById('utilities-percent-badge');
+      if (utilPercentBadge) utilPercentBadge.innerText = utilPercent.toFixed(1) + '%';
 
-      state.utilitiesSub.forEach(sub => {
-        const plannedSh = (availablePool * sub.percent) / 100;
-        const spent = monthData ? (monthData.utilitiesSubSpent[sub.name] || 0) : 0;
-        utilsPlannedTotal += plannedSh;
-        utilsSpentTotal += spent;
-        const remaining = plannedSh - spent;
+      let utilsSpentTotal = 0;
+      if (monthData) {
+        Object.values(monthData.utilitiesSubSpent).forEach(v => utilsSpentTotal += v);
+      }
+      const utilSpentSummary = document.getElementById('utilities-spent-summary');
+      if (utilSpentSummary) utilSpentSummary.innerText = `Spent: ${formatSh(utilsSpentTotal)}`;
+      const utilRemSummary = document.getElementById('utilities-remaining-summary');
+      if (utilRemSummary) utilRemSummary.innerText = `Remaining: ${formatSh(utilAmount - utilsSpentTotal)}`;
 
-        const subCard = document.createElement('div');
-        subCard.className = "p-4 bg-white rounded-2xl border border-gray-100 space-y-2";
-        subCard.innerHTML = `
-          <div class="flex justify-between items-center"><span class="font-bold text-sm text-brand-black">${sub.name}</span><span class="text-xs text-brand-muted">${sub.percent}% → ${formatSh(plannedSh)}</span></div>
-          <div class="flex justify-between text-xs"><span class="text-brand-muted">Spent: ${formatSh(spent)}</span><span class="font-bold text-emerald-600">Rem: ${formatSh(remaining)}</span></div>
-        `;
-        utilsList.appendChild(subCard);
-      });
+      // Render Subcategories for Utilities
+      const utilsList = document.getElementById('utilities-subcategories-list');
+      if (utilsList) {
+        utilsList.innerHTML = '';
+        state.utilitiesSub.forEach(sub => {
+          const spent = monthData ? (monthData.utilitiesSubSpent[sub.name] || 0) : 0;
+          const subCard = document.createElement('div');
+          subCard.className = "p-4 bg-white rounded-2xl border border-gray-100 space-y-2";
+          subCard.innerHTML = `
+            <div class="flex justify-between items-center"><span class="font-bold text-sm text-brand-black">${sub.name}</span></div>
+            <div class="flex justify-between text-xs"><span class="text-brand-muted">Spent: ${formatSh(spent)}</span></div>
+          `;
+          utilsList.appendChild(subCard);
+        });
+      }
 
-      document.getElementById('utilities-planned').innerText = formatSh(utilsPlannedTotal);
-      document.getElementById('utilities-spent-summary').innerText = `Spent: ${formatSh(utilsSpentTotal)}`;
-
+      // Render main non-utilities categories grid
       const mainList = document.getElementById('main-categories-list');
-      mainList.innerHTML = '';
-      let totalAllocatedPercent = 25;
+      if (mainList) {
+        mainList.innerHTML = '';
+        state.categories.filter(c => !c.isExpandable).forEach(cat => {
+          const catAmount = cat.amount || 0;
+          const catPercent = availablePool > 0 ? (catAmount / availablePool) * 100 : 0;
+          const spentSh = monthData ? (monthData.categorySpent[cat.name] || 0) : 0;
+          const card = document.createElement('div');
+          card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4";
+          card.innerHTML = `
+            <div class="flex justify-between items-center">
+              <h4 class="font-bold text-base text-brand-black">${cat.name}</h4>
+              <span class="px-2.5 py-0.5 rounded-full bg-gray-100 text-brand-black text-[11px] font-bold">${catPercent.toFixed(1)}%</span>
+            </div>
+            <div class="space-y-2">
+              <label class="block text-xs font-bold text-brand-muted uppercase">Target Amount (Sh)</label>
+              <input type="number" value="${cat.amount || ''}" oninput="handleCategoryAmountInput('${cat.id}', this.value)" placeholder="Enter amount" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm font-bold text-brand-black">
+            </div>
+            <div class="flex justify-between text-xs pt-2 border-t border-gray-100">
+              <span class="text-brand-muted">Spent: ${formatSh(spentSh)}</span>
+              <span class="font-bold text-emerald-600">Remaining: ${formatSh(catAmount - spentSh)}</span>
+            </div>
+          `;
+          mainList.appendChild(card);
+        });
+      }
 
-      state.categories.filter(c => !c.isExpandable).forEach(cat => {
-        totalAllocatedPercent += cat.percent;
-        const plannedSh = (availablePool * cat.percent) / 100;
-        const spentSh = monthData ? (monthData.categorySpent[cat.name] || 0) : 0;
-
-        const card = document.createElement('div');
-        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4";
-        card.innerHTML = `
-          <div class="flex justify-between items-center"><h4 class="font-bold text-base text-brand-black">${cat.name} (${cat.percent}%)</h4><span class="font-display font-bold text-lg text-brand-black">${formatSh(plannedSh)}</span></div>
-          <div class="flex justify-between text-xs pt-2 border-t border-gray-100"><span class="text-brand-muted">Spent: ${formatSh(spentSh)}</span><span class="font-bold text-emerald-600">Remaining: ${formatSh(plannedSh - spentSh)}</span></div>
-        `;
-        mainList.appendChild(card);
-      });
-
-      document.getElementById('budget-allocated-percent').innerText = `${totalAllocatedPercent.toFixed(1)}%`;
-      document.getElementById('budget-allocated-bar').style.width = `${Math.min(totalAllocatedPercent, 100)}%`;
+      // Overall pool percentage calculation
+      const overallPercent = availablePool > 0 ? (totalTargeted / availablePool) * 100 : 0;
+      const allocatedPercentEl = document.getElementById('budget-allocated-percent');
+      if (allocatedPercentEl) allocatedPercentEl.innerText = `${overallPercent.toFixed(1)}%`;
+      const allocatedBarEl = document.getElementById('budget-allocated-bar');
+      if (allocatedBarEl) allocatedBarEl.style.width = `${Math.min(overallPercent, 100)}%`;
     }
 
     function renderInvestmentHistoryList() {
@@ -1228,18 +1186,15 @@
       const table = document.getElementById('appearich-sales-table');
       table.innerHTML = '';
       const monthData = state.monthlyData[state.activeMonth];
-
       if (!monthData || monthData.sales.length === 0) {
         table.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-brand-muted text-xs">No sales recorded for ${state.activeMonth}. Click + ADD SALE to record transactions.</td></tr>`;
         return;
       }
-
       monthData.sales.forEach(sale => {
         const totalValue = sale.sellPrice * sale.qty;
         const paid = sale.paymentStatus === 'FULL' ? totalValue : (sale.amountPaid || 0);
         const remaining = totalValue - paid;
         const isPartial = sale.paymentStatus === 'PARTIAL' && remaining > 0;
-
         const tr = document.createElement('tr');
         tr.className = "hover:bg-gray-50/50 transition border-b border-gray-100";
         tr.innerHTML = `
@@ -1254,38 +1209,6 @@
         `;
         table.appendChild(tr);
       });
-
-      // Product & Customer Summaries Grid Layout
-      const topProductsContainer = document.getElementById('appearich-top-products');
-      const customersContainer = document.getElementById('appearich-customers-list');
-
-      topProductsContainer.innerHTML = '';
-      customersContainer.innerHTML = '';
-
-      const productMap = {};
-      const customerMap = {};
-
-      monthData.sales.forEach(sale => {
-        productMap[sale.product] = (productMap[sale.product] || 0) + sale.qty;
-        customerMap[sale.customer] = (customerMap[sale.customer] || 0) + (sale.sellPrice * sale.qty);
-      });
-
-      Object.keys(productMap).forEach(prod => {
-        const item = document.createElement('div');
-        item.className = "p-3 rounded-2xl bg-brand-surface border border-gray-100 flex justify-between items-center text-xs";
-        item.innerHTML = `<span class="font-bold text-brand-black">${prod}</span><span class="text-brand-muted font-semibold">${productMap[prod]} Units</span>`;
-        topProductsContainer.appendChild(item);
-      });
-
-      Object.keys(customerMap).forEach(cust => {
-        const item = document.createElement('div');
-        item.className = "p-3 rounded-2xl bg-brand-surface border border-gray-100 flex justify-between items-center text-xs";
-        item.innerHTML = `<span class="font-bold text-brand-black">${cust}</span><span class="text-emerald-600 font-bold">${formatSh(customerMap[cust])}</span>`;
-        customersContainer.appendChild(item);
-      });
-
-      if (Object.keys(productMap).length === 0) topProductsContainer.innerText = 'No products recorded.';
-      if (Object.keys(customerMap).length === 0) customersContainer.innerText = 'No customers recorded.';
 
       document.getElementById('app-period-sold').innerText = monthData.sales.reduce((a, b) => a + Number(b.qty), 0);
       document.getElementById('app-period-revenue').innerText = formatSh(calc.salesIncome);
@@ -1307,348 +1230,342 @@
         card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4";
         card.innerHTML = `
           <div class="flex items-center justify-between">
-            <span class="font-bold text-sm text-brand-black">${loan.borrower}</span>
-            <span class="text-[10px] text-brand-muted font-semibold">${loan.date}</span>
+            <span class="text-xs font-bold uppercase tracking-wider text-brand-black">${loan.borrower}</span>
+            <span class="px-2.5 py-0.5 rounded-full ${remaining === 0 ? 'bg-emerald-100 text-emerald-600' : 'bg-yellow-100 text-yellow-700'} text-[10px] font-bold">${remaining === 0 ? 'PAID' : 'ACTIVE'}</span>
           </div>
           <div>
-            <p class="text-[11px] text-brand-muted">Total Loan</p>
-            <p class="font-display font-extrabold text-xl text-brand-black">${formatSh(loan.amount)}</p>
+            <p class="text-[11px] text-brand-muted">Borrowed Amount</p>
+            <p class="font-display font-extrabold text-2xl text-brand-black">${formatSh(loan.amount)}</p>
           </div>
-          <div class="pt-3 border-t border-gray-100 space-y-2">
-            <div class="flex justify-between text-xs">
-              <span class="text-brand-muted">Paid: ${formatSh(loan.paid)}</span>
-              <span class="font-bold text-red-600">Owed: ${formatSh(remaining)}</span>
-            </div>
-            <button onclick="openEditLoanModal('${loan.id}')" class="w-full py-2 bg-brand-surface hover:bg-gray-100 rounded-xl text-xs font-bold text-brand-black transition">Update Repayment</button>
+          <div class="pt-3 border-t border-gray-100 space-y-2 text-xs">
+            <div class="flex justify-between text-brand-muted"><span>Paid So Far</span><span class="font-bold text-emerald-600">${formatSh(loan.paid)}</span></div>
+            <div class="flex justify-between font-bold text-brand-black"><span>Outstanding Balance</span><span class="text-red-600">${formatSh(remaining)}</span></div>
           </div>
+          <button onclick="openUpdateLoanModal('${loan.id}')" class="w-full py-2 bg-brand-surface hover:bg-gray-100 text-brand-black font-bold rounded-xl text-xs transition">Update Repayment</button>
         `;
         container.appendChild(card);
       });
     }
 
     function renderAccountCards() {
-      const grid = document.getElementById('account-cards-grid');
-      grid.innerHTML = '';
+      const container = document.getElementById('account-cards-grid');
+      container.innerHTML = '';
       Object.keys(state.accounts).forEach(accName => {
         const balance = state.accounts[accName];
         const card = document.createElement('div');
         card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4";
         card.innerHTML = `
-          <div class="flex justify-between items-center">
-            <span class="font-bold text-sm text-brand-black uppercase">${accName}</span>
-            <div class="w-8 h-8 rounded-xl bg-gray-50 flex items-center justify-center font-bold text-xs">AZ</div>
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-brand-muted">${accName} ACCOUNT</span>
+            <div class="w-8 h-8 rounded-xl bg-gray-50 flex items-center justify-center font-bold text-xs text-brand-black">sh</div>
           </div>
           <div>
-            <p class="text-[11px] text-brand-muted">Account Balance</p>
-            <p class="font-display font-extrabold text-2xl text-brand-black mt-1">${formatSh(balance)}</p>
+            <p class="text-[11px] text-brand-muted">Current Balance</p>
+            <p class="font-display font-extrabold text-2xl text-brand-black">${formatSh(balance)}</p>
+          </div>
+          <div class="pt-3 border-t border-gray-100 flex gap-2">
+            <button onclick="openModal('addMoneyModal')" class="flex-1 py-2 bg-brand-surface hover:bg-gray-100 text-brand-black font-bold rounded-xl text-xs transition">Deposit</button>
+            <button onclick="openModal('transferModal')" class="flex-1 py-2 bg-brand-black hover:bg-gray-800 text-white font-bold rounded-xl text-xs transition">Transfer</button>
           </div>
         `;
-        grid.appendChild(card);
+        container.appendChild(card);
       });
     }
 
     function renderProgressMonthlyGrid(monthlyProfits) {
-      const grid = document.getElementById('progress-monthly-grid');
-      grid.innerHTML = '';
-
-      const months = Object.keys(monthlyProfits);
-      if (months.length === 0) {
-        grid.innerHTML = `<div class="col-span-full py-4 text-center text-xs text-brand-muted">No stored monthly profit data available.</div>`;
+      const container = document.getElementById('progress-monthly-grid');
+      container.innerHTML = '';
+      const keys = Object.keys(monthlyProfits);
+      if (keys.length === 0) {
+        container.innerHTML = `<div class="col-span-full py-4 text-center text-xs text-brand-muted">No monthly profit records.</div>`;
         return;
       }
-
-      months.forEach(mKey => {
+      keys.forEach(mKey => {
         const profit = monthlyProfits[mKey];
-        const card = document.createElement('div');
-        card.className = "p-5 rounded-2xl bg-brand-surface border border-gray-100 flex justify-between items-center";
-        card.innerHTML = `
-          <div>
-            <span class="text-xs font-bold text-brand-black uppercase">${mKey}</span>
-            <p class="text-[10px] text-brand-muted">Monthly Stored Record</p>
-          </div>
-          <span class="font-display font-extrabold text-lg text-emerald-600">${formatSh(profit)}</span>
+        const item = document.createElement('div');
+        item.className = "p-4 rounded-2xl bg-brand-surface border border-gray-100 flex justify-between items-center text-xs";
+        item.innerHTML = `
+          <span class="font-bold text-brand-black">${mKey}</span>
+          <span class="font-display font-bold text-sm text-emerald-600">${formatSh(profit)}</span>
         `;
-        grid.appendChild(card);
+        container.appendChild(item);
       });
     }
 
-    // INTERACTION HANDLERS
-    function switchTab(tabId) {
-      state.currentTab = tabId;
+    // Modal helpers
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    // Switch tab logic
+    function switchTab(tab) {
+      state.currentTab = tab;
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('.nav-tab').forEach(el => {
-        el.classList.remove('bg-brand-black', 'text-white', 'shadow-sm');
-        el.classList.add('text-brand-muted');
+      const activeTabEl = document.getElementById(`tab-${tab}`);
+      if (activeTabEl) activeTabEl.classList.remove('hidden');
+
+      document.querySelectorAll('.nav-tab').forEach(btn => {
+        btn.classList.remove('bg-brand-black', 'text-white', 'shadow-sm');
+        btn.classList.add('text-brand-muted');
       });
-
-      const targetTab = document.getElementById(`tab-${tabId}`);
-      if (targetTab) targetTab.classList.remove('hidden');
-
-      const targetNav = document.getElementById(`nav-${tabId}`);
-      if (targetNav) {
-        targetNav.classList.add('bg-brand-black', 'text-white', 'shadow-sm');
-        targetNav.classList.remove('text-brand-muted');
+      const activeNav = document.getElementById(`nav-${tab}`);
+      if (activeNav) {
+        activeNav.classList.add('bg-brand-black', 'text-white', 'shadow-sm');
+        activeNav.classList.remove('text-brand-muted');
       }
-
-      // Hide Hero image section if not on Home Dashboard
-      const hero = document.getElementById('hero-section');
-      if (hero) {
-        if (tabId === 'dashboard') hero.classList.remove('hidden');
-        else hero.classList.add('hidden');
-      }
-
       renderAll();
     }
 
-    function handleHeroUpload(event) {
-      const file = event.target.files[0];
+    function toggleUtilitiesAccordion() {
+      const acc = document.getElementById('utilities-accordion');
+      const chev = document.getElementById('utilities-chevron');
+      acc.classList.toggle('expanded');
+      chev.classList.toggle('rotate-180');
+    }
+
+    function handleHeroUpload(e) {
+      const file = e.target.files[0];
       if (file) {
         const reader = new FileReader();
-        reader.onload = function(e) {
-          state.heroImageUrl = e.target.result;
+        reader.onload = function(evt) {
+          state.heroImageUrl = evt.target.result;
           localStorage.setItem('appearich_hero_img', state.heroImageUrl);
           renderAll();
-        };
+        }
         reader.readAsDataURL(file);
       }
     }
 
     function handleMonthChange(e) {
-      const newMonth = e.target.value;
-      if (newMonth) {
-        state.activeMonth = newMonth;
-        ensureMonthExists(newMonth);
-        renderAll();
-      }
+      state.activeMonth = e.target.value || getCurrentMonthKey();
+      ensureMonthExists(state.activeMonth);
+      renderAll();
     }
-
-    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
     function handleAddIncome(e) {
       e.preventDefault();
       const name = document.getElementById('income-name-input').value;
-      const amount = parseFloat(document.getElementById('income-amount-input').value);
-      if (name && amount) {
-        ensureMonthExists(state.activeMonth);
-        state.monthlyData[state.activeMonth].incomes.push({ id: Date.now().toString(), name, amount });
-        closeModal('addIncomeModal');
-        e.target.reset();
-        renderAll();
-      }
+      const amount = parseFloat(document.getElementById('income-amount-input').value) || 0;
+      ensureMonthExists(state.activeMonth);
+      state.monthlyData[state.activeMonth].incomes.push({ id: Date.now().toString(), name, amount });
+      closeModal('addIncomeModal');
+      e.target.reset();
+      renderAll();
     }
 
     function handleAddSale(e) {
       e.preventDefault();
       const date = document.getElementById('sale-date').value;
-      const qty = parseFloat(document.getElementById('sale-qty').value);
+      const qty = parseInt(document.getElementById('sale-qty').value) || 1;
       const product = document.getElementById('sale-product').value;
       const customer = document.getElementById('sale-customer').value;
-      const buyPrice = parseFloat(document.getElementById('sale-buy-price').value);
-      const sellPrice = parseFloat(document.getElementById('sale-sell-price').value);
-      const status = document.getElementById('sale-payment-status').value;
-      const paidVal = parseFloat(document.getElementById('sale-paid-amount').value) || 0;
+      const buyPrice = parseFloat(document.getElementById('sale-buy-price').value) || 0;
+      const sellPrice = parseFloat(document.getElementById('sale-sell-price').value) || 0;
+      const paymentStatus = document.getElementById('sale-payment-status').value;
+      const amountPaid = paymentStatus === 'PARTIAL' ? (parseFloat(document.getElementById('sale-paid-amount').value) || 0) : sellPrice * qty;
 
-      if (product && sellPrice) {
-        ensureMonthExists(state.activeMonth);
-        state.monthlyData[state.activeMonth].sales.push({
-          id: Date.now().toString(),
-          date, qty, product, customer, buyPrice, sellPrice, paymentStatus: status, amountPaid: status === 'FULL' ? (sellPrice * qty) : paidVal
-        });
-        closeModal('addSaleModal');
-        e.target.reset();
-        renderAll();
-      }
+      ensureMonthExists(state.activeMonth);
+      state.monthlyData[state.activeMonth].sales.push({
+        id: Date.now().toString(),
+        date, qty, product, customer, buyPrice, sellPrice, paymentStatus, amountPaid
+      });
+      closeModal('addSaleModal');
+      e.target.reset();
+      renderAll();
     }
 
     function toggleSalePartialInput() {
-      const status = document.getElementById('sale-payment-status').value;
+      const val = document.getElementById('sale-payment-status').value;
       const container = document.getElementById('sale-partial-container');
-      if (status === 'PARTIAL') container.classList.remove('hidden');
+      if (val === 'PARTIAL') container.classList.remove('hidden');
       else container.classList.add('hidden');
     }
 
     function openEditSaleModal(saleId) {
       const monthData = state.monthlyData[state.activeMonth];
+      if (!monthData) return;
       const sale = monthData.sales.find(s => s.id === saleId);
-      if (sale) {
-        document.getElementById('edit-sale-id').value = sale.id;
-        document.getElementById('edit-sale-status').value = sale.paymentStatus;
-        document.getElementById('edit-sale-paid-amount').value = sale.amountPaid || (sale.sellPrice * sale.qty);
-        openModal('updateSalePaymentModal');
-      }
+      if (!sale) return;
+
+      document.getElementById('edit-sale-id').value = sale.id;
+      document.getElementById('edit-sale-status').value = sale.paymentStatus;
+      document.getElementById('edit-sale-paid-amount').value = sale.amountPaid || (sale.sellPrice * sale.qty);
+      toggleEditSalePartialInput();
+      openModal('updateSalePaymentModal');
+    }
+
+    function toggleEditSalePartialInput() {
+      const val = document.getElementById('edit-sale-status').value;
+      const container = document.getElementById('edit-sale-paid-container');
+      if (val === 'PARTIAL') container.classList.remove('hidden');
+      else container.classList.add('hidden');
     }
 
     function handleUpdateSalePayment(e) {
       e.preventDefault();
       const saleId = document.getElementById('edit-sale-id').value;
       const monthData = state.monthlyData[state.activeMonth];
+      if (!monthData) return;
+
       const sale = monthData.sales.find(s => s.id === saleId);
       if (sale) {
         sale.paymentStatus = document.getElementById('edit-sale-status').value;
-        sale.amountPaid = parseFloat(document.getElementById('edit-sale-paid-amount').value) || 0;
-        closeModal('updateSalePaymentModal');
-        renderAll();
+        sale.amountPaid = sale.paymentStatus === 'FULL' ? (sale.sellPrice * sale.qty) : (parseFloat(document.getElementById('edit-sale-paid-amount').value) || 0);
       }
+      closeModal('updateSalePaymentModal');
+      renderAll();
     }
 
     function handleAddLoan(e) {
       e.preventDefault();
       const borrower = document.getElementById('loan-borrower').value;
-      const amount = parseFloat(document.getElementById('loan-amount').value);
+      const amount = parseFloat(document.getElementById('loan-amount').value) || 0;
       const date = document.getElementById('loan-date').value;
       const paid = parseFloat(document.getElementById('loan-paid').value) || 0;
       const note = document.getElementById('loan-note').value;
 
-      if (borrower && amount) {
-        state.loans.push({ id: Date.now().toString(), borrower, amount, date, paid, note });
-        closeModal('addLoanModal');
-        e.target.reset();
-        renderAll();
-      }
+      state.loans.push({ id: Date.now().toString(), borrower, amount, date, paid, note });
+      closeModal('addLoanModal');
+      e.target.reset();
+      renderAll();
     }
 
-    function openEditLoanModal(loanId) {
+    function openUpdateLoanModal(loanId) {
       const loan = state.loans.find(l => l.id === loanId);
-      if (loan) {
-        document.getElementById('edit-loan-id').value = loan.id;
-        document.getElementById('edit-loan-paid').value = loan.paid;
-        openModal('updateLoanModal');
-      }
+      if (!loan) return;
+      document.getElementById('edit-loan-id').value = loan.id;
+      document.getElementById('edit-loan-paid').value = loan.paid;
+      openModal('updateLoanModal');
     }
 
     function handleUpdateLoan(e) {
       e.preventDefault();
-      const id = document.getElementById('edit-loan-id').value;
-      const loan = state.loans.find(l => l.id === id);
+      const loanId = document.getElementById('edit-loan-id').value;
+      const loan = state.loans.find(l => l.id === loanId);
       if (loan) {
         loan.paid = parseFloat(document.getElementById('edit-loan-paid').value) || 0;
-        closeModal('updateLoanModal');
-        renderAll();
       }
+      closeModal('updateLoanModal');
+      renderAll();
     }
 
     function handleAddTransaction(e) {
       e.preventDefault();
-      const desc = document.getElementById('tx-name').value;
-      const cat = document.getElementById('tx-category').value;
-      const acc = document.getElementById('tx-account').value;
-      const amount = parseFloat(document.getElementById('tx-amount').value);
+      const name = document.getElementById('tx-name').value;
+      const category = document.getElementById('tx-category').value;
+      const account = document.getElementById('tx-account').value;
+      const amount = parseFloat(document.getElementById('tx-amount').value) || 0;
 
-      if (desc && amount) {
-        ensureMonthExists(state.activeMonth);
-        const monthData = state.monthlyData[state.activeMonth];
+      ensureMonthExists(state.activeMonth);
+      const monthData = state.monthlyData[state.activeMonth];
 
-        if (monthData.utilitiesSubSpent[cat] !== undefined) {
-          monthData.utilitiesSubSpent[cat] += amount;
-        } else if (monthData.categorySpent[cat] !== undefined) {
-          monthData.categorySpent[cat] += amount;
-        } else {
-          monthData.categorySpent['Other'] += amount;
-        }
-
-        state.accounts[acc] = (state.accounts[acc] || 0) - amount;
-        closeModal('addTransactionModal');
-        e.target.reset();
-        renderAll();
+      if (['Internet', 'Umeme', 'Taka', 'Transport'].includes(category)) {
+        monthData.utilitiesSubSpent[category] = (monthData.utilitiesSubSpent[category] || 0) + amount;
+      } else if (monthData.categorySpent[category] !== undefined) {
+        monthData.categorySpent[category] += amount;
+      } else {
+        monthData.categorySpent['Other'] = (monthData.categorySpent['Other'] || 0) + amount;
       }
+
+      if (state.accounts[account] !== undefined) {
+        state.accounts[account] -= amount;
+      }
+
+      closeModal('addTransactionModal');
+      e.target.reset();
+      renderAll();
     }
 
     function handleTransfer(e) {
       e.preventDefault();
       const from = document.getElementById('tr-from').value;
       const to = document.getElementById('tr-to').value;
-      const amount = parseFloat(document.getElementById('tr-amount').value);
+      const amount = parseFloat(document.getElementById('tr-amount').value) || 0;
 
-      if (from !== to && amount) {
-        state.accounts[from] = (state.accounts[from] || 0) - amount;
-        state.accounts[to] = (state.accounts[to] || 0) + amount;
-        closeModal('transferModal');
-        e.target.reset();
-        renderAll();
+      if (from !== to && state.accounts[from] !== undefined && state.accounts[to] !== undefined) {
+        state.accounts[from] -= amount;
+        state.accounts[to] += amount;
       }
+      closeModal('transferModal');
+      e.target.reset();
+      renderAll();
     }
 
     function handleAddMoneyAccount(e) {
       e.preventDefault();
-      const acc = document.getElementById('am-account').value;
-      const amount = parseFloat(document.getElementById('am-amount').value);
-      if (acc && amount) {
-        state.accounts[acc] = (state.accounts[acc] || 0) + amount;
-        closeModal('addMoneyModal');
-        e.target.reset();
-        renderAll();
+      const account = document.getElementById('am-account').value;
+      const amount = parseFloat(document.getElementById('am-amount').value) || 0;
+
+      if (state.accounts[account] !== undefined) {
+        state.accounts[account] += amount;
       }
+      closeModal('addMoneyModal');
+      e.target.reset();
+      renderAll();
     }
 
     function handleAddInvestmentCapital(e) {
       e.preventDefault();
-      const amount = parseFloat(document.getElementById('inv-add-amount').value);
-      if (amount) {
-        state.investment.totalInvested += amount;
-        state.investment.currentValue += amount;
-        state.investment.history.push({ date: new Date().toISOString().split('T')[0], value: state.investment.currentValue });
-        closeModal('addInvestmentModal');
-        e.target.reset();
-        renderAll();
-      }
+      const amount = parseFloat(document.getElementById('inv-add-amount').value) || 0;
+      state.investment.totalInvested += amount;
+      state.investment.currentValue += amount;
+      state.investment.history.push({
+        date: new Date().toISOString().split('T')[0],
+        value: state.investment.currentValue
+      });
+      closeModal('addInvestmentModal');
+      e.target.reset();
+      renderAll();
     }
 
     function handleUpdateInvestmentValue(e) {
       e.preventDefault();
-      const value = parseFloat(document.getElementById('inv-update-value').value);
-      if (value) {
-        state.investment.currentValue = value;
-        state.investment.history.push({ date: new Date().toISOString().split('T')[0], value });
-        closeModal('updateInvestmentModal');
-        e.target.reset();
-        renderAll();
-      }
+      const val = parseFloat(document.getElementById('inv-update-value').value) || 0;
+      state.investment.currentValue = val;
+      state.investment.history.push({
+        date: new Date().toISOString().split('T')[0],
+        value: val
+      });
+      closeModal('updateInvestmentModal');
+      e.target.reset();
+      renderAll();
     }
 
     function handleAddCategory(e) {
       e.preventDefault();
       const name = document.getElementById('cat-name-input').value;
-      const percent = parseFloat(document.getElementById('cat-percent-input').value);
-      if (name && percent) {
-        state.categories.push({ id: `cat-${Date.now()}`, name, percent, isExpandable: false });
-        ensureMonthExists(state.activeMonth);
-        state.monthlyData[state.activeMonth].categorySpent[name] = 0;
-        closeModal('addCategoryModal');
-        e.target.reset();
-        renderAll();
-      }
-    }
+      const amount = parseFloat(document.getElementById('cat-amount-input').value) || 0;
+      const id = 'cat-' + name.toLowerCase().replace(/\s+/g, '-');
 
-    function toggleUtilitiesAccordion() {
-      state.utilitiesExpanded = !state.utilitiesExpanded;
-      const acc = document.getElementById('utilities-accordion');
-      const chev = document.getElementById('utilities-chevron');
-      if (state.utilitiesExpanded) {
-        acc.classList.add('expanded');
-        chev.classList.add('rotate-180');
-      } else {
-        acc.classList.remove('expanded');
-        chev.classList.remove('rotate-180');
-      }
-    }
-
-    function switchAppearichPeriod(p) {
-      state.appearichPeriod = p;
-      document.querySelectorAll('.app-period-btn').forEach(btn => {
-        btn.classList.remove('bg-brand-black', 'text-white');
-        btn.classList.add('bg-gray-100', 'text-brand-muted');
-      });
-      document.getElementById(`app-period-${p}`).classList.add('bg-brand-black', 'text-white');
-      document.getElementById(`app-period-${p}`).classList.remove('bg-gray-100', 'text-brand-muted');
-      renderAll();
-    }
-
-    // INITIAL APP LOAD
-    window.onload = function() {
+      state.categories.push({ id, name, amount, isExpandable: false });
       ensureMonthExists(state.activeMonth);
+      state.monthlyData[state.activeMonth].categorySpent[name] = 0;
+
+      closeModal('addCategoryModal');
+      e.target.reset();
       renderAll();
-    };
+    }
+
+    function switchAppearichPeriod(period) {
+      state.appearichPeriod = period;
+      document.querySelectorAll('.app-period-btn').forEach(b => {
+        b.classList.remove('active', 'bg-brand-black', 'text-white');
+        b.classList.add('bg-gray-100', 'text-brand-muted');
+      });
+      const btn = document.getElementById(`app-period-${period}`);
+      if (btn) {
+        btn.classList.add('active', 'bg-brand-black', 'text-white');
+        btn.classList.remove('bg-gray-100', 'text-brand-muted');
+      }
+    }
+
+    // Initial load
+    window.addEventListener('DOMContentLoaded', () => {
+      renderAll();
+    });
   </script>
 </body>
 </html>
