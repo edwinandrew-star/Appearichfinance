@@ -6,6 +6,8 @@
   <title>Appearich Finance Command Center</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -55,6 +57,9 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
+    .gold-gradient-bg {
+      background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+    }
     .accordion-content {
       max-height: 0;
       overflow: hidden;
@@ -103,20 +108,28 @@
 
   <!-- MAIN CONTAINER -->
   <main class="max-w-6xl mx-auto px-4 lg:px-8 pt-6 space-y-8">
-    
-    <!-- 1. HERO HOME SECTION WITH UPLOAD OPTION & NO TEXT -->
-    <div id="hero-section" class="relative rounded-3xl overflow-hidden bg-brand-black h-72 lg:h-96 shadow-2xl flex items-end justify-start p-6">
-      <div id="hero-bg-image" class="absolute inset-0 bg-cover bg-center transition-all duration-300" style="background-image: url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1600&auto=format&fit=crop');"></div>
-      <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+    <!-- 1. HERO HOME SECTION (Only on Dashboard) -->
+    <div id="hero-section" class="relative rounded-3xl overflow-hidden bg-brand-black text-white shadow-2xl p-6 lg:p-10">
+      <div class="absolute inset-0 opacity-25 mix-blend-overlay bg-cover bg-center pointer-events-none" style="background-image: url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1600&auto=format&fit=crop');"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-brand-black via-brand-black/90 to-transparent"></div>
       
-      <!-- Change / Update Hero Image Option -->
-      <div class="relative z-10 flex items-center gap-3 bg-white/90 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-lg border border-white/20">
-        <label for="hero-image-upload" class="cursor-pointer text-xs font-bold text-brand-black flex items-center space-x-2 hover:opacity-80 transition">
-          <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-          <span>Change / Update Hero Image</span>
-        </label>
-        <input id="hero-image-upload" type="file" accept="image/*" onchange="handleHeroImageUpload(event)" class="hidden">
-        <button onclick="resetHeroImage()" class="text-[10px] text-brand-muted hover:text-brand-black uppercase font-bold pl-2 border-l border-gray-300">Reset</button>
+      <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div class="space-y-2 max-w-lg">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-gold/20 text-brand-gold text-xs font-bold tracking-wider">
+            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            <span>APPEARICH FINANCE</span>
+          </div>
+          <h2 class="font-display font-extrabold text-3xl lg:text-4xl tracking-tight">Build. Track. Grow.</h2>
+          <p class="text-xs lg:text-sm text-gray-300">Your complete wealth ecosystem at a glance. Intelligent automated 10% GOD allocation and robust multi-account management.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+          <button onclick="switchTab('budget')" class="px-5 py-3 rounded-xl bg-brand-gold text-brand-black font-bold text-xs uppercase tracking-wider hover:bg-yellow-400 transition shadow-gold-glow text-center">
+            View Budget Structure
+          </button>
+          <button onclick="switchTab('progress')" class="px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider transition border border-white/10 text-center">
+            See Financial Growth
+          </button>
+        </div>
       </div>
     </div>
 
@@ -155,46 +168,58 @@
     <!-- ==================== TAB 1: HOME DASHBOARD ==================== -->
     <div id="tab-dashboard" class="tab-content space-y-8">
       
-      <!-- COMPACT CARDS (Horizontal-by-Vertical Grid) -->
+      <!-- 2. HOME DASHBOARD COMPACT CARDS -->
       <div class="space-y-3">
         <div class="flex items-center justify-between">
           <h3 class="font-bold text-base text-brand-black">Your Money At A Glance</h3>
           <span class="text-xs text-brand-muted">Real-time calculations</span>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Total Income -->
           <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between">
             <div class="flex items-center justify-between text-brand-muted">
               <span class="text-xs font-semibold uppercase tracking-wider">Total Income</span>
               <svg class="w-4 h-4 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             </div>
-            <div class="mt-4"><p id="dash-total-income" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-black">0 Sh</p></div>
+            <div class="mt-4">
+              <p id="dash-total-income" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-black">0 Sh</p>
+            </div>
           </div>
+          <!-- GOD 10% -->
           <div class="p-5 rounded-2xl bg-brand-black text-white shadow-premium relative overflow-hidden flex flex-col justify-between">
             <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-brand-gold/10 rounded-full blur-xl pointer-events-none"></div>
             <div class="flex items-center justify-between text-brand-gold">
               <span class="text-xs font-semibold uppercase tracking-wider">GOD — 10%</span>
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>
             </div>
-            <div class="mt-4"><p id="dash-god-amount" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-gold">0 Sh</p></div>
+            <div class="mt-4">
+              <p id="dash-god-amount" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-gold">0 Sh</p>
+            </div>
           </div>
+          <!-- Total Money (Liquid Accounts) -->
           <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between">
             <div class="flex items-center justify-between text-brand-muted">
               <span class="text-xs font-semibold uppercase tracking-wider">Total Money</span>
               <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
             </div>
-            <div class="mt-4"><p id="dash-total-money" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-black">0 Sh</p></div>
+            <div class="mt-4">
+              <p id="dash-total-money" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-black">0 Sh</p>
+            </div>
           </div>
+          <!-- Remaining Budget -->
           <div class="p-5 rounded-2xl bg-white border border-brand-black/10 shadow-premium flex flex-col justify-between">
             <div class="flex items-center justify-between text-brand-muted">
               <span class="text-xs font-semibold uppercase tracking-wider text-brand-black">Remaining</span>
               <svg class="w-4 h-4 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             </div>
-            <div class="mt-4"><p id="dash-remaining-budget" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-black">0 Sh</p></div>
+            <div class="mt-4">
+              <p id="dash-remaining-budget" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-black">0 Sh</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- QUICK ACTIONS BAR -->
+      <!-- 3. QUICK ACTIONS BAR -->
       <div class="p-4 rounded-2xl bg-brand-surface border border-gray-100 flex flex-wrap items-center justify-between gap-3">
         <span class="text-xs font-bold uppercase tracking-wider text-brand-muted">Quick Actions:</span>
         <div class="flex flex-wrap items-center gap-2">
@@ -222,14 +247,21 @@
             <svg class="w-3.5 h-3.5 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
             <span>INVESTMENT</span>
           </button>
+          <button onclick="switchTab('progress')" class="px-4 py-2 rounded-xl bg-brand-black text-white text-xs font-bold flex items-center space-x-1.5 transition shadow-sm">
+            <svg class="w-3.5 h-3.5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+            <span>PROGRESS</span>
+          </button>
         </div>
       </div>
 
-      <!-- MAIN FINANCE CATEGORIES CARDS SECTION (Horizontal-by-Vertical Grid) -->
+      <!-- 4. MAIN FINANCE CATEGORIES CARDS SECTION (BOXED LAYOUT) -->
       <div class="space-y-4">
         <h3 class="font-bold text-lg text-brand-black">MONEY MANAGEMENT</h3>
+        <!-- Box Container for Cards -->
         <div class="p-6 rounded-3xl bg-brand-surface border border-gray-200 shadow-sm">
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <!-- INCOME CARD -->
             <div onclick="switchTab('income')" class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition cursor-pointer flex flex-col justify-between space-y-4 group">
               <div class="flex items-center justify-between">
                 <div class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition">
@@ -247,6 +279,7 @@
               </div>
             </div>
 
+            <!-- BUDGET CARD -->
             <div onclick="switchTab('budget')" class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition cursor-pointer flex flex-col justify-between space-y-4 group">
               <div class="flex items-center justify-between">
                 <div class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition">
@@ -264,6 +297,7 @@
               </div>
             </div>
 
+            <!-- INVESTMENT CARD -->
             <div onclick="switchTab('investment')" class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition cursor-pointer flex flex-col justify-between space-y-4 group">
               <div class="flex items-center justify-between">
                 <div class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition">
@@ -281,6 +315,7 @@
               </div>
             </div>
 
+            <!-- APPEARICH BUSINESS CARD -->
             <div onclick="switchTab('appearich')" class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition cursor-pointer flex flex-col justify-between space-y-4 group">
               <div class="flex items-center justify-between">
                 <div class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition">
@@ -298,6 +333,7 @@
               </div>
             </div>
 
+            <!-- ACCOUNTS CARD -->
             <div onclick="switchTab('accounts')" class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition cursor-pointer flex flex-col justify-between space-y-4 group">
               <div class="flex items-center justify-between">
                 <div class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition">
@@ -315,6 +351,7 @@
               </div>
             </div>
 
+            <!-- PROGRESS CARD -->
             <div onclick="switchTab('progress')" class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition cursor-pointer flex flex-col justify-between space-y-4 group">
               <div class="flex items-center justify-between">
                 <div class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition">
@@ -331,6 +368,7 @@
                 <span class="font-bold text-emerald-600">+0.0%</span>
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -347,14 +385,19 @@
             <span>+ Record Loan</span>
           </button>
         </div>
+
         <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-6">
           <div class="flex items-center justify-between border-b border-gray-100 pb-4">
             <span class="text-xs font-bold uppercase tracking-wider text-brand-muted">Total Outstanding Debt Owed To You</span>
             <span id="loan-total-owed" class="font-display text-2xl font-extrabold text-brand-black">0 Sh</span>
           </div>
-          <div id="loan-cards-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+
+          <div id="loan-cards-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Dynamic Loan Cards rendered via JS -->
+          </div>
         </div>
       </div>
+
     </div>
 
     <!-- ==================== TAB 2: INCOME & GOD ==================== -->
@@ -414,6 +457,7 @@
         </button>
       </div>
 
+      <!-- Pool summary -->
       <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col md:flex-row items-center justify-between gap-6">
         <div>
           <p class="text-xs font-bold text-brand-muted uppercase tracking-wider">Available Budget Pool (90%)</p>
@@ -432,6 +476,7 @@
 
       <div class="space-y-4">
         <h3 class="font-bold text-lg text-brand-black">Primary Categories</h3>
+        <!-- UTILITIES EXPANDABLE CARD -->
         <div class="rounded-3xl bg-white border border-gray-100 shadow-premium overflow-hidden transition-all duration-300">
           <div onclick="toggleUtilitiesAccordion()" class="p-6 flex items-center justify-between cursor-pointer hover:bg-gray-50/50 transition">
             <div class="flex items-center space-x-4">
@@ -454,11 +499,14 @@
               <svg id="utilities-chevron" class="w-6 h-6 text-brand-black transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
             </div>
           </div>
+          <!-- Accordion Content -->
           <div id="utilities-accordion" class="accordion-content border-t border-gray-100 bg-brand-surface p-6 space-y-4">
             <p class="text-xs font-semibold text-brand-muted uppercase tracking-wider">Subcategory Breakdown</p>
             <div id="utilities-subcategories-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
           </div>
         </div>
+
+        <!-- OTHER CATEGORIES CONTAINER -->
         <div id="main-categories-list" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
       </div>
     </div>
@@ -481,6 +529,7 @@
         </div>
       </div>
 
+      <!-- Investment Master Status -->
       <div class="p-8 rounded-3xl bg-white border border-gray-100 shadow-premium grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div>
           <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">Total Invested</span>
@@ -500,6 +549,15 @@
         </div>
       </div>
 
+      <!-- Investment Chart -->
+      <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
+        <h3 class="font-bold text-base text-brand-black">Investment Performance Trend</h3>
+        <div class="h-72 w-full">
+          <canvas id="investmentMainChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Valuation History -->
       <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
         <h3 class="font-bold text-base text-brand-black">Investment History Log</h3>
         <div id="investment-history-list" class="divide-y divide-gray-100"></div>
@@ -511,7 +569,7 @@
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 class="font-display font-bold text-2xl text-brand-black">Appearich Business & Sales System</h2>
-          <p class="text-xs text-brand-muted">Dedicated business sales tracking, payment status management, and records.</p>
+          <p class="text-xs text-brand-muted">Dedicated business sales tracking, payment status management, and customer analytics.</p>
         </div>
         <button onclick="openModal('addSaleModal')" class="bg-brand-black text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-sm hover:bg-gray-800 transition">
           <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
@@ -519,6 +577,7 @@
         </button>
       </div>
 
+      <!-- Business Metric Cards -->
       <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
         <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium">
           <p class="text-xs font-semibold text-brand-muted">TODAY'S RECEIVED</p>
@@ -542,6 +601,40 @@
         <div class="p-5 rounded-2xl bg-brand-black text-white shadow-gold-glow">
           <p class="text-xs font-semibold text-brand-gold">TOTAL PROFIT</p>
           <p id="app-total-profit" class="font-display text-2xl font-bold text-brand-gold mt-2">0 Sh</p>
+        </div>
+      </div>
+
+      <!-- Performance Period & Chart -->
+      <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-4">
+          <div class="flex space-x-2">
+            <button onclick="switchAppearichPeriod('day')" id="app-period-day" class="app-period-btn active px-4 py-1.5 rounded-lg text-xs font-bold bg-brand-black text-white">DAY</button>
+            <button onclick="switchAppearichPeriod('week')" id="app-period-week" class="app-period-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-brand-muted hover:text-brand-black">WEEK</button>
+            <button onclick="switchAppearichPeriod('month')" id="app-period-month" class="app-period-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-brand-muted hover:text-brand-black">MONTH</button>
+            <button onclick="switchAppearichPeriod('year')" id="app-period-year" class="app-period-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-brand-muted hover:text-brand-black">YEAR</button>
+          </div>
+          <span class="text-xs font-bold text-emerald-600">Profit Growth: +0%</span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+          <div class="p-3 rounded-xl bg-gray-50"><p class="text-[10px] text-brand-muted uppercase font-bold">Products Sold</p><p id="app-period-sold" class="font-display font-bold text-lg text-brand-black">0</p></div>
+          <div class="p-3 rounded-xl bg-gray-50"><p class="text-[10px] text-brand-muted uppercase font-bold">Total Revenue</p><p id="app-period-revenue" class="font-display font-bold text-lg text-brand-black">0 Sh</p></div>
+          <div class="p-3 rounded-xl bg-gray-50"><p class="text-[10px] text-brand-muted uppercase font-bold">Buying Cost</p><p id="app-period-cost" class="font-display font-bold text-lg text-brand-black">0 Sh</p></div>
+          <div class="p-3 rounded-xl bg-gray-50"><p class="text-[10px] text-brand-muted uppercase font-bold">Profit Margin</p><p id="app-period-margin" class="font-display font-bold text-lg text-emerald-600">0%</p></div>
+        </div>
+        <div class="h-64 w-full">
+          <canvas id="appearichSalesChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Top Products & Customers -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
+          <h3 class="font-bold text-base text-brand-black">Best Products</h3>
+          <div id="appearich-top-products" class="divide-y divide-gray-100 text-xs text-brand-muted">No products sold yet.</div>
+        </div>
+        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
+          <h3 class="font-bold text-base text-brand-black">Customer Tracking</h3>
+          <div id="appearich-customers-list" class="divide-y divide-gray-100 text-xs text-brand-muted">No customers recorded yet.</div>
         </div>
       </div>
 
@@ -586,6 +679,7 @@
         </div>
       </div>
 
+      <!-- Aggregate Total Money -->
       <div class="p-8 rounded-3xl bg-brand-black text-white shadow-premium flex flex-col sm:flex-row items-center justify-between gap-6 border border-brand-black">
         <div>
           <span class="text-xs font-bold text-brand-gold uppercase tracking-widest">TOTAL MONEY (Liquid Net Worth)</span>
@@ -594,6 +688,7 @@
         <span class="px-3 py-1 rounded-full bg-brand-gold/20 text-brand-gold text-xs font-bold">5 Active Accounts</span>
       </div>
 
+      <!-- Account Cards Grid -->
       <div id="account-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </div>
 
@@ -601,15 +696,23 @@
     <div id="tab-progress" class="tab-content hidden space-y-8">
       <div>
         <h2 class="font-display font-bold text-2xl text-brand-black">Progress Center</h2>
-        <p class="text-xs text-brand-muted">Weekly, monthly, and yearly performance records and financial metrics.</p>
+        <p class="text-xs text-brand-muted">Weekly, monthly, and yearly performance metrics and financial growth tracking.</p>
       </div>
 
+      <!-- Score & Insights Banner -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="p-6 rounded-3xl bg-brand-black text-white shadow-premium flex flex-col items-center justify-center text-center space-y-4 relative overflow-hidden">
           <p class="text-xs font-bold text-brand-gold uppercase tracking-wider">FINANCIAL GROWTH SCORE</p>
-          <div class="font-display font-extrabold text-4xl text-white">+0.0%</div>
+          <div class="relative w-32 h-32 flex items-center justify-center">
+            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+              <path class="text-gray-800" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              <path class="text-brand-gold" stroke-dasharray="0, 100" stroke-width="3" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            </svg>
+            <span class="absolute font-display font-extrabold text-3xl text-white">+0.0%</span>
+          </div>
           <p class="text-xs text-gray-400">Consistent upward momentum across business and investments.</p>
         </div>
+
         <div class="lg:col-span-2 p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4 flex flex-col justify-between">
           <div>
             <div class="flex items-center space-x-2 text-brand-black mb-2">
@@ -620,10 +723,31 @@
           </div>
         </div>
       </div>
+
+      <!-- Weekly / Monthly Charts -->
+      <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-6">
+        <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+          <div class="flex space-x-2">
+            <button onclick="switchProgressTab('weekly')" id="prog-tab-weekly" class="prog-tab-btn active px-4 py-1.5 rounded-lg text-xs font-bold bg-brand-black text-white">WEEKLY</button>
+            <button onclick="switchProgressTab('monthly')" id="prog-tab-monthly" class="prog-tab-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-brand-muted hover:text-brand-black">MONTHLY</button>
+          </div>
+          <span class="text-xs font-bold text-emerald-600">Status: Active</span>
+        </div>
+        <div id="prog-weekly-panel" class="space-y-4">
+          <div class="h-64 w-full">
+            <canvas id="progressWeeklyChart"></canvas>
+          </div>
+        </div>
+        <div id="prog-monthly-panel" class="space-y-4 hidden">
+          <div class="h-64 w-full">
+            <canvas id="progressMonthlyChart"></canvas>
+          </div>
+        </div>
+      </div>
     </div>
   </main>
 
-  <!-- BOTTOM NAVIGATION -->
+  <!-- 13. SIMPLE BOTTOM NAVIGATION -->
   <nav class="fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-t border-gray-200 px-4 py-2.5">
     <div class="max-w-md mx-auto flex items-center justify-between">
       <button onclick="switchTab('dashboard')" id="bnav-dashboard" class="bnav-btn flex flex-col items-center space-y-1 text-brand-black">
@@ -648,12 +772,13 @@
     </div>
   </nav>
 
-  <!-- MODALS -->
+  <!-- ==================== MODALS ==================== -->
+
   <!-- Add Income Modal -->
   <div id="addIncomeModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Add Income Source (Automatic 10% Tithe)</h3>
+        <h3 class="font-bold text-lg text-brand-black">Add Income Source</h3>
         <button onclick="closeModal('addIncomeModal')" class="text-gray-400 hover:text-black">&times;</button>
       </div>
       <form onsubmit="handleAddIncome(event)" class="space-y-4">
@@ -663,9 +788,9 @@
         </div>
         <div>
           <label class="block text-xs font-bold text-brand-black uppercase mb-1">Amount (Sh)</label>
-          <input id="income-amount-input" type="number" required placeholder="100000" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm">
+          <input id="income-amount-input" type="number" required placeholder="500000" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm">
         </div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Save Income & Calculate 10% Tithe</button>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Save Income</button>
       </form>
     </div>
   </div>
@@ -688,6 +813,8 @@
           <div><label class="block text-xs font-bold uppercase mb-1">Buying Price (Sh)</label><input id="sale-buy-price" type="number" required placeholder="35000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
           <div><label class="block text-xs font-bold uppercase mb-1">Selling Price (Sh)</label><input id="sale-sell-price" type="number" required placeholder="55000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
         </div>
+        
+        <!-- Payment Status Selector -->
         <div>
           <label class="block text-xs font-bold uppercase mb-1">Payment Status</label>
           <select id="sale-payment-status" onchange="toggleSalePartialInput()" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white font-medium">
@@ -695,10 +822,12 @@
             <option value="PARTIAL">Partial Payment</option>
           </select>
         </div>
+
         <div id="sale-partial-container" class="hidden">
           <label class="block text-xs font-bold uppercase mb-1 text-red-600">Amount Paid So Far (Sh)</label>
           <input id="sale-paid-amount" type="number" placeholder="Enter amount paid" class="w-full px-3 py-2 rounded-xl border border-red-300 text-sm">
         </div>
+
         <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Record Sale</button>
       </form>
     </div>
@@ -899,9 +1028,8 @@
 
   <!-- ==================== JAVASCRIPT APP ENGINE ==================== -->
   <script>
-    const DEFAULT_HERO_IMAGE = "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1600&auto=format&fit=crop";
+    // INITIAL STATE: ALL FINANCIAL AMOUNTS START AT ZERO (0)
     const state = {
-      heroImageUrl: localStorage.getItem('appearich_hero_img') || DEFAULT_HERO_IMAGE,
       incomes: [],
       categories: [
         { id: 'cat-utilities', name: 'Utilities', percent: 25, isExpandable: true },
@@ -917,13 +1045,20 @@
         { name: 'Transport', percent: 6, spent: 0 }
       ],
       categorySpent: { 'Appearich': 0, 'Expenses': 0, 'Other': 0 },
-      investment: { totalInvested: 0, currentValue: 0, history: [] },
+      investment: {
+        totalInvested: 0,
+        currentValue: 0,
+        history: []
+      },
       sales: [],
       loans: [],
       accounts: { 'CRDB': 0, 'SELCOM': 0, 'MPESA': 0, 'LIPA NAMBA': 0, 'CASH': 0 },
       currentTab: 'dashboard',
+      appearichPeriod: 'day',
       utilitiesExpanded: false
     };
+
+    let invMainChart, appearichChart, progWeeklyChart, progMonthlyChart;
 
     function formatSh(amount) {
       return new Intl.NumberFormat('en-US').format(Math.round(amount || 0)) + ' Sh';
@@ -947,17 +1082,31 @@
         const totalCost = sale.buyPrice * sale.qty;
         const paid = sale.paymentStatus === 'FULL' ? totalValue : (sale.amountPaid || 0);
         const unpaid = totalValue - paid;
+
         appTotalRevenue += totalValue;
         appTotalCost += totalCost;
         appTotalReceived += paid;
         appTotalOutstanding += unpaid;
       });
+
       const appTotalProfit = appTotalReceived - appTotalCost;
       const totalLoanOwed = state.loans.reduce((sum, loan) => sum + (loan.amount - loan.paid), 0);
+
       return { 
-        totalIncome, godTotal, availableBudget, totalSpent, remainingBudget, 
-        invGainLoss, invReturnPercent, totalLiquidMoney, appTotalRevenue, 
-        appTotalCost, appTotalReceived, appTotalOutstanding, appTotalProfit, totalLoanOwed
+        totalIncome, 
+        godTotal, 
+        availableBudget, 
+        totalSpent, 
+        remainingBudget, 
+        invGainLoss, 
+        invReturnPercent, 
+        totalLiquidMoney, 
+        appTotalRevenue, 
+        appTotalCost, 
+        appTotalReceived, 
+        appTotalOutstanding, 
+        appTotalProfit,
+        totalLoanOwed
       };
     }
 
@@ -973,18 +1122,22 @@
       document.getElementById('card-appearich-profit').innerText = formatSh(calc.appTotalProfit);
       document.getElementById('card-accounts-val').innerText = formatSh(calc.totalLiquidMoney);
       
+      // Income Tab
       document.getElementById('income-god-total').innerText = formatSh(calc.godTotal);
       renderIncomeCards();
       
+      // Budget Tab
       document.getElementById('budget-pool-total').innerText = formatSh(calc.availableBudget);
       renderBudgetCategoryList(calc.availableBudget);
       
+      // Investment Tab
       document.getElementById('inv-total-invested').innerText = formatSh(state.investment.totalInvested);
       document.getElementById('inv-current-value').innerText = formatSh(state.investment.currentValue);
       document.getElementById('inv-gain-loss').innerText = (calc.invGainLoss >= 0 ? '+' : '') + formatSh(calc.invGainLoss);
       document.getElementById('inv-percentage-return').innerText = (calc.invReturnPercent >= 0 ? '+' : '') + calc.invReturnPercent.toFixed(2) + '%';
       renderInvestmentHistoryList();
       
+      // Appearich Tab
       document.getElementById('app-today-sales').innerText = formatSh(calc.appTotalReceived);
       document.getElementById('app-today-profit').innerText = formatSh(calc.appTotalProfit);
       document.getElementById('app-month-revenue').innerText = formatSh(calc.appTotalRevenue);
@@ -992,31 +1145,17 @@
       document.getElementById('app-total-profit').innerText = formatSh(calc.appTotalProfit);
       renderAppearichDashboard(calc);
       
+      // Loans Section
       document.getElementById('loan-total-owed').innerText = formatSh(calc.totalLoanOwed);
       renderLoansList();
+
+      // Accounts Tab
       document.getElementById('accounts-total-money').innerText = formatSh(calc.totalLiquidMoney);
       renderAccountCards();
       
-      document.getElementById('hero-bg-image').style.backgroundImage = `url('${state.heroImageUrl}')`;
-    }
-
-    function handleHeroImageUpload(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-          state.heroImageUrl = event.target.result;
-          localStorage.setItem('appearich_hero_img', state.heroImageUrl);
-          renderAll();
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-
-    function resetHeroImage() {
-      state.heroImageUrl = DEFAULT_HERO_IMAGE;
-      localStorage.removeItem('appearich_hero_img');
-      renderAll();
+      // Progress Insights
+      renderProgressInsights(calc);
+      updateAllCharts();
     }
 
     function renderIncomeCards() {
@@ -1033,11 +1172,11 @@
         card.innerHTML = `
           <div class="flex items-center justify-between">
             <span class="text-xs font-bold uppercase tracking-wider text-brand-black">${inc.name}</span>
-            <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-[10px] font-bold text-emerald-600">ACTIVE</span>
+            ${inc.fixed ? '<span class="px-2.5 py-0.5 rounded-full bg-gray-100 text-[10px] font-bold text-brand-black">FIXED</span>' : '<span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-[10px] font-bold text-emerald-600">FLEXIBLE</span>'}
           </div>
           <div><p class="text-[11px] text-brand-muted">Amount</p><p class="font-display font-extrabold text-2xl text-brand-black">${formatSh(inc.amount)}</p></div>
           <div class="pt-3 border-t border-gray-100 flex items-center justify-between bg-brand-surface p-3 rounded-2xl">
-            <span class="text-xs font-bold text-brand-gold">GOD 10% Tithe</span>
+            <span class="text-xs font-bold text-brand-gold">GOD 10%</span>
             <span class="font-display font-bold text-sm text-brand-black">${formatSh(godShare)}</span>
           </div>
         `;
@@ -1064,6 +1203,7 @@
       });
       document.getElementById('utilities-planned').innerText = formatSh(utilsPlannedTotal);
       document.getElementById('utilities-spent-summary').innerText = `Spent: ${formatSh(utilsSpentTotal)}`;
+
       const mainList = document.getElementById('main-categories-list');
       mainList.innerHTML = '';
       let totalAllocatedPercent = 25;
@@ -1105,11 +1245,13 @@
         table.innerHTML = `<tr><td colspan="8" class="py-6 text-center text-brand-muted text-xs">No sales recorded yet. Click + ADD SALE to record transactions.</td></tr>`;
         return;
       }
+
       state.sales.forEach(sale => {
         const totalValue = sale.sellPrice * sale.qty;
         const paid = sale.paymentStatus === 'FULL' ? totalValue : (sale.amountPaid || 0);
         const remaining = totalValue - paid;
         const isPartial = sale.paymentStatus === 'PARTIAL' && remaining > 0;
+
         const tr = document.createElement('tr');
         tr.className = "hover:bg-gray-50/50 transition";
         tr.innerHTML = `
@@ -1143,6 +1285,7 @@
         container.innerHTML = `<div class="col-span-2 text-center py-6 text-brand-muted text-xs">No loan records active. Click "+ Record Loan" to add one.</div>`;
         return;
       }
+
       state.loans.forEach(loan => {
         const remaining = loan.amount - loan.paid;
         const isPaid = remaining <= 0;
@@ -1181,104 +1324,153 @@
         card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4 hover:border-brand-black transition";
         card.innerHTML = `
           <div class="flex justify-between items-center"><span class="font-bold text-sm uppercase text-brand-black">${accName}</span><span class="px-2 py-0.5 rounded-full bg-gray-100 text-[10px] font-bold">VAULT</span></div>
-          <div><p class="text-[11px] text-brand-muted">Available Balance</p><p class="font-display font-bold text-2xl text-brand-black mt-1">${formatSh(balance)}</p></div>
+          <div><p class="text-[11px] text-brand-muted">Available Balance</p><p class="font-display font-bold text-2xl text-brand-black">${formatSh(balance)}</p></div>
+          <div class="pt-3 border-t border-gray-100 flex justify-between items-center text-xs">
+            <button onclick="openModal('addMoneyModal')" class="font-semibold text-brand-black hover:underline">+ Add Money</button>
+            <button onclick="openModal('transferModal')" class="font-semibold text-brand-muted hover:text-brand-black">Transfer</button>
+          </div>
         `;
         container.appendChild(card);
       });
     }
 
+    function renderProgressInsights(calc) {
+      const list = document.getElementById('progress-insights-list');
+      list.innerHTML = `
+        <p>• Your business received total is <span class="font-bold text-emerald-600">${formatSh(calc.appTotalReceived)}</span>.</p>
+        <p>• Outstanding business unpaid amount is <span class="font-bold text-red-600">${formatSh(calc.appTotalOutstanding)}</span>.</p>
+        <p>• GOD allocation is secured at <span class="font-bold text-brand-gold">${formatSh(calc.godTotal)}</span>.</p>
+      `;
+    }
+
+    function updateAllCharts() {
+      const ctx1 = document.getElementById('investmentMainChart').getContext('2d');
+      if (invMainChart) invMainChart.destroy();
+      invMainChart = new Chart(ctx1, {
+        type: 'line',
+        data: {
+          labels: state.investment.history.length > 0 ? state.investment.history.map(h => h.date) : ['Start'],
+          datasets: [{ label: 'Portfolio Value', data: state.investment.history.length > 0 ? state.investment.history.map(h => h.value) : [0], borderColor: '#0A0A0C', backgroundColor: 'rgba(10,10,12,0.05)', fill: true, tension: 0.3 }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+      });
+
+      const ctx2 = document.getElementById('appearichSalesChart').getContext('2d');
+      if (appearichChart) appearichChart.destroy();
+      appearichChart = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          datasets: [{ label: 'Sales Received', data: [0, 0, 0, 0, 0, 0, 0], backgroundColor: '#D4AF37', borderRadius: 8 }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+      });
+
+      const ctx3 = document.getElementById('progressWeeklyChart').getContext('2d');
+      if (progWeeklyChart) progWeeklyChart.destroy();
+      progWeeklyChart = new Chart(ctx3, {
+        type: 'line',
+        data: {
+          labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+          datasets: [{ label: 'Net Growth', data: [0, 0, 0, 0], borderColor: '#10B981', backgroundColor: 'rgba(16,185,129,0.1)', fill: true, tension: 0.3 }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+      });
+    }
+
     function switchTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+      document.getElementById('tab-' + tabId).classList.remove('hidden');
       document.querySelectorAll('.nav-tab').forEach(el => {
-        el.classList.remove('active', 'bg-brand-black', 'text-white', 'shadow-sm');
+        el.classList.remove('bg-brand-black', 'text-white', 'shadow-sm');
         el.classList.add('text-brand-muted');
       });
-      const activeNav = document.getElementById(`nav-${tabId}`);
+      const activeNav = document.getElementById('nav-' + tabId);
       if (activeNav) {
-        activeNav.classList.add('active', 'bg-brand-black', 'text-white', 'shadow-sm');
+        activeNav.classList.add('bg-brand-black', 'text-white', 'shadow-sm');
         activeNav.classList.remove('text-brand-muted');
       }
-      document.querySelectorAll('.bnav-btn').forEach(el => {
-        el.classList.remove('text-brand-black');
-        el.classList.add('text-brand-muted');
-      });
-      const activeBNav = document.getElementById(`bnav-${tabId}`);
-      if (activeBNav) {
-        activeBNav.classList.add('text-brand-black');
-        activeBNav.classList.remove('text-brand-muted');
-      }
-      state.currentTab = tabId;
+      const hero = document.getElementById('hero-section');
+      if (tabId === 'dashboard') hero.classList.remove('hidden');
+      else hero.classList.add('hidden');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function openModal(modalId) {
-      document.getElementById(modalId).classList.remove('hidden');
-    }
-
-    function closeModal(modalId) {
-      document.getElementById(modalId).classList.add('hidden');
-    }
-
     function toggleUtilitiesAccordion() {
-      state.utilitiesExpanded = !state.utilitiesExpanded;
       const acc = document.getElementById('utilities-accordion');
       const chev = document.getElementById('utilities-chevron');
-      if (state.utilitiesExpanded) {
-        acc.classList.add('expanded');
-        chev.classList.add('rotate-180');
-      } else {
-        acc.classList.remove('expanded');
-        chev.classList.remove('rotate-180');
-      }
+      acc.classList.toggle('expanded');
+      chev.classList.toggle('rotate-180');
     }
 
     function toggleSalePartialInput() {
       const status = document.getElementById('sale-payment-status').value;
-      const container = document.getElementById('sale-partial-container');
-      if (status === 'PARTIAL') container.classList.remove('hidden');
-      else container.classList.add('hidden');
+      const partialBox = document.getElementById('sale-partial-container');
+      if (status === 'PARTIAL') partialBox.classList.remove('hidden');
+      else partialBox.classList.add('hidden');
     }
 
     function toggleEditSalePartialInput() {
       const status = document.getElementById('edit-sale-status').value;
-      const container = document.getElementById('edit-sale-paid-container');
-      if (status === 'PARTIAL') container.classList.remove('hidden');
-      else container.classList.add('hidden');
+      const partialBox = document.getElementById('edit-sale-paid-container');
+      if (status === 'PARTIAL') partialBox.classList.remove('hidden');
+      else partialBox.classList.add('hidden');
     }
 
-    // FORM HANDLERS WITH AUTOMATIC 10% TITHE CALCULATION
+    function switchAppearichPeriod(period) {
+      document.querySelectorAll('.app-period-btn').forEach(btn => {
+        btn.classList.remove('bg-brand-black', 'text-white');
+        btn.classList.add('bg-gray-100', 'text-brand-muted');
+      });
+      document.getElementById('app-period-' + period).classList.add('bg-brand-black', 'text-white');
+      document.getElementById('app-period-' + period).classList.remove('bg-gray-100', 'text-brand-muted');
+    }
+
+    function switchProgressTab(period) {
+      document.querySelectorAll('.prog-tab-btn').forEach(btn => {
+        btn.classList.remove('bg-brand-black', 'text-white');
+        btn.classList.add('bg-gray-100', 'text-brand-muted');
+      });
+      document.getElementById('prog-tab-' + period).classList.add('bg-brand-black', 'text-white');
+      document.getElementById('prog-tab-' + period).classList.remove('bg-gray-100', 'text-brand-muted');
+      if (period === 'weekly') {
+        document.getElementById('prog-weekly-panel').classList.remove('hidden');
+        document.getElementById('prog-monthly-panel').classList.add('hidden');
+      } else {
+        document.getElementById('prog-weekly-panel').classList.add('hidden');
+        document.getElementById('prog-monthly-panel').classList.remove('hidden');
+      }
+    }
+
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
     function handleAddIncome(e) {
       e.preventDefault();
-      const name = document.getElementById('income-name-input').value;
-      const amount = parseFloat(document.getElementById('income-amount-input').value);
-      if (!name || isNaN(amount)) return;
-      
-      // Automatically calculate 10% tithe separately and record income
-      state.incomes.push({ id: 'inc-' + Date.now(), name, amount });
-      state.accounts['CRDB'] += amount; // Automatically deposit to CRDB vault by default
-      
+      const name = document.getElementById('income-name-input').value.toUpperCase();
+      const amount = parseFloat(document.getElementById('income-amount-input').value) || 0;
+      state.incomes.push({ id: Date.now().toString(), name, amount, fixed: false });
       closeModal('addIncomeModal');
-      e.target.reset();
       renderAll();
     }
 
     function handleAddSale(e) {
       e.preventDefault();
       const date = document.getElementById('sale-date').value;
-      const qty = parseInt(document.getElementById('sale-qty').value);
+      const qty = parseInt(document.getElementById('sale-qty').value) || 1;
       const product = document.getElementById('sale-product').value;
       const customer = document.getElementById('sale-customer').value;
-      const buyPrice = parseFloat(document.getElementById('sale-buy-price').value);
-      const sellPrice = parseFloat(document.getElementById('sale-sell-price').value);
+      const buyPrice = parseFloat(document.getElementById('sale-buy-price').value) || 0;
+      const sellPrice = parseFloat(document.getElementById('sale-sell-price').value) || 0;
       const paymentStatus = document.getElementById('sale-payment-status').value;
-      let amountPaid = paymentStatus === 'FULL' ? sellPrice * qty : parseFloat(document.getElementById('sale-paid-amount').value || 0);
+      
+      let amountPaid = sellPrice * qty;
+      if (paymentStatus === 'PARTIAL') {
+        amountPaid = parseFloat(document.getElementById('sale-paid-amount').value) || 0;
+      }
 
-      state.sales.push({ id: 'sale-' + Date.now(), date, qty, product, customer, buyPrice, sellPrice, paymentStatus, amountPaid });
-      state.accounts['CASH'] += amountPaid;
-
+      state.sales.unshift({ id: Date.now().toString(), date, product, customer, qty, buyPrice, sellPrice, paymentStatus, amountPaid });
       closeModal('addSaleModal');
-      e.target.reset();
       renderAll();
     }
 
@@ -1287,20 +1479,21 @@
       if (!sale) return;
       document.getElementById('edit-sale-id').value = sale.id;
       document.getElementById('edit-sale-status').value = sale.paymentStatus;
-      document.getElementById('edit-sale-paid-amount').value = sale.amountPaid || 0;
+      document.getElementById('edit-sale-paid-amount').value = sale.amountPaid || (sale.sellPrice * sale.qty);
       toggleEditSalePartialInput();
       openModal('updateSalePaymentModal');
     }
 
     function handleUpdateSalePayment(e) {
       e.preventDefault();
-      const id = document.getElementById('edit-sale-id').value;
-      const paymentStatus = document.getElementById('edit-sale-status').value;
-      const amountPaid = parseFloat(document.getElementById('edit-sale-paid-amount').value);
-      const sale = state.sales.find(s => s.id === id);
+      const saleId = document.getElementById('edit-sale-id').value;
+      const status = document.getElementById('edit-sale-status').value;
+      const paidAmt = parseFloat(document.getElementById('edit-sale-paid-amount').value) || 0;
+
+      const sale = state.sales.find(s => s.id === saleId);
       if (sale) {
-        sale.paymentStatus = paymentStatus;
-        sale.amountPaid = paymentStatus === 'FULL' ? (sale.sellPrice * sale.qty) : amountPaid;
+        sale.paymentStatus = status;
+        sale.amountPaid = status === 'FULL' ? (sale.sellPrice * sale.qty) : paidAmt;
       }
       closeModal('updateSalePaymentModal');
       renderAll();
@@ -1309,13 +1502,13 @@
     function handleAddLoan(e) {
       e.preventDefault();
       const borrower = document.getElementById('loan-borrower').value;
-      const amount = parseFloat(document.getElementById('loan-amount').value);
+      const amount = parseFloat(document.getElementById('loan-amount').value) || 0;
       const date = document.getElementById('loan-date').value;
-      const paid = parseFloat(document.getElementById('loan-paid').value);
+      const paid = parseFloat(document.getElementById('loan-paid').value) || 0;
       const note = document.getElementById('loan-note').value;
-      state.loans.push({ id: 'loan-' + Date.now(), borrower, amount, date, paid, note });
+
+      state.loans.unshift({ id: Date.now().toString(), borrower, amount, date, paid, note });
       closeModal('addLoanModal');
-      e.target.reset();
       renderAll();
     }
 
@@ -1329,35 +1522,31 @@
 
     function handleUpdateLoan(e) {
       e.preventDefault();
-      const id = document.getElementById('edit-loan-id').value;
-      const paid = parseFloat(document.getElementById('edit-loan-paid').value);
-      const loan = state.loans.find(l => l.id === id);
-      if (loan) loan.paid = paid;
+      const loanId = document.getElementById('edit-loan-id').value;
+      const paidAmt = parseFloat(document.getElementById('edit-loan-paid').value) || 0;
+      const loan = state.loans.find(l => l.id === loanId);
+      if (loan) {
+        loan.paid = paidAmt;
+      }
       closeModal('updateLoanModal');
       renderAll();
     }
 
     function handleAddTransaction(e) {
       e.preventDefault();
-      const name = document.getElementById('tx-name').value;
       const category = document.getElementById('tx-category').value;
       const account = document.getElementById('tx-account').value;
-      const amount = parseFloat(document.getElementById('tx-amount').value);
+      const amount = parseFloat(document.getElementById('tx-amount').value) || 0;
       
-      if (state.accounts[account] < amount) {
-        alert('Insufficient funds in ' + account);
-        return;
+      if (state.accounts[account] !== undefined) {
+        state.accounts[account] -= amount;
       }
-      state.accounts[account] -= amount;
-
-      if (['Internet', 'Umeme', 'Taka', 'Transport'].includes(category)) {
-        const sub = state.utilitiesSub.find(s => s.name === category);
-        if (sub) sub.spent += amount;
+      if (state.categorySpent[category] !== undefined) {
+        state.categorySpent[category] += amount;
       } else {
-        state.categorySpent[category] = (state.categorySpent[category] || 0) + amount;
+        state.categorySpent[category] = amount;
       }
       closeModal('addTransactionModal');
-      e.target.reset();
       renderAll();
     }
 
@@ -1365,11 +1554,11 @@
       e.preventDefault();
       const from = document.getElementById('tr-from').value;
       const to = document.getElementById('tr-to').value;
-      const amount = parseFloat(document.getElementById('tr-amount').value);
-      if (from === to) { alert('Cannot transfer to the same account'); return; }
-      if (state.accounts[from] < amount) { alert('Insufficient funds'); return; }
-      state.accounts[from] -= amount;
-      state.accounts[to] += amount;
+      const amount = parseFloat(document.getElementById('tr-amount').value) || 0;
+      if (from !== to) {
+        state.accounts[from] -= amount;
+        state.accounts[to] += amount;
+      }
       closeModal('transferModal');
       renderAll();
     }
@@ -1377,27 +1566,27 @@
     function handleAddMoneyAccount(e) {
       e.preventDefault();
       const acc = document.getElementById('am-account').value;
-      const amount = parseFloat(document.getElementById('am-amount').value);
-      state.accounts[acc] += amount;
+      const amt = parseFloat(document.getElementById('am-amount').value) || 0;
+      state.accounts[acc] += amt;
       closeModal('addMoneyModal');
       renderAll();
     }
 
     function handleAddInvestmentCapital(e) {
       e.preventDefault();
-      const amt = parseFloat(document.getElementById('inv-add-amount').value);
+      const amt = parseFloat(document.getElementById('inv-add-amount').value) || 0;
       state.investment.totalInvested += amt;
       state.investment.currentValue += amt;
-      state.investment.history.push({ date: new Date().toISOString().split('T')[0], value: state.investment.currentValue });
+      state.investment.history.push({ date: 'Today', value: state.investment.currentValue });
       closeModal('addInvestmentModal');
       renderAll();
     }
 
     function handleUpdateInvestmentValue(e) {
       e.preventDefault();
-      const val = parseFloat(document.getElementById('inv-update-value').value);
+      const val = parseFloat(document.getElementById('inv-update-value').value) || 0;
       state.investment.currentValue = val;
-      state.investment.history.push({ date: new Date().toISOString().split('T')[0], value: val });
+      state.investment.history.push({ date: 'Today', value: val });
       closeModal('updateInvestmentModal');
       renderAll();
     }
@@ -1405,18 +1594,17 @@
     function handleAddCategory(e) {
       e.preventDefault();
       const name = document.getElementById('cat-name-input').value;
-      const percent = parseFloat(document.getElementById('cat-percent-input').value);
+      const percent = parseFloat(document.getElementById('cat-percent-input').value) || 0;
       state.categories.push({ id: 'cat-' + Date.now(), name, percent, isExpandable: false });
       state.categorySpent[name] = 0;
       closeModal('addCategoryModal');
-      e.target.reset();
       renderAll();
     }
 
-    // Initialize initial render
-    window.addEventListener('DOMContentLoaded', () => {
+    // Initialize application on page load
+    window.onload = () => {
       renderAll();
-    });
+    };
   </script>
 </body>
 </html>
