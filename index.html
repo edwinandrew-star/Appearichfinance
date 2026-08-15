@@ -1,412 +1,256 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>App Layout</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appearich Finance Command Center</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Space Grotesk"', 'sans-serif']
+          },
+          colors: {
+            brand: {
+              bg: '#FFFFFF',
+              surface: '#F8F9FA',
+              card: '#FFFFFF',
+              black: '#0A0A0C',
+              muted: '#6C727F',
+              border: '#E5E7EB',
+              gold: '#D4AF37',
+              goldLight: '#FFFDF0',
+              goldDark: '#997B15',
+              success: '#10B981',
+              danger: '#EF4444'
+            }
+          },
+          boxShadow: {
+            'premium': '0 10px 30px -5px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02)',
+            'gold-glow': '0 0 20px rgba(212, 175, 55, 0.25)',
+            'card-hover': '0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.03)'
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    /* CSS Reset & Variables */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-
     body {
-      background-color: #f8f9fa;
-      color: #1a1a1a;
-      display: flex;
-      justify-content: center;
-      min-height: 100vh;
+      background-color: #FFFFFF;
+      color: #0A0A0C;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
     }
-
-    /* Container for mobile-first frame */
-    .app-container {
-      width: 100%;
-      max-width: 430px;
-      background-color: #ffffff;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      padding-bottom: 75px; /* Space for sticky bottom nav */
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #B8860B 0%, #D4AF37 50%, #AA771C 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-
-    /* Top Bar Header */
-    .top-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 20px;
-      background-color: #ffffff;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .icon-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      border: 1px solid #e0e0e0;
-      background: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-
-    .brand-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-    }
-
-    .main-content {
-      padding: 0 16px 20px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    /* Hero Banner */
-    .hero-banner {
-      position: relative;
-      height: 180px;
-      border-radius: 20px;
+    .accordion-content {
+      max-height: 0;
       overflow: hidden;
-      background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('./images/hero.jpg') center/cover no-repeat;
-      background-color: #333333; /* Fallback */
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 20px;
-      color: #ffffff;
+      transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
-    .hero-banner h2 {
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 6px;
+    .accordion-content.expanded {
+      max-height: 1200px;
     }
-
-    .hero-banner p {
-      font-size: 13px;
-      color: #dcb13c;
-      font-weight: 600;
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
     }
-
-    /* Category Section */
-    .section-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 15px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 12px;
-    }
-
-    .grid-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .card-item {
-      position: relative;
-      height: 160px;
-      border-radius: 20px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 14px;
-      color: #ffffff;
-      text-decoration: none;
-      background-size: cover;
-      background-position: center;
-    }
-
-    .card-item-1 {
-      background: linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.8) 100%), url('./images/category1.jpg');
-      background-color: #555; /* Fallback */
-    }
-
-    .card-item-2 {
-      background: linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.8) 100%), url('./images/category2.jpg');
-      background-color: #777; /* Fallback */
-    }
-
-    .card-title {
-      font-size: 16px;
-      font-weight: 700;
-    }
-
-    .card-subtitle {
-      font-size: 11px;
-      color: #dcb13c;
-      margin-top: 2px;
-    }
-
-    /* Interaction Input Box */
-    .prompt-card {
-      background-color: #ffffff;
-      border: 1px solid #f0f0f0;
-      border-radius: 20px;
-      padding: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-    }
-
-    .prompt-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-
-    .prompt-desc {
-      font-size: 13px;
-      color: #666666;
-      margin-bottom: 14px;
-      line-height: 1.4;
-    }
-
-    .input-group {
-      display: flex;
-      gap: 8px;
-    }
-
-    .input-field {
-      flex: 1;
-      padding: 12px 16px;
-      border-radius: 12px;
-      border: 1px solid #e2e8f0;
-      background-color: #f8fafc;
-      font-size: 14px;
-      outline: none;
-    }
-
-    .submit-btn {
-      padding: 12px 20px;
-      background-color: #dcb13c;
-      color: #ffffff;
-      border: none;
-      border-radius: 12px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    /* Action Row Box */
-    .action-card {
-      background-color: #ffffff;
-      border: 1px solid #f0f0f0;
-      border-radius: 20px;
-      padding: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-    }
-
-    .action-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .action-icon-circle {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background-color: #fef9c3;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .action-text h4 {
-      font-size: 15px;
-      font-weight: 700;
-    }
-
-    .action-text p {
-      font-size: 12px;
-      color: #666666;
-      margin-top: 2px;
-    }
-
-    .outline-btn {
-      padding: 10px 18px;
-      border: 1.5px solid #dcb13c;
-      background: transparent;
-      color: #dcb13c;
-      border-radius: 20px;
-      font-weight: 700;
-      font-size: 13px;
-      cursor: pointer;
-    }
-
-    /* Sticky Bottom Navigation */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 430px;
-      height: 65px;
-      background-color: #ffffff;
-      border-top: 1px solid #f0f0f0;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      z-index: 1000;
-    }
-
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      text-decoration: none;
-      color: #8E8E93;
-      font-size: 11px;
-      font-weight: 600;
-      width: 25%;
-    }
-
-    .nav-item.active {
-      color: #dcb13c;
-    }
-
-    .nav-item svg {
-      width: 22px;
-      height: 22px;
-      fill: currentColor;
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
   </style>
 </head>
-<body>
+<body class="bg-brand-bg min-h-screen pb-24 text-brand-black">
 
-  <div class="app-container">
+  <!-- TOP APP HEADER -->
+  <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100 px-4 lg:px-8 py-4">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('dashboard')">
+        <div class="w-10 h-10 rounded-2xl bg-brand-black flex items-center justify-center text-brand-gold shadow-gold-glow">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="font-display font-bold text-xl tracking-tight text-brand-black">APPEARICH</h1>
+          <p class="text-xs font-semibold tracking-widest text-brand-gold uppercase">Financial Command Center</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3">
+        <button onclick="openModal('addTransactionModal')" class="hidden sm:flex items-center space-x-2 bg-brand-black text-white px-4 py-2.5 rounded-xl font-medium text-sm hover:bg-gray-800 transition">
+          <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          <span>Add Transaction</span>
+        </button>
+        <div class="w-10 h-10 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center font-bold text-xs text-brand-black">
+          TZ
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-6xl mx-auto px-4 lg:px-8 pt-6 space-y-8">
     
-    <!-- Top Header -->
-    <header class="top-header">
-      <button class="icon-btn" aria-label="Back">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M19 12H5M12 19l-7-7 7-7"/>
-        </svg>
+    <!-- VIEW TABS NAVIGATION -->
+    <div class="flex items-center space-x-2 border-b border-gray-200 overflow-x-auto no-scrollbar pb-2">
+      <button id="nav-dashboard" onclick="switchTab('dashboard')" class="nav-tab active px-5 py-2.5 rounded-xl text-sm font-semibold transition flex items-center space-x-2 bg-brand-black text-white shadow-sm">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+        <span>Home</span>
       </button>
+      <button id="nav-income" onclick="switchTab('income')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span>Income & GOD</span>
+      </button>
+      <button id="nav-budget" onclick="switchTab('budget')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" /></svg>
+        <span>Budget Allocations</span>
+      </button>
+      <button id="nav-investment" onclick="switchTab('investment')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+        <span>Investments</span>
+      </button>
+      <button id="nav-appearich" onclick="switchTab('appearich')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+        <span>Appearich Sales</span>
+      </button>
+      <button id="nav-accounts" onclick="switchTab('accounts')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+        <span>Accounts</span>
+      </button>
+      <button id="nav-progress" onclick="switchTab('progress')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+        <span>Progress</span>
+      </button>
+    </div>
+
+    <!-- ==================== TAB 1: HOME (HERO SCREEN & DASHBOARD) ==================== -->
+    <div id="tab-dashboard" class="tab-content space-y-8">
       
-      <div class="brand-title">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-        </svg>
-        App Title
+      <!-- HERO IMAGE BANNER -->
+      <div class="relative rounded-3xl overflow-hidden shadow-2xl text-white">
+        <img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=1600&q=80" alt="Financial Success" class="w-full h-80 sm:h-96 object-cover" />
+        <div class="absolute inset-0 bg-gradient-to-r from-brand-black/90 via-brand-black/70 to-transparent flex flex-col justify-center p-8 sm:p-12">
+          <div class="max-w-xl space-y-4">
+            <span class="px-3 py-1 rounded-full bg-brand-gold/20 border border-brand-gold/30 text-brand-gold text-xs font-bold uppercase tracking-wider">Smart Financial Command</span>
+            <h2 class="font-display text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">Master Your Wealth & Business Growth</h2>
+            <p class="text-sm sm:text-base text-gray-300">Seamlessly navigate your income, budget allocations, investments, and business sales from one central place.</p>
+            <div class="flex flex-wrap gap-3 pt-2">
+              <button onclick="openModal('addTransactionModal')" class="bg-brand-gold text-brand-black px-6 py-3 rounded-xl font-bold text-sm shadow-gold-glow hover:bg-yellow-500 transition">
+                + Quick Expense
+              </button>
+              <button onclick="switchTab('appearich')" class="bg-white/10 backdrop-blur-md text-white border border-white/20 px-6 py-3 rounded-xl font-bold text-sm hover:bg-white/20 transition">
+                View Sales Tracker
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <button class="icon-btn" aria-label="Toggle Theme">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-        </svg>
-      </button>
-    </header>
-
-    <!-- Main Body Area -->
-    <main class="main-content">
-      
-      <!-- Banner -->
-      <section class="hero-banner">
-        <h2>Primary Greeting</h2>
-        <p>Featured highlight description goes here.</p>
-      </section>
-
-      <!-- Grid Cards -->
-      <section>
-        <div class="section-title">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="#dcb13c">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-          </svg>
-          Section Heading
-        </div>
-        
-        <div class="grid-container">
-          <a href="#" class="card-item card-item-1">
-            <div class="card-title">Category One</div>
-            <div class="card-subtitle">Subtext Detail</div>
-          </a>
-          
-          <a href="#" class="card-item card-item-2">
-            <div class="card-title">Category Two</div>
-            <div class="card-subtitle">Subtext Detail</div>
-          </a>
-        </div>
-      </section>
-
-      <!-- Input Section -->
-      <section class="prompt-card">
-        <div class="prompt-header">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="#dcb13c">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M12 16v-4M12 8h.01" stroke="#fff" stroke-width="2"/>
-          </svg>
-          Interactive Title
-        </div>
-        <p class="prompt-desc">Enter your custom details below or submit your input directly to process your request.</p>
-        <div class="input-group">
-          <input type="text" class="input-field" placeholder="Enter details here..." />
-          <button class="submit-btn">Submit</button>
-        </div>
-      </section>
-
-      <!-- Action Row -->
-      <section class="action-card">
-        <div class="action-info">
-          <div class="action-icon-circle">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#dcb13c" stroke-width="2">
-              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
-            </svg>
+      <!-- Quick Navigation Grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        <button onclick="switchTab('income')" class="p-4 rounded-2xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition text-center space-y-2">
+          <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
           </div>
-          <div class="action-text">
-            <h4>Quick Action</h4>
-            <p>Repeat previous selection</p>
+          <p class="font-bold text-xs text-brand-black">Income & GOD</p>
+        </button>
+        <button onclick="switchTab('budget')" class="p-4 rounded-2xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition text-center space-y-2">
+          <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" /></svg>
           </div>
+          <p class="font-bold text-xs text-brand-black">Budgeting</p>
+        </button>
+        <button onclick="switchTab('investment')" class="p-4 rounded-2xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition text-center space-y-2">
+          <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center mx-auto">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+          </div>
+          <p class="font-bold text-xs text-brand-black">Investments</p>
+        </button>
+        <button onclick="switchTab('appearich')" class="p-4 rounded-2xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition text-center space-y-2">
+          <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+          </div>
+          <p class="font-bold text-xs text-brand-black">Appearich Sales</p>
+        </button>
+        <button onclick="switchTab('accounts')" class="p-4 rounded-2xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition text-center space-y-2">
+          <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+          </div>
+          <p class="font-bold text-xs text-brand-black">Accounts</p>
+        </button>
+        <button onclick="switchTab('progress')" class="p-4 rounded-2xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition text-center space-y-2">
+          <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+          </div>
+          <p class="font-bold text-xs text-brand-black">Progress</p>
+        </button>
+      </div>
+
+      <!-- Primary Summary Stats Grid -->
+      <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
+        <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between">
+          <span class="text-xs font-semibold text-brand-muted uppercase">Total Income</span>
+          <p id="dash-total-income" class="font-display text-xl lg:text-2xl font-bold text-brand-black mt-2">0 Sh</p>
         </div>
-        <button class="outline-btn">Action</button>
-      </section>
+        <div class="p-5 rounded-2xl bg-brand-black text-white shadow-premium flex flex-col justify-between">
+          <span class="text-xs font-semibold text-brand-gold uppercase">GOD (10%)</span>
+          <p id="dash-god-amount" class="font-display text-xl lg:text-2xl font-bold text-brand-gold mt-2">0 Sh</p>
+        </div>
+        <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between">
+          <span class="text-xs font-semibold text-brand-muted uppercase">Available (90%)</span>
+          <p id="dash-available-budget" class="font-display text-xl lg:text-2xl font-bold text-brand-black mt-2">0 Sh</p>
+        </div>
+        <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between">
+          <span class="text-xs font-semibold text-brand-muted uppercase">Spent</span>
+          <p id="dash-total-spent" class="font-display text-xl lg:text-2xl font-bold text-brand-black mt-2">0 Sh</p>
+        </div>
+        <div class="col-span-2 lg:col-span-1 p-5 rounded-2xl bg-white border border-brand-black/10 shadow-premium flex flex-col justify-between">
+          <span class="text-xs font-semibold text-brand-black uppercase">Remaining</span>
+          <p id="dash-remaining-budget" class="font-display text-xl lg:text-2xl font-bold text-brand-black mt-2">0 Sh</p>
+        </div>
+      </div>
+    </div>
 
-    </main>
+    <!-- Additional Tab Content Placeholder Containers -->
+    <div id="tab-income" class="tab-content hidden"><h2 class="font-bold text-xl">Income & GOD Content</h2></div>
+    <div id="tab-budget" class="tab-content hidden"><h2 class="font-bold text-xl">Budget Allocations Content</h2></div>
+    <div id="tab-investment" class="tab-content hidden"><h2 class="font-bold text-xl">Investments Content</h2></div>
+    <div id="tab-appearich" class="tab-content hidden"><h2 class="font-bold text-xl">Appearich Sales Content</h2></div>
+    <div id="tab-accounts" class="tab-content hidden"><h2 class="font-bold text-xl">Accounts Content</h2></div>
+    <div id="tab-progress" class="tab-content hidden"><h2 class="font-bold text-xl">Progress Content</h2></div>
+  </main>
 
-    <!-- Bottom Navigation Bar -->
-    <nav class="bottom-nav">
-      <a href="#" class="nav-item active">
-        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-        <span>Nav One</span>
-      </a>
-      <a href="#" class="nav-item">
-        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
-        <span>Nav Two</span>
-      </a>
-      <a href="#" class="nav-item">
-        <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
-        <span>Nav Three</span>
-      </a>
-      <a href="#" class="nav-item">
-        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-        <span>Nav Four</span>
-      </a>
-    </nav>
+  <!-- NAVIGATION SCRIPT -->
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      const targetTab = document.getElementById(`tab-${tabId}`);
+      if (targetTab) targetTab.classList.remove('hidden');
 
-  </div>
-
+      document.querySelectorAll('.nav-tab').forEach(btn => {
+        btn.className = "nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2";
+      });
+      const activeNav = document.getElementById(`nav-${tabId}`);
+      if (activeNav) {
+        activeNav.className = "nav-tab active px-5 py-2.5 rounded-xl text-sm font-semibold transition flex items-center space-x-2 bg-brand-black text-white shadow-sm";
+      }
+    }
+  </script>
 </body>
 </html>
