@@ -1,256 +1,451 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Appearich Finance Command Center</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-  
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-            display: ['"Space Grotesk"', 'sans-serif']
-          },
-          colors: {
-            brand: {
-              bg: '#FFFFFF',
-              surface: '#F8F9FA',
-              card: '#FFFFFF',
-              black: '#0A0A0C',
-              muted: '#6C727F',
-              border: '#E5E7EB',
-              gold: '#D4AF37',
-              goldLight: '#FFFDF0',
-              goldDark: '#997B15',
-              success: '#10B981',
-              danger: '#EF4444'
-            }
-          },
-          boxShadow: {
-            'premium': '0 10px 30px -5px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02)',
-            'gold-glow': '0 0 20px rgba(212, 175, 55, 0.25)',
-            'card-hover': '0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.03)'
+<!-- Liquidity Bar -->
+        const barRow = document.createElement('div');
+        barRow.className = "space-y-1";
+        barRow.innerHTML = `
+          <div class="flex justify-between text-xs font-semibold">
+            <span class="text-brand-black">${accName}</span>
+            <span class="text-brand-muted">${formatSh(balance)} (${pctOfTotal.toFixed(1)}%)</span>
+          </div>
+          <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+            <div class="h-full bg-brand-black transition-all duration-500" style="width: ${pctOfTotal}%"></div>
+          </div>
+        `;
+        barsContainer.appendChild(barRow);
+      });
+    }
+
+    // 6. PROGRESS INSIGHTS GENERATOR
+    function renderProgressInsights(calc) {
+      const insightsList = document.getElementById('progress-insights-list');
+      insightsList.innerHTML = '';
+      
+      const insights = [
+        `✨ <b>GOD Allocation Protected:</b> Exactly ${formatSh(calc.godTotal)} (10%) reserve set aside across all income streams.`,
+        `📈 <b>Investment Return:</b> Portfolio is currently yields a total return of ${calc.invReturnPercent.toFixed(2)}% (${formatSh(calc.invGainLoss)}).`,
+        `🛍️ <b>Business Yield:</b> Appearich business generated ${formatSh(calc.appTotalProfit)} in net profits.`,
+        `💳 <b>Remaining Budget:</b> You have ${formatSh(calc.remainingBudget)} left in your 90% available budget.`
+      ];
+
+      insights.forEach(ins => {
+        const item = document.createElement('div');
+        item.className = "p-3 rounded-xl bg-gray-50 border border-gray-100";
+        item.innerHTML = ins;
+        insightsList.appendChild(item);
+      });
+
+      // Update Period Aggregation Display in Progress Center
+      document.getElementById('prog-week-income').innerText = formatSh(calc.totalIncome / 4);
+      document.getElementById('prog-week-expenses').innerText = formatSh(calc.totalSpent / 4);
+      document.getElementById('prog-week-god').innerText = formatSh(calc.godTotal / 4);
+      document.getElementById('prog-week-inv').innerText = formatSh(calc.invGainLoss / 4);
+      document.getElementById('prog-week-net').innerText = formatSh((calc.totalIncome - calc.godTotal - calc.totalSpent + calc.invGainLoss) / 4);
+
+      document.getElementById('prog-month-income').innerText = formatSh(calc.totalIncome);
+      document.getElementById('prog-month-god').innerText = formatSh(calc.godTotal);
+      document.getElementById('prog-month-expenses').innerText = formatSh(calc.totalSpent);
+      document.getElementById('prog-month-inv').innerText = formatSh(calc.invGainLoss);
+      document.getElementById('prog-month-remaining').innerText = formatSh(calc.remainingBudget);
+    }
+
+    // ==================== CHARTS ENGINE ====================
+    function initCharts() {
+      // Dashboard Investment Quick Chart
+      const ctxDashInv = document.getElementById('dashInvestmentChart').getContext('2d');
+      dashInvChart = new Chart(ctxDashInv, {
+        type: 'line',
+        data: {
+          labels: ['Aug 1', 'Aug 7', 'Aug 14'],
+          datasets: [{
+            label: 'Portfolio Value',
+            data: [500000, 540000, 700000],
+            borderColor: '#10B981',
+            backgroundColor: 'rgba(16, 185, 129, 0.08)',
+            fill: true,
+            tension: 0.4,
+            borderWidth: 2,
+            pointRadius: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { display: false },
+            y: { display: false }
           }
         }
+      });
+
+      // Investment Main Chart
+      const ctxInvMain = document.getElementById('investmentMainChart').getContext('2d');
+      invMainChart = new Chart(ctxInvMain, {
+        type: 'line',
+        data: {
+          labels: state.investment.history.map(h => h.date),
+          datasets: [
+            {
+              label: 'Market Valuation',
+              data: state.investment.history.map(h => h.value),
+              borderColor: '#0A0A0C',
+              backgroundColor: 'rgba(10, 10, 12, 0.05)',
+              fill: true,
+              tension: 0.3,
+              borderWidth: 2
+            },
+            {
+              label: 'Invested Capital',
+              data: [500000, 500000, state.investment.totalInvested],
+              borderColor: '#D4AF37',
+              borderDash: [5, 5],
+              fill: false,
+              tension: 0,
+              borderWidth: 1.5
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'top', labels: { font: { family: 'Plus Jakarta Sans', size: 11 } } }
+          },
+          scales: {
+            y: {
+              grid: { color: '#F3F4F6' },
+              ticks: { font: { family: 'Plus Jakarta Sans', size: 10 } }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { font: { family: 'Plus Jakarta Sans', size: 10 } }
+            }
+          }
+        }
+      });
+
+      // Appearich Sales Chart
+      const ctxSales = document.getElementById('appearichSalesChart').getContext('2d');
+      appearichChart = new Chart(ctxSales, {
+        type: 'bar',
+        data: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          datasets: [
+            {
+              label: 'Revenue',
+              data: [120000, 80000, 150000, 190000, 210000, 145000, 0],
+              backgroundColor: '#0A0A0C',
+              borderRadius: 6
+            },
+            {
+              label: 'Profit',
+              data: [45000, 30000, 60000, 75000, 90000, 55000, 0],
+              backgroundColor: '#D4AF37',
+              borderRadius: 6
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'top', labels: { font: { family: 'Plus Jakarta Sans', size: 11 } } }
+          },
+          scales: {
+            y: { grid: { color: '#F3F4F6' } },
+            x: { grid: { display: false } }
+          }
+        }
+      });
+
+      // Weekly Progress Chart
+      const ctxProgWeekly = document.getElementById('progressWeeklyChart').getContext('2d');
+      progWeeklyChart = new Chart(ctxProgWeekly, {
+        type: 'bar',
+        data: {
+          labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+          datasets: [
+            { label: 'Income', data: [375000, 375000, 375000, 375000], backgroundColor: '#0A0A0C', borderRadius: 4 },
+            { label: 'Expenses', data: [80000, 60000, 95000, 70000], backgroundColor: '#EF4444', borderRadius: 4 },
+            { label: 'GOD (10%)', data: [37500, 37500, 37500, 37500], backgroundColor: '#D4AF37', borderRadius: 4 },
+            { label: 'Inv Growth', data: [10000, 30000, 20000, 40000], backgroundColor: '#10B981', borderRadius: 4 }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'top' } },
+          scales: { y: { grid: { color: '#F3F4F6' } }, x: { grid: { display: false } } }
+        }
+      });
+
+      // Monthly Progress Chart
+      const ctxProgMonthly = document.getElementById('progressMonthlyChart').getContext('2d');
+      progMonthlyChart = new Chart(ctxProgMonthly, {
+        type: 'line',
+        data: {
+          labels: ['May', 'Jun', 'Jul', 'Aug'],
+          datasets: [
+            { label: 'Income Growth', data: [1100000, 1250000, 1350000, 1500000], borderColor: '#0A0A0C', tension: 0.3 },
+            { label: 'Investment Gain', data: [20000, 45000, 60000, 100000], borderColor: '#10B981', tension: 0.3 }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'top' } },
+          scales: { y: { grid: { color: '#F3F4F6' } }, x: { grid: { display: false } } }
+        }
+      });
+    }
+
+    function updateAllCharts() {
+      if (invMainChart) {
+        invMainChart.data.labels = state.investment.history.map(h => h.date);
+        invMainChart.data.datasets[0].data = state.investment.history.map(h => h.value);
+        invMainChart.data.datasets[1].data = state.investment.history.map((h, idx) => idx === state.investment.history.length - 1 ? state.investment.totalInvested : 500000);
+        invMainChart.update();
+      }
+      if (dashInvChart) {
+        dashInvChart.data.labels = state.investment.history.map(h => h.date);
+        dashInvChart.data.datasets[0].data = state.investment.history.map(h => h.value);
+        dashInvChart.update();
       }
     }
-  </script>
-  <style>
-    body {
-      background-color: #FFFFFF;
-      color: #0A0A0C;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      -webkit-font-smoothing: antialiased;
-    }
-    .gold-gradient-text {
-      background: linear-gradient(135deg, #B8860B 0%, #D4AF37 50%, #AA771C 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .accordion-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .accordion-content.expanded {
-      max-height: 1200px;
-    }
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-  </style>
-</head>
-<body class="bg-brand-bg min-h-screen pb-24 text-brand-black">
 
-  <!-- TOP APP HEADER -->
-  <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100 px-4 lg:px-8 py-4">
-    <div class="max-w-6xl mx-auto flex justify-between items-center">
-      <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('dashboard')">
-        <div class="w-10 h-10 rounded-2xl bg-brand-black flex items-center justify-center text-brand-gold shadow-gold-glow">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-          </svg>
-        </div>
-        <div>
-          <h1 class="font-display font-bold text-xl tracking-tight text-brand-black">APPEARICH</h1>
-          <p class="text-xs font-semibold tracking-widest text-brand-gold uppercase">Financial Command Center</p>
-        </div>
-      </div>
-      <div class="flex items-center space-x-3">
-        <button onclick="openModal('addTransactionModal')" class="hidden sm:flex items-center space-x-2 bg-brand-black text-white px-4 py-2.5 rounded-xl font-medium text-sm hover:bg-gray-800 transition">
-          <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-          </svg>
-          <span>Add Transaction</span>
-        </button>
-        <div class="w-10 h-10 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center font-bold text-xs text-brand-black">
-          TZ
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <!-- MAIN CONTAINER -->
-  <main class="max-w-6xl mx-auto px-4 lg:px-8 pt-6 space-y-8">
-    
-    <!-- VIEW TABS NAVIGATION -->
-    <div class="flex items-center space-x-2 border-b border-gray-200 overflow-x-auto no-scrollbar pb-2">
-      <button id="nav-dashboard" onclick="switchTab('dashboard')" class="nav-tab active px-5 py-2.5 rounded-xl text-sm font-semibold transition flex items-center space-x-2 bg-brand-black text-white shadow-sm">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-        <span>Home</span>
-      </button>
-      <button id="nav-income" onclick="switchTab('income')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-        <span>Income & GOD</span>
-      </button>
-      <button id="nav-budget" onclick="switchTab('budget')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" /></svg>
-        <span>Budget Allocations</span>
-      </button>
-      <button id="nav-investment" onclick="switchTab('investment')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-        <span>Investments</span>
-      </button>
-      <button id="nav-appearich" onclick="switchTab('appearich')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
-        <span>Appearich Sales</span>
-      </button>
-      <button id="nav-accounts" onclick="switchTab('accounts')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-        <span>Accounts</span>
-      </button>
-      <button id="nav-progress" onclick="switchTab('progress')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
-        <span>Progress</span>
-      </button>
-    </div>
-
-    <!-- ==================== TAB 1: HOME (HERO SCREEN & DASHBOARD) ==================== -->
-    <div id="tab-dashboard" class="tab-content space-y-8">
-      
-      <!-- HERO IMAGE BANNER -->
-      <div class="relative rounded-3xl overflow-hidden shadow-2xl text-white">
-        <img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=1600&q=80" alt="Financial Success" class="w-full h-80 sm:h-96 object-cover" />
-        <div class="absolute inset-0 bg-gradient-to-r from-brand-black/90 via-brand-black/70 to-transparent flex flex-col justify-center p-8 sm:p-12">
-          <div class="max-w-xl space-y-4">
-            <span class="px-3 py-1 rounded-full bg-brand-gold/20 border border-brand-gold/30 text-brand-gold text-xs font-bold uppercase tracking-wider">Smart Financial Command</span>
-            <h2 class="font-display text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">Master Your Wealth & Business Growth</h2>
-            <p class="text-sm sm:text-base text-gray-300">Seamlessly navigate your income, budget allocations, investments, and business sales from one central place.</p>
-            <div class="flex flex-wrap gap-3 pt-2">
-              <button onclick="openModal('addTransactionModal')" class="bg-brand-gold text-brand-black px-6 py-3 rounded-xl font-bold text-sm shadow-gold-glow hover:bg-yellow-500 transition">
-                + Quick Expense
-              </button>
-              <button onclick="switchTab('appearich')" class="bg-white/10 backdrop-blur-md text-white border border-white/20 px-6 py-3 rounded-xl font-bold text-sm hover:bg-white/20 transition">
-                View Sales Tracker
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Quick Navigation Grid -->
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-        <button onclick="switchTab('income')" class="p-4 rounded-2xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition text-center space-y-2">
-          <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          </div>
-          <p class="font-bold text-xs text-brand-black">Income & GOD</p>
-        </button>
-        <button onclick="switchTab('budget')" class="p-4 rounded-2xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition text-center space-y-2">
-          <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" /></svg>
-          </div>
-          <p class="font-bold text-xs text-brand-black">Budgeting</p>
-        </button>
-        <button onclick="switchTab('investment')" class="p-4 rounded-2xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition text-center space-y-2">
-          <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center mx-auto">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-          </div>
-          <p class="font-bold text-xs text-brand-black">Investments</p>
-        </button>
-        <button onclick="switchTab('appearich')" class="p-4 rounded-2xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition text-center space-y-2">
-          <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
-          </div>
-          <p class="font-bold text-xs text-brand-black">Appearich Sales</p>
-        </button>
-        <button onclick="switchTab('accounts')" class="p-4 rounded-2xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition text-center space-y-2">
-          <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-          </div>
-          <p class="font-bold text-xs text-brand-black">Accounts</p>
-        </button>
-        <button onclick="switchTab('progress')" class="p-4 rounded-2xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover transition text-center space-y-2">
-          <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
-          </div>
-          <p class="font-bold text-xs text-brand-black">Progress</p>
-        </button>
-      </div>
-
-      <!-- Primary Summary Stats Grid -->
-      <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
-        <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between">
-          <span class="text-xs font-semibold text-brand-muted uppercase">Total Income</span>
-          <p id="dash-total-income" class="font-display text-xl lg:text-2xl font-bold text-brand-black mt-2">0 Sh</p>
-        </div>
-        <div class="p-5 rounded-2xl bg-brand-black text-white shadow-premium flex flex-col justify-between">
-          <span class="text-xs font-semibold text-brand-gold uppercase">GOD (10%)</span>
-          <p id="dash-god-amount" class="font-display text-xl lg:text-2xl font-bold text-brand-gold mt-2">0 Sh</p>
-        </div>
-        <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between">
-          <span class="text-xs font-semibold text-brand-muted uppercase">Available (90%)</span>
-          <p id="dash-available-budget" class="font-display text-xl lg:text-2xl font-bold text-brand-black mt-2">0 Sh</p>
-        </div>
-        <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between">
-          <span class="text-xs font-semibold text-brand-muted uppercase">Spent</span>
-          <p id="dash-total-spent" class="font-display text-xl lg:text-2xl font-bold text-brand-black mt-2">0 Sh</p>
-        </div>
-        <div class="col-span-2 lg:col-span-1 p-5 rounded-2xl bg-white border border-brand-black/10 shadow-premium flex flex-col justify-between">
-          <span class="text-xs font-semibold text-brand-black uppercase">Remaining</span>
-          <p id="dash-remaining-budget" class="font-display text-xl lg:text-2xl font-bold text-brand-black mt-2">0 Sh</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Additional Tab Content Placeholder Containers -->
-    <div id="tab-income" class="tab-content hidden"><h2 class="font-bold text-xl">Income & GOD Content</h2></div>
-    <div id="tab-budget" class="tab-content hidden"><h2 class="font-bold text-xl">Budget Allocations Content</h2></div>
-    <div id="tab-investment" class="tab-content hidden"><h2 class="font-bold text-xl">Investments Content</h2></div>
-    <div id="tab-appearich" class="tab-content hidden"><h2 class="font-bold text-xl">Appearich Sales Content</h2></div>
-    <div id="tab-accounts" class="tab-content hidden"><h2 class="font-bold text-xl">Accounts Content</h2></div>
-    <div id="tab-progress" class="tab-content hidden"><h2 class="font-bold text-xl">Progress Content</h2></div>
-  </main>
-
-  <!-- NAVIGATION SCRIPT -->
-  <script>
+    // ==================== INTERACTION HANDLERS ====================
     function switchTab(tabId) {
+      state.currentTab = tabId;
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      const targetTab = document.getElementById(`tab-${tabId}`);
-      if (targetTab) targetTab.classList.remove('hidden');
+      document.getElementById(`tab-${tabId}`).classList.remove('hidden');
 
+      // Top Nav Active Styling
       document.querySelectorAll('.nav-tab').forEach(btn => {
-        btn.className = "nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2";
+        btn.classList.remove('active', 'bg-brand-black', 'text-white', 'shadow-sm');
+        btn.classList.add('text-brand-muted');
       });
       const activeNav = document.getElementById(`nav-${tabId}`);
       if (activeNav) {
-        activeNav.className = "nav-tab active px-5 py-2.5 rounded-xl text-sm font-semibold transition flex items-center space-x-2 bg-brand-black text-white shadow-sm";
+        activeNav.classList.add('active', 'bg-brand-black', 'text-white', 'shadow-sm');
+        activeNav.classList.remove('text-brand-muted');
+      }
+
+      // Bottom Nav Active Styling
+      document.querySelectorAll('.bnav-btn').forEach(btn => {
+        btn.classList.remove('text-brand-black');
+        btn.classList.add('text-brand-muted');
+      });
+      const activeBNav = document.getElementById(`bnav-${tabId}`);
+      if (activeBNav) {
+        activeBNav.classList.add('text-brand-black');
+        activeBNav.classList.remove('text-brand-muted');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleUtilitiesAccordion() {
+      state.utilitiesExpanded = !state.utilitiesExpanded;
+      const content = document.getElementById('utilities-accordion');
+      const chevron = document.getElementById('utilities-chevron');
+      if (state.utilitiesExpanded) {
+        content.classList.add('expanded');
+        chevron.style.transform = 'rotate(180deg)';
+      } else {
+        content.classList.remove('expanded');
+        chevron.style.transform = 'rotate(0deg)';
       }
     }
+
+    function switchAppearichPeriod(period) {
+      state.appearichPeriod = period;
+      document.querySelectorAll('.app-period-btn').forEach(b => {
+        b.classList.remove('bg-brand-black', 'text-white');
+        b.classList.add('bg-gray-100', 'text-brand-muted');
+      });
+      const btn = document.getElementById(`app-period-${period}`);
+      btn.classList.add('bg-brand-black', 'text-white');
+      btn.classList.remove('bg-gray-100', 'text-brand-muted');
+    }
+
+    function switchProgressTab(period) {
+      state.progressPeriod = period;
+      document.querySelectorAll('.prog-tab-btn').forEach(b => {
+        b.classList.remove('bg-brand-black', 'text-white');
+        b.classList.add('bg-gray-100', 'text-brand-muted');
+      });
+      const btn = document.getElementById(`prog-tab-${period}`);
+      btn.classList.add('bg-brand-black', 'text-white');
+      btn.classList.remove('bg-gray-100', 'text-brand-muted');
+
+      if (period === 'weekly') {
+        document.getElementById('prog-weekly-panel').classList.remove('hidden');
+        document.getElementById('prog-monthly-panel').classList.add('hidden');
+      } else {
+        document.getElementById('prog-weekly-panel').classList.add('hidden');
+        document.getElementById('prog-monthly-panel').classList.remove('hidden');
+      }
+    }
+
+    // Modal Helpers
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+    // Form Processing Logic
+    function handleAddIncome(e) {
+      e.preventDefault();
+      const name = document.getElementById('income-name-input').value;
+      const amount = parseFloat(document.getElementById('income-amount-input').value);
+      if (name && !isNaN(amount)) {
+        state.incomes.push({ id: Date.now().toString(), name: name.toUpperCase(), amount, fixed: false });
+        renderAll();
+        closeModal('addIncomeModal');
+        document.getElementById('addIncomeForm').reset();
+      }
+    }
+
+    function deleteIncome(id) {
+      state.incomes = state.incomes.filter(i => i.id !== id);
+      renderAll();
+    }
+
+    function promptEditIncome(id) {
+      const inc = state.incomes.find(i => i.id === id);
+      if (inc) {
+        const val = prompt(`Enter new amount for ${inc.name}:`, inc.amount);
+        if (val && !isNaN(parseFloat(val))) {
+          inc.amount = parseFloat(val);
+          renderAll();
+        }
+      }
+    }
+
+    function handleAddCategory(e) {
+      e.preventDefault();
+      const name = document.getElementById('cat-name-input').value;
+      const percent = parseFloat(document.getElementById('cat-percent-input').value);
+      if (name && !isNaN(percent)) {
+        state.categories.push({ id: 'cat-' + Date.now(), name, percent, isExpandable: false });
+        renderAll();
+        closeModal('addCategoryModal');
+        document.getElementById('addCategoryForm').reset();
+      }
+    }
+
+    function handleAddInvestmentCapital(e) {
+      e.preventDefault();
+      const amount = parseFloat(document.getElementById('inv-add-amount').value);
+      if (!isNaN(amount)) {
+        state.investment.totalInvested += amount;
+        state.investment.currentValue += amount; // capital added increases value linearly
+        renderAll();
+        closeModal('addInvestmentModal');
+        document.getElementById('addInvestmentForm').reset();
+      }
+    }
+
+    function handleUpdateInvestmentValue(e) {
+      e.preventDefault();
+      const val = parseFloat(document.getElementById('inv-update-value').value);
+      if (!isNaN(val)) {
+        state.investment.currentValue = val;
+        const today = new Date();
+        const dateStr = today.toLocaleString('default', { month: 'short' }) + ' ' + today.getDate();
+        state.investment.history.push({ date: dateStr, value: val });
+        renderAll();
+        closeModal('updateInvestmentModal');
+        document.getElementById('updateInvestmentForm').reset();
+      }
+    }
+
+    function handleAddSale(e) {
+      e.preventDefault();
+      const date = document.getElementById('sale-date').value;
+      const qty = parseInt(document.getElementById('sale-qty').value);
+      const product = document.getElementById('sale-product').value;
+      const customer = document.getElementById('sale-customer').value;
+      const buyPrice = parseFloat(document.getElementById('sale-buy-price').value);
+      const sellPrice = parseFloat(document.getElementById('sale-sell-price').value);
+
+      if (product && customer && !isNaN(buyPrice) && !isNaN(sellPrice)) {
+        state.sales.unshift({
+          id: 's' + Date.now(),
+          date,
+          product,
+          customer,
+          qty,
+          buyPrice,
+          sellPrice,
+          status: 'SOLD'
+        });
+        renderAll();
+        closeModal('addSaleModal');
+        document.getElementById('addSaleForm').reset();
+      }
+    }
+
+    function handleAddTransaction(e) {
+      e.preventDefault();
+      const name = document.getElementById('tx-name').value;
+      const category = document.getElementById('tx-category').value;
+      const account = document.getElementById('tx-account').value;
+      const amount = parseFloat(document.getElementById('tx-amount').value);
+
+      if (!isNaN(amount) && state.accounts[account] !== undefined) {
+        // Deduct from liquid account
+        state.accounts[account] -= amount;
+
+        // Record spending in budget category
+        const utilMatch = state.utilitiesSub.find(u => u.name === category);
+        if (utilMatch) {
+          utilMatch.spent += amount;
+        } else {
+          if (!state.categorySpent[category]) state.categorySpent[category] = 0;
+          state.categorySpent[category] += amount;
+        }
+
+        renderAll();
+        closeModal('addTransactionModal');
+        document.getElementById('addTransactionForm').reset();
+      }
+    }
+
+    function handleTransfer(e) {
+      e.preventDefault();
+      const fromAcc = document.getElementById('tr-from').value;
+      const toAcc = document.getElementById('tr-to').value;
+      const amount = parseFloat(document.getElementById('tr-amount').value);
+
+      if (fromAcc !== toAcc && !isNaN(amount) && state.accounts[fromAcc] >= amount) {
+        state.accounts[fromAcc] -= amount;
+        state.accounts[toAcc] += amount;
+        renderAll();
+        closeModal('transferModal');
+        document.getElementById('transferForm').reset();
+      } else {
+        alert("Invalid transfer operation. Check balances and account choices.");
+      }
+    }
+
+    function handleAddMoneyAccount(e) {
+      e.preventDefault();
+      const acc = document.getElementById('am-account').value;
+      const amount = parseFloat(document.getElementById('am-amount').value);
+      if (!isNaN(amount)) {
+        state.accounts[acc] += amount;
+        renderAll();
+        closeModal('addMoneyModal');
+        document.getElementById('addMoneyForm').reset();
+      }
+    }
+
+    // Set Default Form Date
+    document.getElementById('sale-date').valueAsDate = new Date();
+
+    // INITIALIZATION
+    window.addEventListener('DOMContentLoaded', () => {
+      initCharts();
+      renderAll();
+    });
   </script>
 </body>
 </html>
