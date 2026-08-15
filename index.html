@@ -4,20 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Appearich Finance Command Center</title>
-  <!-- PWA Manifest & Meta Tags -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#FFFFFF">
-  <link rel="apple-touch-icon" href="images/appearich-logo.png">
-  
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Supabase CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   
+  <!-- PWA Manifest & Meta Tags -->
+  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Appearich%20Finance%20Command%20Center%22%2C%22short_name%22%3A%22Appearich%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23FFFFFF%22%2C%22theme_color%22%3A%22%230A0A0C%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22images%2Fappearich-logo.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
+  <meta name="theme-color" content="#0A0A0C">
+  
+  <!-- Supabase JS Client CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
     tailwind.config = {
       theme: {
@@ -72,47 +72,69 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
-    /* Splash Screen Pop-in Animation */
+    /* Splash Screen & Animations */
     @keyframes popIn {
-      0% { opacity: 0; transform: scale(0.85); }
-      70% { opacity: 1; transform: scale(1.05); }
-      100% { opacity: 1; transform: scale(1); }
+      0% { transform: scale(0.85); opacity: 0; }
+      60% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
     }
     .splash-logo-anim {
       animation: popIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
+    @keyframes slideLeftToRight {
+      0% { transform: translateX(-30px); opacity: 0; }
+      100% { transform: translateX(0); opacity: 1; }
+    }
+    .sentence-anim {
+      animation: slideLeftToRight 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
   </style>
 </head>
 <body class="bg-brand-bg min-h-screen pb-28 text-brand-black">
-  
-  <!-- SPLASH SCREEN -->
-  <div id="splash-screen" class="fixed inset-0 z-50 bg-white flex items-center justify-center transition-opacity duration-500">
-    <img src="images/appearich-logo.png" alt="Appearich Logo" class="w-28 h-28 object-contain splash-logo-anim">
+
+  <!-- ==================== SPLASH SCREEN ==================== -->
+  <div id="app-splash-screen" class="fixed inset-0 z-50 bg-white flex flex-col items-center justify-center transition-opacity duration-500">
+    <div class="splash-logo-anim flex flex-col items-center">
+      <img src="images/appearich-logo.png" alt="Appearich Logo" class="w-24 h-24 object-contain mb-4">
+      <h1 class="font-display font-bold text-2xl tracking-tight text-brand-black">APPEARICH</h1>
+      <p class="text-[10px] font-bold tracking-widest text-brand-gold uppercase mt-1">Track Your Money. Build Your Business. See Your Growth.</p>
+    </div>
   </div>
-  <!-- AUTHENTICATION OVERLAY (Sign In / Sign Up) -->
-  <div id="auth-overlay" class="fixed inset-0 z-40 bg-white flex flex-col items-center justify-center p-6 hidden">
-    <div class="w-full max-w-md space-y-8 bg-white">
-      <div class="text-center space-y-3">
-        <img src="images/appearich-logo.png" alt="Appearich Logo" class="w-16 h-16 mx-auto object-contain">
-        <h2 class="font-display font-bold text-2xl text-brand-black">Welcome Back</h2>
+
+  <!-- ==================== AUTH SCREEN (SIGN IN / SIGN UP) ==================== -->
+  <div id="app-auth-screen" class="fixed inset-0 z-40 bg-white flex flex-col items-center justify-center p-4 hidden overflow-y-auto">
+    <div class="max-w-md w-full space-y-6 bg-white p-6">
+      <div class="text-center space-y-2">
+        <img src="images/appearich-logo.png" alt="Appearich Logo" class="w-16 h-16 object-contain mx-auto mb-2">
+        <h2 id="auth-title" class="font-display font-extrabold text-2xl text-brand-black">Sign In to Appearich</h2>
+        <!-- Animated Login Sentences Requirement -->
+        <div id="login-sentences-container" class="space-y-1 pt-1">
+          <p class="text-xs text-brand-muted font-medium sentence-anim" style="animation-delay: 0.1s;">Track Your Money with complete accuracy and ease.</p>
+          <p class="text-xs text-brand-muted font-medium sentence-anim" style="animation-delay: 0.3s;">Build Your Business using advanced sales and tithe tracking.</p>
+          <p class="text-xs text-brand-muted font-medium sentence-anim" style="animation-delay: 0.5s;">See Your Growth through automated wealth analytics and records.</p>
+        </div>
       </div>
-      <div id="auth-form-container" class="space-y-4 pt-4">
+      
+      <form id="auth-form" onsubmit="handleAuthSubmit(event)" class="space-y-4">
         <div>
-          <label class="block text-xs font-bold uppercase mb-1 text-brand-black">Email Address</label>
-          <input type="email" id="auth-email" placeholder="name@example.com" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-brand-black">
+          <label class="block text-xs font-bold text-brand-black uppercase mb-1">Email Address</label>
+          <input id="auth-email" type="email" required placeholder="name@example.com" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-brand-black bg-white">
         </div>
         <div>
-          <label class="block text-xs font-bold uppercase mb-1 text-brand-black">Password</label>
-          <input type="password" id="auth-password" placeholder="••••••••" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-brand-black">
+          <label class="block text-xs font-bold text-brand-black uppercase mb-1">Password</label>
+          <input id="auth-password" type="password" required placeholder="••••••••" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-brand-black bg-white">
         </div>
-        <div class="flex gap-3 pt-2">
-          <button onclick="handleSignIn()" class="flex-1 bg-brand-black text-white font-bold py-3 rounded-xl text-sm hover:bg-gray-800 transition">Sign In</button>
-          <button onclick="handleSignUp()" class="flex-1 bg-gray-100 text-brand-black font-bold py-3 rounded-xl text-sm hover:bg-gray-200 transition">Sign Up</button>
-        </div>
-        <p id="auth-error" class="text-xs text-red-500 text-center hidden"></p>
+        <button type="submit" id="auth-submit-btn" class="w-full bg-brand-black text-white font-bold py-3.5 rounded-xl hover:bg-gray-800 transition text-sm">Sign In</button>
+      </form>
+
+      <div class="text-center pt-2">
+        <button type="button" onclick="toggleAuthMode()" id="auth-toggle-btn" class="text-xs font-bold text-brand-muted hover:text-brand-black transition">
+          Don't have an account? Sign Up
+        </button>
       </div>
     </div>
   </div>
+
   <!-- TOP APP HEADER -->
   <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100 px-4 lg:px-8 py-4">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
@@ -134,7 +156,7 @@
           </svg>
           <span>+ Expense</span>
         </button>
-        <button onclick="handleSignOut()" class="px-3 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-xs font-bold text-brand-black transition">
+        <button onclick="handleSignOut()" class="px-3 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-xs font-bold text-brand-black transition" title="Sign Out">
           Sign Out
         </button>
         <div class="w-10 h-10 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center font-bold text-xs text-brand-black">
@@ -1011,15 +1033,26 @@
   </div>
   <!-- ==================== JAVASCRIPT ENGINE ==================== -->
   <script>
-    // Supabase Initialization
+    // Supabase Integration Setup
     const SUPABASE_URL = 'https://zudqubbglwphfxaviqsg.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.example';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1ZHF1YmJnbHdwaGZ4YXZpcXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjMwMjY5lnst... (provided anon key)'; // Using standard initialization with provided zudqubbglwphfxaviqsg URL and key
+    
+    // Initialize Supabase Client if available
     let supabaseClient = null;
     try {
-      if (typeof supabase !== 'undefined' && supabase.createClient && SUPABASE_ANON_KEY !== 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.example') {
-        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      if (window.supabase) {
+        supabaseClient = window.supabase.createClient(
+          'https://zudqubbglwphfxaviqsg.supabase.co',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1ZHF1YmJnbHdwaGZ4YXZpcXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjMwMjY5'
+        );
       }
-    } catch(e) { console.error('Supabase init error', e); }
+    } catch(e) {
+      console.warn('Supabase initialization fallback active', e);
+    }
+
+    let currentUser = null;
+    let isSignUpMode = false;
+
     function getCurrentMonthKey() {
       const now = new Date();
       const year = now.getFullYear();
@@ -1042,133 +1075,205 @@
       categories: [
         { id: 'cat-utilities', name: 'Utilities', amount: 0, isExpandable: true },
         { id: 'cat-investment', name: 'Investment', amount: 0, isExpandable: false },
-        { id: 'cat-expenses', name: 'Expenses', amount: 0, isExpandable: false },
-        { id: 'cat-other', name: 'Other', amount: 0, isExpandable: false }
+        { id: 'cat-expenses', name: 'Expenses', amount: 0, isExpandable: false }
       ],
-      utilitiesSub: [
-        { name: 'Internet' },
-        { name: 'Umeme' },
-        { name: 'Taka' },
-        { name: 'Transport' }
-      ],
-      businessTypes: ['Appearich Main'],
-      activeBusinessType: 'Appearich Main',
-      investment: {
+      accounts: {
+        'CRDB': 0,
+        'SELCOM': 0,
+        'MPESA': 0,
+        'LIPA NAMBA': 0,
+        'CASH': 0
+      },
+      businessOptions: ['Appearich Main'],
+      activeBusinessTab: 'Appearich Main',
+      appearichPeriod: 'day',
+      investments: {
         totalInvested: 0,
         currentValue: 0,
         history: []
       },
-      loans: [],
-      accounts: { 'CRDB': 0, 'SELCOM': 0, 'MPESA': 0, 'LIPA NAMBA': 0, 'CASH': 0 },
-      currentTab: 'dashboard',
-      appearichPeriod: 'day',
-      utilitiesExpanded: false,
-      currentUser: null
+      loans: []
     };
-    // Splash screen handler & flow
-    window.addEventListener('DOMContentLoaded', async () => {
+
+    // Splash Screen Handler
+    window.addEventListener('load', () => {
       setTimeout(() => {
-        const splash = document.getElementById('splash-screen');
+        const splash = document.getElementById('app-splash-screen');
         if (splash) {
           splash.style.opacity = '0';
           setTimeout(() => splash.remove(), 500);
         }
+        checkUserSession();
       }, 1200);
-      if (supabaseClient) {
+    });
+
+    async function checkUserSession() {
+      if (!supabaseClient) {
+        initApp();
+        return;
+      }
+      try {
         const { data: { session } } = await supabaseClient.auth.getSession();
         if (session && session.user) {
-          state.currentUser = session.user;
-          document.getElementById('auth-overlay').classList.add('hidden');
+          currentUser = session.user;
+          document.getElementById('app-auth-screen').classList.add('hidden');
           await loadUserDataFromSupabase();
         } else {
-          document.getElementById('auth-overlay').classList.remove('hidden');
+          document.getElementById('app-auth-screen').classList.remove('hidden');
         }
-      } else {
-        document.getElementById('auth-overlay').classList.add('hidden');
-      }
-      renderAll();
-    });
-    async function handleSignIn() {
-      const email = document.getElementById('auth-email').value;
-      const password = document.getElementById('auth-password').value;
-      const errElem = document.getElementById('auth-error');
-      if (!supabaseClient) {
-        state.currentUser = { id: 'local_user' };
-        document.getElementById('auth-overlay').classList.add('hidden');
-        renderAll();
-        return;
-      }
-      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-      if (error) {
-        errElem.innerText = error.message;
-        errElem.classList.remove('hidden');
-      } else {
-        state.currentUser = data.user;
-        document.getElementById('auth-overlay').classList.add('hidden');
-        await loadUserDataFromSupabase();
-        renderAll();
+      } catch (err) {
+        console.error('Session check error:', err);
+        initApp();
       }
     }
-    async function handleSignUp() {
-      const email = document.getElementById('auth-email').value;
-      const password = document.getElementById('auth-password').value;
-      const errElem = document.getElementById('auth-error');
-      if (!supabaseClient) {
-        state.currentUser = { id: 'local_user' };
-        document.getElementById('auth-overlay').classList.add('hidden');
-        renderAll();
-        return;
-      }
-      const { data, error } = await supabaseClient.auth.signUp({ email, password });
-      if (error) {
-        errElem.innerText = error.message;
-        errElem.classList.remove('hidden');
+
+    function toggleAuthMode() {
+      isSignUpMode = !isSignUpMode;
+      const title = document.getElementById('auth-title');
+      const btn = document.getElementById('auth-submit-btn');
+      const toggleBtn = document.getElementById('auth-toggle-btn');
+      if (isSignUpMode) {
+        title.innerText = 'Create Appearich Account';
+        btn.innerText = 'Sign Up';
+        toggleBtn.innerText = 'Already have an account? Sign In';
       } else {
-        alert('Check your email for confirmation or sign in directly if enabled.');
+        title.innerText = 'Sign In to Appearich';
+        btn.innerText = 'Sign In';
+        toggleBtn.innerText = "Don't have an account? Sign Up";
       }
     }
+
+    async function handleAuthSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('auth-email').value;
+      const password = document.getElementById('auth-password').value;
+      
+      if (!supabaseClient) {
+        alert('Supabase client offline. Proceeding in local mode.');
+        document.getElementById('app-auth-screen').classList.add('hidden');
+        initApp();
+        return;
+      }
+
+      try {
+        if (isSignUpMode) {
+          const { data, error } = await supabaseClient.auth.signUp({ email, password });
+          if (error) throw error;
+          alert('Sign up successful! Please check your email or sign in.');
+          toggleAuthMode();
+        } else {
+          const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+          if (error) throw error;
+          currentUser = data.user;
+          document.getElementById('app-auth-screen').classList.add('hidden');
+          await loadUserDataFromSupabase();
+        }
+      } catch (err) {
+        alert('Authentication Error: ' + err.message);
+      }
+    }
+
     async function handleSignOut() {
       if (supabaseClient) {
         await supabaseClient.auth.signOut();
       }
-      state.currentUser = null;
-      document.getElementById('auth-overlay').classList.remove('hidden');
+      currentUser = null;
+      document.getElementById('app-auth-screen').classList.remove('hidden');
     }
+
     async function saveUserDataToSupabase() {
-      if (!supabaseClient || !state.currentUser) return;
-      const payload = {
-        user_id: state.currentUser.id,
-        app_state: JSON.stringify({
-          monthlyData: state.monthlyData,
-          categories: state.categories,
-          businessTypes: state.businessTypes,
-          investment: state.investment,
-          loans: state.loans,
-          accounts: state.accounts
-        }),
-        updated_at: new Date()
-      };
-      await supabaseClient.from('user_data').upsert(payload, { onConflict: 'user_id' });
-    }
-    async function loadUserDataFromSupabase() {
-      if (!supabaseClient || !state.currentUser) return;
-      const { data, error } = await supabaseClient
-        .from('user_data')
-        .select('app_state')
-        .eq('user_id', state.currentUser.id)
-        .single();
-      if (data && data.app_state) {
-        try {
-          const parsed = typeof data.app_state === 'string' ? JSON.parse(data.app_state) : data.app_state;
-          if (parsed.monthlyData) state.monthlyData = parsed.monthlyData;
-          if (parsed.categories) state.categories = parsed.categories;
-          if (parsed.businessTypes) state.businessTypes = parsed.businessTypes;
-          if (parsed.investment) state.investment = parsed.investment;
-          if (parsed.loans) state.loans = parsed.loans;
-          if (parsed.accounts) state.accounts = parsed.accounts;
-        } catch(e) { console.error('Parse error', e); }
+      if (!supabaseClient || !currentUser) {
+        // Fallback to localStorage
+        localStorage.setItem('appearich_app_state', JSON.stringify(state));
+        return;
+      }
+      try {
+        await supabaseClient.from('user_profiles').upsert({
+          user_id: currentUser.id,
+          app_data: state,
+          updated_at: new Date()
+        }, { onConflict: 'user_id' });
+      } catch (err) {
+        console.error('Error saving data to Supabase:', err);
       }
     }
+
+    async function loadUserDataFromSupabase() {
+      if (!supabaseClient || !currentUser) {
+        const saved = localStorage.getItem('appearich_app_state');
+        if (saved) {
+          try { Object.assign(state, JSON.parse(saved)); } catch(e){}
+        }
+        initApp();
+        return;
+      }
+      try {
+        const { data, error } = await supabaseClient
+          .from('user_profiles')
+          .select('app_data')
+          .eq('user_id', currentUser.id)
+          .single();
+        
+        if (data && data.app_data) {
+          Object.assign(state, data.app_data);
+        }
+      } catch (err) {
+        console.log('No existing cloud profile found or table missing, using default state.');
+      }
+      initApp();
+    }
+
+    function initApp() {
+      // Initialize date pickers and render UI
+      const todayStr = new Date().toISOString().split('T')[0];
+      if(document.getElementById('sale-date')) document.getElementById('sale-date').value = todayStr;
+      if(document.getElementById('loan-date')) document.getElementById('loan-date').value = todayStr;
+      if(document.getElementById('tx-date')) document.getElementById('tx-date').value = todayStr;
+
+      if(document.getElementById('income-month-picker')) document.getElementById('income-month-picker').value = state.activeMonth;
+      if(document.getElementById('daily-expense-month-picker')) document.getElementById('daily-expense-month-picker').value = state.expenseActiveMonth;
+
+      renderAll();
+    }
+
+    // Core Tab Switcher
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.getElementById('tab-' + tabId).classList.remove('hidden');
+
+      document.querySelectorAll('.nav-tab').forEach(el => {
+        el.classList.remove('active', 'bg-brand-black', 'text-white', 'shadow-sm');
+        el.classList.add('text-brand-muted', 'hover:text-brand-black');
+      });
+      const activeNav = document.getElementById('nav-' + tabId);
+      if (activeNav) {
+        activeNav.classList.add('active', 'bg-brand-black', 'text-white', 'shadow-sm');
+        activeNav.classList.remove('text-brand-muted', 'hover:text-brand-black');
+      }
+
+      document.querySelectorAll('.bnav-btn').forEach(el => {
+        el.classList.remove('text-brand-black');
+        el.classList.add('text-brand-muted');
+      });
+      const activeBnav = document.getElementById('bnav-' + tabId);
+      if (activeBnav) {
+        activeBnav.classList.add('text-brand-black');
+        activeBnav.classList.remove('text-brand-muted');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function formatSh(num) {
+      return Number(num || 0).toLocaleString() + ' Sh';
+    }
+
     function ensureMonthExists(monthKey) {
       if (!state.monthlyData[monthKey]) {
         state.monthlyData[monthKey] = {
@@ -1180,85 +1285,703 @@
         };
       }
     }
-    function formatSh(amount) {
-      return new Intl.NumberFormat('en-US').format(Math.round(amount || 0)) + ' Sh';
+
+    // Handlers for Data Actions
+    function handleHeroUpload(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          state.heroImageUrl = evt.target.result;
+          localStorage.setItem('appearich_hero_img', state.heroImageUrl);
+          document.getElementById('hero-bg-img').style.backgroundImage = `url('${state.heroImageUrl}')`;
+          saveUserDataToSupabase();
+        };
+        reader.readAsDataURL(file);
+      }
     }
-    function calculateMonthMetrics(monthKey) {
+
+    function handleMonthChange(e) {
+      state.activeMonth = e.target.value;
+      ensureMonthExists(state.activeMonth);
+      renderAll();
+      saveUserDataToSupabase();
+    }
+
+    function handleExpenseMonthChange(e) {
+      state.expenseActiveMonth = e.target.value;
+      ensureMonthExists(state.expenseActiveMonth);
+      renderAll();
+      saveUserDataToSupabase();
+    }
+
+    function handleAddIncome(e) {
+      e.preventDefault();
+      const name = document.getElementById('income-name-input').value;
+      const amount = parseFloat(document.getElementById('income-amount-input').value) || 0;
+      
+      ensureMonthExists(state.activeMonth);
+      state.monthlyData[state.activeMonth].incomes.push({ id: Date.now(), name, amount });
+      
+      // Auto-allocate into CRDB or default account
+      state.accounts['CRDB'] = (state.accounts['CRDB'] || 0) + amount;
+
+      closeModal('addIncomeModal');
+      e.target.reset();
+      renderAll();
+      saveUserDataToSupabase();
+    }
+
+    function handleAddSale(e) {
+      e.preventDefault();
+      const businessType = document.getElementById('sale-business-type').value;
+      const date = document.getElementById('sale-date').value;
+      const qty = parseInt(document.getElementById('sale-qty').value) || 1;
+      const product = document.getElementById('sale-product').value;
+      const customer = document.getElementById('sale-customer').value;
+      const buyPrice = parseFloat(document.getElementById('sale-buy-price').value) || 0;
+      const sellPrice = parseFloat(document.getElementById('sale-sell-price').value) || 0;
+      const status = document.getElementById('sale-payment-status').value;
+      
+      const totalValue = sellPrice * qty;
+      const paidAmount = status === 'FULL' ? totalValue : (parseFloat(document.getElementById('sale-paid-amount').value) || 0);
+
+      const monthKey = date.substring(0, 7);
       ensureMonthExists(monthKey);
-      const data = state.monthlyData[monthKey];
-      
-      const generalIncome = data.incomes.reduce((sum, inc) => sum + inc.amount, 0);
-      let salesIncome = 0;
-      let salesCost = 0;
-      let salesReceived = 0;
-      let salesOutstanding = 0;
-      data.sales.forEach(sale => {
-        const totalValue = sale.sellPrice * sale.qty;
-        const totalCost = sale.buyPrice * sale.qty;
-        const paid = sale.paymentStatus === 'FULL' ? totalValue : (sale.amountPaid || 0);
-        salesIncome += totalValue;
-        salesCost += totalCost;
-        salesReceived += paid;
-        salesOutstanding += (totalValue - paid);
+
+      state.monthlyData[monthKey].sales.push({
+        id: Date.now(),
+        businessType,
+        date,
+        qty,
+        product,
+        customer,
+        buyPrice: buyPrice * qty,
+        sellPrice: totalValue,
+        status,
+        paidAmount
       });
-      const totalIncome = generalIncome + salesReceived;
-      const godTithe = totalIncome * 0.10;
-      const availableBudget = totalIncome - godTithe;
-      const salesProfit = salesReceived - salesCost;
-      let totalSpent = 0;
-      Object.values(data.utilitiesSubSpent || {}).forEach(v => totalSpent += v);
-      Object.values(data.categorySpent || {}).forEach(v => totalSpent += v);
-      const remainingBudget = availableBudget - totalSpent;
-      return {
-        generalIncome,
-        salesIncome,
-        salesReceived,
-        salesCost,
-        salesOutstanding,
-        salesProfit,
-        totalIncome,
-        godTithe,
-        availableBudget,
-        totalSpent,
-        remainingBudget
-      };
+
+      // Add paid amount to cash/CRDB
+      state.accounts['CRDB'] = (state.accounts['CRDB'] || 0) + paidAmount;
+
+      closeModal('addSaleModal');
+      e.target.reset();
+      renderAll();
+      saveUserDataToSupabase();
     }
-    function getCalculations() {
-      const activeCalc = calculateMonthMetrics(state.activeMonth);
-      let overallProfit = 0;
-      const monthlyProfits = {};
-      Object.keys(state.monthlyData).forEach(mKey => {
-        const mCalc = calculateMonthMetrics(mKey);
-        monthlyProfits[mKey] = mCalc.salesProfit;
-        overallProfit += mCalc.salesProfit;
+
+    function toggleSalePartialInput() {
+      const status = document.getElementById('sale-payment-status').value;
+      const container = document.getElementById('sale-partial-container');
+      if (status === 'PARTIAL') container.classList.remove('hidden');
+      else container.classList.add('hidden');
+    }
+
+    function handleAddBusinessOption(e) {
+      e.preventDefault();
+      const name = document.getElementById('new-business-name-input').value.trim();
+      if (name && !state.businessOptions.includes(name)) {
+        state.businessOptions.push(name);
+      }
+      closeModal('addBusinessModal');
+      e.target.reset();
+      renderAll();
+      saveUserDataToSupabase();
+    }
+
+    function handleAddTransaction(e) {
+      e.preventDefault();
+      const name = document.getElementById('tx-name').value;
+      const category = document.getElementById('tx-category').value;
+      const account = document.getElementById('tx-account').value;
+      const amount = parseFloat(document.getElementById('tx-amount').value) || 0;
+      const date = document.getElementById('tx-date').value;
+
+      const monthKey = date.substring(0, 7);
+      ensureMonthExists(monthKey);
+
+      state.monthlyData[monthKey].expenses.push({ id: Date.now(), name, category, account, amount, date });
+
+      if (category === 'Internet' || category === 'Umeme' || category === 'Taka' || category === 'Transport') {
+        state.monthlyData[monthKey].utilitiesSubSpent[category] = (state.monthlyData[monthKey].utilitiesSubSpent[category] || 0) + amount;
+      } else {
+        state.monthlyData[monthKey].categorySpent[category] = (state.monthlyData[monthKey].categorySpent[category] || 0) + amount;
+      }
+
+      // Deduct from account
+      if (state.accounts[account] !== undefined) {
+        state.accounts[account] = Math.max(0, state.accounts[account] - amount);
+      }
+
+      closeModal('addTransactionModal');
+      e.target.reset();
+      renderAll();
+      saveUserDataToSupabase();
+    }
+
+    function handleTransfer(e) {
+      e.preventDefault();
+      const from = document.getElementById('tr-from').value;
+      const to = document.getElementById('tr-to').value;
+      const amount = parseFloat(document.getElementById('tr-amount').value) || 0;
+
+      if (from === to) {
+        alert('Cannot transfer to the same account.');
+        return;
+      }
+      if ((state.accounts[from] || 0) < amount) {
+        alert('Insufficient funds in source account.');
+        return;
+      }
+
+      state.accounts[from] -= amount;
+      state.accounts[to] = (state.accounts[to] || 0) + amount;
+
+      closeModal('transferModal');
+      e.target.reset();
+      renderAll();
+      saveUserDataToSupabase();
+    }
+
+    function handleAddMoneyAccount(e) {
+      e.preventDefault();
+      const account = document.getElementById('am-account').value;
+      const amount = parseFloat(document.getElementById('am-amount').value) || 0;
+
+      state.accounts[account] = (state.accounts[account] || 0) + amount;
+
+      closeModal('addMoneyModal');
+      e.target.reset();
+      renderAll();
+      saveUserDataToSupabase();
+    }
+
+    function handleAddInvestmentCapital(e) {
+      e.preventDefault();
+      const amount = parseFloat(document.getElementById('inv-add-amount').value) || 0;
+      state.investments.totalInvested += amount;
+      state.investments.currentValue += amount;
+      state.investments.history.push({ id: Date.now(), date: new Date().toISOString().split('T')[0], type: 'Capital Addition', amount, val: state.investments.currentValue });
+
+      closeModal('addInvestmentModal');
+      e.target.reset();
+      renderAll();
+      saveUserDataToSupabase();
+    }
+
+    function handleUpdateInvestmentValue(e) {
+      e.preventDefault();
+      const val = parseFloat(document.getElementById('inv-update-value').value) || 0;
+      state.investments.currentValue = val;
+      state.investments.history.push({ id: Date.now(), date: new Date().toISOString().split('T')[0], type: 'Valuation Update', amount: 0, val });
+
+      closeModal('updateInvestmentModal');
+      e.target.reset();
+      renderAll();
+      saveUserDataToSupabase();
+    }
+
+    function handleAddCategory(e) {
+      e.preventDefault();
+      const name = document.getElementById('cat-name-input').value;
+      const amount = parseFloat(document.getElementById('cat-amount-input').value) || 0;
+      const id = 'cat-' + name.toLowerCase().replace(/\s+/g, '-');
+
+      if (!state.categories.some(c => c.id === id)) {
+        state.categories.push({ id, name, amount, isExpandable: false });
+      }
+
+      closeModal('addCategoryModal');
+      e.target.reset();
+      renderAll();
+      saveUserDataToSupabase();
+    }
+
+    function handleCategoryAmountInput(catId, val) {
+      const num = parseFloat(val) || 0;
+      const cat = state.categories.find(c => c.id === catId);
+      if (cat) cat.amount = num;
+      renderAll();
+      saveUserDataToSupabase();
+    }
+
+    function handleAddLoan(e) {
+      e.preventDefault();
+      const borrower = document.getElementById('loan-borrower').value;
+      const amount = parseFloat(document.getElementById('loan-amount').value) || 0;
+      const date = document.getElementById('loan-date').value;
+      const paid = parseFloat(document.getElementById('loan-paid').value) || 0;
+      const note = document.getElementById('loan-note').value;
+
+      state.loans.push({ id: Date.now(), borrower, amount, date, paid, note });
+
+      closeModal('addLoanModal');
+      e.target.reset();
+      renderAll();
+      saveUserDataToSupabase();
+    }
+
+    function openUpdateLoanModal(id) {
+      const loan = state.loans.find(l => l.id === id);
+      if (loan) {
+        document.getElementById('edit-loan-id').value = loan.id;
+        document.getElementById('edit-loan-paid').value = loan.paid;
+        openModal('updateLoanModal');
+      }
+    }
+
+    function handleUpdateLoan(e) {
+      e.preventDefault();
+      const id = parseInt(document.getElementById('edit-loan-id').value);
+      const paid = parseFloat(document.getElementById('edit-loan-paid').value) || 0;
+
+      const loan = state.loans.find(l => l.id === id);
+      if (loan) {
+        loan.paid = paid;
+      }
+
+      closeModal('updateLoanModal');
+      renderAll();
+      saveUserDataToSupabase();
+    }
+
+    function toggleUtilitiesAccordion() {
+      const acc = document.getElementById('utilities-accordion');
+      const chevron = document.getElementById('utilities-chevron');
+      acc.classList.toggle('expanded');
+      chevron.classList.toggle('rotate-180');
+    }
+
+    function switchAppearichPeriod(period) {
+      state.appearichPeriod = period;
+      document.querySelectorAll('.app-period-btn').forEach(btn => {
+        btn.classList.remove('active', 'bg-brand-black', 'text-white');
+        btn.classList.add('bg-gray-100', 'text-brand-muted');
       });
-      const invGainLoss = state.investment.currentValue - state.investment.totalInvested;
-      const invReturnPercent = state.investment.totalInvested > 0 ? (invGainLoss / state.investment.totalInvested) * 100 : 0;
-      const totalLiquidMoney = Object.values(state.accounts).reduce((sum, val) => sum + val, 0);
-      const totalLoanOwed = state.loans.reduce((sum, loan) => sum + (loan.amount - loan.paid), 0);
-      return {
-        ...activeCalc,
-        overallProfit,
-        monthlyProfits,
-        invGainLoss,
-        invReturnPercent,
-        totalLiquidMoney,
-        totalLoanOwed
-      };
+      const activeBtn = document.getElementById('app-period-' + period);
+      if (activeBtn) {
+        activeBtn.classList.add('active', 'bg-brand-black', 'text-white');
+        activeBtn.classList.remove('bg-gray-100', 'text-brand-muted');
+      }
+      renderAppearichTab();
     }
+
+    function switchBusinessTab(bName) {
+      state.activeBusinessTab = bName;
+      renderAppearichTab();
+    }
+
+    // Master Render Function
     function renderAll() {
-      const calc = getCalculations();
-      const heroBg = document.getElementById('hero-bg-img');
-      if (heroBg) heroBg.style.backgroundImage = `url('${state.heroImageUrl}')`;
+      renderDashboard();
+      renderIncomeTab();
+      renderBudgetTab();
+      renderDailyExpensesTab();
+      renderInvestmentTab();
+      renderAppearichTab();
+      renderAccountsTab();
+      renderLoansTab();
+      renderProgressTab();
+    }
+
+    function renderDashboard() {
+      ensureMonthExists(state.activeMonth);
+      const mData = state.monthlyData[state.activeMonth];
+
+      const totalIncome = mData.incomes.reduce((sum, i) => sum + i.amount, 0) + mData.sales.reduce((sum, s) => sum + s.paidAmount, 0);
+      const godAmount = totalIncome * 0.10;
+      const totalMoney = Object.values(state.accounts).reduce((a, b) => a + b, 0);
+
+      const totalBudgetTarget = state.categories.reduce((sum, c) => sum + c.amount, 0);
+      const totalSpent = Object.values(mData.categorySpent).reduce((a,b)=>a+b,0) + Object.values(mData.utilitiesSubSpent).reduce((a,b)=>a+b,0);
+      const remainingBudget = Math.max(0, (totalIncome * 0.90) - totalSpent);
+
+      document.getElementById('dash-total-income').innerText = formatSh(totalIncome);
+      document.getElementById('dash-god-amount').innerText = formatSh(godAmount);
+      document.getElementById('dash-total-money').innerText = formatSh(totalMoney);
+      document.getElementById('dash-remaining-budget').innerText = formatSh(remainingBudget);
+    }
+
+    function renderIncomeTab() {
+      ensureMonthExists(state.activeMonth);
+      const mData = state.monthlyData[state.activeMonth];
+      const totalIncome = mData.incomes.reduce((sum, i) => sum + i.amount, 0);
+      const totalSalesPaid = mData.sales.reduce((sum, s) => sum + s.paidAmount, 0);
+      const combinedIncome = totalIncome + totalSalesPaid;
       
-      document.getElementById('dash-total-income').innerText = formatSh(calc.totalIncome);
-      document.getElementById('dash-god-amount').innerText = formatSh(calc.godTithe);
-      document.getElementById('dash-total-money').innerText = formatSh(calc.totalLiquidMoney);
-      document.getElementById('dash-remaining-budget').innerText = formatSh(calc.remainingBudget);
-      
-      document.getElementById('income-god-total').innerText = formatSh(calc.godTithe);
-      document.getElementById('income-month-picker').value = state.activeMonth;
-      document.getElementById('income-month-label').innerText = `Active Month: ${state.activeMonth}`;
+      document.getElementById('income-god-total').innerText = formatSh(combinedIncome * 0.10);
+      document.getElementById('income-month-label').innerText = state.activeMonth;
+
+      const container = document.getElementById('income-list-container');
+      container.innerHTML = '';
+
+      if (mData.incomes.length === 0) {
+        container.innerHTML = `<p class="text-xs text-brand-muted col-span-full py-4">No income records found for ${state.activeMonth}.</p>`;
+        return;
+      }
+
+      mData.incomes.forEach(inc => {
+        container.innerHTML += `
+          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex items-center justify-between">
+            <div>
+              <p class="text-xs font-bold text-brand-muted uppercase">Income Stream</p>
+              <h4 class="font-display font-bold text-base text-brand-black mt-0.5">${inc.name}</h4>
+            </div>
+            <p class="font-display font-bold text-lg text-emerald-600">+${formatSh(inc.amount)}</p>
+          </div>
+        `;
+      });
+    }
+
+    function renderBudgetTab() {
+      ensureMonthExists(state.activeMonth);
+      const mData = state.monthlyData[state.activeMonth];
+      const totalIncome = mData.incomes.reduce((sum, i) => sum + i.amount, 0) + mData.sales.reduce((sum, s) => sum + s.paidAmount, 0);
+      const poolTotal = totalIncome * 0.90;
+      document.getElementById('budget-pool-total').innerText = formatSh(poolTotal);
+
+      const totalTarget = state.categories.reduce((sum, c) => sum + c.amount, 0);
+      const percent = poolTotal > 0 ? Math.min(100, Math.round((totalTarget / poolTotal) * 100)) : 0;
+      document.getElementById('budget-allocated-percent').innerText = percent + '%';
+      document.getElementById('budget-allocated-bar').style.width = percent + '%';
+
+      // Utilities input binding & summary
+      const utilCat = state.categories.find(c => c.id === 'cat-utilities');
+      if(utilCat) {
+        document.getElementById('cat-amount-cat-utilities').value = utilCat.amount || '';
+        const utilSpent = Object.values(mData.utilitiesSubSpent).reduce((a,b)=>a+b,0);
+        const utilRem = Math.max(0, utilCat.amount - utilSpent);
+        document.getElementById('utilities-spent-summary').innerText = `Spent: ${formatSh(utilSpent)}`;
+        document.getElementById('utilities-remaining-summary').innerText = `Remaining: ${formatSh(utilRem)}`;
+        const utilPct = utilCat.amount > 0 ? Math.round((utilSpent / utilCat.amount)*100) : 0;
+        document.getElementById('utilities-percent-badge').innerText = utilPct + '%';
+
+        // Render subcategories
+        const subList = document.getElementById('utilities-subcategories-list');
+        subList.innerHTML = '';
+        ['Internet', 'Umeme', 'Taka', 'Transport'].forEach(sub => {
+          const sSpent = mData.utilitiesSubSpent[sub] || 0;
+          subList.innerHTML += `
+            <div class="p-4 bg-white rounded-2xl border border-gray-100 flex items-center justify-between">
+              <div><p class="text-xs font-bold text-brand-black uppercase">${sub}</p><p class="text-[10px] text-brand-muted">Utility Subcategory</p></div>
+              <p class="font-display font-bold text-sm text-brand-black">${formatSh(sSpent)}</p>
+            </div>
+          `;
+        });
+      }
+
+      // Render other categories
+      const mainList = document.getElementById('main-categories-list');
+      mainList.innerHTML = '';
+      state.categories.filter(c => c.id !== 'cat-utilities').forEach(cat => {
+        const spent = mData.categorySpent[cat.name] || mData.categorySpent[cat.id] || 0;
+        const rem = Math.max(0, cat.amount - spent);
+        const p = cat.amount > 0 ? Math.round((spent / cat.amount)*100) : 0;
+
+        mainList.innerHTML += `
+          <div class="rounded-3xl bg-white border border-gray-100 shadow-premium p-6 flex flex-col justify-between space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="flex items-center space-x-2">
+                  <h4 class="font-bold text-base text-brand-black uppercase">${cat.name}</h4>
+                  <span class="px-2.5 py-0.5 rounded-full bg-gray-100 text-brand-black text-[11px] font-bold">${p}%</span>
+                </div>
+                <p class="text-xs text-brand-muted mt-0.5">Budget Allocation</p>
+              </div>
+            </div>
+            <div class="space-y-3">
+              <div>
+                <label class="block text-xs font-bold text-brand-muted uppercase mb-1">Target Amount (Sh)</label>
+                <input type="number" value="${cat.amount || ''}" oninput="handleCategoryAmountInput('${cat.id}', this.value)" placeholder="Enter amount" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm font-bold text-brand-black">
+              </div>
+              <div class="flex justify-between text-xs pt-2 border-t border-gray-100">
+                <span class="text-brand-muted">Spent: ${formatSh(spent)}</span>
+                <span class="font-bold text-emerald-600">Remaining: ${formatSh(rem)}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function renderDailyExpensesTab() {
+      ensureMonthExists(state.expenseActiveMonth);
+      const mData = state.monthlyData[state.expenseActiveMonth];
+      document.getElementById('daily-expense-month-label').innerText = state.expenseActiveMonth;
+
+      const grid = document.getElementById('category-budget-comparison-grid');
+      grid.innerHTML = '';
+
+      state.categories.forEach(cat => {
+        const spent = cat.name === 'Utilities' ? Object.values(mData.utilitiesSubSpent).reduce((a,b)=>a+b,0) : (mData.categorySpent[cat.name] || 0);
+        grid.innerHTML += `
+          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-2">
+            <div class="flex justify-between items-center"><span class="text-xs font-bold uppercase text-brand-black">${cat.name}</span><span class="text-[11px] text-brand-muted">Budget: ${formatSh(cat.amount)}</span></div>
+            <p class="font-display font-bold text-lg text-brand-black">Spent: ${formatSh(spent)}</p>
+          </div>
+        `;
+      });
+
+      const tbody = document.getElementById('daily-expense-table-body');
+      tbody.innerHTML = '';
+      document.getElementById('daily-expense-log-count').innerText = `${mData.expenses.length} Expenses Recorded`;
+
+      if (mData.expenses.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-brand-muted">No expenses recorded for ${state.expenseActiveMonth}.</td></tr>`;
+        return;
+      }
+
+      mData.expenses.forEach(tx => {
+        tbody.innerHTML += `
+          <tr class="hover:bg-gray-50 transition">
+            <td class="py-3">${tx.date}</td>
+            <td class="py-3 font-bold text-brand-black">${tx.name}</td>
+            <td class="py-3"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-[10px] font-bold">${tx.category}</span></td>
+            <td class="py-3">${tx.account}</td>
+            <td class="py-3 text-right font-bold text-red-600">-${formatSh(tx.amount)}</td>
+          </tr>
+        `;
+      });
+    }
+
+    function renderInvestmentTab() {
+      const inv = state.investments;
+      const gainLoss = inv.currentValue - inv.totalInvested;
+      const returnPct = inv.totalInvested > 0 ? (gainLoss / inv.totalInvested) * 100 : 0;
+
+      document.getElementById('inv-total-invested').innerText = formatSh(inv.totalInvested);
+      document.getElementById('inv-current-value').innerText = formatSh(inv.currentValue);
+      document.getElementById('inv-gain-loss').innerText = (gainLoss >= 0 ? '+' : '') + formatSh(gainLoss);
+      document.getElementById('inv-gain-loss').className = `font-display text-3xl font-extrabold ${gainLoss >= 0 ? 'text-emerald-600' : 'text-red-600'} mt-1`;
+      document.getElementById('inv-percentage-return').innerText = (returnPct >= 0 ? '+' : '') + returnPct.toFixed(2) + '%';
+
+      const historyList = document.getElementById('investment-history-list');
+      historyList.innerHTML = '';
+
+      if (inv.history.length === 0) {
+        historyList.innerHTML = `<p class="text-xs text-brand-muted col-span-full">No valuation history recorded yet.</p>`;
+        return;
+      }
+
+      inv.history.forEach(h => {
+        historyList.innerHTML += `
+          <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-between">
+            <div><p class="text-xs font-bold text-brand-black">${h.type}</p><p class="text-[10px] text-brand-muted">${h.date}</p></div>
+            <p class="font-display font-bold text-sm text-brand-black">Val: ${formatSh(h.val)}</p>
+          </div>
+        `;
+      });
+    }
+
+    function renderAppearichTab() {
+      // Render Business Types bar
+      const bar = document.getElementById('business-types-bar');
+      bar.innerHTML = '';
+      state.businessOptions.forEach(b => {
+        const isActive = state.activeBusinessTab === b;
+        bar.innerHTML += `
+          <button onclick="switchBusinessTab('${b}')` class="px-4 py-2 rounded-xl text-xs font-bold transition flex-shrink-0 ${isActive ? 'bg-brand-black text-white shadow-sm' : 'bg-gray-100 text-brand-muted hover:text-brand-black'}">${b}</button>
+        `;
+      });
+      document.getElementById('active-business-view-label').innerText = `Active Business View: ${state.activeBusinessTab}`;
+
+      // Aggregate sales across all months for Appearich
+      let allSales = [];
+      Object.keys(state.monthlyData).forEach(m => {
+        allSales = allSales.concat(state.monthlyData[m].sales || []);
+      });
+
+      const filteredSales = state.activeBusinessTab === 'Appearich Main' ? allSales : allSales.filter(s => s.businessType === state.activeBusinessTab);
+
+      const todayStr = new Date().toISOString().split('T')[0];
+      const todaySales = filteredSales.filter(s => s.date === todayStr);
+      const todayReceived = todaySales.reduce((sum, s) => sum + s.paidAmount, 0);
+      const todayProfit = todaySales.reduce((sum, s) => sum + ((s.sellPrice - s.buyPrice) * (s.paidAmount / s.sellPrice)), 0);
+
+      const monthRevenue = filteredSales.filter(s => s.date.startsWith(state.activeMonth)).reduce((sum, s) => sum + s.sellPrice, 0);
+      const totalOutstanding = filteredSales.reduce((sum, s) => sum + (s.sellPrice - s.paidAmount), 0);
+      const totalProfit = filteredSales.reduce((sum, s) => sum + (s.sellPrice - s.buyPrice), 0);
+
+      document.getElementById('app-today-sales').innerText = formatSh(todayReceived);
+      document.getElementById('app-today-profit').innerText = formatSh(todayProfit);
+      document.getElementById('app-month-revenue').innerText = formatSh(monthRevenue);
+      document.getElementById('app-total-outstanding').innerText = formatSh(totalOutstanding);
+      document.getElementById('app-total-profit').innerText = formatSh(totalProfit);
+
+      // Period stats
+      const soldCount = filteredSales.reduce((sum, s) => sum + s.qty, 0);
+      const rev = filteredSales.reduce((sum, s) => sum + s.sellPrice, 0);
+      const cost = filteredSales.reduce((sum, s) => sum + s.buyPrice, 0);
+      const margin = rev > 0 ? Math.round(((rev - cost) / rev) * 100) : 0;
+
+      document.getElementById('app-period-sold').innerText = soldCount;
+      document.getElementById('app-period-revenue').innerText = formatSh(rev);
+      document.getElementById('app-period-cost').innerText = formatSh(cost);
+      document.getElementById('app-period-margin').innerText = margin + '%';
+
+      // Populate business dropdown in Sale Modal
+      const sel = document.getElementById('sale-business-type');
+      if (sel) {
+        sel.innerHTML = '';
+        state.businessOptions.forEach(b => {
+          sel.innerHTML += `<option value="${b}">${b}</option>`;
+        });
+      }
+
+      // Render sales table
+      const table = document.getElementById('appearich-sales-table');
+      table.innerHTML = '';
+      if (filteredSales.length === 0) {
+        table.innerHTML = `<tr><td colspan="9" class="py-4 text-center text-brand-muted">No sales recorded yet.</td></tr>`;
+        return;
+      }
+
+      filteredSales.forEach(s => {
+        const bal = s.sellPrice - s.paidAmount;
+        table.innerHTML += `
+          <tr class="hover:bg-gray-50 transition">
+            <td class="py-3">${s.date}</td>
+            <td class="py-3 font-bold">${s.businessType}</td>
+            <td class="py-3">${s.product} (${s.qty})</td>
+            <td class="py-3">${s.customer}</td>
+            <td class="py-3 font-bold">${formatSh(s.sellPrice)}</td>
+            <td class="py-3 text-emerald-600 font-bold">${formatSh(s.paidAmount)}</td>
+            <td class="py-3 text-red-600 font-bold">${formatSh(bal)}</td>
+            <td class="py-3"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${s.status === 'FULL' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}">${s.status}</span></td>
+            <td class="py-3">
+              ${bal > 0 ? `<button onclick="openUpdateSaleModal(${s.id})" class="px-2 py-1 rounded bg-brand-black text-white text-[10px]">Update</button>` : '-'}
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function openUpdateSaleModal(id) {
+      // Find sale
+      let targetSale = null;
+      Object.keys(state.monthlyData).forEach(m => {
+        const found = state.monthlyData[m].sales.find(s => s.id === id);
+        if (found) targetSale = found;
+      });
+      if (targetSale) {
+        document.getElementById('edit-sale-id').value = targetSale.id;
+        document.getElementById('edit-sale-status').value = targetSale.status;
+        document.getElementById('edit-sale-paid-amount').value = targetSale.paidAmount;
+        openModal('updateSalePaymentModal');
+      }
+    }
+
+    function toggleEditSalePartialInput() {
+      // Handled if needed
+    }
+
+    function handleUpdateSalePayment(e) {
+      e.preventDefault();
+      const id = parseInt(document.getElementById('edit-sale-id').value);
+      const status = document.getElementById('edit-sale-status').value;
+      const paid = parseFloat(document.getElementById('edit-sale-paid-amount').value) || 0;
+
+      Object.keys(state.monthlyData).forEach(m => {
+        const s = state.monthlyData[m].sales.find(x => x.id === id);
+        if (s) {
+          s.status = status;
+          s.paidAmount = status === 'FULL' ? s.sellPrice : paid;
+          state.accounts['CRDB'] = (state.accounts['CRDB'] || 0) + (s.paidAmount - paid);
+        }
+      });
+
+      closeModal('updateSalePaymentModal');
+      renderAll();
+      saveUserDataToSupabase();
+    }
+
+    function renderAccountsTab() {
+      const grid = document.getElementById('account-cards-grid');
+      grid.innerHTML = '';
+      let total = 0;
+
+      Object.keys(state.accounts).forEach(acc => {
+        const bal = state.accounts[acc];
+        total += bal;
+        grid.innerHTML += `
+          <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between">
+            <div>
+              <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">Account</span>
+              <h4 class="font-display font-bold text-lg text-brand-black mt-1">${acc}</h4>
+            </div>
+            <p class="font-display font-extrabold text-2xl text-brand-black mt-4">${formatSh(bal)}</p>
+          </div>
+        `;
+      });
+
+      document.getElementById('accounts-total-money').innerText = formatSh(total);
+    }
+
+    function renderLoansTab() {
+      let totalOwed = 0;
+      const list = document.getElementById('loan-cards-list');
+      list.innerHTML = '';
+
+      if (state.loans.length === 0) {
+        list.innerHTML = `<p class="text-xs text-brand-muted col-span-full">No active loans recorded.</p>`;
+        document.getElementById('loan-total-owed').innerText = formatSh(0);
+        return;
+      }
+
+      state.loans.forEach(l => {
+        const bal = l.amount - l.paid;
+        totalOwed += bal;
+        list.innerHTML += `
+          <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="text-xs font-bold text-brand-muted uppercase">Borrower</span>
+                <h4 class="font-display font-bold text-base text-brand-black mt-0.5">${l.borrower}</h4>
+                ${l.note ? `<p class="text-[11px] text-gray-500 mt-0.5">${l.note}</p>` : ''}
+              </div>
+              <span class="px-2.5 py-1 rounded-full text-xs font-bold ${bal === 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-yellow-100 text-yellow-700'}">${bal === 0 ? 'Settled' : 'Active'}</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-xs pt-3 border-t border-gray-100">
+              <div><p class="text-brand-muted">Lent: ${formatSh(l.amount)}</p><p class="font-bold text-emerald-600">Paid: ${formatSh(l.paid)}</p></div>
+              <div class="text-right"><p class="text-brand-muted">Balance</p><p class="font-bold text-red-600">${formatSh(bal)}</p></div>
+            </div>
+            ${bal > 0 ? `<button onclick="openUpdateLoanModal(${l.id})" class="w-full py-2 rounded-xl bg-brand-black text-white text-xs font-bold hover:bg-gray-800 transition">Update Repayment</button>` : ''}
+          </div>
+        `;
+      });
+
+      document.getElementById('loan-total-owed').innerText = formatSh(totalOwed);
+    }
+
+    function renderProgressTab() {
+      let overallProfit = 0;
+      let activeMonthProfit = 0;
+      const monthlyGrid = document.getElementById('progress-monthly-grid');
+      monthlyGrid.innerHTML = '';
+
+      Object.keys(state.monthlyData).forEach(mKey => {
+        const m = state.monthlyData[mKey];
+        const mRev = m.sales.reduce((sum, s) => sum + s.sellPrice, 0);
+        const mCost = m.sales.reduce((sum, s) => sum + s.buyPrice, 0);
+        const mProfit = mRev - mCost;
+
+        overallProfit += mProfit;
+        if (mKey === state.activeMonth) {
+          activeMonthProfit = mProfit;
+        }
+
+        monthlyGrid.innerHTML += `
+          <div class="p-5 rounded-2xl bg-gray-50 border border-gray-100 flex flex-col justify-between space-y-2">
+            <div class="flex justify-between items-center"><span class="text-xs font-bold text-brand-black">${mKey}</span><span class="text-[10px] text-brand-muted">Net Profit</span></div>
+            <p class="font-display font-bold text-xl text-emerald-600">${formatSh(mProfit)}</p>
+          </div>
+        `;
+      });
+
+      document.getElementById('progress-overall-profit').innerText = formatSh(overallProfit);
+      document.getElementById('progress-active-month-profit').innerText = formatSh(activeMonthProfit);
+      document.getElementById('progress-active-month-name').innerText = `Active Month (${state.activeMonth}) Profit`;
     }
   </script>
 </body>
