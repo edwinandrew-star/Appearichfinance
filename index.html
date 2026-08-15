@@ -4,6 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Appearich Finance Command Center</title>
+  
+  <!-- PWA Manifest & Service Worker Setup -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#FFFFFF">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => console.error('SW registration failed:', err));
+      });
+    }
+  </script>
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts -->
@@ -11,11 +23,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   
-  <!-- PWA Manifest & Meta Tags -->
-  <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Appearich%20Finance%20Command%20Center%22%2C%22short_name%22%3A%22Appearich%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23FFFFFF%22%2C%22theme_color%22%3A%22%230A0A0C%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22images%2Fappearich-logo.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
-  <meta name="theme-color" content="#0A0A0C">
-  
-  <!-- Supabase JS Client CDN -->
+  <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
@@ -72,59 +80,54 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
-    /* Splash Screen & Animations */
+    /* Animations for Splash and Login Sentences */
     @keyframes popIn {
       0% { transform: scale(0.85); opacity: 0; }
-      60% { transform: scale(1.05); opacity: 1; }
+      70% { transform: scale(1.03); opacity: 1; }
       100% { transform: scale(1); opacity: 1; }
     }
-    .splash-logo-anim {
+    .animate-pop-in {
       animation: popIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
-    @keyframes slideLeftToRight {
+    @keyframes slideFromLeft {
       0% { transform: translateX(-30px); opacity: 0; }
       100% { transform: translateX(0); opacity: 1; }
     }
-    .sentence-anim {
-      animation: slideLeftToRight 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    .animate-slide-left {
+      animation: slideFromLeft 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
   </style>
 </head>
 <body class="bg-brand-bg min-h-screen pb-28 text-brand-black">
 
   <!-- ==================== SPLASH SCREEN ==================== -->
-  <div id="app-splash-screen" class="fixed inset-0 z-50 bg-white flex flex-col items-center justify-center transition-opacity duration-500">
-    <div class="splash-logo-anim flex flex-col items-center">
-      <img src="images/appearich-logo.png" alt="Appearich Logo" class="w-24 h-24 object-contain mb-4">
-      <h1 class="font-display font-bold text-2xl tracking-tight text-brand-black">APPEARICH</h1>
-      <p class="text-[10px] font-bold tracking-widest text-brand-gold uppercase mt-1">Track Your Money. Build Your Business. See Your Growth.</p>
-    </div>
+  <div id="splash-screen" class="fixed inset-0 z-50 bg-white flex items-center justify-center transition-opacity duration-700">
+    <img src="images/appearich-logo.png" alt="Appearich Logo" class="w-32 h-32 object-contain animate-pop-in">
   </div>
 
-  <!-- ==================== AUTH SCREEN (SIGN IN / SIGN UP) ==================== -->
-  <div id="app-auth-screen" class="fixed inset-0 z-40 bg-white flex flex-col items-center justify-center p-4 hidden overflow-y-auto">
-    <div class="max-w-md w-full space-y-6 bg-white p-6">
-      <div class="text-center space-y-2">
-        <img src="images/appearich-logo.png" alt="Appearich Logo" class="w-16 h-16 object-contain mx-auto mb-2">
-        <h2 id="auth-title" class="font-display font-extrabold text-2xl text-brand-black">Sign In to Appearich</h2>
-        <!-- Animated Login Sentences Requirement -->
-        <div id="login-sentences-container" class="space-y-1 pt-1">
-          <p class="text-xs text-brand-muted font-medium sentence-anim" style="animation-delay: 0.1s;">Track Your Money with complete accuracy and ease.</p>
-          <p class="text-xs text-brand-muted font-medium sentence-anim" style="animation-delay: 0.3s;">Build Your Business using advanced sales and tithe tracking.</p>
-          <p class="text-xs text-brand-muted font-medium sentence-anim" style="animation-delay: 0.5s;">See Your Growth through automated wealth analytics and records.</p>
+  <!-- ==================== AUTH OVERLAY (SIGN IN / SIGN UP) ==================== -->
+  <div id="auth-overlay" class="fixed inset-0 z-40 bg-white hidden flex items-center justify-center p-4">
+    <div class="w-full max-w-md p-8 space-y-6">
+      <div class="space-y-2 text-left">
+        <h2 id="auth-title" class="font-display font-bold text-3xl tracking-tight text-brand-black">Welcome Back</h2>
+        <!-- Animated Login Sentences container -->
+        <div id="auth-sentences-container" class="space-y-1 min-h-[48px]">
+          <p class="text-xs text-brand-muted animate-slide-left opacity-0" style="animation-delay: 0.1s;">Track Your Money.</p>
+          <p class="text-xs text-brand-muted animate-slide-left opacity-0" style="animation-delay: 0.3s;">Build Your Business.</p>
+          <p class="text-xs text-brand-muted animate-slide-left opacity-0" style="animation-delay: 0.5s;">See Your Growth.</p>
         </div>
       </div>
       
       <form id="auth-form" onsubmit="handleAuthSubmit(event)" class="space-y-4">
         <div>
-          <label class="block text-xs font-bold text-brand-black uppercase mb-1">Email Address</label>
-          <input id="auth-email" type="email" required placeholder="name@example.com" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-brand-black bg-white">
+          <label class="block text-xs font-bold uppercase mb-1 text-brand-black">Email Address</label>
+          <input id="auth-email" type="email" required placeholder="name@example.com" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-brand-black transition">
         </div>
         <div>
-          <label class="block text-xs font-bold text-brand-black uppercase mb-1">Password</label>
-          <input id="auth-password" type="password" required placeholder="••••••••" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-brand-black bg-white">
+          <label class="block text-xs font-bold uppercase mb-1 text-brand-black">Password</label>
+          <input id="auth-password" type="password" required placeholder="••••••••" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-brand-black transition">
         </div>
-        <button type="submit" id="auth-submit-btn" class="w-full bg-brand-black text-white font-bold py-3.5 rounded-xl hover:bg-gray-800 transition text-sm">Sign In</button>
+        <button type="submit" id="auth-submit-btn" class="w-full bg-brand-black text-white font-bold py-3.5 rounded-xl hover:bg-gray-800 transition text-sm shadow-sm">Sign In</button>
       </form>
 
       <div class="text-center pt-2">
@@ -136,7 +139,7 @@
   </div>
 
   <!-- TOP APP HEADER -->
-  <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100 px-4 lg:px-8 py-4">
+  <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-gray-100 px-4 lg:px-8 py-4">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
       <div class="flex items-center space-x-3">
         <div class="w-10 h-10 rounded-2xl bg-brand-black flex items-center justify-center text-brand-gold shadow-gold-glow">
@@ -156,12 +159,9 @@
           </svg>
           <span>+ Expense</span>
         </button>
-        <button onclick="handleSignOut()" class="px-3 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-xs font-bold text-brand-black transition" title="Sign Out">
-          Sign Out
+        <button onclick="handleLogout()" title="Sign Out" class="w-10 h-10 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center font-bold text-xs text-brand-black hover:bg-gray-100 transition">
+          OUT
         </button>
-        <div class="w-10 h-10 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center font-bold text-xs text-brand-black">
-          TZ
-        </div>
       </div>
     </div>
   </header>
@@ -747,7 +747,7 @@
     </div>
   </main>
   <!-- SIMPLE BOTTOM NAVIGATION -->
-  <nav class="fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-t border-gray-200 px-4 py-2.5">
+  <nav class="fixed bottom-0 left-0 right-0 z-30 bg-white/90 backdrop-blur-md border-t border-gray-200 px-4 py-2.5">
     <div class="max-w-md mx-auto flex items-center justify-between">
       <button onclick="switchTab('dashboard')" id="bnav-dashboard" class="bnav-btn flex flex-col items-center space-y-1 text-brand-black">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
@@ -1033,22 +1033,10 @@
   </div>
   <!-- ==================== JAVASCRIPT ENGINE ==================== -->
   <script>
-    // Supabase Integration Setup
+    // Initialize Supabase Client
     const SUPABASE_URL = 'https://zudqubbglwphfxaviqsg.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1ZHF1YmJnbHdwaGZ4YXZpcXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjMwMjY5lnst... (provided anon key)'; // Using standard initialization with provided zudqubbglwphfxaviqsg URL and key
-    
-    // Initialize Supabase Client if available
-    let supabaseClient = null;
-    try {
-      if (window.supabase) {
-        supabaseClient = window.supabase.createClient(
-          'https://zudqubbglwphfxaviqsg.supabase.co',
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1ZHF1YmJnbHdwaGZ4YXZpcXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjMwMjY5'
-        );
-      }
-    } catch(e) {
-      console.warn('Supabase initialization fallback active', e);
-    }
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1ZHF1YmJnbHdwaGZ4YXZpcXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0NjcyNTUsImV4cCI6MjA5ODA0MzI1NX0.7pRbRqz9-5gN8SG_ALn5ecHOWQofykPvhbrE2HQROCE';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     let currentUser = null;
     let isSignUpMode = false;
@@ -1059,6 +1047,7 @@
       const month = String(now.getMonth() + 1).padStart(2, '0');
       return `${year}-${month}`;
     }
+
     const state = {
       activeMonth: getCurrentMonthKey(),
       expenseActiveMonth: getCurrentMonthKey(),
@@ -1075,203 +1064,117 @@
       categories: [
         { id: 'cat-utilities', name: 'Utilities', amount: 0, isExpandable: true },
         { id: 'cat-investment', name: 'Investment', amount: 0, isExpandable: false },
-        { id: 'cat-expenses', name: 'Expenses', amount: 0, isExpandable: false }
+        { id: 'cat-expenses', name: 'Expenses', amount: 0, isExpandable: false },
+        { id: 'cat-other', name: 'Other', amount: 0, isExpandable: false }
       ],
-      accounts: {
-        'CRDB': 0,
-        'SELCOM': 0,
-        'MPESA': 0,
-        'LIPA NAMBA': 0,
-        'CASH': 0
-      },
-      businessOptions: ['Appearich Main'],
-      activeBusinessTab: 'Appearich Main',
-      appearichPeriod: 'day',
-      investments: {
+      utilitiesSub: [
+        { name: 'Internet' },
+        { name: 'Umeme' },
+        { name: 'Taka' },
+        { name: 'Transport' }
+      ],
+      businessTypes: ['Appearich Main'],
+      activeBusinessType: 'Appearich Main',
+      investment: {
         totalInvested: 0,
         currentValue: 0,
         history: []
       },
-      loans: []
+      loans: [],
+      accounts: { 'CRDB': 0, 'SELCOM': 0, 'MPESA': 0, 'LIPA NAMBA': 0, 'CASH': 0 },
+      currentTab: 'dashboard',
+      appearichPeriod: 'day',
+      utilitiesExpanded: false
     };
 
-    // Splash Screen Handler
-    window.addEventListener('load', () => {
+    // Splash Screen flow
+    window.addEventListener('DOMContentLoaded', async () => {
+      // Show splash screen with subtle pop-in animation, then auto-continue
       setTimeout(() => {
-        const splash = document.getElementById('app-splash-screen');
+        const splash = document.getElementById('splash-screen');
         if (splash) {
           splash.style.opacity = '0';
-          setTimeout(() => splash.remove(), 500);
+          setTimeout(() => splash.remove(), 700);
         }
-        checkUserSession();
-      }, 1200);
-    });
+      }, 1500);
 
-    async function checkUserSession() {
-      if (!supabaseClient) {
-        initApp();
-        return;
+      // Check existing Supabase session
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (session && session.user) {
+        currentUser = session.user;
+        await loadUserData();
+        renderAll();
+      } else {
+        document.getElementById('auth-overlay').classList.remove('hidden');
       }
-      try {
-        const { data: { session } } = await supabaseClient.auth.getSession();
-        if (session && session.user) {
-          currentUser = session.user;
-          document.getElementById('app-auth-screen').classList.add('hidden');
-          await loadUserDataFromSupabase();
-        } else {
-          document.getElementById('app-auth-screen').classList.remove('hidden');
-        }
-      } catch (err) {
-        console.error('Session check error:', err);
-        initApp();
-      }
-    }
+    });
 
     function toggleAuthMode() {
       isSignUpMode = !isSignUpMode;
-      const title = document.getElementById('auth-title');
-      const btn = document.getElementById('auth-submit-btn');
-      const toggleBtn = document.getElementById('auth-toggle-btn');
-      if (isSignUpMode) {
-        title.innerText = 'Create Appearich Account';
-        btn.innerText = 'Sign Up';
-        toggleBtn.innerText = 'Already have an account? Sign In';
-      } else {
-        title.innerText = 'Sign In to Appearich';
-        btn.innerText = 'Sign In';
-        toggleBtn.innerText = "Don't have an account? Sign Up";
-      }
+      document.getElementById('auth-title').innerText = isSignUpMode ? 'Create Account' : 'Welcome Back';
+      document.getElementById('auth-submit-btn').innerText = isSignUpMode ? 'Sign Up' : 'Sign In';
+      document.getElementById('auth-toggle-btn').innerText = isSignUpMode ? 'Already have an account? Sign In' : "Don't have an account? Sign Up";
     }
 
     async function handleAuthSubmit(e) {
       e.preventDefault();
       const email = document.getElementById('auth-email').value;
       const password = document.getElementById('auth-password').value;
-      
-      if (!supabaseClient) {
-        alert('Supabase client offline. Proceeding in local mode.');
-        document.getElementById('app-auth-screen').classList.add('hidden');
-        initApp();
-        return;
-      }
 
-      try {
-        if (isSignUpMode) {
-          const { data, error } = await supabaseClient.auth.signUp({ email, password });
-          if (error) throw error;
-          alert('Sign up successful! Please check your email or sign in.');
-          toggleAuthMode();
+      if (isSignUpMode) {
+        const { data, error } = await supabaseClient.auth.signUp({ email, password });
+        if (error) {
+          alert('Sign Up Error: ' + error.message);
+          return;
+        }
+        if (data.session) {
+          currentUser = data.session.user;
         } else {
-          const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-          if (error) throw error;
-          currentUser = data.user;
-          document.getElementById('app-auth-screen').classList.add('hidden');
-          await loadUserDataFromSupabase();
+          alert('Sign up successful! Please sign in.');
+          toggleAuthMode();
+          return;
         }
-      } catch (err) {
-        alert('Authentication Error: ' + err.message);
-      }
-    }
-
-    async function handleSignOut() {
-      if (supabaseClient) {
-        await supabaseClient.auth.signOut();
-      }
-      currentUser = null;
-      document.getElementById('app-auth-screen').classList.remove('hidden');
-    }
-
-    async function saveUserDataToSupabase() {
-      if (!supabaseClient || !currentUser) {
-        // Fallback to localStorage
-        localStorage.setItem('appearich_app_state', JSON.stringify(state));
-        return;
-      }
-      try {
-        await supabaseClient.from('user_profiles').upsert({
-          user_id: currentUser.id,
-          app_data: state,
-          updated_at: new Date()
-        }, { onConflict: 'user_id' });
-      } catch (err) {
-        console.error('Error saving data to Supabase:', err);
-      }
-    }
-
-    async function loadUserDataFromSupabase() {
-      if (!supabaseClient || !currentUser) {
-        const saved = localStorage.getItem('appearich_app_state');
-        if (saved) {
-          try { Object.assign(state, JSON.parse(saved)); } catch(e){}
+      } else {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) {
+          alert('Sign In Error: ' + error.message);
+          return;
         }
-        initApp();
-        return;
+        currentUser = data.user;
       }
-      try {
-        const { data, error } = await supabaseClient
-          .from('user_profiles')
-          .select('app_data')
-          .eq('user_id', currentUser.id)
-          .single();
-        
-        if (data && data.app_data) {
-          Object.assign(state, data.app_data);
-        }
-      } catch (err) {
-        console.log('No existing cloud profile found or table missing, using default state.');
-      }
-      initApp();
-    }
 
-    function initApp() {
-      // Initialize date pickers and render UI
-      const todayStr = new Date().toISOString().split('T')[0];
-      if(document.getElementById('sale-date')) document.getElementById('sale-date').value = todayStr;
-      if(document.getElementById('loan-date')) document.getElementById('loan-date').value = todayStr;
-      if(document.getElementById('tx-date')) document.getElementById('tx-date').value = todayStr;
-
-      if(document.getElementById('income-month-picker')) document.getElementById('income-month-picker').value = state.activeMonth;
-      if(document.getElementById('daily-expense-month-picker')) document.getElementById('daily-expense-month-picker').value = state.expenseActiveMonth;
-
+      document.getElementById('auth-overlay').classList.add('hidden');
+      await loadUserData();
       renderAll();
     }
 
-    // Core Tab Switcher
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.getElementById('tab-' + tabId).classList.remove('hidden');
+    async function handleLogout() {
+      await supabaseClient.auth.signOut();
+      currentUser = null;
+      document.getElementById('auth-overlay').classList.remove('hidden');
+    }
 
-      document.querySelectorAll('.nav-tab').forEach(el => {
-        el.classList.remove('active', 'bg-brand-black', 'text-white', 'shadow-sm');
-        el.classList.add('text-brand-muted', 'hover:text-brand-black');
-      });
-      const activeNav = document.getElementById('nav-' + tabId);
-      if (activeNav) {
-        activeNav.classList.add('active', 'bg-brand-black', 'text-white', 'shadow-sm');
-        activeNav.classList.remove('text-brand-muted', 'hover:text-brand-black');
+    async function saveUserData() {
+      if (!currentUser) return;
+      const payload = {
+        user_id: currentUser.id,
+        app_state: JSON.stringify(state),
+        updated_at: new Date()
+      };
+      await supabaseClient.from('user_profiles').upsert(payload, { onConflict: 'user_id' });
+    }
+
+    async function loadUserData() {
+      if (!currentUser) return;
+      const { data, error } = await supabaseClient.from('user_profiles').select('app_state').eq('user_id', currentUser.id).single();
+      if (data && data.app_state) {
+        try {
+          const parsed = typeof data.app_state === 'string' ? JSON.parse(data.app_state) : data.app_state;
+          Object.assign(state, parsed);
+        } catch (err) {
+          console.error('Error parsing user state:', err);
+        }
       }
-
-      document.querySelectorAll('.bnav-btn').forEach(el => {
-        el.classList.remove('text-brand-black');
-        el.classList.add('text-brand-muted');
-      });
-      const activeBnav = document.getElementById('bnav-' + tabId);
-      if (activeBnav) {
-        activeBnav.classList.add('text-brand-black');
-        activeBnav.classList.remove('text-brand-muted');
-      }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function openModal(id) {
-      document.getElementById(id).classList.remove('hidden');
-    }
-    function closeModal(id) {
-      document.getElementById(id).classList.add('hidden');
-    }
-
-    function formatSh(num) {
-      return Number(num || 0).toLocaleString() + ' Sh';
     }
 
     function ensureMonthExists(monthKey) {
@@ -1286,522 +1189,432 @@
       }
     }
 
-    // Handlers for Data Actions
-    function handleHeroUpload(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          state.heroImageUrl = evt.target.result;
-          localStorage.setItem('appearich_hero_img', state.heroImageUrl);
-          document.getElementById('hero-bg-img').style.backgroundImage = `url('${state.heroImageUrl}')`;
-          saveUserDataToSupabase();
-        };
-        reader.readAsDataURL(file);
-      }
+    function formatSh(amount) {
+      return new Intl.NumberFormat('en-US').format(Math.round(amount || 0)) + ' Sh';
     }
 
-    function handleMonthChange(e) {
-      state.activeMonth = e.target.value;
-      ensureMonthExists(state.activeMonth);
-      renderAll();
-      saveUserDataToSupabase();
+    function calculateMonthMetrics(monthKey) {
+      ensureMonthExists(monthKey);
+      const data = state.monthlyData[monthKey];
+      
+      const generalIncome = data.incomes.reduce((sum, inc) => sum + inc.amount, 0);
+      let salesIncome = 0;
+      let salesCost = 0;
+      let salesReceived = 0;
+      let salesOutstanding = 0;
+      data.sales.forEach(sale => {
+        const totalValue = sale.sellPrice * sale.qty;
+        const totalCost = sale.buyPrice * sale.qty;
+        const paid = sale.paymentStatus === 'FULL' ? totalValue : (sale.amountPaid || 0);
+        salesIncome += totalValue;
+        salesCost += totalCost;
+        salesReceived += paid;
+        salesOutstanding += (totalValue - paid);
+      });
+      const totalIncome = generalIncome + salesReceived;
+      const godTithe = totalIncome * 0.10;
+      const availableBudget = totalIncome - godTithe;
+      const salesProfit = salesReceived - salesCost;
+      let totalSpent = 0;
+      Object.values(data.utilitiesSubSpent || {}).forEach(v => totalSpent += v);
+      Object.values(data.categorySpent || {}).forEach(v => totalSpent += v);
+      const remainingBudget = availableBudget - totalSpent;
+      return {
+        generalIncome,
+        salesIncome,
+        salesReceived,
+        salesCost,
+        salesOutstanding,
+        salesProfit,
+        totalIncome,
+        godTithe,
+        availableBudget,
+        totalSpent,
+        remainingBudget
+      };
+    }
+
+    function getCalculations() {
+      const activeCalc = calculateMonthMetrics(state.activeMonth);
+      let overallProfit = 0;
+      const monthlyProfits = {};
+      Object.keys(state.monthlyData).forEach(mKey => {
+        const mCalc = calculateMonthMetrics(mKey);
+        monthlyProfits[mKey] = mCalc.salesProfit;
+        overallProfit += mCalc.salesProfit;
+      });
+      const invGainLoss = state.investment.currentValue - state.investment.totalInvested;
+      const invReturnPercent = state.investment.totalInvested > 0 ? (invGainLoss / state.investment.totalInvested) * 100 : 0;
+      const totalLiquidMoney = Object.values(state.accounts).reduce((sum, val) => sum + val, 0);
+      const totalLoanOwed = state.loans.reduce((sum, loan) => sum + (loan.amount - loan.paid), 0);
+      return {
+        ...activeCalc,
+        overallProfit,
+        monthlyProfits,
+        invGainLoss,
+        invReturnPercent,
+        totalLiquidMoney,
+        totalLoanOwed
+      };
+    }
+
+    function renderAll() {
+      const calc = getCalculations();
+      const heroBg = document.getElementById('hero-bg-img');
+      if (heroBg) heroBg.style.backgroundImage = `url('${state.heroImageUrl}')`;
+      
+      document.getElementById('dash-total-income').innerText = formatSh(calc.totalIncome);
+      document.getElementById('dash-god-amount').innerText = formatSh(calc.godTithe);
+      document.getElementById('dash-total-money').innerText = formatSh(calc.totalLiquidMoney);
+      document.getElementById('dash-remaining-budget').innerText = formatSh(calc.remainingBudget);
+      
+      document.getElementById('income-god-total').innerText = formatSh(calc.godTithe);
+      document.getElementById('income-month-picker').value = state.activeMonth;
+      document.getElementById('income-month-label').innerText = `Active Month: ${state.activeMonth}`;
+      renderIncomeCards();
+      
+      document.getElementById('budget-pool-total').innerText = formatSh(calc.availableBudget);
+      renderBudgetCategoryList(calc.availableBudget);
+      
+      document.getElementById('daily-expense-month-picker').value = state.expenseActiveMonth;
+      document.getElementById('daily-expense-month-label').innerText = `Month: ${state.expenseActiveMonth}`;
+      renderDailyExpensesSection();
+      
+      document.getElementById('inv-total-invested').innerText = formatSh(state.investment.totalInvested);
+      document.getElementById('inv-current-value').innerText = formatSh(state.investment.currentValue);
+      document.getElementById('inv-gain-loss').innerText = (calc.invGainLoss >= 0 ? '+' : '') + formatSh(calc.invGainLoss);
+      document.getElementById('inv-percentage-return').innerText = (calc.invReturnPercent >= 0 ? '+' : '') + calc.invReturnPercent.toFixed(2) + '%';
+      renderInvestmentHistoryList();
+      
+      renderBusinessTypesBar();
+      renderBusinessDropdown();
+      document.getElementById('active-business-view-label').innerText = `Active Business View: ${state.activeBusinessType}`;
+      renderAppearichDashboard(calc);
+      
+      document.getElementById('loan-total-owed').innerText = formatSh(calc.totalLoanOwed);
+      renderLoansList();
+      
+      document.getElementById('accounts-total-money').innerText = formatSh(calc.totalLiquidMoney);
+      renderAccountCards();
+      
+      document.getElementById('progress-overall-profit').innerText = formatSh(calc.overallProfit);
+      document.getElementById('progress-active-month-profit').innerText = formatSh(calc.salesProfit);
+      document.getElementById('progress-active-month-name').innerText = `Profit for ${state.activeMonth}`;
+      renderProgressMonthlyGrid(calc.monthlyProfits);
+    }
+
+    function renderIncomeCards() {
+      const container = document.getElementById('income-list-container');
+      container.innerHTML = '';
+      const monthData = state.monthlyData[state.activeMonth];
+      if (!monthData || monthData.incomes.length === 0) {
+        container.innerHTML = `<div class="col-span-full text-center py-8 text-brand-muted text-xs">No income streams entered for ${state.activeMonth}. Click above to add one.</div>`;
+        return;
+      }
+      monthData.incomes.forEach(inc => {
+        const godShare = inc.amount * 0.10;
+        const netAmount = inc.amount - godShare;
+        const card = document.createElement('div');
+        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4";
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-brand-black">${inc.name}</span>
+            <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-[10px] font-bold text-emerald-600">INCOME</span>
+          </div>
+          <div>
+            <p class="text-[11px] text-brand-muted">Total Entered</p>
+            <p class="font-display font-extrabold text-2xl text-brand-black">${formatSh(inc.amount)}</p>
+          </div>
+          <div class="pt-3 border-t border-gray-100 space-y-2">
+            <div class="flex items-center justify-between bg-brand-surface p-2.5 rounded-xl">
+              <span class="text-xs font-bold text-brand-gold">10% GOD Tithe</span>
+              <span class="font-display font-bold text-xs text-brand-gold">${formatSh(godShare)}</span>
+            </div>
+            <div class="flex items-center justify-between px-2 text-xs">
+              <span class="text-brand-muted">Remaining (90%)</span>
+              <span class="font-bold text-brand-black">${formatSh(netAmount)}</span>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function handleCategoryAmountInput(categoryId, val) {
+      const amt = parseFloat(val) || 0;
+      const cat = state.categories.find(c => c.id === categoryId);
+      if (cat) {
+        cat.amount = amt;
+      }
+      const calc = getCalculations();
+      renderBudgetCategoryList(calc.availableBudget);
+      renderDailyExpensesSection();
+      saveUserData();
+    }
+
+    function renderBudgetCategoryList(availablePool) {
+      const monthData = state.monthlyData[state.activeMonth];
+      const totalTargeted = state.categories.reduce((sum, c) => sum + (c.amount || 0), 0);
+      
+      const utilCat = state.categories.find(c => c.id === 'cat-utilities');
+      const utilAmount = utilCat ? utilCat.amount || 0 : 0;
+      const utilPercent = availablePool > 0 ? (utilAmount / availablePool) * 100 : 0;
+      const utilPercentBadge = document.getElementById('utilities-percent-badge');
+      if (utilPercentBadge) utilPercentBadge.innerText = utilPercent.toFixed(1) + '%';
+      let utilsSpentTotal = 0;
+      if (monthData && monthData.utilitiesSubSpent) {
+        Object.values(monthData.utilitiesSubSpent).forEach(v => utilsSpentTotal += v);
+      }
+      const utilSpentSummary = document.getElementById('utilities-spent-summary');
+      if (utilSpentSummary) utilSpentSummary.innerText = `Spent: ${formatSh(utilsSpentTotal)}`;
+      const utilRemSummary = document.getElementById('utilities-remaining-summary');
+      if (utilRemSummary) {
+        const rem = utilAmount - utilsSpentTotal;
+        utilRemSummary.innerText = `Remaining: ${formatSh(rem)}`;
+        utilRemSummary.className = rem < 0 ? 'font-bold text-red-500' : 'font-bold text-emerald-600';
+      }
+
+      const subContainer = document.getElementById('utilities-subcategories-list');
+      if (subContainer) {
+        subContainer.innerHTML = '';
+        state.utilitiesSub.forEach(sub => {
+          const subSpent = monthData && monthData.utilitiesSubSpent ? (monthData.utilitiesSubSpent[sub.name] || 0) : 0;
+          const subItem = document.createElement('div');
+          subItem.className = 'flex items-center justify-between p-3 rounded-xl bg-white border border-gray-100 text-xs';
+          subItem.innerHTML = `
+            <span class="font-bold text-brand-black">${sub.name}</span>
+            <span class="text-brand-muted font-semibold">Spent: ${formatSh(subSpent)}</span>
+          `;
+          subContainer.appendChild(subItem);
+        });
+      }
+
+      const mainContainer = document.getElementById('main-categories-list');
+      if (mainContainer) {
+        mainContainer.innerHTML = '';
+        state.categories.filter(c => !c.isExpandable).forEach(cat => {
+          const catAmount = cat.amount || 0;
+          const catPercent = availablePool > 0 ? (catAmount / availablePool) * 100 : 0;
+          let spent = 0;
+          if (monthData && monthData.categorySpent) {
+            spent = monthData.categorySpent[cat.name] || 0;
+          }
+          const remaining = catAmount - spent;
+          const card = document.createElement('div');
+          card.className = "rounded-3xl bg-white border border-gray-100 shadow-premium p-6 flex flex-col justify-between space-y-4";
+          card.innerHTML = `
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="flex items-center space-x-2">
+                  <h4 class="font-bold text-base text-brand-black uppercase">${cat.name}</h4>
+                  <span class="px-2.5 py-0.5 rounded-full bg-gray-100 text-brand-black text-[11px] font-bold">${catPercent.toFixed(1)}%</span>
+                </div>
+              </div>
+            </div>
+            <div class="space-y-3">
+              <div>
+                <label class="block text-xs font-bold text-brand-muted uppercase mb-1">Target Amount (Sh)</label>
+                <input type="number" id="cat-amount-${cat.id}" value="${cat.amount || ''}" oninput="handleCategoryAmountInput('${cat.id}', this.value)" placeholder="Enter amount" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm font-bold text-brand-black">
+              </div>
+              <div class="flex justify-between text-xs pt-2 border-t border-gray-100">
+                <span class="text-brand-muted">Spent: ${formatSh(spent)}</span>
+                <span class="font-bold ${remaining < 0 ? 'text-red-500' : 'text-emerald-600'}">Remaining: ${formatSh(remaining)}</span>
+              </div>
+            </div>
+          `;
+          mainContainer.appendChild(card);
+        });
+      }
+
+      const allocatedPercent = availablePool > 0 ? Math.min(100, (totalTargeted / availablePool) * 100) : 0;
+      const barElem = document.getElementById('budget-allocated-bar');
+      if (barElem) barElem.style.width = allocatedPercent + '%';
+      const percentElem = document.getElementById('budget-allocated-percent');
+      if (percentElem) percentElem.innerText = allocatedPercent.toFixed(1) + '%';
+    }
+
+    function toggleUtilitiesAccordion() {
+      state.utilitiesExpanded = !state.utilitiesExpanded;
+      const accordion = document.getElementById('utilities-accordion');
+      const chevron = document.getElementById('utilities-chevron');
+      if (state.utilitiesExpanded) {
+        accordion.classList.add('expanded');
+        chevron.classList.add('rotate-180');
+      } else {
+        accordion.classList.remove('expanded');
+        chevron.classList.remove('rotate-180');
+      }
     }
 
     function handleExpenseMonthChange(e) {
       state.expenseActiveMonth = e.target.value;
       ensureMonthExists(state.expenseActiveMonth);
       renderAll();
-      saveUserDataToSupabase();
     }
 
-    function handleAddIncome(e) {
-      e.preventDefault();
-      const name = document.getElementById('income-name-input').value;
-      const amount = parseFloat(document.getElementById('income-amount-input').value) || 0;
-      
+    function handleMonthChange(e) {
+      state.activeMonth = e.target.value;
       ensureMonthExists(state.activeMonth);
-      state.monthlyData[state.activeMonth].incomes.push({ id: Date.now(), name, amount });
-      
-      // Auto-allocate into CRDB or default account
-      state.accounts['CRDB'] = (state.accounts['CRDB'] || 0) + amount;
-
-      closeModal('addIncomeModal');
-      e.target.reset();
       renderAll();
-      saveUserDataToSupabase();
     }
 
-    function handleAddSale(e) {
-      e.preventDefault();
-      const businessType = document.getElementById('sale-business-type').value;
-      const date = document.getElementById('sale-date').value;
-      const qty = parseInt(document.getElementById('sale-qty').value) || 1;
-      const product = document.getElementById('sale-product').value;
-      const customer = document.getElementById('sale-customer').value;
-      const buyPrice = parseFloat(document.getElementById('sale-buy-price').value) || 0;
-      const sellPrice = parseFloat(document.getElementById('sale-sell-price').value) || 0;
-      const status = document.getElementById('sale-payment-status').value;
-      
-      const totalValue = sellPrice * qty;
-      const paidAmount = status === 'FULL' ? totalValue : (parseFloat(document.getElementById('sale-paid-amount').value) || 0);
-
-      const monthKey = date.substring(0, 7);
-      ensureMonthExists(monthKey);
-
-      state.monthlyData[monthKey].sales.push({
-        id: Date.now(),
-        businessType,
-        date,
-        qty,
-        product,
-        customer,
-        buyPrice: buyPrice * qty,
-        sellPrice: totalValue,
-        status,
-        paidAmount
-      });
-
-      // Add paid amount to cash/CRDB
-      state.accounts['CRDB'] = (state.accounts['CRDB'] || 0) + paidAmount;
-
-      closeModal('addSaleModal');
-      e.target.reset();
-      renderAll();
-      saveUserDataToSupabase();
-    }
-
-    function toggleSalePartialInput() {
-      const status = document.getElementById('sale-payment-status').value;
-      const container = document.getElementById('sale-partial-container');
-      if (status === 'PARTIAL') container.classList.remove('hidden');
-      else container.classList.add('hidden');
-    }
-
-    function handleAddBusinessOption(e) {
-      e.preventDefault();
-      const name = document.getElementById('new-business-name-input').value.trim();
-      if (name && !state.businessOptions.includes(name)) {
-        state.businessOptions.push(name);
-      }
-      closeModal('addBusinessModal');
-      e.target.reset();
-      renderAll();
-      saveUserDataToSupabase();
-    }
-
-    function handleAddTransaction(e) {
-      e.preventDefault();
-      const name = document.getElementById('tx-name').value;
-      const category = document.getElementById('tx-category').value;
-      const account = document.getElementById('tx-account').value;
-      const amount = parseFloat(document.getElementById('tx-amount').value) || 0;
-      const date = document.getElementById('tx-date').value;
-
-      const monthKey = date.substring(0, 7);
-      ensureMonthExists(monthKey);
-
-      state.monthlyData[monthKey].expenses.push({ id: Date.now(), name, category, account, amount, date });
-
-      if (category === 'Internet' || category === 'Umeme' || category === 'Taka' || category === 'Transport') {
-        state.monthlyData[monthKey].utilitiesSubSpent[category] = (state.monthlyData[monthKey].utilitiesSubSpent[category] || 0) + amount;
-      } else {
-        state.monthlyData[monthKey].categorySpent[category] = (state.monthlyData[monthKey].categorySpent[category] || 0) + amount;
-      }
-
-      // Deduct from account
-      if (state.accounts[account] !== undefined) {
-        state.accounts[account] = Math.max(0, state.accounts[account] - amount);
-      }
-
-      closeModal('addTransactionModal');
-      e.target.reset();
-      renderAll();
-      saveUserDataToSupabase();
-    }
-
-    function handleTransfer(e) {
-      e.preventDefault();
-      const from = document.getElementById('tr-from').value;
-      const to = document.getElementById('tr-to').value;
-      const amount = parseFloat(document.getElementById('tr-amount').value) || 0;
-
-      if (from === to) {
-        alert('Cannot transfer to the same account.');
-        return;
-      }
-      if ((state.accounts[from] || 0) < amount) {
-        alert('Insufficient funds in source account.');
-        return;
-      }
-
-      state.accounts[from] -= amount;
-      state.accounts[to] = (state.accounts[to] || 0) + amount;
-
-      closeModal('transferModal');
-      e.target.reset();
-      renderAll();
-      saveUserDataToSupabase();
-    }
-
-    function handleAddMoneyAccount(e) {
-      e.preventDefault();
-      const account = document.getElementById('am-account').value;
-      const amount = parseFloat(document.getElementById('am-amount').value) || 0;
-
-      state.accounts[account] = (state.accounts[account] || 0) + amount;
-
-      closeModal('addMoneyModal');
-      e.target.reset();
-      renderAll();
-      saveUserDataToSupabase();
-    }
-
-    function handleAddInvestmentCapital(e) {
-      e.preventDefault();
-      const amount = parseFloat(document.getElementById('inv-add-amount').value) || 0;
-      state.investments.totalInvested += amount;
-      state.investments.currentValue += amount;
-      state.investments.history.push({ id: Date.now(), date: new Date().toISOString().split('T')[0], type: 'Capital Addition', amount, val: state.investments.currentValue });
-
-      closeModal('addInvestmentModal');
-      e.target.reset();
-      renderAll();
-      saveUserDataToSupabase();
-    }
-
-    function handleUpdateInvestmentValue(e) {
-      e.preventDefault();
-      const val = parseFloat(document.getElementById('inv-update-value').value) || 0;
-      state.investments.currentValue = val;
-      state.investments.history.push({ id: Date.now(), date: new Date().toISOString().split('T')[0], type: 'Valuation Update', amount: 0, val });
-
-      closeModal('updateInvestmentModal');
-      e.target.reset();
-      renderAll();
-      saveUserDataToSupabase();
-    }
-
-    function handleAddCategory(e) {
-      e.preventDefault();
-      const name = document.getElementById('cat-name-input').value;
-      const amount = parseFloat(document.getElementById('cat-amount-input').value) || 0;
-      const id = 'cat-' + name.toLowerCase().replace(/\s+/g, '-');
-
-      if (!state.categories.some(c => c.id === id)) {
-        state.categories.push({ id, name, amount, isExpandable: false });
-      }
-
-      closeModal('addCategoryModal');
-      e.target.reset();
-      renderAll();
-      saveUserDataToSupabase();
-    }
-
-    function handleCategoryAmountInput(catId, val) {
-      const num = parseFloat(val) || 0;
-      const cat = state.categories.find(c => c.id === catId);
-      if (cat) cat.amount = num;
-      renderAll();
-      saveUserDataToSupabase();
-    }
-
-    function handleAddLoan(e) {
-      e.preventDefault();
-      const borrower = document.getElementById('loan-borrower').value;
-      const amount = parseFloat(document.getElementById('loan-amount').value) || 0;
-      const date = document.getElementById('loan-date').value;
-      const paid = parseFloat(document.getElementById('loan-paid').value) || 0;
-      const note = document.getElementById('loan-note').value;
-
-      state.loans.push({ id: Date.now(), borrower, amount, date, paid, note });
-
-      closeModal('addLoanModal');
-      e.target.reset();
-      renderAll();
-      saveUserDataToSupabase();
-    }
-
-    function openUpdateLoanModal(id) {
-      const loan = state.loans.find(l => l.id === id);
-      if (loan) {
-        document.getElementById('edit-loan-id').value = loan.id;
-        document.getElementById('edit-loan-paid').value = loan.paid;
-        openModal('updateLoanModal');
-      }
-    }
-
-    function handleUpdateLoan(e) {
-      e.preventDefault();
-      const id = parseInt(document.getElementById('edit-loan-id').value);
-      const paid = parseFloat(document.getElementById('edit-loan-paid').value) || 0;
-
-      const loan = state.loans.find(l => l.id === id);
-      if (loan) {
-        loan.paid = paid;
-      }
-
-      closeModal('updateLoanModal');
-      renderAll();
-      saveUserDataToSupabase();
-    }
-
-    function toggleUtilitiesAccordion() {
-      const acc = document.getElementById('utilities-accordion');
-      const chevron = document.getElementById('utilities-chevron');
-      acc.classList.toggle('expanded');
-      chevron.classList.toggle('rotate-180');
-    }
-
-    function switchAppearichPeriod(period) {
-      state.appearichPeriod = period;
-      document.querySelectorAll('.app-period-btn').forEach(btn => {
-        btn.classList.remove('active', 'bg-brand-black', 'text-white');
-        btn.classList.add('bg-gray-100', 'text-brand-muted');
-      });
-      const activeBtn = document.getElementById('app-period-' + period);
-      if (activeBtn) {
-        activeBtn.classList.add('active', 'bg-brand-black', 'text-white');
-        activeBtn.classList.remove('bg-gray-100', 'text-brand-muted');
-      }
-      renderAppearichTab();
-    }
-
-    function switchBusinessTab(bName) {
-      state.activeBusinessTab = bName;
-      renderAppearichTab();
-    }
-
-    // Master Render Function
-    function renderAll() {
-      renderDashboard();
-      renderIncomeTab();
-      renderBudgetTab();
-      renderDailyExpensesTab();
-      renderInvestmentTab();
-      renderAppearichTab();
-      renderAccountsTab();
-      renderLoansTab();
-      renderProgressTab();
-    }
-
-    function renderDashboard() {
-      ensureMonthExists(state.activeMonth);
-      const mData = state.monthlyData[state.activeMonth];
-
-      const totalIncome = mData.incomes.reduce((sum, i) => sum + i.amount, 0) + mData.sales.reduce((sum, s) => sum + s.paidAmount, 0);
-      const godAmount = totalIncome * 0.10;
-      const totalMoney = Object.values(state.accounts).reduce((a, b) => a + b, 0);
-
-      const totalBudgetTarget = state.categories.reduce((sum, c) => sum + c.amount, 0);
-      const totalSpent = Object.values(mData.categorySpent).reduce((a,b)=>a+b,0) + Object.values(mData.utilitiesSubSpent).reduce((a,b)=>a+b,0);
-      const remainingBudget = Math.max(0, (totalIncome * 0.90) - totalSpent);
-
-      document.getElementById('dash-total-income').innerText = formatSh(totalIncome);
-      document.getElementById('dash-god-amount').innerText = formatSh(godAmount);
-      document.getElementById('dash-total-money').innerText = formatSh(totalMoney);
-      document.getElementById('dash-remaining-budget').innerText = formatSh(remainingBudget);
-    }
-
-    function renderIncomeTab() {
-      ensureMonthExists(state.activeMonth);
-      const mData = state.monthlyData[state.activeMonth];
-      const totalIncome = mData.incomes.reduce((sum, i) => sum + i.amount, 0);
-      const totalSalesPaid = mData.sales.reduce((sum, s) => sum + s.paidAmount, 0);
-      const combinedIncome = totalIncome + totalSalesPaid;
-      
-      document.getElementById('income-god-total').innerText = formatSh(combinedIncome * 0.10);
-      document.getElementById('income-month-label').innerText = state.activeMonth;
-
-      const container = document.getElementById('income-list-container');
-      container.innerHTML = '';
-
-      if (mData.incomes.length === 0) {
-        container.innerHTML = `<p class="text-xs text-brand-muted col-span-full py-4">No income records found for ${state.activeMonth}.</p>`;
-        return;
-      }
-
-      mData.incomes.forEach(inc => {
-        container.innerHTML += `
-          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex items-center justify-between">
-            <div>
-              <p class="text-xs font-bold text-brand-muted uppercase">Income Stream</p>
-              <h4 class="font-display font-bold text-base text-brand-black mt-0.5">${inc.name}</h4>
+    function renderDailyExpensesSection() {
+      ensureMonthExists(state.expenseActiveMonth);
+      const data = state.monthlyData[state.expenseActiveMonth];
+      const grid = document.getElementById('category-budget-comparison-grid');
+      if (grid) {
+        grid.innerHTML = '';
+        const catSpending = {};
+        data.expenses.forEach(ex => {
+          catSpending[ex.category] = (catSpending[ex.category] || 0) + ex.amount;
+        });
+        state.categories.forEach(cat => {
+          let spent = 0;
+          if (cat.isExpandable && cat.name === 'Utilities') {
+            state.utilitiesSub.forEach(sub => {
+              spent += catSpending[sub.name] || 0;
+            });
+          } else {
+            spent = catSpending[cat.name] || 0;
+          }
+          const budgeted = cat.amount || 0;
+          const ratio = budgeted > 0 ? (spent / budgeted) : 0;
+          let statusBadge = '';
+          if (budgeted === 0 && spent === 0) {
+            statusBadge = `<span class="px-2 py-0.5 rounded-full bg-gray-100 text-brand-muted text-[10px] font-bold">No Budget</span>`;
+          } else if (spent > budgeted) {
+            statusBadge = `<span class="px-2 py-0.5 rounded-full bg-red-100 text-red-600 text-[10px] font-bold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>Exceeded</span>`;
+          } else if (ratio >= 0.85) {
+            statusBadge = `<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-[10px] font-bold">Approaching Limit</span>`;
+          } else {
+            statusBadge = `<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold">Within Budget</span>`;
+          }
+          const card = document.createElement('div');
+          card.className = "p-5 rounded-2xl bg-white border border-gray-100 shadow-premium space-y-3";
+          card.innerHTML = `
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-xs uppercase text-brand-black">${cat.name}</span>
+              ${statusBadge}
             </div>
-            <p class="font-display font-bold text-lg text-emerald-600">+${formatSh(inc.amount)}</p>
-          </div>
-        `;
-      });
-    }
-
-    function renderBudgetTab() {
-      ensureMonthExists(state.activeMonth);
-      const mData = state.monthlyData[state.activeMonth];
-      const totalIncome = mData.incomes.reduce((sum, i) => sum + i.amount, 0) + mData.sales.reduce((sum, s) => sum + s.paidAmount, 0);
-      const poolTotal = totalIncome * 0.90;
-      document.getElementById('budget-pool-total').innerText = formatSh(poolTotal);
-
-      const totalTarget = state.categories.reduce((sum, c) => sum + c.amount, 0);
-      const percent = poolTotal > 0 ? Math.min(100, Math.round((totalTarget / poolTotal) * 100)) : 0;
-      document.getElementById('budget-allocated-percent').innerText = percent + '%';
-      document.getElementById('budget-allocated-bar').style.width = percent + '%';
-
-      // Utilities input binding & summary
-      const utilCat = state.categories.find(c => c.id === 'cat-utilities');
-      if(utilCat) {
-        document.getElementById('cat-amount-cat-utilities').value = utilCat.amount || '';
-        const utilSpent = Object.values(mData.utilitiesSubSpent).reduce((a,b)=>a+b,0);
-        const utilRem = Math.max(0, utilCat.amount - utilSpent);
-        document.getElementById('utilities-spent-summary').innerText = `Spent: ${formatSh(utilSpent)}`;
-        document.getElementById('utilities-remaining-summary').innerText = `Remaining: ${formatSh(utilRem)}`;
-        const utilPct = utilCat.amount > 0 ? Math.round((utilSpent / utilCat.amount)*100) : 0;
-        document.getElementById('utilities-percent-badge').innerText = utilPct + '%';
-
-        // Render subcategories
-        const subList = document.getElementById('utilities-subcategories-list');
-        subList.innerHTML = '';
-        ['Internet', 'Umeme', 'Taka', 'Transport'].forEach(sub => {
-          const sSpent = mData.utilitiesSubSpent[sub] || 0;
-          subList.innerHTML += `
-            <div class="p-4 bg-white rounded-2xl border border-gray-100 flex items-center justify-between">
-              <div><p class="text-xs font-bold text-brand-black uppercase">${sub}</p><p class="text-[10px] text-brand-muted">Utility Subcategory</p></div>
-              <p class="font-display font-bold text-sm text-brand-black">${formatSh(sSpent)}</p>
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs">
+                <span class="text-brand-muted">Spent: <strong class="text-brand-black">${formatSh(spent)}</strong></span>
+                <span class="text-brand-muted">Budget: <strong class="text-brand-black">${formatSh(budgeted)}</strong></span>
+              </div>
+              <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div class="h-full ${spent > budgeted ? 'bg-red-500' : ratio >= 0.85 ? 'bg-amber-500' : 'bg-emerald-500'} transition-all duration-300" style="width: ${Math.min(100, Math.round(ratio * 100))}%"></div>
+              </div>
             </div>
           `;
+          grid.appendChild(card);
         });
       }
 
-      // Render other categories
-      const mainList = document.getElementById('main-categories-list');
-      mainList.innerHTML = '';
-      state.categories.filter(c => c.id !== 'cat-utilities').forEach(cat => {
-        const spent = mData.categorySpent[cat.name] || mData.categorySpent[cat.id] || 0;
-        const rem = Math.max(0, cat.amount - spent);
-        const p = cat.amount > 0 ? Math.round((spent / cat.amount)*100) : 0;
-
-        mainList.innerHTML += `
-          <div class="rounded-3xl bg-white border border-gray-100 shadow-premium p-6 flex flex-col justify-between space-y-4">
-            <div class="flex items-center justify-between">
-              <div>
-                <div class="flex items-center space-x-2">
-                  <h4 class="font-bold text-base text-brand-black uppercase">${cat.name}</h4>
-                  <span class="px-2.5 py-0.5 rounded-full bg-gray-100 text-brand-black text-[11px] font-bold">${p}%</span>
-                </div>
-                <p class="text-xs text-brand-muted mt-0.5">Budget Allocation</p>
-              </div>
-            </div>
-            <div class="space-y-3">
-              <div>
-                <label class="block text-xs font-bold text-brand-muted uppercase mb-1">Target Amount (Sh)</label>
-                <input type="number" value="${cat.amount || ''}" oninput="handleCategoryAmountInput('${cat.id}', this.value)" placeholder="Enter amount" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm font-bold text-brand-black">
-              </div>
-              <div class="flex justify-between text-xs pt-2 border-t border-gray-100">
-                <span class="text-brand-muted">Spent: ${formatSh(spent)}</span>
-                <span class="font-bold text-emerald-600">Remaining: ${formatSh(rem)}</span>
-              </div>
-            </div>
-          </div>
-        `;
-      });
+      const tableBody = document.getElementById('daily-expense-table-body');
+      const countLabel = document.getElementById('daily-expense-log-count');
+      if (tableBody) {
+        tableBody.innerHTML = '';
+        if (data.expenses.length === 0) {
+          tableBody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-brand-muted">No expenses recorded for ${state.expenseActiveMonth}.</td></tr>`;
+          if (countLabel) countLabel.innerText = "0 Expenses Recorded";
+        } else {
+          if (countLabel) countLabel.innerText = `${data.expenses.length} Expense${data.expenses.length > 1 ? 's' : ''} Recorded`;
+          data.expenses.forEach(ex => {
+            const tr = document.createElement('tr');
+            tr.className = "hover:bg-gray-50/50 transition";
+            tr.innerHTML = `
+              <td class="py-3 text-brand-muted">${ex.date}</td>
+              <td class="py-3 text-brand-black font-semibold">${ex.name}</td>
+              <td class="py-3"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-brand-black text-[10px] font-bold">${ex.category}</span></td>
+              <td class="py-3 text-brand-muted">${ex.account}</td>
+              <td class="py-3 text-right font-bold text-red-600">-${formatSh(ex.amount)}</td>
+            `;
+            tableBody.appendChild(tr);
+          });
+        }
+      }
     }
 
-    function renderDailyExpensesTab() {
-      ensureMonthExists(state.expenseActiveMonth);
-      const mData = state.monthlyData[state.expenseActiveMonth];
-      document.getElementById('daily-expense-month-label').innerText = state.expenseActiveMonth;
-
-      const grid = document.getElementById('category-budget-comparison-grid');
-      grid.innerHTML = '';
-
-      state.categories.forEach(cat => {
-        const spent = cat.name === 'Utilities' ? Object.values(mData.utilitiesSubSpent).reduce((a,b)=>a+b,0) : (mData.categorySpent[cat.name] || 0);
-        grid.innerHTML += `
-          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-2">
-            <div class="flex justify-between items-center"><span class="text-xs font-bold uppercase text-brand-black">${cat.name}</span><span class="text-[11px] text-brand-muted">Budget: ${formatSh(cat.amount)}</span></div>
-            <p class="font-display font-bold text-lg text-brand-black">Spent: ${formatSh(spent)}</p>
-          </div>
-        `;
-      });
-
-      const tbody = document.getElementById('daily-expense-table-body');
-      tbody.innerHTML = '';
-      document.getElementById('daily-expense-log-count').innerText = `${mData.expenses.length} Expenses Recorded`;
-
-      if (mData.expenses.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-brand-muted">No expenses recorded for ${state.expenseActiveMonth}.</td></tr>`;
+    function renderInvestmentHistoryList() {
+      const container = document.getElementById('investment-history-list');
+      if (!container) return;
+      container.innerHTML = '';
+      if (state.investment.history.length === 0) {
+        container.innerHTML = `<div class="col-span-full text-center py-6 text-brand-muted text-xs">No valuation updates recorded yet.</div>`;
         return;
       }
-
-      mData.expenses.forEach(tx => {
-        tbody.innerHTML += `
-          <tr class="hover:bg-gray-50 transition">
-            <td class="py-3">${tx.date}</td>
-            <td class="py-3 font-bold text-brand-black">${tx.name}</td>
-            <td class="py-3"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-[10px] font-bold">${tx.category}</span></td>
-            <td class="py-3">${tx.account}</td>
-            <td class="py-3 text-right font-bold text-red-600">-${formatSh(tx.amount)}</td>
-          </tr>
-        `;
-      });
-    }
-
-    function renderInvestmentTab() {
-      const inv = state.investments;
-      const gainLoss = inv.currentValue - inv.totalInvested;
-      const returnPct = inv.totalInvested > 0 ? (gainLoss / inv.totalInvested) * 100 : 0;
-
-      document.getElementById('inv-total-invested').innerText = formatSh(inv.totalInvested);
-      document.getElementById('inv-current-value').innerText = formatSh(inv.currentValue);
-      document.getElementById('inv-gain-loss').innerText = (gainLoss >= 0 ? '+' : '') + formatSh(gainLoss);
-      document.getElementById('inv-gain-loss').className = `font-display text-3xl font-extrabold ${gainLoss >= 0 ? 'text-emerald-600' : 'text-red-600'} mt-1`;
-      document.getElementById('inv-percentage-return').innerText = (returnPct >= 0 ? '+' : '') + returnPct.toFixed(2) + '%';
-
-      const historyList = document.getElementById('investment-history-list');
-      historyList.innerHTML = '';
-
-      if (inv.history.length === 0) {
-        historyList.innerHTML = `<p class="text-xs text-brand-muted col-span-full">No valuation history recorded yet.</p>`;
-        return;
-      }
-
-      inv.history.forEach(h => {
-        historyList.innerHTML += `
-          <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-between">
-            <div><p class="text-xs font-bold text-brand-black">${h.type}</p><p class="text-[10px] text-brand-muted">${h.date}</p></div>
-            <p class="font-display font-bold text-sm text-brand-black">Val: ${formatSh(h.val)}</p>
+      state.investment.history.forEach(item => {
+        const card = document.createElement('div');
+        card.className = "p-4 rounded-2xl bg-gray-50 border border-gray-100 space-y-1";
+        card.innerHTML = `
+          <div class="flex justify-between text-xs text-brand-muted">
+            <span>${item.date}</span>
+            <span class="font-bold text-brand-black">${item.type}</span>
           </div>
+          <p class="font-display font-bold text-lg text-brand-black">${formatSh(item.value)}</p>
         `;
+        container.appendChild(card);
       });
     }
 
-    function renderAppearichTab() {
-      // Render Business Types bar
+    function renderBusinessTypesBar() {
       const bar = document.getElementById('business-types-bar');
+      if (!bar) return;
       bar.innerHTML = '';
-      state.businessOptions.forEach(b => {
-        const isActive = state.activeBusinessTab === b;
-        bar.innerHTML += `
-          <button onclick="switchBusinessTab('${b}')` class="px-4 py-2 rounded-xl text-xs font-bold transition flex-shrink-0 ${isActive ? 'bg-brand-black text-white shadow-sm' : 'bg-gray-100 text-brand-muted hover:text-brand-black'}">${b}</button>
-        `;
+      state.businessTypes.forEach(bType => {
+        const btn = document.createElement('button');
+        const isActive = state.activeBusinessType === bType;
+        btn.className = `px-4 py-2 rounded-xl text-xs font-bold transition flex-shrink-0 ${isActive ? 'bg-brand-black text-white shadow-sm' : 'bg-gray-100 text-brand-muted hover:text-brand-black'}`;
+        btn.innerText = bType;
+        btn.onclick = () => {
+          state.activeBusinessType = bType;
+          renderAll();
+        };
+        bar.appendChild(btn);
       });
-      document.getElementById('active-business-view-label').innerText = `Active Business View: ${state.activeBusinessTab}`;
+    }
 
-      // Aggregate sales across all months for Appearich
-      let allSales = [];
-      Object.keys(state.monthlyData).forEach(m => {
-        allSales = allSales.concat(state.monthlyData[m].sales || []);
+    function renderBusinessDropdown() {
+      const select = document.getElementById('sale-business-type');
+      if (!select) return;
+      select.innerHTML = '';
+      state.businessTypes.forEach(bType => {
+        const opt = document.createElement('option');
+        opt.value = bType;
+        opt.innerText = bType;
+        if (bType === state.activeBusinessType) opt.selected = true;
+        select.appendChild(opt);
       });
+    }
 
-      const filteredSales = state.activeBusinessTab === 'Appearich Main' ? allSales : allSales.filter(s => s.businessType === state.activeBusinessTab);
+    function renderAppearichDashboard(calc) {
+      const monthData = state.monthlyData[state.activeMonth];
+      const filteredSales = monthData.sales.filter(s => s.businessType === state.activeBusinessType);
+      
+      let todayReceived = 0;
+      let todayProfit = 0;
+      let monthRevenue = 0;
+      let totalOutstanding = 0;
+      let totalProfit = 0;
 
       const todayStr = new Date().toISOString().split('T')[0];
-      const todaySales = filteredSales.filter(s => s.date === todayStr);
-      const todayReceived = todaySales.reduce((sum, s) => sum + s.paidAmount, 0);
-      const todayProfit = todaySales.reduce((sum, s) => sum + ((s.sellPrice - s.buyPrice) * (s.paidAmount / s.sellPrice)), 0);
 
-      const monthRevenue = filteredSales.filter(s => s.date.startsWith(state.activeMonth)).reduce((sum, s) => sum + s.sellPrice, 0);
-      const totalOutstanding = filteredSales.reduce((sum, s) => sum + (s.sellPrice - s.paidAmount), 0);
-      const totalProfit = filteredSales.reduce((sum, s) => sum + (s.sellPrice - s.buyPrice), 0);
+      filteredSales.forEach(s => {
+        const totalVal = s.sellPrice * s.qty;
+        const totalCst = s.buyPrice * s.qty;
+        const paid = s.paymentStatus === 'FULL' ? totalVal : (s.amountPaid || 0);
+        const profit = paid - totalCst;
+        const unpaid = totalVal - paid;
+
+        monthRevenue += totalVal;
+        totalOutstanding += unpaid;
+        totalProfit += profit;
+
+        if (s.date === todayStr) {
+          todayReceived += paid;
+          todayProfit += profit;
+        }
+      });
 
       document.getElementById('app-today-sales').innerText = formatSh(todayReceived);
       document.getElementById('app-today-profit').innerText = formatSh(todayProfit);
@@ -1810,178 +1623,432 @@
       document.getElementById('app-total-profit').innerText = formatSh(totalProfit);
 
       // Period stats
-      const soldCount = filteredSales.reduce((sum, s) => sum + s.qty, 0);
-      const rev = filteredSales.reduce((sum, s) => sum + s.sellPrice, 0);
-      const cost = filteredSales.reduce((sum, s) => sum + s.buyPrice, 0);
-      const margin = rev > 0 ? Math.round(((rev - cost) / rev) * 100) : 0;
-
-      document.getElementById('app-period-sold').innerText = soldCount;
-      document.getElementById('app-period-revenue').innerText = formatSh(rev);
-      document.getElementById('app-period-cost').innerText = formatSh(cost);
-      document.getElementById('app-period-margin').innerText = margin + '%';
-
-      // Populate business dropdown in Sale Modal
-      const sel = document.getElementById('sale-business-type');
-      if (sel) {
-        sel.innerHTML = '';
-        state.businessOptions.forEach(b => {
-          sel.innerHTML += `<option value="${b}">${b}</option>`;
-        });
-      }
-
-      // Render sales table
-      const table = document.getElementById('appearich-sales-table');
-      table.innerHTML = '';
-      if (filteredSales.length === 0) {
-        table.innerHTML = `<tr><td colspan="9" class="py-4 text-center text-brand-muted">No sales recorded yet.</td></tr>`;
-        return;
-      }
-
+      let periodSold = 0;
+      let periodRev = 0;
+      let periodCost = 0;
       filteredSales.forEach(s => {
-        const bal = s.sellPrice - s.paidAmount;
-        table.innerHTML += `
-          <tr class="hover:bg-gray-50 transition">
-            <td class="py-3">${s.date}</td>
-            <td class="py-3 font-bold">${s.businessType}</td>
-            <td class="py-3">${s.product} (${s.qty})</td>
-            <td class="py-3">${s.customer}</td>
-            <td class="py-3 font-bold">${formatSh(s.sellPrice)}</td>
-            <td class="py-3 text-emerald-600 font-bold">${formatSh(s.paidAmount)}</td>
-            <td class="py-3 text-red-600 font-bold">${formatSh(bal)}</td>
-            <td class="py-3"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${s.status === 'FULL' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}">${s.status}</span></td>
-            <td class="py-3">
-              ${bal > 0 ? `<button onclick="openUpdateSaleModal(${s.id})" class="px-2 py-1 rounded bg-brand-black text-white text-[10px]">Update</button>` : '-'}
-            </td>
-          </tr>
+        periodSold += s.qty;
+        periodRev += (s.paymentStatus === 'FULL' ? (s.sellPrice * s.qty) : (s.amountPaid || 0));
+        periodCost += (s.buyPrice * s.qty);
+      });
+      const periodMargin = periodRev > 0 ? ((periodRev - periodCost) / periodRev) * 100 : 0;
+      document.getElementById('app-period-sold').innerText = periodSold;
+      document.getElementById('app-period-revenue').innerText = formatSh(periodRev);
+      document.getElementById('app-period-cost').innerText = formatSh(periodCost);
+      document.getElementById('app-period-margin').innerText = periodMargin.toFixed(1) + '%';
+
+      // Render Sales Table
+      const tableBody = document.getElementById('appearich-sales-table');
+      if (tableBody) {
+        tableBody.innerHTML = '';
+        if (filteredSales.length === 0) {
+          tableBody.innerHTML = `<tr><td colspan="9" class="py-6 text-center text-brand-muted">No sales recorded for ${state.activeBusinessType}.</td></tr>`;
+        } else {
+          filteredSales.forEach((s, idx) => {
+            const totalVal = s.sellPrice * s.qty;
+            const paid = s.paymentStatus === 'FULL' ? totalVal : (s.amountPaid || 0);
+            const unpaid = totalVal - paid;
+            const statusBadge = s.paymentStatus === 'FULL' ? 
+              `<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold">FULL</span>` :
+              `<span class="px-2 py-0.5 rounded-full bg-red-100 text-red-600 text-[10px] font-bold">PARTIAL</span>`;
+
+            const tr = document.createElement('tr');
+            tr.className = "hover:bg-gray-50/50 transition";
+            tr.innerHTML = `
+              <td class="py-3 text-brand-muted">${s.date}</td>
+              <td class="py-3 font-semibold text-brand-black">${s.businessType}</td>
+              <td class="py-3 font-semibold text-brand-black">${s.product} (${s.qty})</td>
+              <td class="py-3 text-brand-muted">${s.customer}</td>
+              <td class="py-3 font-bold">${formatSh(totalVal)}</td>
+              <td class="py-3 text-emerald-600 font-bold">${formatSh(paid)}</td>
+              <td class="py-3 text-red-600 font-bold">${formatSh(unpaid)}</td>
+              <td class="py-3">${statusBadge}</td>
+              <td class="py-3">
+                <button onclick="openUpdateSaleModal(${idx})" class="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-brand-black rounded-lg text-xs font-bold transition">Update</button>
+              </td>
+            `;
+            tableBody.appendChild(tr);
+          });
+        }
+      }
+    }
+
+    function switchAppearichPeriod(period) {
+      state.appearichPeriod = period;
+      document.querySelectorAll('.app-period-btn').forEach(btn => {
+        btn.classList.remove('active', 'bg-brand-black', 'text-white');
+        btn.classList.add('bg-gray-100', 'text-brand-muted');
+      });
+      const activeBtn = document.getElementById(`app-period-${period}`);
+      if (activeBtn) {
+        activeBtn.classList.add('active', 'bg-brand-black', 'text-white');
+        activeBtn.classList.remove('bg-gray-100', 'text-brand-muted');
+      }
+    }
+
+    function renderAccountCards() {
+      const grid = document.getElementById('account-cards-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      Object.entries(state.accounts).forEach(([accName, balance]) => {
+        const card = document.createElement('div');
+        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4";
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold tracking-wider uppercase text-brand-muted">${accName}</span>
+            <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
+          </div>
+          <div>
+            <p class="text-[11px] text-brand-muted">Available Balance</p>
+            <p class="font-display font-extrabold text-2xl text-brand-black mt-1">${formatSh(balance)}</p>
+          </div>
         `;
+        grid.appendChild(card);
       });
     }
 
-    function openUpdateSaleModal(id) {
-      // Find sale
-      let targetSale = null;
-      Object.keys(state.monthlyData).forEach(m => {
-        const found = state.monthlyData[m].sales.find(s => s.id === id);
-        if (found) targetSale = found;
+    function renderLoansList() {
+      const list = document.getElementById('loan-cards-list');
+      if (!list) return;
+      list.innerHTML = '';
+      if (state.loans.length === 0) {
+        list.innerHTML = `<div class="col-span-full text-center py-8 text-brand-muted text-xs">No active loan records found.</div>`;
+        return;
+      }
+      state.loans.forEach((loan, idx) => {
+        const remaining = loan.amount - loan.paid;
+        const card = document.createElement('div');
+        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4";
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-base text-brand-black">${loan.borrower}</span>
+            <span class="px-2.5 py-0.5 rounded-full ${remaining === 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-700'} text-[10px] font-bold">${remaining === 0 ? 'PAID' : 'OUTSTANDING'}</span>
+          </div>
+          <div class="space-y-1">
+            <p class="text-xs text-brand-muted">Loan Date: ${loan.date}</p>
+            <p class="text-xs text-brand-muted">Original Amount: <strong class="text-brand-black">${formatSh(loan.amount)}</strong></p>
+            <p class="text-xs text-brand-muted">Paid So Far: <strong class="text-emerald-600">${formatSh(loan.paid)}</strong></p>
+          </div>
+          <div class="pt-3 border-t border-gray-100 flex items-center justify-between">
+            <div>
+              <p class="text-[10px] text-brand-muted uppercase font-bold">Remaining Balance</p>
+              <p class="font-display font-extrabold text-xl text-red-600">${formatSh(remaining)}</p>
+            </div>
+            <button onclick="openUpdateLoanModal(${idx})" class="px-4 py-2 bg-brand-black text-white rounded-xl text-xs font-bold hover:bg-gray-800 transition">Update</button>
+          </div>
+        `;
+        list.appendChild(card);
       });
-      if (targetSale) {
-        document.getElementById('edit-sale-id').value = targetSale.id;
-        document.getElementById('edit-sale-status').value = targetSale.status;
-        document.getElementById('edit-sale-paid-amount').value = targetSale.paidAmount;
-        openModal('updateSalePaymentModal');
+    }
+
+    function renderProgressMonthlyGrid(monthlyProfits) {
+      const grid = document.getElementById('progress-monthly-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      const keys = Object.keys(monthlyProfits).sort().reverse();
+      if (keys.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center py-6 text-brand-muted text-xs">No monthly profit history available.</div>`;
+        return;
+      }
+      keys.forEach(mKey => {
+        const profit = monthlyProfits[mKey];
+        const card = document.createElement('div');
+        card.className = "p-5 rounded-2xl bg-gray-50 border border-gray-100 flex flex-col justify-between space-y-2";
+        card.innerHTML = `
+          <div class="flex items-center justify-between text-xs text-brand-muted font-bold uppercase">
+            <span>Month</span>
+            <span>${mKey}</span>
+          </div>
+          <p class="font-display font-extrabold text-xl ${profit >= 0 ? 'text-emerald-600' : 'text-red-600'}">${formatSh(profit)}</p>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function switchTab(tabId) {
+      state.currentTab = tabId;
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      const target = document.getElementById(`tab-${tabId}`);
+      if (target) target.classList.remove('hidden');
+
+      document.querySelectorAll('.nav-tab').forEach(el => {
+        el.classList.remove('active', 'bg-brand-black', 'text-white', 'shadow-sm');
+        el.classList.add('text-brand-muted');
+      });
+      const navTarget = document.getElementById(`nav-${tabId}`);
+      if (navTarget) {
+        navTarget.classList.add('active', 'bg-brand-black', 'text-white', 'shadow-sm');
+        navTarget.classList.remove('text-brand-muted');
+      }
+
+      document.querySelectorAll('.bnav-btn').forEach(el => {
+        el.classList.remove('text-brand-black');
+        el.classList.add('text-brand-muted');
+      });
+      const bnavTarget = document.getElementById(`bnav-${tabId}`);
+      if (bnavTarget) {
+        bnavTarget.classList.add('text-brand-black');
+        bnavTarget.classList.remove('text-brand-muted');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function handleHeroUpload(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          state.heroImageUrl = evt.target.result;
+          localStorage.setItem('appearich_hero_img', state.heroImageUrl);
+          renderAll();
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function toggleSalePartialInput() {
+      const status = document.getElementById('sale-payment-status').value;
+      const container = document.getElementById('sale-partial-container');
+      if (status === 'PARTIAL') {
+        container.classList.remove('hidden');
+      } else {
+        container.classList.add('hidden');
       }
     }
 
     function toggleEditSalePartialInput() {
-      // Handled if needed
+      const status = document.getElementById('edit-sale-status').value;
+      const container = document.getElementById('edit-sale-paid-container');
+      if (status === 'FULL') {
+        container.classList.add('hidden');
+      } else {
+        container.classList.remove('hidden');
+      }
+    }
+
+    function handleAddIncome(e) {
+      e.preventDefault();
+      const name = document.getElementById('income-name-input').value;
+      const amount = parseFloat(document.getElementById('income-amount-input').value) || 0;
+      ensureMonthExists(state.activeMonth);
+      state.monthlyData[state.activeMonth].incomes.push({ name, amount });
+      state.accounts['CRDB'] += amount;
+      closeModal('addIncomeModal');
+      e.target.reset();
+      renderAll();
+      saveUserData();
+    }
+
+    function handleAddSale(e) {
+      e.preventDefault();
+      const businessType = document.getElementById('sale-business-type').value;
+      const date = document.getElementById('sale-date').value || new Date().toISOString().split('T')[0];
+      const qty = parseInt(document.getElementById('sale-qty').value) || 1;
+      const product = document.getElementById('sale-product').value;
+      const customer = document.getElementById('sale-customer').value;
+      const buyPrice = parseFloat(document.getElementById('sale-buy-price').value) || 0;
+      const sellPrice = parseFloat(document.getElementById('sale-sell-price').value) || 0;
+      const paymentStatus = document.getElementById('sale-payment-status').value;
+      const amountPaid = paymentStatus === 'PARTIAL' ? (parseFloat(document.getElementById('sale-paid-amount').value) || 0) : (sellPrice * qty);
+
+      ensureMonthExists(state.activeMonth);
+      state.monthlyData[state.activeMonth].sales.push({
+        businessType, date, qty, product, customer, buyPrice, sellPrice, paymentStatus, amountPaid
+      });
+      state.accounts['CRDB'] += amountPaid;
+      closeModal('addSaleModal');
+      e.target.reset();
+      renderAll();
+      saveUserData();
+    }
+
+    function handleAddBusinessOption(e) {
+      e.preventDefault();
+      const name = document.getElementById('new-business-name-input').value.trim();
+      if (name && !state.businessTypes.includes(name)) {
+        state.businessTypes.push(name);
+        state.activeBusinessType = name;
+      }
+      closeModal('addBusinessModal');
+      e.target.reset();
+      renderAll();
+      saveUserData();
+    }
+
+    let activeEditSaleIndex = null;
+    function openUpdateSaleModal(idx) {
+      activeEditSaleIndex = idx;
+      const monthData = state.monthlyData[state.activeMonth];
+      const filteredSales = monthData.sales.filter(s => s.businessType === state.activeBusinessType);
+      const sale = filteredSales[idx];
+      document.getElementById('edit-sale-status').value = sale.paymentStatus;
+      document.getElementById('edit-sale-paid-amount').value = sale.amountPaid || 0;
+      toggleEditSalePartialInput();
+      openModal('updateSalePaymentModal');
     }
 
     function handleUpdateSalePayment(e) {
       e.preventDefault();
-      const id = parseInt(document.getElementById('edit-sale-id').value);
       const status = document.getElementById('edit-sale-status').value;
       const paid = parseFloat(document.getElementById('edit-sale-paid-amount').value) || 0;
-
-      Object.keys(state.monthlyData).forEach(m => {
-        const s = state.monthlyData[m].sales.find(x => x.id === id);
-        if (s) {
-          s.status = status;
-          s.paidAmount = status === 'FULL' ? s.sellPrice : paid;
-          state.accounts['CRDB'] = (state.accounts['CRDB'] || 0) + (s.paidAmount - paid);
-        }
-      });
-
+      const monthData = state.monthlyData[state.activeMonth];
+      const filteredSales = monthData.sales.filter(s => s.businessType === state.activeBusinessType);
+      const sale = filteredSales[activeEditSaleIndex];
+      if (sale) {
+        const diff = paid - (sale.amountPaid || 0);
+        sale.paymentStatus = status;
+        sale.amountPaid = status === 'FULL' ? (sale.sellPrice * sale.qty) : paid;
+        state.accounts['CRDB'] += diff;
+      }
       closeModal('updateSalePaymentModal');
       renderAll();
-      saveUserDataToSupabase();
+      saveUserData();
     }
 
-    function renderAccountsTab() {
-      const grid = document.getElementById('account-cards-grid');
-      grid.innerHTML = '';
-      let total = 0;
+    function handleAddLoan(e) {
+      e.preventDefault();
+      const borrower = document.getElementById('loan-borrower').value;
+      const amount = parseFloat(document.getElementById('loan-amount').value) || 0;
+      const date = document.getElementById('loan-date').value || new Date().toISOString().split('T')[0];
+      const paid = parseFloat(document.getElementById('loan-paid').value) || 0;
+      const note = document.getElementById('loan-note').value;
 
-      Object.keys(state.accounts).forEach(acc => {
-        const bal = state.accounts[acc];
-        total += bal;
-        grid.innerHTML += `
-          <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between">
-            <div>
-              <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">Account</span>
-              <h4 class="font-display font-bold text-lg text-brand-black mt-1">${acc}</h4>
-            </div>
-            <p class="font-display font-extrabold text-2xl text-brand-black mt-4">${formatSh(bal)}</p>
-          </div>
-        `;
-      });
-
-      document.getElementById('accounts-total-money').innerText = formatSh(total);
+      state.loans.push({ borrower, amount, date, paid, note });
+      closeModal('addLoanModal');
+      e.target.reset();
+      renderAll();
+      saveUserData();
     }
 
-    function renderLoansTab() {
-      let totalOwed = 0;
-      const list = document.getElementById('loan-cards-list');
-      list.innerHTML = '';
+    let activeEditLoanIndex = null;
+    function openUpdateLoanModal(idx) {
+      activeEditLoanIndex = idx;
+      const loan = state.loans[idx];
+      document.getElementById('edit-loan-paid').value = loan.paid;
+      openModal('updateLoanModal');
+    }
 
-      if (state.loans.length === 0) {
-        list.innerHTML = `<p class="text-xs text-brand-muted col-span-full">No active loans recorded.</p>`;
-        document.getElementById('loan-total-owed').innerText = formatSh(0);
-        return;
+    function handleUpdateLoan(e) {
+      e.preventDefault();
+      const paid = parseFloat(document.getElementById('edit-loan-paid').value) || 0;
+      const loan = state.loans[activeEditLoanIndex];
+      if (loan) {
+        loan.paid = paid;
+      }
+      closeModal('updateLoanModal');
+      renderAll();
+      saveUserData();
+    }
+
+    function handleAddTransaction(e) {
+      e.preventDefault();
+      const name = document.getElementById('tx-name').value;
+      const category = document.getElementById('tx-category').value;
+      const account = document.getElementById('tx-account').value;
+      const amount = parseFloat(document.getElementById('tx-amount').value) || 0;
+      const date = document.getElementById('tx-date').value || new Date().toISOString().split('T')[0];
+      const monthKey = date.substring(0, 7);
+
+      ensureMonthExists(monthKey);
+      const mData = state.monthlyData[monthKey];
+      mData.expenses.push({ name, category, account, amount, date });
+
+      if (['Internet', 'Umeme', 'Taka', 'Transport'].includes(category)) {
+        mData.utilitiesSubSpent[category] = (mData.utilitiesSubSpent[category] || 0) + amount;
+      } else {
+        mData.categorySpent[category] = (mData.categorySpent[category] || 0) + amount;
       }
 
-      state.loans.forEach(l => {
-        const bal = l.amount - l.paid;
-        totalOwed += bal;
-        list.innerHTML += `
-          <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4">
-            <div class="flex justify-between items-start">
-              <div>
-                <span class="text-xs font-bold text-brand-muted uppercase">Borrower</span>
-                <h4 class="font-display font-bold text-base text-brand-black mt-0.5">${l.borrower}</h4>
-                ${l.note ? `<p class="text-[11px] text-gray-500 mt-0.5">${l.note}</p>` : ''}
-              </div>
-              <span class="px-2.5 py-1 rounded-full text-xs font-bold ${bal === 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-yellow-100 text-yellow-700'}">${bal === 0 ? 'Settled' : 'Active'}</span>
-            </div>
-            <div class="grid grid-cols-2 gap-2 text-xs pt-3 border-t border-gray-100">
-              <div><p class="text-brand-muted">Lent: ${formatSh(l.amount)}</p><p class="font-bold text-emerald-600">Paid: ${formatSh(l.paid)}</p></div>
-              <div class="text-right"><p class="text-brand-muted">Balance</p><p class="font-bold text-red-600">${formatSh(bal)}</p></div>
-            </div>
-            ${bal > 0 ? `<button onclick="openUpdateLoanModal(${l.id})" class="w-full py-2 rounded-xl bg-brand-black text-white text-xs font-bold hover:bg-gray-800 transition">Update Repayment</button>` : ''}
-          </div>
-        `;
-      });
+      if (state.accounts[account] !== undefined) {
+        state.accounts[account] -= amount;
+      }
 
-      document.getElementById('loan-total-owed').innerText = formatSh(totalOwed);
+      closeModal('addTransactionModal');
+      e.target.reset();
+      renderAll();
+      saveUserData();
     }
 
-    function renderProgressTab() {
-      let overallProfit = 0;
-      let activeMonthProfit = 0;
-      const monthlyGrid = document.getElementById('progress-monthly-grid');
-      monthlyGrid.innerHTML = '';
+    function handleTransfer(e) {
+      e.preventDefault();
+      const from = document.getElementById('tr-from').value;
+      const to = document.getElementById('tr-to').value;
+      const amount = parseFloat(document.getElementById('tr-amount').value) || 0;
 
-      Object.keys(state.monthlyData).forEach(mKey => {
-        const m = state.monthlyData[mKey];
-        const mRev = m.sales.reduce((sum, s) => sum + s.sellPrice, 0);
-        const mCost = m.sales.reduce((sum, s) => sum + s.buyPrice, 0);
-        const mProfit = mRev - mCost;
+      if (state.accounts[from] !== undefined && state.accounts[to] !== undefined) {
+        state.accounts[from] -= amount;
+        state.accounts[to] += amount;
+      }
+      closeModal('transferModal');
+      renderAll();
+      saveUserData();
+    }
 
-        overallProfit += mProfit;
-        if (mKey === state.activeMonth) {
-          activeMonthProfit = mProfit;
-        }
+    function handleAddMoneyAccount(e) {
+      e.preventDefault();
+      const acc = document.getElementById('am-account').value;
+      const amount = parseFloat(document.getElementById('am-amount').value) || 0;
+      if (state.accounts[acc] !== undefined) {
+        state.accounts[acc] += amount;
+      }
+      closeModal('addMoneyModal');
+      renderAll();
+      saveUserData();
+    }
 
-        monthlyGrid.innerHTML += `
-          <div class="p-5 rounded-2xl bg-gray-50 border border-gray-100 flex flex-col justify-between space-y-2">
-            <div class="flex justify-between items-center"><span class="text-xs font-bold text-brand-black">${mKey}</span><span class="text-[10px] text-brand-muted">Net Profit</span></div>
-            <p class="font-display font-bold text-xl text-emerald-600">${formatSh(mProfit)}</p>
-          </div>
-        `;
+    function handleAddInvestmentCapital(e) {
+      e.preventDefault();
+      const amt = parseFloat(document.getElementById('inv-add-amount').value) || 0;
+      state.investment.totalInvested += amt;
+      state.investment.currentValue += amt;
+      state.investment.history.push({
+        date: new Date().toISOString().split('T')[0],
+        type: 'Capital Addition',
+        value: state.investment.currentValue
       });
+      closeModal('addInvestmentModal');
+      e.target.reset();
+      renderAll();
+      saveUserData();
+    }
 
-      document.getElementById('progress-overall-profit').innerText = formatSh(overallProfit);
-      document.getElementById('progress-active-month-profit').innerText = formatSh(activeMonthProfit);
-      document.getElementById('progress-active-month-name').innerText = `Active Month (${state.activeMonth}) Profit`;
+    function handleUpdateInvestmentValue(e) {
+      e.preventDefault();
+      const val = parseFloat(document.getElementById('inv-update-value').value) || 0;
+      state.investment.currentValue = val;
+      state.investment.history.push({
+        date: new Date().toISOString().split('T')[0],
+        type: 'Valuation Update',
+        value: val
+      });
+      closeModal('updateInvestmentModal');
+      e.target.reset();
+      renderAll();
+      saveUserData();
+    }
+
+    function handleAddCategory(e) {
+      e.preventDefault();
+      const name = document.getElementById('cat-name-input').value.trim();
+      const amount = parseFloat(document.getElementById('cat-amount-input').value) || 0;
+      const id = 'cat-' + name.toLowerCase().replace(/\s+/g, '-');
+      if (name && !state.categories.some(c => c.id === id)) {
+        state.categories.push({ id, name, amount, isExpandable: false });
+      }
+      closeModal('addCategoryModal');
+      e.target.reset();
+      renderAll();
+      saveUserData();
     }
   </script>
 </body>
