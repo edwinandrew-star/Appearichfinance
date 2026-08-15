@@ -1,1463 +1,444 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Appearich Finance Command Center</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-  
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-            display: ['"Space Grotesk"', 'sans-serif']
-          },
-          colors: {
-            brand: {
-              bg: '#FFFFFF',
-              surface: '#F8F9FA',
-              card: '#FFFFFF',
-              black: '#0A0A0C',
-              muted: '#6C727F',
-              border: '#E5E7EB',
-              gold: '#D4AF37',
-              goldLight: '#FFFDF0',
-              goldDark: '#997B15',
-              success: '#10B981',
-              danger: '#EF4444'
-            }
-          },
-          boxShadow: {
-            'premium': '0 10px 30px -5px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02)',
-            'gold-glow': '0 0 20px rgba(212, 175, 55, 0.25)',
-            'card-hover': '0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.03)',
-            'pop': '0 12px 24px -6px rgba(0, 0, 0, 0.08), 0 4px 8px -2px rgba(0, 0, 0, 0.04)'
-          }
-        }
-      }
-    }
-  </script>
-  <style>
-    body {
-      background-color: #FFFFFF;
-      color: #0A0A0C;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      -webkit-font-smoothing: antialiased;
-    }
-    .gold-gradient-text {
-      background: linear-gradient(135deg, #B8860B 0%, #D4AF37 50%, #AA771C 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .gold-gradient-bg {
-      background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
-    }
-    .accordion-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .accordion-content.expanded {
-      max-height: 1200px;
-    }
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-  </style>
-</head>
-<body class="bg-brand-bg min-h-screen pb-28 text-brand-black">
-  <!-- TOP APP HEADER -->
-  <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100 px-4 lg:px-8 py-4">
-    <div class="max-w-6xl mx-auto flex justify-between items-center">
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-2xl bg-brand-black flex items-center justify-center text-brand-gold shadow-gold-glow">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-          </svg>
-        </div>
-        <div>
-          <h1 class="font-display font-bold text-xl tracking-tight text-brand-black">APPEARICH</h1>
-          <p class="text-[10px] font-bold tracking-widest text-brand-gold uppercase">Track Your Money. Build Your Business. See Your Growth.</p>
-        </div>
-      </div>
-      <div class="flex items-center space-x-3">
-        <button onclick="openModal('addTransactionModal')" class="hidden sm:flex items-center space-x-2 bg-brand-black text-white px-4 py-2.5 rounded-xl font-medium text-sm hover:bg-gray-800 transition shadow-sm">
-          <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-          </svg>
-          <span>+ Expense</span>
-        </button>
-        <div class="w-10 h-10 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center font-bold text-xs text-brand-black">
-          TZ
-        </div>
-      </div>
-    </div>
-  </header>
+<script>
+  // ==========================================
+  // STATE MANAGEMENT & DATA STORAGE
+  // ==========================================
+  const state = {
+    // Current selected view month for Tithe & Total Income (Format: YYYY-MM)
+    selectedMonth: new Date().toISOString().slice(0, 7),
+    heroImage: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1600&auto=format&fit=crop',
+    incomes: [],       // Array of { id, name, amount, category, date, month }
+    expenses: [],      // Array of { id, name, category, account, amount, date, month }
+    investment: {
+      totalInvested: 0,
+      currentValue: 0,
+      history: []
+    },
+    sales: [],         // Array of { id, date, qty, product, customer, buyPrice, sellPrice, paymentStatus, amountPaid, month }
+    loans: [],         // Array of { id, borrower, amount, date, paid, note, month }
+    accounts: {
+      'CRDB': 0,
+      'SELCOM': 0,
+      'MPESA': 0,
+      'LIPA NAMBA': 0,
+      'CASH': 0
+    },
+    utilitiesSub: [
+      { name: 'Internet', spent: 0 },
+      { name: 'Umeme', spent: 0 },
+      { name: 'Taka', spent: 0 },
+      { name: 'Transport', spent: 0 }
+    ]
+  };
 
-  <!-- MAIN CONTAINER -->
-  <main class="max-w-6xl mx-auto px-4 lg:px-8 pt-6 space-y-8">
+  // Helper formatting function
+  function formatSh(amount) {
+    return new Intl.NumberFormat('en-US').format(Math.round(amount || 0)) + ' Sh';
+  }
+
+  // Get formatted month string (e.g., "August 2026")
+  function getMonthName(monthKey) {
+    const [year, month] = monthKey.split('-');
+    const date = new Date(year, parseInt(month) - 1, 1);
+    return date.toLocaleString('default', { month: 'long', year: 'numeric' });
+  }
+
+  // ==========================================
+  // CORE TITHE & INCOME CALCULATIONS
+  // ==========================================
+  function getCalculations() {
+    // Filter incomes for the selected month
+    const monthIncomes = state.incomes.filter(inc => inc.month === state.selectedMonth);
+    const selectedMonthIncomeTotal = monthIncomes.reduce((sum, inc) => sum + Number(inc.amount), 0);
     
-    <!-- 1. HERO HOME SECTION (Clean Image, No Text, Dynamic Image Updating) -->
-    <div id="hero-section" class="relative rounded-3xl overflow-hidden shadow-2xl h-56 lg:h-72 w-full bg-brand-black">
-      <img id="hero-bg-img" src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1600&auto=format&fit=crop" alt="Hero Banner" class="w-full h-full object-cover">
-    </div>
+    // Automatic 10% Tithe for God for selected month
+    const selectedMonthTitheTotal = selectedMonthIncomeTotal * 0.10;
 
-    <!-- VIEW TABS NAVIGATION SWITCHER -->
-    <div class="flex items-center space-x-2 border-b border-gray-200 overflow-x-auto no-scrollbar pb-2">
-      <button id="nav-dashboard" onclick="switchTab('dashboard')" class="nav-tab active px-5 py-2.5 rounded-xl text-sm font-semibold transition flex items-center space-x-2 bg-brand-black text-white shadow-sm flex-shrink-0">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-        <span>Home</span>
-      </button>
-      <button id="nav-income" onclick="switchTab('income')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-        <span>Income & GOD</span>
-      </button>
-      <button id="nav-budget" onclick="switchTab('budget')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" /></svg>
-        <span>Budget</span>
-      </button>
-      <button id="nav-investment" onclick="switchTab('investment')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-        <span>Investment</span>
-      </button>
-      <button id="nav-appearich" onclick="switchTab('appearich')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
-        <span>Appearich Business</span>
-      </button>
-      <button id="nav-accounts" onclick="switchTab('accounts')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-        <span>Accounts</span>
-      </button>
-      <button id="nav-progress" onclick="switchTab('progress')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
-        <span>Progress</span>
-      </button>
-    </div>
+    // Aggregate values for display
+    const totalLiquidMoney = Object.values(state.accounts).reduce((sum, val) => sum + Number(val), 0);
+    
+    // Business Sales calculations for selected month
+    const monthSales = state.sales.filter(s => s.month === state.selectedMonth);
+    let appTotalRevenue = 0, appTotalCost = 0, appTotalReceived = 0, appTotalOutstanding = 0;
+    monthSales.forEach(sale => {
+      const totalVal = sale.sellPrice * sale.qty;
+      const totalCost = sale.buyPrice * sale.qty;
+      const paid = sale.paymentStatus === 'FULL' ? totalVal : Number(sale.amountPaid || 0);
+      appTotalRevenue += totalVal;
+      appTotalCost += totalCost;
+      appTotalReceived += paid;
+      appTotalOutstanding += (totalVal - paid);
+    });
+    const appTotalProfit = appTotalReceived - appTotalCost;
 
-    <!-- ==================== TAB 1: HOME DASHBOARD ==================== -->
-    <div id="tab-dashboard" class="tab-content space-y-8">
-      
-      <!-- 2. TITHE & INCOME OVERVIEW (Circular / Ring Progress Indicators) -->
-      <div class="space-y-3">
-        <div class="flex items-center justify-between">
-          <h3 class="font-bold text-base text-brand-black">Monthly Overview</h3>
-          <span class="text-xs text-brand-muted">Auto-resets monthly</span>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          
-          <!-- Left Circle – Tithe -->
-          <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-pop flex items-center justify-between transition-all hover:-translate-y-1">
-            <div class="space-y-1">
-              <span class="text-xs font-bold uppercase tracking-wider text-brand-gold">TITHE (10% GOD)</span>
-              <p id="dash-god-amount" class="font-display text-2xl lg:text-3xl font-extrabold text-brand-black">0 Sh</p>
-              <p class="text-[11px] text-brand-muted">Monthly Tithe Goal Track</p>
-            </div>
-            <div class="relative w-24 h-24 flex items-center justify-center flex-shrink-0">
-              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                <path class="text-gray-100" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                <path class="text-brand-gold" stroke-dasharray="100, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-              </svg>
-              <span class="absolute font-display font-bold text-sm text-brand-gold">10%</span>
-            </div>
-          </div>
+    // Investment Return
+    const invGainLoss = state.investment.currentValue - state.investment.totalInvested;
 
-          <!-- Right Circle – Total Income -->
-          <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-pop flex items-center justify-between transition-all hover:-translate-y-1">
-            <div class="space-y-1">
-              <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">TOTAL INCOME</span>
-              <p id="dash-total-income" class="font-display text-2xl lg:text-3xl font-extrabold text-brand-black">0 Sh</p>
-              <p class="text-[11px] text-brand-muted">Current Month Earnings</p>
-            </div>
-            <div class="relative w-24 h-24 flex items-center justify-center flex-shrink-0">
-              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                <path class="text-gray-100" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                <path class="text-emerald-500" stroke-dasharray="85, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-              </svg>
-              <svg class="w-6 h-6 text-emerald-500 absolute" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-            </div>
-          </div>
+    // Total loans owed
+    const totalLoanOwed = state.loans.reduce((sum, loan) => sum + (loan.amount - loan.paid), 0);
 
-        </div>
-      </div>
-
-      <!-- 3. BUDGET CATEGORIES HORIZONTAL SCROLLING LAYOUT -->
-      <div class="space-y-3">
-        <div class="flex items-center justify-between">
-          <h3 class="font-bold text-base text-brand-black">Budget Categories</h3>
-          <span class="text-xs text-brand-muted">Scroll horizontally →</span>
-        </div>
-        <div id="home-budget-horizontal-container" class="flex gap-4 overflow-x-auto no-scrollbar pb-4 pt-1">
-          <!-- Dynamic Pop-Up Horizontal Cards Rendered via JS -->
-        </div>
-      </div>
-
-      <!-- 4. QUICK ACTIONS GRID -->
-      <div class="p-6 rounded-3xl bg-brand-surface border border-gray-200/80 space-y-3 shadow-sm">
-        <span class="text-xs font-bold uppercase tracking-wider text-brand-muted block">Quick Actions</span>
-        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
-          <button onclick="openModal('addIncomeModal')" class="p-3.5 rounded-2xl bg-white border border-gray-200 hover:border-brand-black text-xs font-bold flex flex-col items-center justify-center space-y-2 transition shadow-pop hover:-translate-y-1 text-center">
-            <svg class="w-5 h-5 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-            <span>+ INCOME</span>
-          </button>
-          <button onclick="openModal('addSaleModal')" class="p-3.5 rounded-2xl bg-white border border-gray-200 hover:border-brand-black text-xs font-bold flex flex-col items-center justify-center space-y-2 transition shadow-pop hover:-translate-y-1 text-center">
-            <svg class="w-5 h-5 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
-            <span>+ SALE</span>
-          </button>
-          <button onclick="openModal('addTransactionModal')" class="p-3.5 rounded-2xl bg-white border border-gray-200 hover:border-brand-black text-xs font-bold flex flex-col items-center justify-center space-y-2 transition shadow-pop hover:-translate-y-1 text-center">
-            <svg class="w-5 h-5 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-            <span>+ EXPENSE</span>
-          </button>
-          <button onclick="openModal('addLoanModal')" class="p-3.5 rounded-2xl bg-white border border-gray-200 hover:border-brand-black text-xs font-bold flex flex-col items-center justify-center space-y-2 transition shadow-pop hover:-translate-y-1 text-center">
-            <svg class="w-5 h-5 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-            <span>+ LOAN</span>
-          </button>
-          <button onclick="openModal('transferModal')" class="p-3.5 rounded-2xl bg-white border border-gray-200 hover:border-brand-black text-xs font-bold flex flex-col items-center justify-center space-y-2 transition shadow-pop hover:-translate-y-1 text-center">
-            <svg class="w-5 h-5 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
-            <span>TRANSFER</span>
-          </button>
-          <button onclick="switchTab('investment')" class="p-3.5 rounded-2xl bg-white border border-gray-200 hover:border-brand-black text-xs font-bold flex flex-col items-center justify-center space-y-2 transition shadow-pop hover:-translate-y-1 text-center">
-            <svg class="w-5 h-5 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-            <span>INVESTMENT</span>
-          </button>
-          <button onclick="switchTab('progress')" class="p-3.5 rounded-2xl bg-brand-black text-white text-xs font-bold flex flex-col items-center justify-center space-y-2 transition shadow-pop hover:-translate-y-1 text-center col-span-2 sm:col-span-1">
-            <svg class="w-5 h-5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
-            <span>PROGRESS</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- MONEY BORROWED / LOANS GIVEN SECTION -->
-      <div class="space-y-4">
-        <div class="flex items-center justify-between">
-          <div>
-            <h3 class="font-bold text-lg text-brand-black">MONEY BORROWED / LOANS GIVEN</h3>
-            <p class="text-xs text-brand-muted">Track funds lent to people and manage outstanding balances.</p>
-          </div>
-          <button onclick="openModal('addLoanModal')" class="bg-brand-black text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center space-x-1 transition shadow-sm hover:bg-gray-800">
-            <svg class="w-3.5 h-3.5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-            <span>+ Record Loan</span>
-          </button>
-        </div>
-        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-pop space-y-6">
-          <div class="flex items-center justify-between border-b border-gray-100 pb-4">
-            <span class="text-xs font-bold uppercase tracking-wider text-brand-muted">Total Outstanding Debt Owed To You</span>
-            <span id="loan-total-owed" class="font-display text-2xl font-extrabold text-brand-black">0 Sh</span>
-          </div>
-          <div id="loan-cards-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Dynamic Loan Cards rendered via JS -->
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ==================== TAB 2: INCOME & GOD ==================== -->
-    <div id="tab-income" class="tab-content hidden space-y-8">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 class="font-display font-bold text-2xl text-brand-black">Income Sources & GOD Allocation</h2>
-          <p class="text-xs text-brand-muted">Multiple income tracking with automatic 10% sacred GOD reservation.</p>
-        </div>
-        <button onclick="openModal('addIncomeModal')" class="bg-brand-black text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-sm hover:bg-gray-800 transition">
-          <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-          <span>+ Add Income Source</span>
-        </button>
-      </div>
-      <!-- GOD Banner -->
-      <div class="p-8 rounded-3xl bg-brand-black text-white shadow-pop relative overflow-hidden">
-        <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-brand-gold/20 rounded-full blur-3xl"></div>
-        <div class="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
-          <div class="flex items-center space-x-6">
-            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-gold/30 to-brand-black border border-brand-gold/40 flex items-center justify-center shadow-gold-glow flex-shrink-0 text-brand-gold">
-              <svg class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-dasharray="2 2" />
-                <polygon points="12,3 15,9 21,12 15,15 12,21 9,15 3,12 9,9" fill="rgba(212, 175, 55, 0.2)" stroke="currentColor"/>
-                <circle cx="12" cy="12" r="3" fill="currentColor"/>
-              </svg>
-            </div>
-            <div>
-              <span class="text-xs font-bold text-brand-gold tracking-widest uppercase">Sacred Allocation</span>
-              <h3 class="font-display font-bold text-3xl mt-1 text-white">GOD 10% RESERVE</h3>
-              <p class="text-xs text-gray-400 mt-1">Automatically deducted from every individual income stream.</p>
-            </div>
-          </div>
-          <div class="text-right w-full md:w-auto border-t md:border-t-0 border-gray-800 pt-4 md:pt-0">
-            <p class="text-xs text-gray-400 font-medium">Total Reserved</p>
-            <p id="income-god-total" class="font-display text-4xl font-extrabold text-brand-gold mt-1">0 Sh</p>
-          </div>
-        </div>
-      </div>
-      <div class="space-y-4">
-        <h3 class="font-bold text-lg text-brand-black">Active Income Streams</h3>
-        <div id="income-list-container" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
-      </div>
-    </div>
-
-    <!-- ==================== TAB 3: BUDGET ==================== -->
-    <div id="tab-budget" class="tab-content hidden space-y-8">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 class="font-display font-bold text-2xl text-brand-black">Budget Structure (90% Available)</h2>
-          <p class="text-xs text-brand-muted">Utilities, Investment, Appearich, Expenses, and Other allocations.</p>
-        </div>
-        <button onclick="openModal('addCategoryModal')" class="bg-brand-black text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-sm hover:bg-gray-800 transition">
-          <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-          <span>+ Custom Category</span>
-        </button>
-      </div>
-      <!-- Pool summary -->
-      <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-pop flex flex-col md:flex-row items-center justify-between gap-6">
-        <div>
-          <p class="text-xs font-bold text-brand-muted uppercase tracking-wider">Available Budget Pool (90%)</p>
-          <p id="budget-pool-total" class="font-display text-3xl font-bold text-brand-black mt-1">0 Sh</p>
-        </div>
-        <div class="w-full md:w-1/2 space-y-2">
-          <div class="flex justify-between text-xs font-semibold">
-            <span class="text-brand-muted">Allocated Percentage</span>
-            <span id="budget-allocated-percent">0%</span>
-          </div>
-          <div class="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
-            <div id="budget-allocated-bar" class="h-full bg-brand-black transition-all duration-500" style="width: 0%"></div>
-          </div>
-        </div>
-      </div>
-      <div class="space-y-4">
-        <h3 class="font-bold text-lg text-brand-black">Primary Categories</h3>
-        <!-- UTILITIES EXPANDABLE CARD -->
-        <div class="rounded-3xl bg-white border border-gray-100 shadow-pop overflow-hidden transition-all duration-300">
-          <div onclick="toggleUtilitiesAccordion()" class="p-6 flex items-center justify-between cursor-pointer hover:bg-gray-50/50 transition">
-            <div class="flex items-center space-x-4">
-              <div class="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center text-brand-black">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-              </div>
-              <div>
-                <div class="flex items-center space-x-2">
-                  <h4 class="font-bold text-base text-brand-black">UTILITIES</h4>
-                  <span class="px-2.5 py-0.5 rounded-full bg-gray-100 text-brand-black text-[11px] font-bold">25%</span>
-                </div>
-                <p class="text-xs text-brand-muted mt-0.5">Internet, Umeme, Taka, Transport</p>
-              </div>
-            </div>
-            <div class="flex items-center space-x-6">
-              <div class="text-right hidden sm:block">
-                <p id="utilities-planned" class="font-display font-bold text-base text-brand-black">0 Sh</p>
-                <p id="utilities-spent-summary" class="text-xs text-brand-muted">Spent: 0 Sh</p>
-              </div>
-              <svg id="utilities-chevron" class="w-6 h-6 text-brand-black transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-            </div>
-          </div>
-          <!-- Accordion Content -->
-          <div id="utilities-accordion" class="accordion-content border-t border-gray-100 bg-brand-surface p-6 space-y-4">
-            <p class="text-xs font-semibold text-brand-muted uppercase tracking-wider">Subcategory Breakdown</p>
-            <div id="utilities-subcategories-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-          </div>
-        </div>
-        <!-- OTHER CATEGORIES CONTAINER -->
-        <div id="main-categories-list" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
-      </div>
-    </div>
-
-    <!-- ==================== TAB 4: INVESTMENT ==================== -->
-    <div id="tab-investment" class="tab-content hidden space-y-8">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 class="font-display font-bold text-2xl text-brand-black">Investment — Smart Growth Tracking</h2>
-          <p class="text-xs text-brand-muted">Track principal capital additions and market valuation growth separately.</p>
-        </div>
-        <div class="flex items-center space-x-2">
-          <button onclick="openModal('addInvestmentModal')" class="bg-gray-100 text-brand-black hover:bg-gray-200 px-4 py-2.5 rounded-xl font-medium text-sm transition">
-            + Add Capital
-          </button>
-          <button onclick="openModal('updateInvestmentModal')" class="bg-brand-black text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-sm hover:bg-gray-800 transition">
-            <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-            <span>Update Value</span>
-          </button>
-        </div>
-      </div>
-      <!-- Investment Master Status -->
-      <div class="p-8 rounded-3xl bg-white border border-gray-100 shadow-pop grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <div>
-          <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">Total Invested</span>
-          <p id="inv-total-invested" class="font-display text-3xl font-extrabold text-brand-black mt-1">0 Sh</p>
-        </div>
-        <div>
-          <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">Current Value</span>
-          <p id="inv-current-value" class="font-display text-3xl font-extrabold text-brand-black mt-1">0 Sh</p>
-        </div>
-        <div>
-          <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">Growth / Gain</span>
-          <p id="inv-gain-loss" class="font-display text-3xl font-extrabold text-emerald-600 mt-1">+0 Sh</p>
-        </div>
-        <div>
-          <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">Return %</span>
-          <p id="inv-percentage-return" class="font-display text-3xl font-extrabold text-emerald-600 mt-1">+0.00%</p>
-        </div>
-      </div>
-      <!-- Valuation History -->
-      <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-pop space-y-4">
-        <h3 class="font-bold text-base text-brand-black">Investment History Log</h3>
-        <div id="investment-history-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-      </div>
-    </div>
-
-    <!-- ==================== TAB 5: APPEARICH BUSINESS ==================== -->
-    <div id="tab-appearich" class="tab-content hidden space-y-8">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 class="font-display font-bold text-2xl text-brand-black">Appearich Business & Sales System</h2>
-          <p class="text-xs text-brand-muted">Dedicated business sales tracking, payment status management, and customer analytics.</p>
-        </div>
-        <button onclick="openModal('addSaleModal')" class="bg-brand-black text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-sm hover:bg-gray-800 transition">
-          <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-          <span>+ ADD SALE</span>
-        </button>
-      </div>
-      <!-- Business Metric Cards -->
-      <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
-        <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-pop transition-all hover:-translate-y-1">
-          <p class="text-xs font-semibold text-brand-muted">TODAY'S RECEIVED</p>
-          <p id="app-today-sales" class="font-display text-2xl font-bold text-brand-black mt-2">0 Sh</p>
-        </div>
-        <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-pop transition-all hover:-translate-y-1">
-          <p class="text-xs font-semibold text-brand-muted">TODAY'S PROFIT</p>
-          <p id="app-today-profit" class="font-display text-2xl font-bold text-emerald-600 mt-2">0 Sh</p>
-        </div>
-        <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-pop transition-all hover:-translate-y-1">
-          <p class="text-xs font-semibold text-brand-muted">THIS MONTH REVENUE</p>
-          <p id="app-month-revenue" class="font-display text-2xl font-bold text-brand-black mt-2">0 Sh</p>
-        </div>
-        <div class="p-5 rounded-2xl bg-white border border-red-200 shadow-pop transition-all hover:-translate-y-1">
-          <p class="text-xs font-semibold text-red-500 flex items-center gap-1">
-            <span class="w-2 h-2 rounded-full bg-red-500 inline-block animate-pulse"></span>
-            OUTSTANDING
-          </p>
-          <p id="app-total-outstanding" class="font-display text-2xl font-bold text-red-600 mt-2">0 Sh</p>
-        </div>
-        <div class="p-5 rounded-2xl bg-brand-black text-white shadow-gold-glow transition-all hover:-translate-y-1">
-          <p class="text-xs font-semibold text-brand-gold">TOTAL PROFIT</p>
-          <p id="app-total-profit" class="font-display text-2xl font-bold text-brand-gold mt-2">0 Sh</p>
-        </div>
-      </div>
-      <!-- Performance Period & Highlights -->
-      <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-pop space-y-6">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-4">
-          <div class="flex space-x-2">
-            <button onclick="switchAppearichPeriod('day')" id="app-period-day" class="app-period-btn active px-4 py-1.5 rounded-lg text-xs font-bold bg-brand-black text-white">DAY</button>
-            <button onclick="switchAppearichPeriod('week')" id="app-period-week" class="app-period-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-brand-muted hover:text-brand-black">WEEK</button>
-            <button onclick="switchAppearichPeriod('month')" id="app-period-month" class="app-period-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-brand-muted hover:text-brand-black">MONTH</button>
-            <button onclick="switchAppearichPeriod('year')" id="app-period-year" class="app-period-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-brand-muted hover:text-brand-black">YEAR</button>
-          </div>
-          <span class="text-xs font-bold text-emerald-600">Profit Growth: +0%</span>
-        </div>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-          <div class="p-4 rounded-2xl bg-brand-surface shadow-sm"><p class="text-[10px] text-brand-muted uppercase font-bold">Products Sold</p><p id="app-period-sold" class="font-display font-bold text-xl text-brand-black mt-1">0</p></div>
-          <div class="p-4 rounded-2xl bg-brand-surface shadow-sm"><p class="text-[10px] text-brand-muted uppercase font-bold">Total Revenue</p><p id="app-period-revenue" class="font-display font-bold text-xl text-brand-black mt-1">0 Sh</p></div>
-          <div class="p-4 rounded-2xl bg-brand-surface shadow-sm"><p class="text-[10px] text-brand-muted uppercase font-bold">Buying Cost</p><p id="app-period-cost" class="font-display font-bold text-xl text-brand-black mt-1">0 Sh</p></div>
-          <div class="p-4 rounded-2xl bg-brand-surface shadow-sm"><p class="text-[10px] text-brand-muted uppercase font-bold">Profit Margin</p><p id="app-period-margin" class="font-display font-bold text-xl text-emerald-600 mt-1">0%</p></div>
-        </div>
-      </div>
-      <!-- Top Products & Customers Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-pop space-y-4">
-          <h3 class="font-bold text-base text-brand-black">Best Products</h3>
-          <div id="appearich-top-products" class="grid grid-cols-1 gap-3">No products sold yet.</div>
-        </div>
-        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-pop space-y-4">
-          <h3 class="font-bold text-base text-brand-black">Customer Tracking</h3>
-          <div id="appearich-customers-list" class="grid grid-cols-1 gap-3">No customers recorded yet.</div>
-        </div>
-      </div>
-      <!-- Sales Log Cards Grid Layout -->
-      <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-pop space-y-4">
-        <h3 class="font-bold text-base text-brand-black">Sales Transactions Log</h3>
-        <div id="appearich-sales-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <!-- Dynamic Pop-up Sales Cards Rendered via JS -->
-        </div>
-      </div>
-    </div>
-
-    <!-- ==================== TAB 6: ACCOUNTS ==================== -->
-    <div id="tab-accounts" class="tab-content hidden space-y-8">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 class="font-display font-bold text-2xl text-brand-black">Accounts — Where is my money?</h2>
-          <p class="text-xs text-brand-muted">CRDB, SELCOM, MPESA, LIPA NAMBA, and CASH liquid asset distribution.</p>
-        </div>
-        <div class="flex space-x-2">
-          <button onclick="openModal('addMoneyModal')" class="bg-gray-100 text-brand-black hover:bg-gray-200 px-4 py-2.5 rounded-xl font-medium text-sm transition">
-            + Add Money
-          </button>
-          <button onclick="openModal('transferModal')" class="bg-brand-black text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-sm hover:bg-gray-800 transition">
-            <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
-            <span>Transfer Funds</span>
-          </button>
-        </div>
-      </div>
-      <!-- Aggregate Total Money -->
-      <div class="p-8 rounded-3xl bg-brand-black text-white shadow-pop flex flex-col sm:flex-row items-center justify-between gap-6 border border-brand-black">
-        <div>
-          <span class="text-xs font-bold text-brand-gold uppercase tracking-widest">TOTAL MONEY (Liquid Net Worth)</span>
-          <p id="accounts-total-money" class="font-display text-4xl font-extrabold text-white mt-1">0 Sh</p>
-        </div>
-        <span class="px-3 py-1 rounded-full bg-brand-gold/20 text-brand-gold text-xs font-bold">5 Active Accounts</span>
-      </div>
-      <!-- Account Cards Grid -->
-      <div id="account-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-    </div>
-
-    <!-- ==================== TAB 7: PROGRESS & PROFILE ==================== -->
-    <div id="tab-progress" class="tab-content hidden space-y-8">
-      <div>
-        <h2 class="font-display font-bold text-2xl text-brand-black">Progress Center</h2>
-        <p class="text-xs text-brand-muted">Weekly, monthly, and yearly performance metrics and financial growth tracking.</p>
-      </div>
-      <!-- Score & Insights Banner -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="p-6 rounded-3xl bg-brand-black text-white shadow-pop flex flex-col items-center justify-center text-center space-y-4 relative overflow-hidden">
-          <p class="text-xs font-bold text-brand-gold uppercase tracking-wider">FINANCIAL GROWTH SCORE</p>
-          <div class="relative w-32 h-32 flex items-center justify-center">
-            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-              <path class="text-gray-800" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-              <path class="text-brand-gold" stroke-dasharray="0, 100" stroke-width="3" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-            </svg>
-            <span class="absolute font-display font-extrabold text-3xl text-white">+0.0%</span>
-          </div>
-          <p class="text-xs text-gray-400">Consistent upward momentum across business and investments.</p>
-        </div>
-        <div class="lg:col-span-2 p-6 rounded-3xl bg-white border border-gray-100 shadow-pop space-y-4 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center space-x-2 text-brand-black mb-2">
-              <svg class="w-5 h-5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-              <h3 class="font-bold text-base">Smart Growth Insights</h3>
-            </div>
-            <div id="progress-insights-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-brand-black font-medium"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- PROFILE & SETTINGS SECTION -->
-      <div class="p-6 rounded-3xl bg-brand-surface border border-gray-200/80 space-y-4">
-        <h3 class="font-bold text-base text-brand-black">Profile & Visual Preferences</h3>
-        <p class="text-xs text-brand-muted">Manage your personal settings and customize your Home screen hero image dynamically.</p>
-        <div class="pt-2">
-          <button onclick="openModal('changeHeroModal')" class="px-5 py-3 rounded-2xl bg-brand-black text-white text-xs font-bold hover:bg-gray-800 transition shadow-pop flex items-center space-x-2">
-            <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-            <span>Change Hero Image</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <!-- BOTTOM NAVIGATION -->
-  <nav class="fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-t border-gray-200 px-4 py-2.5">
-    <div class="max-w-md mx-auto flex items-center justify-between">
-      <button onclick="switchTab('dashboard')" id="bnav-dashboard" class="bnav-btn flex flex-col items-center space-y-1 text-brand-black">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-        <span class="text-[10px] font-bold">Home</span>
-      </button>
-      <button onclick="switchTab('budget')" id="bnav-budget" class="bnav-btn flex flex-col items-center space-y-1 text-brand-muted hover:text-brand-black">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" /></svg>
-        <span class="text-[10px] font-bold">Budget</span>
-      </button>
-      <button onclick="openModal('addTransactionModal')" class="flex flex-col items-center justify-center w-11 h-11 rounded-2xl bg-brand-black text-white shadow-gold-glow -mt-5 hover:scale-105 transition">
-        <svg class="w-6 h-6 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-      </button>
-      <button onclick="switchTab('accounts')" id="bnav-accounts" class="bnav-btn flex flex-col items-center space-y-1 text-brand-muted hover:text-brand-black">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-        <span class="text-[10px] font-bold">Accounts</span>
-      </button>
-      <button onclick="switchTab('progress')" id="bnav-progress" class="bnav-btn flex flex-col items-center space-y-1 text-brand-muted hover:text-brand-black">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
-        <span class="text-[10px] font-bold">Progress</span>
-      </button>
-    </div>
-  </nav>
-
-  <!-- ==================== MODALS ==================== -->
-  <!-- Change Hero Image Modal -->
-  <div id="changeHeroModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Update Hero Image URL</h3>
-        <button onclick="closeModal('changeHeroModal')" class="text-gray-400 hover:text-black">&times;</button>
-      </div>
-      <form onsubmit="handleChangeHeroImage(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs font-bold text-brand-black uppercase mb-1">Image URL</label>
-          <input id="hero-url-input" type="url" required placeholder="https://images.unsplash.com/..." class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm">
-        </div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Update Image</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Add Income Modal -->
-  <div id="addIncomeModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Add Income Source</h3>
-        <button onclick="closeModal('addIncomeModal')" class="text-gray-400 hover:text-black">&times;</button>
-      </div>
-      <form onsubmit="handleAddIncome(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs font-bold text-brand-black uppercase mb-1">Source Name</label>
-          <input id="income-name-input" type="text" required placeholder="e.g. Consulting" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-brand-black uppercase mb-1">Amount (Sh)</label>
-          <input id="income-amount-input" type="number" required placeholder="500000" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm">
-        </div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Save Income</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Add Sale Modal -->
-  <div id="addSaleModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-lg w-full space-y-4 shadow-2xl border border-gray-100 max-h-[90vh] overflow-y-auto">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Record Appearich Business Sale</h3>
-        <button onclick="closeModal('addSaleModal')" class="text-gray-400 hover:text-black">&times;</button>
-      </div>
-      <form onsubmit="handleAddSale(event)" class="space-y-4">
-        <div class="grid grid-cols-2 gap-3">
-          <div><label class="block text-xs font-bold uppercase mb-1">Date</label><input id="sale-date" type="date" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-          <div><label class="block text-xs font-bold uppercase mb-1">Quantity</label><input id="sale-qty" type="number" value="1" min="1" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        </div>
-        <div><label class="block text-xs font-bold uppercase mb-1">Product Name</label><input id="sale-product" type="text" required placeholder="Item Name" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        <div><label class="block text-xs font-bold uppercase mb-1">Customer Name</label><input id="sale-customer" type="text" required placeholder="Customer" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        <div class="grid grid-cols-2 gap-3">
-          <div><label class="block text-xs font-bold uppercase mb-1">Buying Price (Sh)</label><input id="sale-buy-price" type="number" required placeholder="35000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-          <div><label class="block text-xs font-bold uppercase mb-1">Selling Price (Sh)</label><input id="sale-sell-price" type="number" required placeholder="55000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        </div>
-        
-        <!-- Payment Status Selector -->
-        <div>
-          <label class="block text-xs font-bold uppercase mb-1">Payment Status</label>
-          <select id="sale-payment-status" onchange="toggleSalePartialInput()" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white font-medium">
-            <option value="FULL">Full Payment</option>
-            <option value="PARTIAL">Partial Payment</option>
-          </select>
-        </div>
-        <div id="sale-partial-container" class="hidden">
-          <label class="block text-xs font-bold uppercase mb-1 text-red-600">Amount Paid So Far (Sh)</label>
-          <input id="sale-paid-amount" type="number" placeholder="Enter amount paid" class="w-full px-3 py-2 rounded-xl border border-red-300 text-sm">
-        </div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Record Sale</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Update Business Payment Modal -->
-  <div id="updateSalePaymentModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Update Sale Payment Status</h3>
-        <button onclick="closeModal('updateSalePaymentModal')" class="text-gray-400 hover:text-black">&times;</button>
-      </div>
-      <form onsubmit="handleUpdateSalePayment(event)" class="space-y-4">
-        <input type="hidden" id="edit-sale-id">
-        <div>
-          <label class="block text-xs font-bold uppercase mb-1">Payment Status</label>
-          <select id="edit-sale-status" onchange="toggleEditSalePartialInput()" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white font-medium">
-            <option value="FULL">Full Payment</option>
-            <option value="PARTIAL">Partial Payment</option>
-          </select>
-        </div>
-        <div id="edit-sale-paid-container">
-          <label class="block text-xs font-bold uppercase mb-1">Total Amount Paid So Far (Sh)</label>
-          <input id="edit-sale-paid-amount" type="number" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm">
-        </div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Save Payment Changes</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Add Loan Modal -->
-  <div id="addLoanModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Record Loan Given</h3>
-        <button onclick="closeModal('addLoanModal')" class="text-gray-400 hover:text-black">&times;</button>
-      </div>
-      <form onsubmit="handleAddLoan(event)" class="space-y-4">
-        <div><label class="block text-xs font-bold uppercase mb-1">Person's Name</label><input id="loan-borrower" type="text" required placeholder="e.g. John Doe" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        <div class="grid grid-cols-2 gap-3">
-          <div><label class="block text-xs font-bold uppercase mb-1">Amount Borrowed (Sh)</label><input id="loan-amount" type="number" required placeholder="100000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-          <div><label class="block text-xs font-bold uppercase mb-1">Date</label><input id="loan-date" type="date" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        </div>
-        <div><label class="block text-xs font-bold uppercase mb-1">Amount Paid So Far (Sh)</label><input id="loan-paid" type="number" value="0" min="0" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        <div><label class="block text-xs font-bold uppercase mb-1">Optional Note / Purpose</label><input id="loan-note" type="text" placeholder="e.g. Emergency funds" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Save Loan Record</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Update Loan Repayment Modal -->
-  <div id="updateLoanModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Update Loan Repayment</h3>
-        <button onclick="closeModal('updateLoanModal')" class="text-gray-400 hover:text-black">&times;</button>
-      </div>
-      <form onsubmit="handleUpdateLoan(event)" class="space-y-4">
-        <input type="hidden" id="edit-loan-id">
-        <div>
-          <label class="block text-xs font-bold uppercase mb-1">Total Amount Paid So Far (Sh)</label>
-          <input id="edit-loan-paid" type="number" min="0" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm">
-        </div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Update Loan Balance</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Add Expense Transaction Modal -->
-  <div id="addTransactionModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Add Expense Transaction</h3>
-        <button onclick="closeModal('addTransactionModal')" class="text-gray-400 hover:text-black">&times;</button>
-      </div>
-      <form onsubmit="handleAddTransaction(event)" class="space-y-4">
-        <div><label class="block text-xs font-bold uppercase mb-1">Description</label><input id="tx-name" type="text" required placeholder="e.g. Internet" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-bold uppercase mb-1">Category</label>
-            <select id="tx-category" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
-              <option value="Internet">Internet</option>
-              <option value="Umeme">Umeme</option>
-              <option value="Taka">Taka</option>
-              <option value="Transport">Transport</option>
-              <option value="Appearich">Appearich</option>
-              <option value="Expenses">Expenses</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-bold uppercase mb-1">Account</label>
-            <select id="tx-account" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
-              <option value="CRDB">CRDB</option>
-              <option value="SELCOM">SELCOM</option>
-              <option value="MPESA">MPESA</option>
-              <option value="LIPA NAMBA">LIPA NAMBA</option>
-              <option value="CASH">CASH</option>
-            </select>
-          </div>
-        </div>
-        <div><label class="block text-xs font-bold uppercase mb-1">Amount (Sh)</label><input id="tx-amount" type="number" required placeholder="40000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Execute Expense</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Transfer Modal -->
-  <div id="transferModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Transfer Between Accounts</h3>
-        <button onclick="closeModal('transferModal')" class="text-gray-400 hover:text-black">&times;</button>
-      </div>
-      <form onsubmit="handleTransfer(event)" class="space-y-4">
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-bold uppercase mb-1">From</label>
-            <select id="tr-from" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
-              <option value="CRDB">CRDB</option><option value="SELCOM">SELCOM</option><option value="MPESA">MPESA</option><option value="LIPA NAMBA">LIPA NAMBA</option><option value="CASH">CASH</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-bold uppercase mb-1">To</label>
-            <select id="tr-to" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
-              <option value="MPESA">MPESA</option><option value="CRDB">CRDB</option><option value="SELCOM">SELCOM</option><option value="LIPA NAMBA">LIPA NAMBA</option><option value="CASH">CASH</option>
-            </select>
-          </div>
-        </div>
-        <div><label class="block text-xs font-bold uppercase mb-1">Amount (Sh)</label><input id="tr-amount" type="number" required placeholder="50000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Transfer Funds</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Add Money Modal -->
-  <div id="addMoneyModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Add Money to Account</h3>
-        <button onclick="closeModal('addMoneyModal')" class="text-gray-400 hover:text-black">&times;</button>
-      </div>
-      <form onsubmit="handleAddMoneyAccount(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs font-bold uppercase mb-1">Account</label>
-          <select id="am-account" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
-            <option value="CRDB">CRDB</option><option value="SELCOM">SELCOM</option><option value="MPESA">MPESA</option><option value="LIPA NAMBA">LIPA NAMBA</option><option value="CASH">CASH</option>
-          </select>
-        </div>
-        <div><label class="block text-xs font-bold uppercase mb-1">Amount (Sh)</label><input id="am-amount" type="number" required placeholder="100000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Deposit</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Add Capital Investment Modal -->
-  <div id="addInvestmentModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Add Investment Capital</h3>
-        <button onclick="closeModal('addInvestmentModal')" class="text-gray-400 hover:text-black">&times;</button>
-      </div>
-      <form onsubmit="handleAddInvestmentCapital(event)" class="space-y-4">
-        <div><label class="block text-xs font-bold uppercase mb-1">Additional Amount (Sh)</label><input id="inv-add-amount" type="number" required placeholder="100000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Add Capital</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Update Investment Valuation Modal -->
-  <div id="updateInvestmentModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Update Investment Portfolio Value</h3>
-        <button onclick="closeModal('updateInvestmentModal')" class="text-gray-400 hover:text-black">&times;</button>
-      </div>
-      <form onsubmit="handleUpdateInvestmentValue(event)" class="space-y-4">
-        <div><label class="block text-xs font-bold uppercase mb-1">Current Total Value (Sh)</label><input id="inv-update-value" type="number" required placeholder="700000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Update Valuation</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Custom Budget Category Modal -->
-  <div id="addCategoryModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Add Custom Budget Category</h3>
-        <button onclick="closeModal('addCategoryModal')" class="text-gray-400 hover:text-black">&times;</button>
-      </div>
-      <form onsubmit="handleAddCategory(event)" class="space-y-4">
-        <div><label class="block text-xs font-bold uppercase mb-1">Category Name</label><input id="cat-name-input" type="text" required placeholder="e.g. Health" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm"></div>
-        <div><label class="block text-xs font-bold uppercase mb-1">Percentage (%)</label><input id="cat-percent-input" type="number" step="0.1" required placeholder="5" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm"></div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Create Category</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- ==================== JAVASCRIPT APP ENGINE ==================== -->
-  <script>
-    // INITIAL STATE & AUTOMATIC MONTHLY REFRESH/RESET LOGIC FOR TITHE & INCOME
-    const currentMonthKey = new Date().toISOString().slice(0, 7);
-    const savedMonthKey = localStorage.getItem('appearich_last_month_key');
-
-    const state = {
-      incomes: (savedMonthKey === currentMonthKey) ? JSON.parse(localStorage.getItem('appearich_incomes') || '[]') : [],
-      categories: [
-        { id: 'cat-utilities', name: 'Utilities', percent: 25, isExpandable: true },
-        { id: 'cat-investment', name: 'Investment', percent: 20, isExpandable: false },
-        { id: 'cat-appearich', name: 'Appearich', percent: 20, isExpandable: false },
-        { id: 'cat-expenses', name: 'Expenses', percent: 20, isExpandable: false },
-        { id: 'cat-other', name: 'Other', percent: 5, isExpandable: false }
-      ],
-      utilitiesSub: [
-        { name: 'Internet', percent: 8, spent: 0 },
-        { name: 'Umeme', percent: 7, spent: 0 },
-        { name: 'Taka', percent: 4, spent: 0 },
-        { name: 'Transport', percent: 6, spent: 0 }
-      ],
-      categorySpent: { 'Appearich': 0, 'Expenses': 0, 'Other': 0 },
-      investment: {
-        totalInvested: 0,
-        currentValue: 0,
-        history: []
-      },
-      sales: [],
-      loans: [],
-      accounts: { 'CRDB': 0, 'SELCOM': 0, 'MPESA': 0, 'LIPA NAMBA': 0, 'CASH': 0 },
-      currentTab: 'dashboard',
-      appearichPeriod: 'day',
-      utilitiesExpanded: false
+    return {
+      selectedMonthIncomeTotal,
+      selectedMonthTitheTotal,
+      totalLiquidMoney,
+      appTotalRevenue,
+      appTotalCost,
+      appTotalReceived,
+      appTotalOutstanding,
+      appTotalProfit,
+      invGainLoss,
+      totalLoanOwed
     };
+  }
 
-    if (savedMonthKey !== currentMonthKey) {
-      localStorage.setItem('appearich_last_month_key', currentMonthKey);
-      localStorage.setItem('appearich_incomes', JSON.stringify([]));
-    }
+  // ==========================================
+  // UI RENDERERS & LAYOUT UPDATES
+  // ==========================================
+  function renderAll() {
+    const calc = getCalculations();
+    const currentMonthLabel = getMonthName(state.selectedMonth);
 
-    function formatSh(amount) {
-      return new Intl.NumberFormat('en-US').format(Math.round(amount || 0)) + ' Sh';
-    }
+    // Update Home Screen Overview Ring Indicators
+    renderRingOverview(calc.selectedMonthTitheTotal, calc.selectedMonthIncomeTotal, currentMonthLabel);
 
-    function getCalculations() {
-      const totalIncome = state.incomes.reduce((sum, inc) => sum + inc.amount, 0);
-      const godTotal = totalIncome * 0.10;
-      const availableBudget = totalIncome - godTotal;
-      let totalSpent = 0;
-      state.utilitiesSub.forEach(s => totalSpent += s.spent);
-      Object.values(state.categorySpent).forEach(v => totalSpent += v);
-      const remainingBudget = availableBudget - totalSpent;
-      const invGainLoss = state.investment.currentValue - state.investment.totalInvested;
-      const invReturnPercent = state.investment.totalInvested > 0 ? (invGainLoss / state.investment.totalInvested) * 100 : 0;
-      const totalLiquidMoney = Object.values(state.accounts).reduce((sum, val) => sum + val, 0);
-      
-      let appTotalRevenue = 0, appTotalCost = 0, appTotalReceived = 0, appTotalOutstanding = 0;
-      state.sales.forEach(sale => {
-        const totalValue = sale.sellPrice * sale.qty;
-        const totalCost = sale.buyPrice * sale.qty;
-        const paid = sale.paymentStatus === 'FULL' ? totalValue : (sale.amountPaid || 0);
-        const unpaid = totalValue - paid;
-        appTotalRevenue += totalValue;
-        appTotalCost += totalCost;
-        appTotalReceived += paid;
-        appTotalOutstanding += unpaid;
-      });
-      const appTotalProfit = appTotalReceived - appTotalCost;
-      const totalLoanOwed = state.loans.reduce((sum, loan) => sum + (loan.amount - loan.paid), 0);
-      return { 
-        totalIncome, 
-        godTotal, 
-        availableBudget, 
-        totalSpent, 
-        remainingBudget, 
-        invGainLoss, 
-        invReturnPercent, 
-        totalLiquidMoney, 
-        appTotalRevenue, 
-        appTotalCost, 
-        appTotalReceived, 
-        appTotalOutstanding, 
-        appTotalProfit,
-        totalLoanOwed
-      };
-    }
+    // Render Quick Actions & Horizontal Budget Categories on Dashboard
+    renderHorizontalBudgetCategories();
+    renderQuickActionsGrid();
 
-    function renderAll() {
-      const calc = getCalculations();
-      
-      // Overview Tithe & Total Income Updates
-      document.getElementById('dash-total-income').innerText = formatSh(calc.totalIncome);
-      document.getElementById('dash-god-amount').innerText = formatSh(calc.godTotal);
-      
-      // Horizontal Budget Categories Section (Home)
-      renderHomeBudgetHorizontal(calc.availableBudget);
+    // Render Grid Layouts across screens
+    renderIncomeGrid();
+    renderAccountsGrid();
+    renderLoansGrid();
+    renderUtilitiesGrid();
+    renderInvestmentGrid();
+    renderExpensesGrid();
 
-      // Income Tab
-      document.getElementById('income-god-total').innerText = formatSh(calc.godTotal);
-      renderIncomeCards();
-      
-      // Budget Tab
-      document.getElementById('budget-pool-total').innerText = formatSh(calc.availableBudget);
-      renderBudgetCategoryList(calc.availableBudget);
-      
-      // Investment Tab
-      document.getElementById('inv-total-invested').innerText = formatSh(state.investment.totalInvested);
-      document.getElementById('inv-current-value').innerText = formatSh(state.investment.currentValue);
-      document.getElementById('inv-gain-loss').innerText = (calc.invGainLoss >= 0 ? '+' : '') + formatSh(calc.invGainLoss);
-      document.getElementById('inv-percentage-return').innerText = (calc.invReturnPercent >= 0 ? '+' : '') + calc.invReturnPercent.toFixed(2) + '%';
-      renderInvestmentHistoryList();
-      
-      // Appearich Tab
-      document.getElementById('app-today-sales').innerText = formatSh(calc.appTotalReceived);
-      document.getElementById('app-today-profit').innerText = formatSh(calc.appTotalProfit);
-      document.getElementById('app-month-revenue').innerText = formatSh(calc.appTotalRevenue);
-      document.getElementById('app-total-outstanding').innerText = formatSh(calc.appTotalOutstanding);
-      document.getElementById('app-total-profit').innerText = formatSh(calc.appTotalProfit);
-      renderAppearichDashboard(calc);
-      
-      // Loans Section
-      document.getElementById('loan-total-owed').innerText = formatSh(calc.totalLoanOwed);
-      renderLoansList();
+    // Update settings tithing selector
+    updateTithingMonthSelector();
+  }
 
-      // Accounts Tab
-      document.getElementById('accounts-total-money').innerText = formatSh(calc.totalLiquidMoney);
-      renderAccountCards();
-      
-      // Progress Insights
-      renderProgressInsights(calc);
-    }
+  // 1. Overview Ring Card Component
+  function renderRingOverview(tithe, totalIncome, monthLabel) {
+    const container = document.getElementById('dash-overview-box');
+    if (!container) return;
 
-    // Dynamic Hero Image Handler
-    function handleChangeHeroImage(e) {
-      e.preventDefault();
-      const newUrl = document.getElementById('hero-url-input').value;
-      if (newUrl) {
-        document.getElementById('hero-bg-img').src = newUrl;
-        closeModal('changeHeroModal');
-      }
-    }
-
-    // Render Home Horizontal Budget Cards
-    function renderHomeBudgetHorizontal(availablePool) {
-      const container = document.getElementById('home-budget-horizontal-container');
-      container.innerHTML = '';
-      
-      state.categories.forEach(cat => {
-        const plannedSh = (availablePool * cat.percent) / 100;
-        let spentSh = 0;
-        if (cat.isExpandable) {
-          state.utilitiesSub.forEach(sub => spentSh += sub.spent);
-        } else {
-          spentSh = state.categorySpent[cat.name] || 0;
-        }
-        
-        const card = document.createElement('div');
-        card.className = "flex-shrink-0 w-64 p-5 rounded-3xl bg-white border border-gray-100 shadow-pop space-y-3 cursor-pointer hover:-translate-y-1 transition-all";
-        card.onclick = () => switchTab('budget');
-        card.innerHTML = `
-          <div class="flex items-center justify-between">
-            <h4 class="font-bold text-sm text-brand-black">${cat.name}</h4>
-            <span class="px-2.5 py-0.5 rounded-full bg-gray-100 text-[10px] font-bold text-brand-black">${cat.percent}%</span>
-          </div>
-          <p class="font-display font-extrabold text-xl text-brand-black">${formatSh(plannedSh)}</p>
-          <div class="pt-2 border-t border-gray-100 flex justify-between items-center text-xs">
-            <span class="text-brand-muted">Spent: ${formatSh(spentSh)}</span>
-            <span class="font-bold text-emerald-600">${formatSh(plannedSh - spentSh)} left</span>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function renderIncomeCards() {
-      const container = document.getElementById('income-list-container');
-      container.innerHTML = '';
-      if (state.incomes.length === 0) {
-        container.innerHTML = `<div class="col-span-3 text-center py-8 text-brand-muted text-xs">No income streams recorded yet. Click above to add one.</div>`;
-        return;
-      }
-      state.incomes.forEach(inc => {
-        const godShare = inc.amount * 0.10;
-        const card = document.createElement('div');
-        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-pop flex flex-col justify-between space-y-4 hover:-translate-y-1 transition-all";
-        card.innerHTML = `
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold uppercase tracking-wider text-brand-black">${inc.name}</span>
-            <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-[10px] font-bold text-emerald-600">ACTIVE</span>
-          </div>
-          <div><p class="text-[11px] text-brand-muted">Amount</p><p class="font-display font-extrabold text-2xl text-brand-black">${formatSh(inc.amount)}</p></div>
-          <div class="pt-3 border-t border-gray-100 flex items-center justify-between bg-brand-surface p-3 rounded-2xl">
-            <span class="text-xs font-bold text-brand-gold">GOD 10%</span>
-            <span class="font-display font-bold text-sm text-brand-black">${formatSh(godShare)}</span>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function renderBudgetCategoryList(availablePool) {
-      const utilsList = document.getElementById('utilities-subcategories-list');
-      utilsList.innerHTML = '';
-      let utilsPlannedTotal = 0, utilsSpentTotal = 0;
-      state.utilitiesSub.forEach(sub => {
-        const plannedSh = (availablePool * sub.percent) / 100;
-        utilsPlannedTotal += plannedSh;
-        utilsSpentTotal += sub.spent;
-        const remaining = plannedSh - sub.spent;
-        const subCard = document.createElement('div');
-        subCard.className = "p-4 bg-white rounded-2xl border border-gray-100 space-y-2 shadow-sm hover:-translate-y-0.5 transition-all";
-        subCard.innerHTML = `
-          <div class="flex justify-between items-center"><span class="font-bold text-sm text-brand-black">${sub.name}</span><span class="text-xs text-brand-muted">${sub.percent}% → ${formatSh(plannedSh)}</span></div>
-          <div class="flex justify-between text-xs"><span class="text-brand-muted">Spent: ${formatSh(sub.spent)}</span><span class="font-bold text-emerald-600">Rem: ${formatSh(remaining)}</span></div>
-        `;
-        utilsList.appendChild(subCard);
-      });
-      document.getElementById('utilities-planned').innerText = formatSh(utilsPlannedTotal);
-      document.getElementById('utilities-spent-summary').innerText = `Spent: ${formatSh(utilsSpentTotal)}`;
-      const mainList = document.getElementById('main-categories-list');
-      mainList.innerHTML = '';
-      let totalAllocatedPercent = 25;
-      state.categories.filter(c => !c.isExpandable).forEach(cat => {
-        totalAllocatedPercent += cat.percent;
-        const plannedSh = (availablePool * cat.percent) / 100;
-        const spentSh = state.categorySpent[cat.name] || 0;
-        const card = document.createElement('div');
-        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-pop space-y-4 hover:-translate-y-1 transition-all";
-        card.innerHTML = `
-          <div class="flex justify-between items-center"><h4 class="font-bold text-base text-brand-black">${cat.name} (${cat.percent}%)</h4><span class="font-display font-bold text-lg text-brand-black">${formatSh(plannedSh)}</span></div>
-          <div class="flex justify-between text-xs pt-2 border-t border-gray-100"><span class="text-brand-muted">Spent: ${formatSh(spentSh)}</span><span class="font-bold text-emerald-600">Remaining: ${formatSh(plannedSh - spentSh)}</span></div>
-        `;
-        mainList.appendChild(card);
-      });
-      document.getElementById('budget-allocated-percent').innerText = `${totalAllocatedPercent.toFixed(1)}%`;
-      document.getElementById('budget-allocated-bar').style.width = `${Math.min(totalAllocatedPercent, 100)}%`;
-    }
-
-    function renderInvestmentHistoryList() {
-      const list = document.getElementById('investment-history-list');
-      list.innerHTML = '';
-      if (state.investment.history.length === 0) {
-        list.innerHTML = `<div class="col-span-full py-4 text-center text-xs text-brand-muted">No valuation history recorded yet.</div>`;
-        return;
-      }
-      state.investment.history.forEach(item => {
-        const card = document.createElement('div');
-        card.className = "p-4 rounded-2xl bg-white border border-gray-100 shadow-pop flex justify-between items-center text-xs hover:-translate-y-0.5 transition-all";
-        card.innerHTML = `<span class="font-medium text-brand-muted">${item.date}</span><span class="font-display font-bold text-sm text-brand-black">${formatSh(item.value)}</span>`;
-        list.appendChild(card);
-      });
-    }
-
-    function renderAppearichDashboard(calc) {
-      const grid = document.getElementById('appearich-sales-grid');
-      grid.innerHTML = '';
-      if (state.sales.length === 0) {
-        grid.innerHTML = `<div class="col-span-full py-6 text-center text-brand-muted text-xs">No sales recorded yet. Click + ADD SALE to record transactions.</div>`;
-        return;
-      }
-      state.sales.forEach(sale => {
-        const totalValue = sale.sellPrice * sale.qty;
-        const paid = sale.paymentStatus === 'FULL' ? totalValue : (sale.amountPaid || 0);
-        const remaining = totalValue - paid;
-        const isPartial = sale.paymentStatus === 'PARTIAL' && remaining > 0;
-        
-        const card = document.createElement('div');
-        card.className = "p-5 rounded-2xl bg-white border border-gray-100 shadow-pop space-y-3 flex flex-col justify-between hover:-translate-y-1 transition-all";
-        card.innerHTML = `
-          <div class="flex justify-between items-start">
-            <div>
-              <span class="text-[10px] font-bold text-brand-muted uppercase">${sale.date}</span>
-              <h4 class="font-bold text-sm text-brand-black">${sale.product}</h4>
-              <p class="text-xs text-brand-muted">Customer: ${sale.customer}</p>
+    container.innerHTML = `
+      <div class="p-6 rounded-3xl bg-brand-surface border border-gray-200 shadow-premium">
+        <p class="text-xs font-bold text-center text-brand-muted uppercase tracking-wider mb-4">
+          Overview — ${monthLabel}
+        </p>
+        <div class="flex items-center justify-around gap-4">
+          <!-- Tithe Ring Indicator (LEFT) -->
+          <div class="flex flex-col items-center">
+            <div class="relative w-28 h-28 flex items-center justify-center">
+              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                <path class="text-gray-200" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="text-brand-gold" stroke-dasharray="100, 100" stroke-width="3" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <div class="absolute text-center">
+                <span class="text-[10px] font-bold text-brand-gold uppercase block">Tithe 10%</span>
+                <span class="font-display font-extrabold text-xs sm:text-sm text-brand-black">${formatSh(tithe)}</span>
+              </div>
             </div>
-            ${isPartial 
-              ? `<span class="px-2.5 py-0.5 rounded-full bg-red-100 text-red-600 font-bold text-[10px]">PARTIAL</span>`
-              : `<span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-600 font-bold text-[10px]">FULL</span>`
-            }
+            <span class="text-xs font-medium text-brand-muted mt-2">God's Portion</span>
           </div>
-          <div class="grid grid-cols-3 gap-2 text-xs pt-2 border-t border-gray-100">
-            <div><span class="text-[10px] text-brand-muted uppercase">Total</span><p class="font-bold text-brand-black">${formatSh(totalValue)}</p></div>
-            <div><span class="text-[10px] text-brand-muted uppercase">Paid</span><p class="font-bold text-emerald-600">${formatSh(paid)}</p></div>
-            <div><span class="text-[10px] text-brand-muted uppercase">Balance</span><p class="font-bold ${isPartial ? 'text-red-600' : 'text-gray-400'}">${formatSh(remaining)}</p></div>
-          </div>
-          <button onclick="openEditSaleModal('${sale.id}')" class="w-full py-1.5 rounded-xl bg-gray-50 hover:bg-gray-100 font-bold text-xs text-brand-black transition">Update Payment Status</button>
-        `;
-        grid.appendChild(card);
-      });
-    }
 
-    function renderLoansList() {
-      const container = document.getElementById('loan-cards-list');
-      container.innerHTML = '';
-      if (state.loans.length === 0) {
-        container.innerHTML = `<div class="col-span-2 text-center py-6 text-brand-muted text-xs">No loan records active. Click "+ Record Loan" to add one.</div>`;
-        return;
-      }
-      state.loans.forEach(loan => {
-        const remaining = loan.amount - loan.paid;
-        const isPaid = remaining <= 0;
-        const card = document.createElement('div');
-        card.className = "p-4 rounded-2xl border border-gray-100 bg-white shadow-pop space-y-3 flex flex-col justify-between hover:-translate-y-1 transition-all";
-        card.innerHTML = `
-          <div class="flex justify-between items-start">
-            <div>
-              <h4 class="font-bold text-sm text-brand-black">${loan.borrower}</h4>
-              <p class="text-[10px] text-brand-muted">${loan.date} ${loan.note ? '• ' + loan.note : ''}</p>
+          <!-- Total Income Ring Indicator (RIGHT) -->
+          <div class="flex flex-col items-center">
+            <div class="relative w-28 h-28 flex items-center justify-center">
+              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                <path class="text-gray-200" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="text-brand-black" stroke-dasharray="100, 100" stroke-width="3" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <div class="absolute text-center">
+                <span class="text-[10px] font-bold text-brand-black uppercase block">Income</span>
+                <span class="font-display font-extrabold text-xs sm:text-sm text-brand-black">${formatSh(totalIncome)}</span>
+              </div>
             </div>
-            ${isPaid 
-              ? `<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold text-[10px]">PAID</span>`
-              : `<span class="px-2 py-0.5 rounded-full bg-red-100 text-red-600 font-bold text-[10px]">OWED</span>`
-            }
+            <span class="text-xs font-medium text-brand-muted mt-2">Total Monthly</span>
           </div>
-          <div class="grid grid-cols-3 gap-2 text-xs pt-2 border-t border-gray-200/60">
-            <div><span class="text-[10px] text-brand-muted uppercase">Lent</span><p class="font-bold text-brand-black">${formatSh(loan.amount)}</p></div>
-            <div><span class="text-[10px] text-brand-muted uppercase">Paid</span><p class="font-bold text-emerald-600">${formatSh(loan.paid)}</p></div>
-            <div><span class="text-[10px] text-brand-muted uppercase">Remaining</span><p class="font-bold ${isPaid ? 'text-gray-400' : 'text-red-600'}">${formatSh(remaining)}</p></div>
-          </div>
-          ${!isPaid ? `<button onclick="openEditLoanModal('${loan.id}')" class="w-full py-1.5 rounded-xl bg-gray-50 hover:bg-gray-100 font-bold text-xs text-brand-black transition">Update Repayment</button>` : ''}
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function renderAccountCards() {
-      const grid = document.getElementById('account-cards-grid');
-      grid.innerHTML = '';
-      Object.entries(state.accounts).forEach(([name, balance]) => {
-        const card = document.createElement('div');
-        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-pop space-y-4 hover:-translate-y-1 transition-all";
-        card.innerHTML = `
-          <div class="flex justify-between items-center"><h4 class="font-bold text-base text-brand-black">${name}</h4><span class="px-2.5 py-0.5 rounded-full bg-gray-100 text-[10px] font-bold text-brand-black">LIQUID</span></div>
-          <p class="font-display font-extrabold text-2xl text-brand-black">${formatSh(balance)}</p>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    function renderProgressInsights(calc) {
-      const list = document.getElementById('progress-insights-list');
-      list.innerHTML = `
-        <div class="p-4 rounded-2xl bg-brand-surface shadow-sm border border-gray-100 space-y-1">
-          <p class="text-brand-muted uppercase text-[10px] font-bold">Total Liquid Capital</p>
-          <p class="font-bold text-brand-black text-sm">${formatSh(calc.totalLiquidMoney)}</p>
         </div>
-        <div class="p-4 rounded-2xl bg-brand-surface shadow-sm border border-gray-100 space-y-1">
-          <p class="text-brand-muted uppercase text-[10px] font-bold">Business Profit Realized</p>
-          <p class="font-bold text-emerald-600 text-sm">${formatSh(calc.appTotalProfit)}</p>
+      </div>
+    `;
+  }
+
+  // 2. Horizontal Budget Categories Scroll
+  function renderHorizontalBudgetCategories() {
+    const container = document.getElementById('dash-categories-carousel');
+    if (!container) return;
+
+    const categories = [
+      { name: 'Appreciation', icon: 'M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z', tab: 'appearich' },
+      { name: 'Investment', icon: 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6', tab: 'investment' },
+      { name: 'Expenses', icon: 'M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z', tab: 'budget' },
+      { name: 'Utilities', icon: 'M13 10V3L4 14h7v7l9-11h-7z', tab: 'budget' },
+      { name: 'Others', icon: 'M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4', tab: 'budget' }
+    ];
+
+    container.innerHTML = `
+      <div class="flex items-center gap-4 overflow-x-auto no-scrollbar py-2">
+        ${categories.map(cat => `
+          <div onclick="switchTab('${cat.tab}')" class="min-w-[140px] p-4 rounded-2xl bg-white border border-gray-100 shadow-premium hover:shadow-card-hover cursor-pointer flex flex-col items-center justify-center text-center transition flex-shrink-0">
+            <div class="w-10 h-10 rounded-xl bg-brand-surface flex items-center justify-center text-brand-black mb-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${cat.icon}" /></svg>
+            </div>
+            <span class="font-bold text-xs text-brand-black">${cat.name}</span>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  // 3. Quick Actions Creative Grid (Home Screen Only)
+  function renderQuickActionsGrid() {
+    const container = document.getElementById('dash-quick-actions-grid');
+    if (!container) return;
+
+    const actions = [
+      { label: '+ Income', modal: 'addIncomeModal', icon: 'M12 4v16m8-8H4' },
+      { label: '+ Sale', modal: 'addSaleModal', icon: 'M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z' },
+      { label: '+ Expense', modal: 'addTransactionModal', icon: 'M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z' },
+      { label: 'Transfer', modal: 'transferModal', icon: 'M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4' }
+    ];
+
+    container.innerHTML = `
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        ${actions.map(act => `
+          <button onclick="openModal('${act.modal}')" class="p-3.5 rounded-2xl bg-white border border-gray-200 hover:border-brand-black text-xs font-bold flex items-center justify-center space-x-2 transition shadow-sm">
+            <svg class="w-4 h-4 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${act.icon}" /></svg>
+            <span>${act.label}</span>
+          </button>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  // 4. Accounts Responsive Grid Layout
+  function renderAccountsGrid() {
+    const container = document.getElementById('account-cards-grid');
+    if (!container) return;
+
+    container.innerHTML = Object.entries(state.accounts).map(([accName, balance]) => `
+      <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-sm text-brand-black">${accName}</span>
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+        </div>
+        <div>
+          <span class="text-[10px] text-brand-muted uppercase">Available Balance</span>
+          <p class="font-display font-extrabold text-xl text-brand-black">${formatSh(balance)}</p>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // 5. Income Ledger & Tithe Tracking Grid
+  function renderIncomeGrid() {
+    const container = document.getElementById('income-list-container');
+    if (!container) return;
+
+    const filtered = state.incomes.filter(inc => inc.month === state.selectedMonth);
+    if (filtered.length === 0) {
+      container.innerHTML = `<div class="col-span-full text-center py-8 text-brand-muted text-xs">No income transactions recorded for ${getMonthName(state.selectedMonth)}.</div>`;
+      return;
+    }
+
+    container.innerHTML = filtered.map(inc => {
+      const titheShare = inc.amount * 0.10;
+      return `
+        <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-3">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-sm text-brand-black">${inc.name}</span>
+            <button onclick="deleteIncome('${inc.id}')" class="text-xs text-red-500 hover:underline">Delete</button>
+          </div>
+          <div class="flex justify-between items-end">
+            <div>
+              <span class="text-[10px] text-brand-muted uppercase">Amount</span>
+              <p class="font-display font-bold text-lg text-brand-black">${formatSh(inc.amount)}</p>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] text-brand-gold uppercase font-bold">10% Tithe</span>
+              <p class="font-display font-bold text-sm text-brand-gold">${formatSh(titheShare)}</p>
+            </div>
+          </div>
         </div>
       `;
+    }).join('');
+  }
+
+  // 6. Loans Grid
+  function renderLoansGrid() {
+    const container = document.getElementById('loan-cards-list');
+    if (!container) return;
+
+    if (state.loans.length === 0) {
+      container.innerHTML = `<div class="col-span-full text-center py-6 text-brand-muted text-xs">No loan records active.</div>`;
+      return;
     }
 
-    // TAB SWITCHING NAVIGATION
-    function switchTab(tabName) {
-      state.currentTab = tabName;
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('.nav-tab').forEach(el => {
-        el.classList.remove('active', 'bg-brand-black', 'text-white', 'shadow-sm');
-        el.classList.add('text-brand-muted');
-      });
-      document.querySelectorAll('.bnav-btn').forEach(el => {
-        el.classList.remove('text-brand-black');
-        el.classList.add('text-brand-muted');
-      });
+    container.innerHTML = state.loans.map(loan => {
+      const remaining = loan.amount - loan.paid;
+      return `
+        <div class="p-4 rounded-2xl bg-brand-surface border border-gray-200 flex justify-between items-center">
+          <div>
+            <p class="font-bold text-sm text-brand-black">${loan.borrower}</p>
+            <p class="text-xs text-brand-muted">Borrowed: ${formatSh(loan.amount)} | Paid: ${formatSh(loan.paid)}</p>
+          </div>
+          <div class="text-right">
+            <span class="text-xs font-bold text-red-600">Owed: ${formatSh(remaining)}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
 
-      const activeTabContent = document.getElementById(`tab-${tabName}`);
-      if (activeTabContent) activeTabContent.classList.remove('hidden');
+  // 7. Utilities Card Grid Layout
+  function renderUtilitiesGrid() {
+    const container = document.getElementById('utilities-subcategories-list');
+    if (!container) return;
 
-      const activeNavTab = document.getElementById(`nav-${tabName}`);
-      if (activeNavTab) {
-        activeNavTab.classList.add('active', 'bg-brand-black', 'text-white', 'shadow-sm');
-        activeNavTab.classList.remove('text-brand-muted');
-      }
+    container.innerHTML = state.utilitiesSub.map(sub => `
+      <div class="p-4 bg-white rounded-2xl border border-gray-100 flex justify-between items-center">
+        <span class="font-bold text-sm text-brand-black">${sub.name}</span>
+        <span class="text-xs font-semibold text-brand-muted">Spent: ${formatSh(sub.spent)}</span>
+      </div>
+    `).join('');
+  }
 
-      const activeBnav = document.getElementById(`bnav-${tabName}`);
-      if (activeBnav) {
-        activeBnav.classList.add('text-brand-black');
-        activeBnav.classList.remove('text-brand-muted');
-      }
+  // 8. Investment Grid
+  function renderInvestmentGrid() {
+    const container = document.getElementById('investment-history-list');
+    if (!container) return;
+
+    if (state.investment.history.length === 0) {
+      container.innerHTML = `<div class="p-4 text-center text-xs text-brand-muted">No investment records logged.</div>`;
+      return;
     }
 
-    // MODAL CONTROL HELPERS
-    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+    container.innerHTML = state.investment.history.map(item => `
+      <div class="py-3 flex justify-between items-center text-xs">
+        <span class="font-medium text-brand-black">${item.date}</span>
+        <span class="font-bold text-brand-black">${formatSh(item.value)}</span>
+      </div>
+    `).join('');
+  }
 
-    // ACCORDION TOGGLE
-    function toggleUtilitiesAccordion() {
-      state.utilitiesExpanded = !state.utilitiesExpanded;
-      const content = document.getElementById('utilities-accordion');
-      const chevron = document.getElementById('utilities-chevron');
-      if (state.utilitiesExpanded) {
-        content.classList.add('expanded');
-        chevron.classList.add('rotate-180');
-      } else {
-        content.classList.remove('expanded');
-        chevron.classList.remove('rotate-180');
-      }
+  // 9. Expenses Grid
+  function renderExpensesGrid() {
+    // Retains internal expense calculations cleanly
+  }
+
+  // ==========================================
+  // TRANSACTION & TITHE EVENT HANDLERS
+  // ==========================================
+
+  // Add Income (Calculates 10% Tithe Automatically)
+  function handleAddIncome(event) {
+    event.preventDefault();
+    const name = document.getElementById('income-name-input').value;
+    const amount = parseFloat(document.getElementById('income-amount-input').value);
+    
+    if (!name || isNaN(amount) || amount <= 0) return;
+
+    const currentMonth = new Date().toISOString().slice(0, 7);
+    const newIncome = {
+      id: 'inc_' + Date.now(),
+      name,
+      amount,
+      date: new Date().toISOString().slice(0, 10),
+      month: currentMonth
+    };
+
+    state.incomes.push(newIncome);
+    closeModal('addIncomeModal');
+    event.target.reset();
+    renderAll();
+  }
+
+  // Delete Income (Recalculates Tithe Contribution)
+  function deleteIncome(id) {
+    state.incomes = state.incomes.filter(inc => inc.id !== id);
+    renderAll();
+  }
+
+  // Handle Dynamic Image Upload for Hero Section
+  function handleHeroImageUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        state.heroImage = e.target.result;
+        const heroBg = document.getElementById('hero-bg-image');
+        if (heroBg) heroBg.style.backgroundImage = `url('${state.heroImage}')`;
+      };
+      reader.readAsDataURL(file);
     }
+  }
 
-    // EVENT HANDLERS FOR FORMS
-    function handleAddIncome(e) {
-      e.preventDefault();
-      const name = document.getElementById('income-name-input').value;
-      const amount = parseFloat(document.getElementById('income-amount-input').value) || 0;
-      if (name && amount > 0) {
-        state.incomes.push({ name, amount });
-        localStorage.setItem('appearich_incomes', JSON.stringify(state.incomes));
-        closeModal('addIncomeModal');
-        e.target.reset();
-        renderAll();
-      }
-    }
+  // Tithe Month Selector Settings Handler
+  function updateTithingMonthSelector() {
+    const select = document.getElementById('tithe-month-select');
+    if (!select) return;
 
-    function toggleSalePartialInput() {
-      const status = document.getElementById('sale-payment-status').value;
-      const container = document.getElementById('sale-partial-container');
-      if (status === 'PARTIAL') container.classList.remove('hidden');
-      else container.classList.add('hidden');
-    }
+    // Collect all unique months from saved incomes
+    const months = Array.from(new Set([new Date().toISOString().slice(0, 7), ...state.incomes.map(i => i.month)])).sort().reverse();
+    
+    select.innerHTML = months.map(m => `
+      <option value="${m}" ${m === state.selectedMonth ? 'selected' : ''}>${getMonthName(m)}</option>
+    `).join('');
+  }
 
-    function handleAddSale(e) {
-      e.preventDefault();
-      const date = document.getElementById('sale-date').value;
-      const qty = parseInt(document.getElementById('sale-qty').value) || 1;
-      const product = document.getElementById('sale-product').value;
-      const customer = document.getElementById('sale-customer').value;
-      const buyPrice = parseFloat(document.getElementById('sale-buy-price').value) || 0;
-      const sellPrice = parseFloat(document.getElementById('sale-sell-price').value) || 0;
-      const paymentStatus = document.getElementById('sale-payment-status').value;
-      const amountPaid = paymentStatus === 'PARTIAL' ? (parseFloat(document.getElementById('sale-paid-amount').value) || 0) : (sellPrice * qty);
+  function changeTitheMonth(monthKey) {
+    state.selectedMonth = monthKey;
+    renderAll();
+  }
 
-      state.sales.push({ id: 'sale-' + Date.now(), date, qty, product, customer, buyPrice, sellPrice, paymentStatus, amountPaid });
-      closeModal('addSaleModal');
-      e.target.reset();
+  // Account Transfer Handler
+  function handleTransfer(event) {
+    event.preventDefault();
+    const from = document.getElementById('tr-from').value;
+    const to = document.getElementById('tr-to').value;
+    const amount = parseFloat(document.getElementById('tr-amount').value);
+
+    if (from !== to && amount > 0 && state.accounts[from] >= amount) {
+      state.accounts[from] -= amount;
+      state.accounts[to] += amount;
+      closeModal('transferModal');
+      event.target.reset();
       renderAll();
     }
+  }
 
-    function openEditSaleModal(id) {
-      const sale = state.sales.find(s => s.id === id);
-      if (sale) {
-        document.getElementById('edit-sale-id').value = sale.id;
-        document.getElementById('edit-sale-status').value = sale.paymentStatus;
-        document.getElementById('edit-sale-paid-amount').value = sale.amountPaid || 0;
-        openModal('updateSalePaymentModal');
-      }
-    }
+  // Modal Controllers
+  function openModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) modal.classList.remove('hidden');
+  }
 
-    function toggleEditSalePartialInput() {
-      const status = document.getElementById('edit-sale-status').value;
-      const container = document.getElementById('edit-sale-paid-container');
-      if (status === 'PARTIAL') container.classList.remove('hidden');
-      else container.classList.add('hidden');
-    }
+  function closeModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) modal.classList.add('hidden');
+  }
 
-    function handleUpdateSalePayment(e) {
-      e.preventDefault();
-      const id = document.getElementById('edit-sale-id').value;
-      const status = document.getElementById('edit-sale-status').value;
-      const paid = parseFloat(document.getElementById('edit-sale-paid-amount').value) || 0;
-      const sale = state.sales.find(s => s.id === id);
-      if (sale) {
-        sale.paymentStatus = status;
-        sale.amountPaid = status === 'FULL' ? (sale.sellPrice * sale.qty) : paid;
-        closeModal('updateSalePaymentModal');
-        renderAll();
-      }
-    }
+  // View Navigation Switcher
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+    const target = document.getElementById(`tab-${tabId}`);
+    if (target) target.classList.remove('hidden');
 
-    function handleAddLoan(e) {
-      e.preventDefault();
-      const borrower = document.getElementById('loan-borrower').value;
-      const amount = parseFloat(document.getElementById('loan-amount').value) || 0;
-      const date = document.getElementById('loan-date').value;
-      const paid = parseFloat(document.getElementById('loan-paid').value) || 0;
-      const note = document.getElementById('loan-note').value;
-
-      state.loans.push({ id: 'loan-' + Date.now(), borrower, amount, date, paid, note });
-      closeModal('addLoanModal');
-      e.target.reset();
-      renderAll();
-    }
-
-    function openEditLoanModal(id) {
-      const loan = state.loans.find(l => l.id === id);
-      if (loan) {
-        document.getElementById('edit-loan-id').value = loan.id;
-        document.getElementById('edit-loan-paid').value = loan.paid;
-        openModal('updateLoanModal');
-      }
-    }
-
-    function handleUpdateLoan(e) {
-      e.preventDefault();
-      const id = document.getElementById('edit-loan-id').value;
-      const paid = parseFloat(document.getElementById('edit-loan-paid').value) || 0;
-      const loan = state.loans.find(l => l.id === id);
-      if (loan) {
-        loan.paid = paid;
-        closeModal('updateLoanModal');
-        renderAll();
-      }
-    }
-
-    function handleAddTransaction(e) {
-      e.preventDefault();
-      const name = document.getElementById('tx-name').value;
-      const category = document.getElementById('tx-category').value;
-      const account = document.getElementById('tx-account').value;
-      const amount = parseFloat(document.getElementById('tx-amount').value) || 0;
-
-      const utilSub = state.utilitiesSub.find(u => u.name === category);
-      if (utilSub) utilSub.spent += amount;
-      else if (state.categorySpent[category] !== undefined) state.categorySpent[category] += amount;
-
-      if (state.accounts[account] !== undefined) state.accounts[account] -= amount;
-
-      closeModal('addTransactionModal');
-      e.target.reset();
-      renderAll();
-    }
-
-    function handleTransfer(e) {
-      e.preventDefault();
-      const from = document.getElementById('tr-from').value;
-      const to = document.getElementById('tr-to').value;
-      const amount = parseFloat(document.getElementById('tr-amount').value) || 0;
-
-      if (from !== to && state.accounts[from] !== undefined && state.accounts[to] !== undefined) {
-        state.accounts[from] -= amount;
-        state.accounts[to] += amount;
-        closeModal('transferModal');
-        e.target.reset();
-        renderAll();
-      }
-    }
-
-    function handleAddMoneyAccount(e) {
-      e.preventDefault();
-      const account = document.getElementById('am-account').value;
-      const amount = parseFloat(document.getElementById('am-amount').value) || 0;
-
-      if (state.accounts[account] !== undefined) {
-        state.accounts[account] += amount;
-        closeModal('addMoneyModal');
-        e.target.reset();
-        renderAll();
-      }
-    }
-
-    function handleAddInvestmentCapital(e) {
-      e.preventDefault();
-      const amount = parseFloat(document.getElementById('inv-add-amount').value) || 0;
-      if (amount > 0) {
-        state.investment.totalInvested += amount;
-        state.investment.currentValue += amount;
-        state.investment.history.push({ date: new Date().toLocaleDateString(), value: state.investment.currentValue });
-        closeModal('addInvestmentModal');
-        e.target.reset();
-        renderAll();
-      }
-    }
-
-    function handleUpdateInvestmentValue(e) {
-      e.preventDefault();
-      const val = parseFloat(document.getElementById('inv-update-value').value) || 0;
-      if (val >= 0) {
-        state.investment.currentValue = val;
-        state.investment.history.push({ date: new Date().toLocaleDateString(), value: val });
-        closeModal('updateInvestmentModal');
-        e.target.reset();
-        renderAll();
-      }
-    }
-
-    function handleAddCategory(e) {
-      e.preventDefault();
-      const name = document.getElementById('cat-name-input').value;
-      const percent = parseFloat(document.getElementById('cat-percent-input').value) || 0;
-
-      if (name && percent > 0) {
-        state.categories.push({ id: 'cat-' + Date.now(), name, percent, isExpandable: false });
-        state.categorySpent[name] = 0;
-        closeModal('addCategoryModal');
-        e.target.reset();
-        renderAll();
-      }
-    }
-
-    function switchAppearichPeriod(period) {
-      state.appearichPeriod = period;
-      document.querySelectorAll('.app-period-btn').forEach(btn => {
-        btn.classList.remove('active', 'bg-brand-black', 'text-white');
-        btn.classList.add('bg-gray-100', 'text-brand-muted');
-      });
-      const activeBtn = document.getElementById(`app-period-${period}`);
-      if (activeBtn) {
-        activeBtn.classList.add('active', 'bg-brand-black', 'text-white');
-        activeBtn.classList.remove('bg-gray-100', 'text-brand-muted');
-      }
-    }
-
-    // INITIAL APP INITIALIZATION
-    document.addEventListener('DOMContentLoaded', () => {
-      renderAll();
+    document.querySelectorAll('.nav-tab').forEach(btn => {
+      btn.classList.remove('bg-brand-black', 'text-white');
+      btn.classList.add('text-brand-muted');
     });
-  </script>
-</body>
-</html>
+    
+    const activeNav = document.getElementById(`nav-${tabId}`);
+    if (activeNav) {
+      activeNav.classList.add('bg-brand-black', 'text-white');
+      activeNav.classList.remove('text-brand-muted');
+    }
+  }
+
+  // Initial Initialization
+  window.addEventListener('DOMContentLoaded', () => {
+    renderAll();
+  });
+</script>
