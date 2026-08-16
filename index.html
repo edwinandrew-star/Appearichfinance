@@ -590,18 +590,6 @@
           </div>
         </div>
         <div id="business-types-bar" class="flex items-center space-x-2 border-b border-gray-100 pb-3 overflow-x-auto no-scrollbar"></div>
-        
-        <!-- PROFIT STARTING POINT CONTROL BAR -->
-        <div class="p-4 rounded-2xl bg-brand-surface border border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div class="flex items-center space-x-3 w-full sm:w-auto">
-            <span class="text-xs font-bold uppercase tracking-wider text-brand-black flex-shrink-0">Profit starts from Sale #</span>
-            <input type="number" id="profit-start-sale-input" onchange="handleProfitStartChange(this.value)" min="1" placeholder="e.g. 150" class="w-28 px-3 py-1.5 rounded-xl border border-gray-300 text-sm font-bold text-brand-black focus:outline-none focus:border-brand-black bg-white">
-          </div>
-          <div class="text-xs text-brand-muted text-right">
-            <span>Calculated from Sale #<strong id="profit-start-sale-display" class="text-brand-black">1</strong> onward</span>
-          </div>
-        </div>
-
         <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
           <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium">
             <p class="text-xs font-semibold text-brand-muted">TODAY'S RECEIVED</p>
@@ -641,15 +629,36 @@
             <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100"><p class="text-[10px] text-brand-muted uppercase font-bold">Products Sold</p><p id="app-period-sold" class="font-display font-bold text-xl text-brand-black mt-1">0</p></div>
             <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100"><p class="text-[10px] text-brand-muted uppercase font-bold">Total Revenue</p><p id="app-period-revenue" class="font-display font-bold text-xl text-brand-black mt-1">0 Sh</p></div>
             <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100"><p class="text-[10px] text-brand-muted uppercase font-bold">Buying Cost</p><p id="app-period-cost" class="font-display font-bold text-xl text-brand-black mt-1">0 Sh</p></div>
-            <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100"><p class="text-[10px] text-brand-muted uppercase font-bold">Profit Margin</p><p id="app-period-margin" class="font-display font-bold text-emerald-600 mt-1">0%</p></div>
+            <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100"><p class="text-[10px] text-brand-muted uppercase font-bold">Profit Margin</p><p id="app-period-margin" class="font-display font-bold text-xl text-emerald-600 mt-1">0%</p></div>
           </div>
         </div>
+
+        <!-- PROFIT STARTING POINT SETTING BAR -->
+        <div class="p-5 rounded-3xl bg-brand-gold/10 border border-brand-gold/30 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="space-y-1">
+            <h4 class="font-bold text-sm text-brand-black uppercase tracking-wider flex items-center space-x-2">
+              <svg class="w-4 h-4 text-brand-goldDark" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <span>Profit Calculation Starting Point</span>
+            </h4>
+            <p class="text-xs text-brand-muted">Select the Sales Number from which current profit calculations begin. Older sales remain visible as historical records.</p>
+          </div>
+          <div class="flex items-center space-x-2 flex-shrink-0">
+            <label class="text-xs font-bold uppercase text-brand-black whitespace-nowrap">Profit starts from Sale #</label>
+            <input type="number" id="profit-start-sale-input" min="1" placeholder="e.g. 1" onchange="handleProfitStartChange(this.value)" class="w-24 px-3 py-2 rounded-xl border border-gray-300 font-bold text-sm text-brand-black bg-white focus:outline-none focus:border-brand-gold">
+          </div>
+        </div>
+
+        <!-- TRANSACTION SALES LOG / HISTORY TABLE WITH BULK ACTIONS -->
         <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-4">
-            <h3 class="font-bold text-base text-brand-black">Sales Transactions Log</h3>
+            <div class="flex items-center space-x-3">
+              <h3 class="font-bold text-base text-brand-black">Transaction Sales Log / History</h3>
+              <span id="sales-log-count-badge" class="px-2.5 py-0.5 rounded-full bg-gray-100 text-brand-black text-[11px] font-bold">0 Sales</span>
+            </div>
             <div class="flex items-center space-x-2">
-              <button onclick="handleBulkDeleteSales()" id="bulk-delete-btn" class="hidden bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition">
-                Delete Selected (<span id="selected-sales-count">0</span>)
+              <button id="bulk-delete-btn" onclick="deleteSelectedSales()" class="hidden bg-red-600 hover:bg-red-700 text-white px-3.5 py-1.5 rounded-xl text-xs font-bold transition shadow-sm items-center space-x-1.5">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                <span id="bulk-delete-label">Delete Selected</span>
               </button>
             </div>
           </div>
@@ -657,17 +666,15 @@
             <table class="w-full text-left text-xs">
               <thead>
                 <tr class="border-b border-gray-100 text-brand-muted font-semibold uppercase">
-                  <th class="pb-3 px-2">
-                    <input type="checkbox" id="select-all-sales" onchange="toggleSelectAllSales(this.checked)" class="rounded border-gray-300">
-                  </th>
+                  <th class="pb-3 pr-2"><input type="checkbox" id="select-all-sales-cb" onchange="toggleSelectAllSales(this.checked)" class="rounded border-gray-300"></th>
                   <th class="pb-3">Sale #</th>
                   <th class="pb-3">Date</th>
                   <th class="pb-3">Business</th>
                   <th class="pb-3">Product</th>
                   <th class="pb-3">Qty</th>
+                  <th class="pb-3">Customer</th>
                   <th class="pb-3">Cost Price</th>
                   <th class="pb-3">Selling Price</th>
-                  <th class="pb-3">Customer</th>
                   <th class="pb-3">Profit</th>
                   <th class="pb-3">Status</th>
                   <th class="pb-3 text-right">Actions</th>
@@ -841,46 +848,43 @@
       </form>
     </div>
   </div>
-
-  <!-- EDIT SALE MODAL -->
   <div id="editSaleModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-lg w-full space-y-4 shadow-2xl border border-gray-100 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Edit Sale <span id="edit-sale-num-header" class="text-brand-gold">#000</span></h3>
+        <h3 id="edit-sale-modal-title" class="font-bold text-lg text-brand-black">Edit Sale</h3>
         <button onclick="closeModal('editSaleModal')" class="text-gray-400 hover:text-black">&times;</button>
       </div>
-      <form onsubmit="handleSaveEditedSale(event)" class="space-y-4">
-        <input type="hidden" id="full-edit-sale-id">
+      <form onsubmit="handleEditSale(event)" class="space-y-4">
+        <input type="hidden" id="edit-sale-full-id">
         <div>
           <label class="block text-xs font-bold uppercase mb-1">Business / Sales Type</label>
-          <select id="full-edit-sale-business-type" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white font-medium"></select>
+          <select id="edit-sale-business-type" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white font-medium"></select>
         </div>
         <div class="grid grid-cols-2 gap-3">
-          <div><label class="block text-xs font-bold uppercase mb-1">Date</label><input id="full-edit-sale-date" type="date" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-          <div><label class="block text-xs font-bold uppercase mb-1">Quantity</label><input id="full-edit-sale-qty" type="number" value="1" min="1" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+          <div><label class="block text-xs font-bold uppercase mb-1">Date</label><input id="edit-sale-date" type="date" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+          <div><label class="block text-xs font-bold uppercase mb-1">Quantity</label><input id="edit-sale-qty" type="number" value="1" min="1" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
         </div>
-        <div><label class="block text-xs font-bold uppercase mb-1">Product Name / Perfume</label><input id="full-edit-sale-product" type="text" required placeholder="Item Name" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        <div><label class="block text-xs font-bold uppercase mb-1">Customer / Details</label><input id="full-edit-sale-customer" type="text" required placeholder="Customer Details" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        <div><label class="block text-xs font-bold uppercase mb-1">Product Name</label><input id="edit-sale-product" type="text" required placeholder="Item Name" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        <div><label class="block text-xs font-bold uppercase mb-1">Customer Name</label><input id="edit-sale-customer" type="text" required placeholder="Customer" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
         <div class="grid grid-cols-2 gap-3">
-          <div><label class="block text-xs font-bold uppercase mb-1">Cost Price (Sh)</label><input id="full-edit-sale-buy-price" type="number" required placeholder="35000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-          <div><label class="block text-xs font-bold uppercase mb-1">Selling Price (Sh)</label><input id="full-edit-sale-sell-price" type="number" required placeholder="55000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+          <div><label class="block text-xs font-bold uppercase mb-1">Buying Price (Sh)</label><input id="edit-sale-buy-price" type="number" required placeholder="35000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+          <div><label class="block text-xs font-bold uppercase mb-1">Selling Price (Sh)</label><input id="edit-sale-sell-price" type="number" required placeholder="55000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
         </div>
         <div>
           <label class="block text-xs font-bold uppercase mb-1">Payment Status</label>
-          <select id="full-edit-sale-payment-status" onchange="toggleFullEditSalePartialInput()" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white font-medium">
+          <select id="edit-sale-payment-status" onchange="toggleEditSaleModalPartialInput()" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white font-medium">
             <option value="FULL">Full Payment</option>
             <option value="PARTIAL">Partial Payment</option>
           </select>
         </div>
-        <div id="full-edit-sale-partial-container">
+        <div id="edit-sale-modal-partial-container">
           <label class="block text-xs font-bold uppercase mb-1">Amount Paid So Far (Sh)</label>
-          <input id="full-edit-sale-paid-amount" type="number" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm">
+          <input id="edit-sale-modal-paid-amount" type="number" placeholder="Enter amount paid" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm">
         </div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Save Transaction Changes</button>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Save Sale Changes</button>
       </form>
     </div>
   </div>
-
   <div id="addBusinessModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
@@ -1168,231 +1172,75 @@
         'LIPA NAMBA': 0,
         'CASH': 0
       },
-      investment: {
+      investments: {
         totalInvested: 0,
         currentValue: 0,
         history: []
       },
       businessTypes: ['Appearich Main', 'Perfumes', 'Clothing'],
       activeBusinessType: 'Appearich Main',
-      activePeriod: 'day',
-      nextSaleSeq: 1,
-      profitStartSaleNum: 1,
-      allSalesList: [],
-      selectedSaleIds: new Set(),
-      loans: []
+      appearichPeriod: 'day',
+      loans: [],
+      salesNextSeq: 1,
+      profitStartSalesNumber: 1,
+      selectedSaleIds: []
     };
 
-    // Format numbers cleanly
-    function formatMoney(amount) {
-      return (Number(amount) || 0).toLocaleString('en-US') + ' Sh';
-    }
+    // INIT APP ON LOAD
+    window.addEventListener('DOMContentLoaded', async () => {
+      setTimeout(() => {
+        const splash = document.getElementById('splash-screen');
+        if (splash) splash.classList.add('hidden');
+      }, 1200);
 
-    // Helper: Ensure monthly structure
-    function ensureMonthExists(monthKey) {
-      if (!state.monthlyData[monthKey]) {
-        state.monthlyData[monthKey] = {
-          incomes: [],
-          sales: [],
-          expenses: [],
-          categorySpent: { 'Expenses': 0, 'Other': 0 },
-          utilitiesSubSpent: { 'Internet': 0, 'Umeme': 0, 'Taka': 0, 'Transport': 0 }
-        };
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (session) {
+        currentUser = session.user;
+        await loadUserData();
+        showAppUI();
+      } else {
+        showAuthUI();
       }
-    }
 
-    // SUPABASE DATA PERSISTENCE
-    async function loadUserData() {
-      if (!currentUser) return;
-      try {
-        const { data, error } = await supabaseClient
-          .from('user_profiles')
-          .select('state_data')
-          .eq('user_id', currentUser.id)
-          .single();
-
-        if (error && error.code !== 'PGRST116') {
-          console.error("Error loading user data:", error);
+      supabaseClient.auth.onAuthStateChange(async (event, session) => {
+        if (event === 'SIGNED_IN' && session) {
+          currentUser = session.user;
+          await loadUserData();
+          showAppUI();
+        } else if (event === 'SIGNED_OUT') {
+          currentUser = null;
+          showAuthUI();
         }
-
-        if (data && data.state_data) {
-          const loaded = data.state_data;
-          state.userName = loaded.userName || state.userName;
-          state.heroImageUrl = loaded.heroImageUrl || state.heroImageUrl;
-          state.categories = loaded.categories || state.categories;
-          state.accounts = loaded.accounts || state.accounts;
-          state.investment = loaded.investment || state.investment;
-          state.businessTypes = loaded.businessTypes || state.businessTypes;
-          state.activeBusinessType = loaded.activeBusinessType || state.activeBusinessType;
-          state.nextSaleSeq = loaded.nextSaleSeq || 1;
-          state.profitStartSaleNum = loaded.profitStartSaleNum || 1;
-          state.allSalesList = loaded.allSalesList || [];
-          state.loans = loaded.loans || [];
-
-          if (loaded.monthlyData) {
-            state.monthlyData = loaded.monthlyData;
-          }
-        }
-
-        // Migrate historical sales into centralized allSalesList if needed
-        if ((!state.allSalesList || state.allSalesList.length === 0) && state.monthlyData) {
-          state.allSalesList = [];
-          let maxSeq = 0;
-          Object.keys(state.monthlyData).forEach(mKey => {
-            const mSales = state.monthlyData[mKey].sales || [];
-            mSales.forEach(s => {
-              const saleNum = s.saleNum || s.salesNum || 0;
-              if (saleNum > maxSeq) maxSeq = saleNum;
-              state.allSalesList.push({
-                id: s.id || 'sale_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
-                saleNum: saleNum || 0,
-                saleNumFormatted: s.saleNumFormatted || ('Sale #' + String(saleNum || 0).padStart(3, '0')),
-                date: s.date || mKey + '-01',
-                businessType: s.businessType || 'Appearich Main',
-                productName: s.productName || s.product || 'Product',
-                qty: Number(s.qty) || 1,
-                costPrice: Number(s.buyPrice || s.costPrice) || 0,
-                sellPrice: Number(s.sellPrice) || 0,
-                customer: s.customer || 'Customer',
-                status: s.status || 'FULL',
-                paidAmount: Number(s.paidAmount) || 0,
-                profit: Number(s.profit) || 0
-              });
-            });
-          });
-          if (state.allSalesList.length > 0) {
-            if (maxSeq > 0) state.nextSaleSeq = maxSeq + 1;
-            else {
-              state.allSalesList.sort((a,b) => new Date(a.date) - new Date(b.date));
-              state.allSalesList.forEach((s, idx) => {
-                s.saleNum = idx + 1;
-                s.saleNumFormatted = 'Sale #' + String(idx + 1).padStart(3, '0');
-              });
-              state.nextSaleSeq = state.allSalesList.length + 1;
-            }
-          }
-        }
-
-        // Ensure every sale in allSalesList has required fields
-        state.allSalesList.forEach(s => {
-          if (!s.saleNum) s.saleNum = 0;
-          if (!s.saleNumFormatted) s.saleNumFormatted = 'Sale #' + String(s.saleNum).padStart(3, '0');
-          if (s.costPrice === undefined && s.buyPrice !== undefined) s.costPrice = Number(s.buyPrice);
-          s.costPrice = Number(s.costPrice) || 0;
-          s.sellPrice = Number(s.sellPrice) || 0;
-          s.qty = Number(s.qty) || 1;
-          s.profit = (s.sellPrice - s.costPrice) * s.qty;
-        });
-
-      } catch (err) {
-        console.error("Load state exception:", err);
-      }
-      sortAllSalesChronologically();
-      syncSalesToMonthlyData();
-      validateProfitStartingPoint();
-      renderAllViews();
-    }
-
-    async function saveUserData() {
-      if (!currentUser) return;
-      try {
-        const payload = {
-          userName: state.userName,
-          heroImageUrl: state.heroImageUrl,
-          categories: state.categories,
-          accounts: state.accounts,
-          investment: state.investment,
-          businessTypes: state.businessTypes,
-          activeBusinessType: state.activeBusinessType,
-          nextSaleSeq: state.nextSaleSeq,
-          profitStartSaleNum: state.profitStartSaleNum,
-          allSalesList: state.allSalesList,
-          monthlyData: state.monthlyData,
-          loans: state.loans
-        };
-
-        await supabaseClient
-          .from('user_profiles')
-          .upsert({ user_id: currentUser.id, state_data: payload, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
-      } catch (err) {
-        console.error("Save state exception:", err);
-      }
-    }
-
-    // AUTOMATIC CHRONOLOGICAL ORDERING (Newest -> Oldest by Sale Date)
-    function sortAllSalesChronologically() {
-      state.allSalesList.sort((a, b) => {
-        const dateA = new Date(a.date);
-        const dateB = new Date(b.date);
-        if (dateB - dateA !== 0) return dateB - dateA;
-        return (b.saleNum || 0) - (a.saleNum || 0);
       });
+    });
+
+    function showAuthUI() {
+      document.getElementById('auth-container').classList.remove('hidden');
+      document.getElementById('auth-container').classList.add('flex');
+      document.getElementById('app-wrapper').classList.add('hidden');
     }
 
-    // Keep monthlyData synced with allSalesList
-    function syncSalesToMonthlyData() {
-      Object.keys(state.monthlyData).forEach(m => {
-        state.monthlyData[m].sales = [];
-      });
-      state.allSalesList.forEach(s => {
-        const mKey = s.date.substring(0, 7);
-        ensureMonthExists(mKey);
-        state.monthlyData[mKey].sales.push(s);
-      });
+    function showAppUI() {
+      document.getElementById('auth-container').classList.add('hidden');
+      document.getElementById('auth-container').classList.remove('flex');
+      document.getElementById('app-wrapper').classList.remove('hidden');
+      renderAll();
     }
 
-    // Validate profit starting point after deletion or edits
-    function validateProfitStartingPoint() {
-      if (!state.allSalesList || state.allSalesList.length === 0) {
-        state.profitStartSaleNum = 1;
-        return;
-      }
-      const exists = state.allSalesList.some(s => s.saleNum === Number(state.profitStartSaleNum));
-      if (!exists) {
-        // Find next valid sale number equal or higher, or fallback to smallest existing
-        const validSales = state.allSalesList.map(s => s.saleNum).sort((a, b) => a - b);
-        const nextValid = validSales.find(num => num > Number(state.profitStartSaleNum)) || validSales[0];
-        const oldVal = state.profitStartSaleNum;
-        state.profitStartSaleNum = nextValid;
-        alert(`Sale #${String(oldVal).padStart(3, '0')} was deleted or not found. Profit starting point auto-adjusted to Sale #${String(nextValid).padStart(3, '0')}.`);
-      }
-    }
-
-    // Change profit starting point control
-    function handleProfitStartChange(val) {
-      const num = parseInt(val, 10);
-      if (isNaN(num) || num < 1) return;
-      state.profitStartSaleNum = num;
-      validateProfitStartingPoint();
-      saveUserData();
-      renderAllViews();
-    }
-
-    // Calculate profit included from selected starting sale onward
-    function calculateTotalProfitFromStartingPoint() {
-      const startNum = Number(state.profitStartSaleNum) || 1;
-      return state.allSalesList.reduce((sum, s) => {
-        if ((s.saleNum || 0) >= startNum) {
-          return sum + (Number(s.profit) || 0);
-        }
-        return sum;
-      }, 0);
-    }
-
-    // AUTHENTICATION LOGIC
     function toggleAuthMode() {
       authMode = authMode === 'login' ? 'signup' : 'login';
       const nameField = document.getElementById('name-field-container');
       const confirmField = document.getElementById('confirm-password-container');
       const submitBtn = document.getElementById('auth-submit-btn');
       const toggleBtn = document.getElementById('auth-toggle-btn');
-      const errEl = document.getElementById('auth-error');
-      errEl.classList.add('hidden');
+      const errorP = document.getElementById('auth-error');
+
+      errorP.classList.add('hidden');
 
       if (authMode === 'signup') {
         nameField.classList.remove('hidden');
         confirmField.classList.remove('hidden');
-        submitBtn.textContent = 'Create Account';
+        submitBtn.textContent = 'Sign Up';
         toggleBtn.textContent = 'Already have an account? Sign In';
       } else {
         nameField.classList.add('hidden');
@@ -1406,15 +1254,15 @@
       e.preventDefault();
       const email = document.getElementById('auth-email').value;
       const password = document.getElementById('auth-password').value;
-      const errEl = document.getElementById('auth-error');
-      errEl.classList.add('hidden');
+      const errorP = document.getElementById('auth-error');
+      errorP.classList.add('hidden');
 
       if (authMode === 'signup') {
         const name = document.getElementById('auth-name').value;
         const confirm = document.getElementById('auth-confirm-password').value;
         if (password !== confirm) {
-          errEl.textContent = 'Passwords do not match.';
-          errEl.classList.remove('hidden');
+          errorP.textContent = 'Passwords do not match.';
+          errorP.classList.remove('hidden');
           return;
         }
         const { data, error } = await supabaseClient.auth.signUp({
@@ -1423,90 +1271,156 @@
           options: { data: { full_name: name } }
         });
         if (error) {
-          errEl.textContent = error.message;
-          errEl.classList.remove('hidden');
-          return;
+          errorP.textContent = error.message;
+          errorP.classList.remove('hidden');
+        } else {
+          state.userName = name;
+          await saveUserData();
         }
-        currentUser = data.user;
-        state.userName = name || email.split('@')[0];
       } else {
         const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
         if (error) {
-          errEl.textContent = error.message;
-          errEl.classList.remove('hidden');
-          return;
+          errorP.textContent = error.message;
+          errorP.classList.remove('hidden');
         }
-        currentUser = data.user;
-        state.userName = currentUser.user_metadata?.full_name || email.split('@')[0];
       }
-
-      document.getElementById('auth-container').classList.add('hidden');
-      document.getElementById('app-wrapper').classList.remove('hidden');
-      await loadUserData();
     }
 
     async function handleLogout() {
       await supabaseClient.auth.signOut();
-      currentUser = null;
-      document.getElementById('app-wrapper').classList.add('hidden');
-      document.getElementById('auth-container').classList.remove('hidden');
     }
 
-    // INITIALIZATION
-    window.addEventListener('DOMContentLoaded', async () => {
-      setTimeout(() => {
-        document.getElementById('splash-screen').style.display = 'none';
-      }, 1000);
+    async function loadUserData() {
+      if (!currentUser) return;
+      try {
+        const { data, error } = await supabaseClient
+          .from('user_profiles')
+          .select('state_data')
+          .eq('id', currentUser.id)
+          .single();
 
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      if (session) {
-        currentUser = session.user;
-        state.userName = currentUser.user_metadata?.full_name || currentUser.email.split('@')[0];
-        document.getElementById('auth-container').classList.add('hidden');
-        document.getElementById('app-wrapper').classList.remove('hidden');
-        await loadUserData();
-      } else {
-        document.getElementById('auth-container').classList.remove('hidden');
+        if (data && data.state_data) {
+          Object.assign(state, data.state_data);
+        } else {
+          if (currentUser.user_metadata && currentUser.user_metadata.full_name) {
+            state.userName = currentUser.user_metadata.full_name;
+          }
+          await saveUserData();
+        }
+      } catch (err) {
+        console.error('Error loading user data:', err);
       }
+      ensureMonthStructure(state.activeMonth);
+      ensureMonthStructure(state.expenseActiveMonth);
+      sanitizeSalesData();
+    }
 
-      document.getElementById('income-month-picker').value = state.activeMonth;
-      document.getElementById('daily-expense-month-picker').value = state.expenseActiveMonth;
-    });
+    async function saveUserData() {
+      if (!currentUser) return;
+      try {
+        await supabaseClient.from('user_profiles').upsert({
+          id: currentUser.id,
+          state_data: state,
+          updated_at: new Date().toISOString()
+        });
+      } catch (err) {
+        console.error('Error saving user data:', err);
+      }
+    }
 
-    // UI TAB SWITCHING
+    function ensureMonthStructure(mKey) {
+      if (!state.monthlyData[mKey]) {
+        state.monthlyData[mKey] = {
+          incomes: [],
+          sales: [],
+          expenses: [],
+          categorySpent: { 'Expenses': 0, 'Other': 0 },
+          utilitiesSubSpent: { 'Internet': 0, 'Umeme': 0, 'Taka': 0, 'Transport': 0 }
+        };
+      }
+    }
+
+    function sanitizeSalesData() {
+      if (!state.salesNextSeq) state.salesNextSeq = 1;
+      if (!state.profitStartSalesNumber) state.profitStartSalesNumber = 1;
+      if (!state.selectedSaleIds) state.selectedSaleIds = [];
+
+      let maxSeq = 0;
+      Object.keys(state.monthlyData).forEach(mKey => {
+        const m = state.monthlyData[mKey];
+        if (m.sales && Array.isArray(m.sales)) {
+          m.sales.forEach(s => {
+            if (s.salesSeqNumber === undefined || s.salesSeqNumber === null) {
+              s.salesSeqNumber = state.salesNextSeq++;
+            }
+            if (s.salesSeqNumber > maxSeq) maxSeq = s.salesSeqNumber;
+          });
+        }
+      });
+      if (state.salesNextSeq <= maxSeq) {
+        state.salesNextSeq = maxSeq + 1;
+      }
+    }
+
     function switchTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.getElementById('tab-' + tabId).classList.remove('hidden');
-
-      document.querySelectorAll('.nav-tab').forEach(btn => {
-        btn.classList.remove('bg-brand-black', 'text-white', 'shadow-sm', 'active');
-        btn.classList.add('text-brand-muted');
+      document.querySelectorAll('.nav-tab').forEach(el => {
+        el.classList.remove('bg-brand-black', 'text-white', 'shadow-sm');
+        el.classList.add('text-brand-muted');
       });
-      const activeNav = document.getElementById('nav-' + tabId);
-      if (activeNav) {
-        activeNav.classList.add('bg-brand-black', 'text-white', 'shadow-sm', 'active');
-        activeNav.classList.remove('text-brand-muted');
+      document.querySelectorAll('.bnav-btn').forEach(el => {
+        el.classList.remove('text-brand-black');
+        el.classList.add('text-brand-muted');
+      });
+
+      const targetTab = document.getElementById(`tab-${tabId}`);
+      if (targetTab) targetTab.classList.remove('hidden');
+
+      const targetNav = document.getElementById(`nav-${tabId}`);
+      if (targetNav) {
+        targetNav.classList.add('bg-brand-black', 'text-white', 'shadow-sm');
+        targetNav.classList.remove('text-brand-muted');
       }
 
-      document.querySelectorAll('.bnav-btn').forEach(btn => {
-        btn.classList.remove('text-brand-black');
-        btn.classList.add('text-brand-muted');
-      });
-      const activeBnav = document.getElementById('bnav-' + tabId);
-      if (activeBnav) {
-        activeBnav.classList.add('text-brand-black');
-        activeBnav.classList.remove('text-brand-muted');
+      const targetBnav = document.getElementById(`bnav-${tabId}`);
+      if (targetBnav) {
+        targetBnav.classList.add('text-brand-black');
+        targetBnav.classList.remove('text-brand-muted');
       }
 
-      renderAllViews();
+      renderAll();
     }
 
-    function openModal(id) {
-      document.getElementById(id).classList.remove('hidden');
-      if (id === 'addSaleModal' || id === 'editSaleModal') populateBusinessDropdowns();
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+      if (modalId === 'addSaleModal') {
+        populateBusinessSelect('sale-business-type');
+        document.getElementById('sale-date').value = new Date().toISOString().split('T')[0];
+      }
     }
-    function closeModal(id) {
-      document.getElementById(id).classList.add('hidden');
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function populateBusinessSelect(selectId, selectedVal) {
+      const select = document.getElementById(selectId);
+      if (!select) return;
+      select.innerHTML = state.businessTypes.map(b => `<option value="${b}">${b}</option>`).join('');
+      if (selectedVal) select.value = selectedVal;
+    }
+
+    // GENERAL HELPERS
+    function formatMoney(num) {
+      return (Number(num) || 0).toLocaleString('en-US') + ' Sh';
     }
 
     function handleHeroUpload(e) {
@@ -1522,12 +1436,22 @@
       }
     }
 
-    // RENDER ALL VIEWS
-    function renderAllViews() {
-      document.getElementById('welcome-greeting').textContent = `Welcome, ${state.userName || 'User'}`;
-      document.getElementById('hero-bg-img').style.backgroundImage = `url('${state.heroImageUrl}')`;
+    // CALCULATIONS & RENDERING
+    function getAllSalesFlat() {
+      const allSales = [];
+      Object.keys(state.monthlyData).forEach(mKey => {
+        const m = state.monthlyData[mKey];
+        if (m.sales && Array.isArray(m.sales)) {
+          m.sales.forEach(s => allSales.push(s));
+        }
+      });
+      allSales.sort((a, b) => new Date(b.date) - new Date(a.date));
+      return allSales;
+    }
 
-      renderHomeDashboard();
+    function renderAll() {
+      renderHeaderAndHero();
+      renderDashboard();
       renderIncomeTab();
       renderBudgetTab();
       renderDailyExpensesTab();
@@ -1538,78 +1462,76 @@
       renderProgressTab();
     }
 
-    function renderHomeDashboard() {
-      ensureMonthExists(state.activeMonth);
-      const mData = state.monthlyData[state.activeMonth];
-      const totalInc = (mData.incomes || []).reduce((sum, i) => sum + Number(i.amount), 0);
-      const godAmt = totalInc * 0.10;
+    function renderHeaderAndHero() {
+      const greeting = document.getElementById('welcome-greeting');
+      if (greeting) greeting.textContent = `Welcome, ${state.userName || 'User'}`;
+      const heroBg = document.getElementById('hero-bg-img');
+      if (heroBg && state.heroImageUrl) heroBg.style.backgroundImage = `url('${state.heroImageUrl}')`;
+    }
 
-      document.getElementById('dash-total-income').textContent = formatMoney(totalInc);
-      document.getElementById('dash-god-amount').textContent = formatMoney(godAmt);
+    function renderDashboard() {
+      const curData = state.monthlyData[state.activeMonth] || {};
+      const incomes = curData.incomes || [];
+      const totalIncome = incomes.reduce((sum, i) => sum + (Number(i.amount) || 0), 0);
+      
+      const sales = curData.sales || [];
+      const validSalesForGod = sales.filter(s => (s.salesSeqNumber || 0) >= state.profitStartSalesNumber);
+      const salesProfit = validSalesForGod.reduce((sum, s) => sum + (Number(s.profit) || 0), 0);
 
-      const totalLiquid = Object.values(state.accounts).reduce((sum, a) => sum + Number(a), 0);
+      const combinedBase = totalIncome + salesProfit;
+      const godAmount = combinedBase * 0.10;
+
+      const totalLiquid = Object.values(state.accounts).reduce((sum, v) => sum + (Number(v) || 0), 0);
+
+      const totalBudgeted = state.categories.reduce((sum, c) => sum + (Number(c.amount) || 0), 0);
+      const remainingPool = (combinedBase * 0.90) - totalBudgeted;
+
+      document.getElementById('dash-total-income').textContent = formatMoney(totalIncome);
+      document.getElementById('dash-god-amount').textContent = formatMoney(godAmount);
       document.getElementById('dash-total-money').textContent = formatMoney(totalLiquid);
-
-      const allocatedTargets = state.categories.reduce((sum, c) => sum + Number(c.amount), 0);
-      const pool90 = totalInc * 0.90;
-      const remainingPool = pool90 - allocatedTargets;
       document.getElementById('dash-remaining-budget').textContent = formatMoney(remainingPool);
+    }
+
+    function renderIncomeTab() {
+      document.getElementById('income-month-picker').value = state.activeMonth;
+      document.getElementById('income-month-label').textContent = `Month: ${state.activeMonth}`;
+
+      const curData = state.monthlyData[state.activeMonth] || {};
+      const incomes = curData.incomes || [];
+      const totalIncome = incomes.reduce((sum, i) => sum + (Number(i.amount) || 0), 0);
+
+      const sales = curData.sales || [];
+      const validSales = sales.filter(s => (s.salesSeqNumber || 0) >= state.profitStartSalesNumber);
+      const salesProfit = validSales.reduce((sum, s) => sum + (Number(s.profit) || 0), 0);
+
+      const godAmount = (totalIncome + salesProfit) * 0.10;
+      document.getElementById('income-god-total').textContent = formatMoney(godAmount);
+
+      const container = document.getElementById('income-list-container');
+      container.innerHTML = incomes.map(inc => `
+        <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex items-center justify-between">
+          <div>
+            <h4 class="font-bold text-sm text-brand-black">${inc.name}</h4>
+            <p class="text-xs text-brand-muted mt-0.5">${formatMoney(inc.amount)}</p>
+          </div>
+          <button onclick="deleteIncome('${inc.id}')" class="text-red-500 hover:text-red-700 text-xs font-bold px-2 py-1 bg-red-50 rounded-lg">Delete</button>
+        </div>
+      `).join('') || `<p class="text-xs text-brand-muted col-span-full">No income sources recorded for this month.</p>`;
     }
 
     function handleMonthChange(e) {
       state.activeMonth = e.target.value;
-      ensureMonthExists(state.activeMonth);
-      renderAllViews();
+      ensureMonthStructure(state.activeMonth);
+      renderAll();
+      saveUserData();
     }
 
-    function handleExpenseMonthChange(e) {
-      state.expenseActiveMonth = e.target.value;
-      ensureMonthExists(state.expenseActiveMonth);
-      renderDailyExpensesTab();
-    }
-
-    // INCOME TAB
-    function renderIncomeTab() {
-      ensureMonthExists(state.activeMonth);
-      const mData = state.monthlyData[state.activeMonth];
-      const totalInc = (mData.incomes || []).reduce((sum, i) => sum + Number(i.amount), 0);
-      const godTotal = totalInc * 0.10;
-
-      document.getElementById('income-god-total').textContent = formatMoney(godTotal);
-      document.getElementById('income-month-label').textContent = `Month: ${state.activeMonth}`;
-
-      const listContainer = document.getElementById('income-list-container');
-      listContainer.innerHTML = '';
-
-      if (!mData.incomes || mData.incomes.length === 0) {
-        listContainer.innerHTML = '<p class="text-xs text-brand-muted col-span-3">No income recorded for this month.</p>';
-        return;
-      }
-
-      mData.incomes.forEach(inc => {
-        const card = document.createElement('div');
-        card.className = 'p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex items-center justify-between';
-        card.innerHTML = `
-          <div>
-            <p class="font-bold text-sm text-brand-black">${inc.name}</p>
-            <p class="text-xs text-brand-muted mt-0.5">God Tithe (10%): <span class="text-brand-gold font-bold">${formatMoney(inc.amount * 0.10)}</span></p>
-          </div>
-          <div class="text-right">
-            <p class="font-display font-bold text-lg text-brand-black">${formatMoney(inc.amount)}</p>
-            <button onclick="deleteIncome('${inc.id}')" class="text-[10px] font-bold text-red-500 hover:underline mt-1">Delete</button>
-          </div>
-        `;
-        listContainer.appendChild(card);
-      });
-    }
-
-    function handleAddIncome(e) {
+    async function handleAddIncome(e) {
       e.preventDefault();
       const name = document.getElementById('income-name-input').value;
-      const amount = Number(document.getElementById('income-amount-input').value);
-      if (!name || isNaN(amount)) return;
+      const amount = parseFloat(document.getElementById('income-amount-input').value) || 0;
+      ensureMonthStructure(state.activeMonth);
 
-      ensureMonthExists(state.activeMonth);
       state.monthlyData[state.activeMonth].incomes.push({
         id: 'inc_' + Date.now(),
         name,
@@ -1619,86 +1541,91 @@
       closeModal('addIncomeModal');
       document.getElementById('income-name-input').value = '';
       document.getElementById('income-amount-input').value = '';
-      saveUserData();
-      renderAllViews();
+
+      renderAll();
+      await saveUserData();
     }
 
-    function deleteIncome(id) {
-      ensureMonthExists(state.activeMonth);
+    async function deleteIncome(id) {
+      ensureMonthStructure(state.activeMonth);
       state.monthlyData[state.activeMonth].incomes = state.monthlyData[state.activeMonth].incomes.filter(i => i.id !== id);
-      saveUserData();
-      renderAllViews();
+      renderAll();
+      await saveUserData();
     }
 
-    // BUDGET TAB
     function renderBudgetTab() {
-      ensureMonthExists(state.activeMonth);
-      const mData = state.monthlyData[state.activeMonth];
-      const totalInc = (mData.incomes || []).reduce((sum, i) => sum + Number(i.amount), 0);
-      const pool90 = totalInc * 0.90;
-
+      const curData = state.monthlyData[state.activeMonth] || {};
+      const incomes = curData.incomes || [];
+      const totalIncome = incomes.reduce((sum, i) => sum + (Number(i.amount) || 0), 0);
+      const sales = curData.sales || [];
+      const validSales = sales.filter(s => (s.salesSeqNumber || 0) >= state.profitStartSalesNumber);
+      const salesProfit = validSales.reduce((sum, s) => sum + (Number(s.profit) || 0), 0);
+      
+      const pool90 = (totalIncome + salesProfit) * 0.90;
       document.getElementById('budget-pool-total').textContent = formatMoney(pool90);
 
-      const allocatedAmt = state.categories.reduce((sum, c) => sum + Number(c.amount), 0);
-      const percent = pool90 > 0 ? Math.min(100, Math.round((allocatedAmt / pool90) * 100)) : 0;
+      const totalAllocated = state.categories.reduce((sum, c) => sum + (Number(c.amount) || 0), 0);
+      const allocatedPercent = pool90 > 0 ? Math.min(100, (totalAllocated / pool90) * 100) : 0;
 
-      document.getElementById('budget-allocated-percent').textContent = `${percent}%`;
-      document.getElementById('budget-allocated-bar').style.width = `${percent}%`;
+      document.getElementById('budget-allocated-percent').textContent = allocatedPercent.toFixed(1) + '%';
+      document.getElementById('budget-allocated-bar').style.width = allocatedPercent + '%';
 
-      const utilsCat = state.categories.find(c => c.id === 'cat-utilities') || { amount: 0 };
-      const utilsTarget = Number(utilsCat.amount) || 0;
-      const utilsSpent = Object.values(mData.utilitiesSubSpent || {}).reduce((s, a) => s + Number(a), 0);
-      const utilsRem = utilsTarget - utilsSpent;
-      const utilsPct = pool90 > 0 ? Math.round((utilsTarget / pool90) * 100) : 0;
+      // UTILITIES
+      const utilCat = state.categories.find(c => c.id === 'cat-utilities') || { amount: 0 };
+      document.getElementById('cat-amount-cat-utilities').value = utilCat.amount || '';
 
-      document.getElementById('cat-amount-cat-utilities').value = utilsTarget || '';
-      document.getElementById('utilities-percent-badge').textContent = `${utilsPct}%`;
-      document.getElementById('utilities-spent-summary').textContent = `Spent: ${formatMoney(utilsSpent)}`;
-      document.getElementById('utilities-remaining-summary').textContent = `Remaining: ${formatMoney(utilsRem)}`;
+      const utilSubSpent = curData.utilitiesSubSpent || { 'Internet': 0, 'Umeme': 0, 'Taka': 0, 'Transport': 0 };
+      const totalUtilSpent = Object.values(utilSubSpent).reduce((sum, v) => sum + (Number(v) || 0), 0);
+      const utilRemaining = (utilCat.amount || 0) - totalUtilSpent;
+      const utilPercent = pool90 > 0 ? ((utilCat.amount || 0) / pool90) * 100 : 0;
+
+      document.getElementById('utilities-percent-badge').textContent = utilPercent.toFixed(1) + '%';
+      document.getElementById('utilities-spent-summary').textContent = `Spent: ${formatMoney(totalUtilSpent)}`;
+      document.getElementById('utilities-remaining-summary').textContent = `Remaining: ${formatMoney(utilRemaining)}`;
 
       const subList = document.getElementById('utilities-subcategories-list');
-      subList.innerHTML = '';
-      const subs = ['Internet', 'Umeme', 'Taka', 'Transport'];
-      subs.forEach(s => {
-        const sp = mData.utilitiesSubSpent ? (mData.utilitiesSubSpent[s] || 0) : 0;
-        const div = document.createElement('div');
-        div.className = 'flex items-center justify-between p-3 rounded-xl bg-white border border-gray-100 text-xs';
-        div.innerHTML = `<span class="font-bold text-brand-black">${s}</span><span class="text-brand-muted">Spent: <strong class="text-brand-black">${formatMoney(sp)}</strong></span>`;
-        subList.appendChild(div);
-      });
-
-      const mainList = document.getElementById('main-categories-list');
-      mainList.innerHTML = '';
-
-      state.categories.filter(c => c.id !== 'cat-utilities').forEach(cat => {
-        const cTarget = Number(cat.amount) || 0;
-        const cPct = pool90 > 0 ? Math.round((cTarget / pool90) * 100) : 0;
-        const cSpent = cat.name === 'Expenses' ? (mData.categorySpent['Expenses'] || 0) : (mData.categorySpent[cat.name] || 0);
-        const cRem = cTarget - cSpent;
-
-        const card = document.createElement('div');
-        card.className = 'rounded-3xl bg-white border border-gray-100 shadow-premium p-6 space-y-4 flex flex-col justify-between';
-        card.innerHTML = `
-          <div>
-            <div class="flex items-center justify-between">
-              <h4 class="font-bold text-base text-brand-black uppercase">${cat.name}</h4>
-              <span class="px-2.5 py-0.5 rounded-full bg-gray-100 text-brand-black text-[11px] font-bold">${cPct}%</span>
-            </div>
-            <p class="text-xs text-brand-muted mt-1">Allocated budget stream</p>
+      const subKeys = ['Internet', 'Umeme', 'Taka', 'Transport'];
+      subList.innerHTML = subKeys.map(key => {
+        const spent = utilSubSpent[key] || 0;
+        return `
+          <div class="flex items-center justify-between p-3 rounded-2xl bg-white border border-gray-100 shadow-sm">
+            <span class="text-xs font-bold text-brand-black">${key}</span>
+            <span class="text-xs text-brand-muted">Spent: ${formatMoney(spent)}</span>
           </div>
-          <div class="space-y-3">
+        `;
+      }).join('');
+
+      // OTHER CATEGORIES
+      const mainCatList = document.getElementById('main-categories-list');
+      const otherCats = state.categories.filter(c => c.id !== 'cat-utilities');
+
+      mainCatList.innerHTML = otherCats.map(cat => {
+        const catSpent = (curData.categorySpent || {})[cat.name] || 0;
+        const rem = cat.amount - catSpent;
+        const pct = pool90 > 0 ? (cat.amount / pool90) * 100 : 0;
+
+        return `
+          <div class="rounded-3xl bg-white border border-gray-100 shadow-premium p-6 space-y-4 flex flex-col justify-between">
             <div>
-              <label class="block text-xs font-bold text-brand-muted uppercase mb-1">Target Amount (Sh)</label>
-              <input type="number" value="${cTarget || ''}" oninput="handleCategoryAmountInput('${cat.id}', this.value)" placeholder="Enter amount" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm font-bold text-brand-black">
+              <div class="flex items-center justify-between mb-2">
+                <h4 class="font-bold text-base text-brand-black uppercase">${cat.name}</h4>
+                <span class="px-2.5 py-0.5 rounded-full bg-gray-100 text-brand-black text-[11px] font-bold">${pct.toFixed(1)}%</span>
+              </div>
+              <p class="text-xs text-brand-muted">Target Allocation</p>
             </div>
-            <div class="flex justify-between text-xs pt-2 border-t border-gray-100">
-              <span class="text-brand-muted">Spent: ${formatMoney(cSpent)}</span>
-              <span class="font-bold text-emerald-600">Remaining: ${formatMoney(cRem)}</span>
+            <div class="space-y-3">
+              <div>
+                <label class="block text-xs font-bold text-brand-muted uppercase mb-1">Target Amount (Sh)</label>
+                <input type="number" value="${cat.amount || ''}" oninput="handleCategoryAmountInput('${cat.id}', this.value)" placeholder="Enter amount" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm font-bold text-brand-black">
+              </div>
+              <div class="flex justify-between text-xs pt-2 border-t border-gray-100">
+                <span class="text-brand-muted">Spent: ${formatMoney(catSpent)}</span>
+                <span class="font-bold ${rem >= 0 ? 'text-emerald-600' : 'text-red-500'}">Remaining: ${formatMoney(rem)}</span>
+              </div>
             </div>
           </div>
         `;
-        mainList.appendChild(card);
-      });
+      }).join('');
     }
 
     function toggleUtilitiesAccordion() {
@@ -1708,126 +1635,108 @@
       chev.classList.toggle('rotate-180');
     }
 
-    function handleCategoryAmountInput(catId, val) {
+    async function handleCategoryAmountInput(catId, val) {
+      const num = parseFloat(val) || 0;
       const cat = state.categories.find(c => c.id === catId);
-      if (cat) {
-        cat.amount = Number(val) || 0;
-        saveUserData();
-        renderHomeDashboard();
-        renderBudgetTab();
-      }
+      if (cat) cat.amount = num;
+      renderDashboard();
+      renderBudgetTab();
+      await saveUserData();
     }
 
-    function handleAddCategory(e) {
+    async function handleAddCategory(e) {
       e.preventDefault();
       const name = document.getElementById('cat-name-input').value;
-      const amount = Number(document.getElementById('cat-amount-input').value);
-      if (!name) return;
+      const amount = parseFloat(document.getElementById('cat-amount-input').value) || 0;
 
       state.categories.push({
         id: 'cat_' + Date.now(),
         name,
-        amount: amount || 0,
+        amount,
         isExpandable: false
       });
 
       closeModal('addCategoryModal');
       document.getElementById('cat-name-input').value = '';
       document.getElementById('cat-amount-input').value = '';
-      saveUserData();
-      renderAllViews();
+
+      renderBudgetTab();
+      await saveUserData();
     }
 
-    // DAILY EXPENSES TAB
     function renderDailyExpensesTab() {
-      ensureMonthExists(state.expenseActiveMonth);
-      const mData = state.monthlyData[state.expenseActiveMonth];
+      document.getElementById('daily-expense-month-picker').value = state.expenseActiveMonth;
       document.getElementById('daily-expense-month-label').textContent = `Month: ${state.expenseActiveMonth}`;
 
-      const comparisonGrid = document.getElementById('category-budget-comparison-grid');
-      comparisonGrid.innerHTML = '';
+      const curData = state.monthlyData[state.expenseActiveMonth] || {};
+      const expenses = curData.expenses || [];
 
-      const cats = ['Internet', 'Umeme', 'Taka', 'Transport', 'Expenses', 'Other'];
-      cats.forEach(c => {
-        let target = 0;
-        if (['Internet', 'Umeme', 'Taka', 'Transport'].includes(c)) {
-          const uCat = state.categories.find(cat => cat.id === 'cat-utilities');
-          target = uCat ? (uCat.amount / 4) : 0;
-        } else if (c === 'Expenses') {
-          const eCat = state.categories.find(cat => cat.name === 'Expenses Target' || cat.name === 'Expenses');
-          target = eCat ? eCat.amount : 0;
-        } else {
-          const oCat = state.categories.find(cat => cat.name === 'Other');
-          target = oCat ? oCat.amount : 0;
-        }
+      document.getElementById('daily-expense-log-count').textContent = `${expenses.length} Expenses Recorded`;
 
-        let spent = 0;
-        if (['Internet', 'Umeme', 'Taka', 'Transport'].includes(c)) {
-          spent = mData.utilitiesSubSpent ? (mData.utilitiesSubSpent[c] || 0) : 0;
-        } else {
-          spent = mData.categorySpent ? (mData.categorySpent[c] || 0) : 0;
-        }
+      const compGrid = document.getElementById('category-budget-comparison-grid');
+      const catSpentMap = {};
 
-        const rem = target - spent;
-        const pct = target > 0 ? Math.min(100, Math.round((spent / target) * 100)) : 0;
+      expenses.forEach(exp => {
+        catSpentMap[exp.category] = (catSpentMap[exp.category] || 0) + (Number(exp.amount) || 0);
+      });
 
-        const card = document.createElement('div');
-        card.className = 'p-4 rounded-2xl bg-white border border-gray-100 shadow-premium space-y-2';
-        card.innerHTML = `
-          <div class="flex justify-between items-center">
-            <span class="font-bold text-xs text-brand-black uppercase">${c}</span>
-            <span class="text-[10px] font-bold text-brand-muted">${pct}% used</span>
-          </div>
-          <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-            <div class="h-full bg-brand-black" style="width: ${pct}%"></div>
-          </div>
-          <div class="flex justify-between text-[11px] text-brand-muted pt-1">
-            <span>Spent: <strong>${formatMoney(spent)}</strong></span>
-            <span>Target: <strong>${formatMoney(target)}</strong></span>
+      const categoriesToCheck = ['Utilities', 'Investment Target', 'Expenses Target', 'Other'];
+      compGrid.innerHTML = categoriesToCheck.map(catName => {
+        const catObj = state.categories.find(c => c.name.toLowerCase().includes(catName.toLowerCase().split(' ')[0])) || { amount: 0 };
+        const spent = catName === 'Utilities'
+          ? Object.values(curData.utilitiesSubSpent || {}).reduce((s, v) => s + (Number(v) || 0), 0)
+          : (catSpentMap[catName] || 0);
+        const target = catObj.amount || 0;
+        const diff = target - spent;
+
+        return `
+          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-2">
+            <span class="text-xs font-bold text-brand-black uppercase">${catName}</span>
+            <div class="flex justify-between items-end">
+              <div>
+                <p class="text-[10px] text-brand-muted uppercase">Target vs Spent</p>
+                <p class="text-sm font-bold text-brand-black">${formatMoney(spent)} / ${formatMoney(target)}</p>
+              </div>
+              <span class="text-xs font-extrabold ${diff >= 0 ? 'text-emerald-600' : 'text-red-500'}">
+                ${diff >= 0 ? 'Under: ' + formatMoney(diff) : 'Over: ' + formatMoney(Math.abs(diff))}
+              </span>
+            </div>
           </div>
         `;
-        comparisonGrid.appendChild(card);
-      });
+      }).join('');
 
       const tableBody = document.getElementById('daily-expense-table-body');
-      tableBody.innerHTML = '';
-      const expList = mData.expenses || [];
-      document.getElementById('daily-expense-log-count').textContent = `${expList.length} Expenses Recorded`;
-
-      if (expList.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-brand-muted">No expenses recorded for this month.</td></tr>';
-        return;
-      }
-
-      expList.forEach(ex => {
-        const tr = document.createElement('tr');
-        tr.className = 'hover:bg-gray-50';
-        tr.innerHTML = `
-          <td class="py-3">${ex.date}</td>
-          <td class="py-3 font-bold text-brand-black">${ex.name}</td>
-          <td class="py-3"><span class="px-2 py-0.5 rounded-full bg-gray-100 font-semibold">${ex.category}</span></td>
-          <td class="py-3">${ex.account}</td>
-          <td class="py-3 text-right font-bold text-brand-black">${formatMoney(ex.amount)}</td>
-        `;
-        tableBody.appendChild(tr);
-      });
+      tableBody.innerHTML = expenses.map(exp => `
+        <tr class="hover:bg-gray-50/50 transition">
+          <td class="py-3 font-semibold text-brand-black">${exp.date}</td>
+          <td class="py-3 text-brand-black">${exp.name}</td>
+          <td class="py-3"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-[10px] font-bold text-brand-black">${exp.category}</span></td>
+          <td class="py-3 text-brand-muted">${exp.account}</td>
+          <td class="py-3 text-right font-bold text-brand-black">${formatMoney(exp.amount)}</td>
+        </tr>
+      `).join('') || `<tr><td colspan="5" class="py-4 text-center text-brand-muted text-xs">No expense transactions recorded for this month.</td></tr>`;
     }
 
-    function handleAddTransaction(e) {
+    function handleExpenseMonthChange(e) {
+      state.expenseActiveMonth = e.target.value;
+      ensureMonthStructure(state.expenseActiveMonth);
+      renderDailyExpensesTab();
+      saveUserData();
+    }
+
+    async function handleAddTransaction(e) {
       e.preventDefault();
       const name = document.getElementById('tx-name').value;
       const category = document.getElementById('tx-category').value;
       const account = document.getElementById('tx-account').value;
-      const amount = Number(document.getElementById('tx-amount').value);
+      const amount = parseFloat(document.getElementById('tx-amount').value) || 0;
       const date = document.getElementById('tx-date').value;
 
-      if (!name || isNaN(amount) || !date) return;
+      const monthKey = date.substring(0, 7);
+      ensureMonthStructure(monthKey);
 
-      const mKey = date.substring(0, 7);
-      ensureMonthExists(mKey);
-
-      state.monthlyData[mKey].expenses.push({
-        id: 'exp_' + Date.now(),
+      state.monthlyData[monthKey].expenses.push({
+        id: 'tx_' + Date.now(),
         name,
         category,
         account,
@@ -1836,9 +1745,11 @@
       });
 
       if (['Internet', 'Umeme', 'Taka', 'Transport'].includes(category)) {
-        state.monthlyData[mKey].utilitiesSubSpent[category] = (state.monthlyData[mKey].utilitiesSubSpent[category] || 0) + amount;
+        state.monthlyData[monthKey].utilitiesSubSpent[category] =
+          (state.monthlyData[monthKey].utilitiesSubSpent[category] || 0) + amount;
       } else {
-        state.monthlyData[mKey].categorySpent[category] = (state.monthlyData[mKey].categorySpent[category] || 0) + amount;
+        state.monthlyData[monthKey].categorySpent[category] =
+          (state.monthlyData[monthKey].categorySpent[category] || 0) + amount;
       }
 
       if (state.accounts[account] !== undefined) {
@@ -1848,408 +1759,545 @@
       closeModal('addTransactionModal');
       document.getElementById('tx-name').value = '';
       document.getElementById('tx-amount').value = '';
-      saveUserData();
-      renderAllViews();
+
+      renderAll();
+      await saveUserData();
     }
 
-    // INVESTMENT TAB
     function renderInvestmentTab() {
-      const inv = state.investment;
+      const inv = state.investments;
+      const gain = inv.currentValue - inv.totalInvested;
+      const pct = inv.totalInvested > 0 ? (gain / inv.totalInvested) * 100 : 0;
+
       document.getElementById('inv-total-invested').textContent = formatMoney(inv.totalInvested);
       document.getElementById('inv-current-value').textContent = formatMoney(inv.currentValue);
-
-      const gain = inv.currentValue - inv.totalInvested;
-      const returnPct = inv.totalInvested > 0 ? ((gain / inv.totalInvested) * 100).toFixed(2) : '0.00';
 
       const gainEl = document.getElementById('inv-gain-loss');
       gainEl.textContent = (gain >= 0 ? '+' : '') + formatMoney(gain);
       gainEl.className = `font-display text-3xl font-extrabold mt-1 ${gain >= 0 ? 'text-emerald-600' : 'text-red-500'}`;
 
       const pctEl = document.getElementById('inv-percentage-return');
-      pctEl.textContent = (gain >= 0 ? '+' : '') + `${returnPct}%`;
-      pctEl.className = `font-display text-3xl font-extrabold mt-1 ${gain >= 0 ? 'text-emerald-600' : 'text-red-500'}`;
+      pctEl.textContent = (pct >= 0 ? '+' : '') + pct.toFixed(2) + '%';
+      pctEl.className = `font-display text-3xl font-extrabold mt-1 ${pct >= 0 ? 'text-emerald-600' : 'text-red-500'}`;
 
-      const logList = document.getElementById('investment-history-list');
-      logList.innerHTML = '';
-
-      if (!inv.history || inv.history.length === 0) {
-        logList.innerHTML = '<p class="text-xs text-brand-muted col-span-3">No investment activity logged yet.</p>';
-        return;
-      }
-
-      inv.history.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'p-4 rounded-2xl bg-white border border-gray-100 shadow-premium flex justify-between items-center';
-        card.innerHTML = `
+      const histList = document.getElementById('investment-history-list');
+      histList.innerHTML = inv.history.map(item => `
+        <div class="p-4 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-between">
           <div>
-            <p class="font-bold text-xs text-brand-black uppercase">${item.type}</p>
+            <p class="text-xs font-bold text-brand-black">${item.type}</p>
             <p class="text-[10px] text-brand-muted">${item.date}</p>
           </div>
-          <p class="font-display font-bold text-sm text-brand-black">${formatMoney(item.amount)}</p>
-        `;
-        logList.appendChild(card);
-      });
+          <p class="text-xs font-extrabold text-brand-black">${formatMoney(item.amount)}</p>
+        </div>
+      `).join('') || `<p class="text-xs text-brand-muted col-span-full">No investment history logs recorded.</p>`;
     }
 
-    function handleAddInvestmentCapital(e) {
+    async function handleAddInvestmentCapital(e) {
       e.preventDefault();
-      const amt = Number(document.getElementById('inv-add-amount').value);
-      if (isNaN(amt) || amt <= 0) return;
+      const amount = parseFloat(document.getElementById('inv-add-amount').value) || 0;
 
-      state.investment.totalInvested += amt;
-      state.investment.currentValue += amt;
-      state.investment.history.push({
+      state.investments.totalInvested += amount;
+      state.investments.currentValue += amount;
+      state.investments.history.unshift({
         id: 'inv_' + Date.now(),
-        type: 'Capital Added',
-        amount: amt,
+        type: 'Capital Addition',
+        amount,
         date: new Date().toISOString().split('T')[0]
       });
 
       closeModal('addInvestmentModal');
       document.getElementById('inv-add-amount').value = '';
-      saveUserData();
+
       renderInvestmentTab();
+      await saveUserData();
     }
 
-    function handleUpdateInvestmentValue(e) {
+    async function handleUpdateInvestmentValue(e) {
       e.preventDefault();
-      const val = Number(document.getElementById('inv-update-value').value);
-      if (isNaN(val)) return;
+      const newVal = parseFloat(document.getElementById('inv-update-value').value) || 0;
 
-      state.investment.currentValue = val;
-      state.investment.history.push({
+      state.investments.currentValue = newVal;
+      state.investments.history.unshift({
         id: 'inv_' + Date.now(),
         type: 'Valuation Update',
-        amount: val,
+        amount: newVal,
         date: new Date().toISOString().split('T')[0]
       });
 
       closeModal('updateInvestmentModal');
       document.getElementById('inv-update-value').value = '';
-      saveUserData();
-      renderInvestmentTab();
-    }
 
-    // APPEARICH TAB & SALES LOG
-    function populateBusinessDropdowns() {
-      const select1 = document.getElementById('sale-business-type');
-      const select2 = document.getElementById('full-edit-sale-business-type');
-      if (select1) {
-        select1.innerHTML = state.businessTypes.map(b => `<option value="${b}">${b}</option>`).join('');
-      }
-      if (select2) {
-        select2.innerHTML = state.businessTypes.map(b => `<option value="${b}">${b}</option>`).join('');
-      }
+      renderInvestmentTab();
+      await saveUserData();
     }
 
     function renderAppearichTab() {
-      populateBusinessDropdowns();
-
-      // Render business filter tabs
-      const bar = document.getElementById('business-types-bar');
-      bar.innerHTML = state.businessTypes.map(b => `
-        <button onclick="setAppearichBusinessFilter('${b}')" class="px-4 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 ${state.activeBusinessType === b ? 'bg-brand-black text-white' : 'bg-gray-100 text-brand-muted hover:text-brand-black'}">
+      const bBar = document.getElementById('business-types-bar');
+      bBar.innerHTML = state.businessTypes.map(b => `
+        <button onclick="setBusinessView('${b}')" class="px-4 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 ${state.activeBusinessType === b ? 'bg-brand-black text-white' : 'bg-gray-100 text-brand-muted hover:text-brand-black'}">
           ${b}
         </button>
       `).join('');
 
       document.getElementById('active-business-view-label').textContent = `Active Business View: ${state.activeBusinessType}`;
-      document.getElementById('profit-start-sale-input').value = state.profitStartSaleNum;
-      document.getElementById('profit-start-sale-display').textContent = state.profitStartSaleNum;
+      document.getElementById('profit-start-sale-input').value = state.profitStartSalesNumber || 1;
 
-      // Filter sales for active business
-      const activeSales = state.allSalesList.filter(s => s.businessType === state.activeBusinessType);
+      const allSales = getAllSalesFlat().filter(s => s.businessType === state.activeBusinessType);
 
       const todayStr = new Date().toISOString().split('T')[0];
-      const todaySalesList = activeSales.filter(s => s.date === todayStr);
-      const todayReceived = todaySalesList.reduce((sum, s) => sum + Number(s.paidAmount), 0);
-      const todayProfit = todaySalesList.reduce((sum, s) => sum + Number(s.profit), 0);
+      const todaySalesList = allSales.filter(s => s.date === todayStr);
 
-      const thisMonthStr = getCurrentMonthKey();
-      const monthSalesList = activeSales.filter(s => s.date.startsWith(thisMonthStr));
-      const monthRevenue = monthSalesList.reduce((sum, s) => sum + (Number(s.sellPrice) * Number(s.qty)), 0);
+      const todayReceived = todaySalesList.reduce((sum, s) => sum + (Number(s.paidAmount) || 0), 0);
+      const todayProfit = todaySalesList
+        .filter(s => (s.salesSeqNumber || 0) >= state.profitStartSalesNumber)
+        .reduce((sum, s) => sum + (Number(s.profit) || 0), 0);
 
-      const totalOutstanding = activeSales.reduce((sum, s) => {
-        const totalVal = Number(s.sellPrice) * Number(s.qty);
-        return sum + Math.max(0, totalVal - Number(s.paidAmount));
-      }, 0);
+      const currentMonthKey = getCurrentMonthKey();
+      const monthSalesList = allSales.filter(s => s.date.substring(0, 7) === currentMonthKey);
+      const monthRevenue = monthSalesList.reduce((sum, s) => sum + (Number(s.totalValue) || 0), 0);
 
-      const totalProfitCalculated = calculateTotalProfitFromStartingPoint();
+      const totalOutstanding = allSales.reduce((sum, s) => sum + Math.max(0, (Number(s.totalValue) || 0) - (Number(s.paidAmount) || 0)), 0);
+
+      const validSalesForTotalProfit = allSales.filter(s => (s.salesSeqNumber || 0) >= state.profitStartSalesNumber);
+      const totalProfit = validSalesForTotalProfit.reduce((sum, s) => sum + (Number(s.profit) || 0), 0);
 
       document.getElementById('app-today-sales').textContent = formatMoney(todayReceived);
       document.getElementById('app-today-profit').textContent = formatMoney(todayProfit);
       document.getElementById('app-month-revenue').textContent = formatMoney(monthRevenue);
       document.getElementById('app-total-outstanding').textContent = formatMoney(totalOutstanding);
-      document.getElementById('app-total-profit').textContent = formatMoney(totalProfitCalculated);
+      document.getElementById('app-total-profit').textContent = formatMoney(totalProfit);
 
-      // Period stats logic
-      const now = new Date();
-      let filteredPeriodSales = activeSales;
-      if (state.activePeriod === 'day') {
-        filteredPeriodSales = activeSales.filter(s => s.date === todayStr);
-      } else if (state.activePeriod === 'week') {
-        const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-        filteredPeriodSales = activeSales.filter(s => new Date(s.date) >= oneWeekAgo);
-      } else if (state.activePeriod === 'month') {
-        filteredPeriodSales = activeSales.filter(s => s.date.startsWith(thisMonthStr));
-      } else if (state.activePeriod === 'year') {
-        const yearStr = String(now.getFullYear());
-        filteredPeriodSales = activeSales.filter(s => s.date.startsWith(yearStr));
-      }
+      // PERIOD FILTER CALCULATIONS
+      const filteredSales = filterSalesByPeriod(allSales, state.appearichPeriod);
+      const periodSold = filteredSales.reduce((sum, s) => sum + (Number(s.quantity) || 0), 0);
+      const periodRev = filteredSales.reduce((sum, s) => sum + (Number(s.totalValue) || 0), 0);
+      const periodCost = filteredSales.reduce((sum, s) => sum + ((Number(s.buyPrice) || 0) * (Number(s.quantity) || 1)), 0);
+      const periodValidSales = filteredSales.filter(s => (s.salesSeqNumber || 0) >= state.profitStartSalesNumber);
+      const periodProf = periodValidSales.reduce((sum, s) => sum + (Number(s.profit) || 0), 0);
+      const periodMargin = periodRev > 0 ? (periodProf / periodRev) * 100 : 0;
 
-      const pSold = filteredPeriodSales.reduce((sum, s) => sum + Number(s.qty), 0);
-      const pRev = filteredPeriodSales.reduce((sum, s) => sum + (Number(s.sellPrice) * Number(s.qty)), 0);
-      const pCost = filteredPeriodSales.reduce((sum, s) => sum + (Number(s.costPrice) * Number(s.qty)), 0);
-      const pProfit = pRev - pCost;
-      const pMargin = pRev > 0 ? ((pProfit / pRev) * 100).toFixed(1) : '0';
+      document.getElementById('app-period-sold').textContent = periodSold;
+      document.getElementById('app-period-revenue').textContent = formatMoney(periodRev);
+      document.getElementById('app-period-cost').textContent = formatMoney(periodCost);
+      document.getElementById('app-period-margin').textContent = periodMargin.toFixed(1) + '%';
 
-      document.getElementById('app-period-sold').textContent = pSold;
-      document.getElementById('app-period-revenue').textContent = formatMoney(pRev);
-      document.getElementById('app-period-cost').textContent = formatMoney(pCost);
-      document.getElementById('app-period-margin').textContent = `${pMargin}%`;
+      renderSalesTable(allSales);
+    }
 
-      // Render Sales Transactions Log Table (NEWEST -> OLDEST automatically)
+    function renderSalesTable(salesList) {
       const tableBody = document.getElementById('appearich-sales-table');
-      tableBody.innerHTML = '';
+      document.getElementById('sales-log-count-badge').textContent = `${salesList.length} Sales`;
 
-      if (state.allSalesList.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="12" class="py-6 text-center text-brand-muted">No sales history recorded yet.</td></tr>';
-        return;
+      const selectAllCb = document.getElementById('select-all-sales-cb');
+      if (selectAllCb) {
+        const allIds = salesList.map(s => s.id);
+        selectAllCb.checked = allIds.length > 0 && allIds.every(id => state.selectedSaleIds.includes(id));
       }
-
-      state.allSalesList.forEach(s => {
-        const totalVal = Number(s.sellPrice) * Number(s.qty);
-        const costVal = Number(s.costPrice) * Number(s.qty);
-        const isExcluded = (s.saleNum || 0) < Number(state.profitStartSaleNum);
-        const isChecked = state.selectedSaleIds.has(s.id);
-
-        const tr = document.createElement('tr');
-        tr.className = `hover:bg-gray-50/80 transition ${isExcluded ? 'opacity-60 bg-gray-50/50' : ''}`;
-        tr.innerHTML = `
-          <td class="py-3 px-2">
-            <input type="checkbox" onchange="toggleSelectSale('${s.id}', this.checked)" ${isChecked ? 'checked' : ''} class="rounded border-gray-300">
-          </td>
-          <td class="py-3 font-bold text-brand-black">
-            <span class="px-2 py-0.5 rounded-md bg-gray-100 text-brand-black">${s.saleNumFormatted || ('Sale #' + String(s.saleNum).padStart(3, '0'))}</span>
-          </td>
-          <td class="py-3 text-xs whitespace-nowrap">${s.date}</td>
-          <td class="py-3"><span class="px-2 py-0.5 rounded-full bg-gray-100 font-bold text-[10px] uppercase">${s.businessType}</span></td>
-          <td class="py-3 font-bold text-brand-black">${s.productName}</td>
-          <td class="py-3 text-center font-bold">${s.qty}</td>
-          <td class="py-3">${formatMoney(costVal)}</td>
-          <td class="py-3 font-bold text-brand-black">${formatMoney(totalVal)}</td>
-          <td class="py-3 text-brand-muted">${s.customer}</td>
-          <td class="py-3 font-bold ${s.profit >= 0 ? 'text-emerald-600' : 'text-red-500'}">
-            ${formatMoney(s.profit)}
-            ${isExcluded ? '<span class="block text-[9px] text-gray-400 font-normal">(Excluded)</span>' : ''}
-          </td>
-          <td class="py-3">
-            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${s.status === 'FULL' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-red-50 text-red-700 border border-red-200'}">
-              ${s.status}
-            </span>
-          </td>
-          <td class="py-3 text-right whitespace-nowrap space-x-2">
-            <button onclick="openFullEditSaleModal('${s.id}')" class="text-xs font-bold text-brand-black hover:underline">Edit</button>
-            <button onclick="handleDeleteSingleSale('${s.id}')" class="text-xs font-bold text-red-600 hover:underline">Delete</button>
-          </td>
-        `;
-        tableBody.appendChild(tr);
-      });
 
       updateBulkDeleteButton();
+
+      tableBody.innerHTML = salesList.map(sale => {
+        const seqNumStr = 'Sale #' + String(sale.salesSeqNumber || 0).padStart(3, '0');
+        const unpaid = Math.max(0, (Number(sale.totalValue) || 0) - (Number(sale.paidAmount) || 0));
+        const statusClass = sale.paymentStatus === 'FULL' || unpaid <= 0
+          ? 'bg-emerald-100 text-emerald-800'
+          : 'bg-yellow-100 text-yellow-800';
+        const isExcluded = (sale.salesSeqNumber || 0) < state.profitStartSalesNumber;
+
+        return `
+          <tr class="hover:bg-gray-50/50 transition ${isExcluded ? 'opacity-60 bg-gray-50/30' : ''}">
+            <td class="py-3 pr-2">
+              <input type="checkbox" value="${sale.id}" ${state.selectedSaleIds.includes(sale.id) ? 'checked' : ''} onchange="toggleSelectSale('${sale.id}', this.checked)" class="rounded border-gray-300">
+            </td>
+            <td class="py-3 font-bold text-brand-black whitespace-nowrap">${seqNumStr}</td>
+            <td class="py-3 font-semibold text-brand-black whitespace-nowrap">${sale.date}</td>
+            <td class="py-3 text-brand-muted whitespace-nowrap">${sale.businessType}</td>
+            <td class="py-3 text-brand-black font-medium">${sale.productName}</td>
+            <td class="py-3 text-brand-black font-semibold">${sale.quantity}</td>
+            <td class="py-3 text-brand-black">${sale.customerName}</td>
+            <td class="py-3 text-brand-muted whitespace-nowrap">${formatMoney(sale.buyPrice)}</td>
+            <td class="py-3 text-brand-black whitespace-nowrap">${formatMoney(sale.sellPrice)}</td>
+            <td class="py-3 font-bold whitespace-nowrap ${isExcluded ? 'text-gray-400' : 'text-emerald-600'}">
+              ${formatMoney(sale.profit)} ${isExcluded ? '<span class="text-[9px] text-gray-400 font-normal block">(Excluded)</span>' : ''}
+            </td>
+            <td class="py-3 whitespace-nowrap">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${statusClass}">
+                ${unpaid <= 0 ? 'FULL' : 'PARTIAL'}
+              </span>
+            </td>
+            <td class="py-3 text-right whitespace-nowrap space-x-1">
+              <button onclick="openEditSaleModal('${sale.id}')" class="px-2 py-1 bg-gray-100 hover:bg-gray-200 text-brand-black font-bold rounded-lg text-[10px]">Edit</button>
+              <button onclick="openUpdateSalePayment('${sale.id}')" class="px-2 py-1 bg-brand-gold/20 hover:bg-brand-gold/30 text-brand-black font-bold rounded-lg text-[10px]">Payment</button>
+              <button onclick="deleteSingleSale('${sale.id}')" class="px-2 py-1 bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-lg text-[10px]">Delete</button>
+            </td>
+          </tr>
+        `;
+      }).join('') || `<tr><td colspan="12" class="py-4 text-center text-brand-muted text-xs">No transaction sales recorded.</td></tr>`;
     }
 
-    function setAppearichBusinessFilter(b) {
-      state.activeBusinessType = b;
-      saveUserData();
-      renderAppearichTab();
-    }
-
-    function switchAppearichPeriod(period) {
-      state.activePeriod = period;
-      document.querySelectorAll('.app-period-btn').forEach(btn => {
-        btn.classList.remove('bg-brand-black', 'text-white', 'active');
-        btn.classList.add('bg-gray-100', 'text-brand-muted');
-      });
-      const activeBtn = document.getElementById('app-period-' + period);
-      if (activeBtn) {
-        activeBtn.classList.add('bg-brand-black', 'text-white', 'active');
-        activeBtn.classList.remove('bg-gray-100', 'text-brand-muted');
+    function toggleSelectSale(saleId, isChecked) {
+      if (isChecked) {
+        if (!state.selectedSaleIds.includes(saleId)) state.selectedSaleIds.push(saleId);
+      } else {
+        state.selectedSaleIds = state.selectedSaleIds.filter(id => id !== saleId);
       }
-      renderAppearichTab();
-    }
-
-    function toggleSalePartialInput() {
-      const status = document.getElementById('sale-payment-status').value;
-      const container = document.getElementById('sale-partial-container');
-      if (status === 'PARTIAL') container.classList.remove('hidden');
-      else container.classList.add('hidden');
-    }
-
-    function toggleFullEditSalePartialInput() {
-      const status = document.getElementById('full-edit-sale-payment-status').value;
-      const container = document.getElementById('full-edit-sale-partial-container');
-      if (status === 'PARTIAL') container.classList.remove('hidden');
-      else container.classList.add('hidden');
-    }
-
-    function handleAddSale(e) {
-      e.preventDefault();
-      const bType = document.getElementById('sale-business-type').value;
-      const date = document.getElementById('sale-date').value;
-      const qty = Number(document.getElementById('sale-qty').value) || 1;
-      const product = document.getElementById('sale-product').value;
-      const customer = document.getElementById('sale-customer').value;
-      const buyPrice = Number(document.getElementById('sale-buy-price').value) || 0;
-      const sellPrice = Number(document.getElementById('sale-sell-price').value) || 0;
-      const status = document.getElementById('sale-payment-status').value;
-      let paid = status === 'FULL' ? (sellPrice * qty) : (Number(document.getElementById('sale-paid-amount').value) || 0);
-
-      const currentSeq = state.nextSaleSeq++;
-      const saleObj = {
-        id: 'sale_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
-        saleNum: currentSeq,
-        saleNumFormatted: 'Sale #' + String(currentSeq).padStart(3, '0'),
-        date,
-        businessType: bType,
-        productName: product,
-        qty,
-        costPrice: buyPrice,
-        sellPrice,
-        customer,
-        status,
-        paidAmount: paid,
-        profit: (sellPrice - buyPrice) * qty
-      };
-
-      state.allSalesList.push(saleObj);
-      sortAllSalesChronologically();
-      syncSalesToMonthlyData();
-
-      closeModal('addSaleModal');
-      saveUserData();
-      renderAllViews();
-    }
-
-    // FULLY EDITABLE SALES HISTORY
-    function openFullEditSaleModal(saleId) {
-      const s = state.allSalesList.find(x => x.id === saleId);
-      if (!s) return;
-
-      populateBusinessDropdowns();
-      document.getElementById('full-edit-sale-id').value = s.id;
-      document.getElementById('edit-sale-num-header').textContent = s.saleNumFormatted || ('Sale #' + String(s.saleNum).padStart(3, '0'));
-      document.getElementById('full-edit-sale-business-type').value = s.businessType || state.businessTypes[0];
-      document.getElementById('full-edit-sale-date').value = s.date;
-      document.getElementById('full-edit-sale-qty').value = s.qty;
-      document.getElementById('full-edit-sale-product').value = s.productName;
-      document.getElementById('full-edit-sale-customer').value = s.customer;
-      document.getElementById('full-edit-sale-buy-price').value = s.costPrice;
-      document.getElementById('full-edit-sale-sell-price').value = s.sellPrice;
-      document.getElementById('full-edit-sale-payment-status').value = s.status;
-      document.getElementById('full-edit-sale-paid-amount').value = s.paidAmount;
-
-      toggleFullEditSalePartialInput();
-      openModal('editSaleModal');
-    }
-
-    function handleSaveEditedSale(e) {
-      e.preventDefault();
-      const saleId = document.getElementById('full-edit-sale-id').value;
-      const s = state.allSalesList.find(x => x.id === saleId);
-      if (!s) return;
-
-      s.businessType = document.getElementById('full-edit-sale-business-type').value;
-      s.date = document.getElementById('full-edit-sale-date').value;
-      s.qty = Number(document.getElementById('full-edit-sale-qty').value) || 1;
-      s.productName = document.getElementById('full-edit-sale-product').value;
-      s.customer = document.getElementById('full-edit-sale-customer').value;
-      s.costPrice = Number(document.getElementById('full-edit-sale-buy-price').value) || 0;
-      s.sellPrice = Number(document.getElementById('full-edit-sale-sell-price').value) || 0;
-      s.status = document.getElementById('full-edit-sale-payment-status').value;
-      s.paidAmount = s.status === 'FULL' ? (s.sellPrice * s.qty) : (Number(document.getElementById('full-edit-sale-paid-amount').value) || 0);
-      s.profit = (s.sellPrice - s.costPrice) * s.qty;
-
-      sortAllSalesChronologically();
-      syncSalesToMonthlyData();
-
-      closeModal('editSaleModal');
-      saveUserData();
-      renderAllViews();
-    }
-
-    // DELETE A SINGLE SALE WITH CONFIRMATION
-    function handleDeleteSingleSale(saleId) {
-      const s = state.allSalesList.find(x => x.id === saleId);
-      if (!s) return;
-
-      const numStr = s.saleNumFormatted || ('Sale #' + String(s.saleNum).padStart(3, '0'));
-      if (confirm(`Are you sure you want to delete ${numStr}? This action cannot be undone.`)) {
-        state.allSalesList = state.allSalesList.filter(x => x.id !== saleId);
-        state.selectedSaleIds.delete(saleId);
-
-        syncSalesToMonthlyData();
-        validateProfitStartingPoint();
-        saveUserData();
-        renderAllViews();
-      }
-    }
-
-    // BULK DELETE MULTIPLE SALES
-    function toggleSelectSale(id, isChecked) {
-      if (isChecked) state.selectedSaleIds.add(id);
-      else state.selectedSaleIds.delete(id);
       updateBulkDeleteButton();
     }
 
     function toggleSelectAllSales(isChecked) {
+      const allVisibleSales = getAllSalesFlat().filter(s => s.businessType === state.activeBusinessType);
       if (isChecked) {
-        state.allSalesList.forEach(s => state.selectedSaleIds.add(s.id));
+        allVisibleSales.forEach(s => {
+          if (!state.selectedSaleIds.includes(s.id)) state.selectedSaleIds.push(s.id);
+        });
       } else {
-        state.selectedSaleIds.clear();
+        const visibleIds = allVisibleSales.map(s => s.id);
+        state.selectedSaleIds = state.selectedSaleIds.filter(id => !visibleIds.includes(id));
       }
       renderAppearichTab();
     }
 
     function updateBulkDeleteButton() {
       const btn = document.getElementById('bulk-delete-btn');
-      const countEl = document.getElementById('selected-sales-count');
-      const count = state.selectedSaleIds.size;
-      countEl.textContent = count;
-      if (count > 0) btn.classList.remove('hidden');
-      else btn.classList.add('hidden');
-    }
-
-    function handleBulkDeleteSales() {
-      const count = state.selectedSaleIds.size;
-      if (count === 0) return;
-
-      if (confirm(`Are you sure you want to delete ${count} selected sales? This action cannot be undone.`)) {
-        state.allSalesList = state.allSalesList.filter(s => !state.selectedSaleIds.has(s.id));
-        state.selectedSaleIds.clear();
-
-        syncSalesToMonthlyData();
-        validateProfitStartingPoint();
-        saveUserData();
-        renderAllViews();
+      const label = document.getElementById('bulk-delete-label');
+      if (state.selectedSaleIds.length > 0) {
+        btn.classList.remove('hidden');
+        btn.classList.add('flex');
+        label.textContent = `Delete Selected (${state.selectedSaleIds.length})`;
+      } else {
+        btn.classList.add('hidden');
+        btn.classList.remove('flex');
       }
     }
 
-    function handleAddBusinessOption(e) {
+    async function handleProfitStartChange(val) {
+      const num = parseInt(val, 10);
+      if (isNaN(num) || num < 1) {
+        document.getElementById('profit-start-sale-input').value = state.profitStartSalesNumber || 1;
+        return;
+      }
+      state.profitStartSalesNumber = num;
+      renderAll();
+      await saveUserData();
+    }
+
+    function setBusinessView(bName) {
+      state.activeBusinessType = bName;
+      state.selectedSaleIds = [];
+      renderAppearichTab();
+    }
+
+    function switchAppearichPeriod(p) {
+      state.appearichPeriod = p;
+      document.querySelectorAll('.app-period-btn').forEach(b => {
+        b.classList.remove('bg-brand-black', 'text-white');
+        b.classList.add('bg-gray-100', 'text-brand-muted');
+      });
+      const activeBtn = document.getElementById(`app-period-${p}`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-brand-black', 'text-white');
+        activeBtn.classList.remove('bg-gray-100', 'text-brand-muted');
+      }
+      renderAppearichTab();
+    }
+
+    function filterSalesByPeriod(sales, period) {
+      const now = new Date();
+      return sales.filter(s => {
+        const d = new Date(s.date);
+        if (period === 'day') {
+          return d.toISOString().split('T')[0] === now.toISOString().split('T')[0];
+        } else if (period === 'week') {
+          const diffDays = Math.floor((now - d) / (1000 * 60 * 60 * 24));
+          return diffDays >= 0 && diffDays < 7;
+        } else if (period === 'month') {
+          return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+        } else if (period === 'year') {
+          return d.getFullYear() === now.getFullYear();
+        }
+        return true;
+      });
+    }
+
+    function toggleSalePartialInput() {
+      const status = document.getElementById('sale-payment-status').value;
+      const partialCont = document.getElementById('sale-partial-container');
+      if (status === 'PARTIAL') partialCont.classList.remove('hidden');
+      else partialCont.classList.add('hidden');
+    }
+
+    function toggleEditSaleModalPartialInput() {
+      const status = document.getElementById('edit-sale-payment-status').value;
+      const partialCont = document.getElementById('edit-sale-modal-partial-container');
+      if (status === 'PARTIAL') partialCont.classList.remove('hidden');
+      else partialCont.classList.add('hidden');
+    }
+
+    async function handleAddSale(e) {
+      e.preventDefault();
+      const bType = document.getElementById('sale-business-type').value;
+      const date = document.getElementById('sale-date').value;
+      const qty = parseInt(document.getElementById('sale-qty').value, 10) || 1;
+      const product = document.getElementById('sale-product').value;
+      const customer = document.getElementById('sale-customer').value;
+      const buyPrice = parseFloat(document.getElementById('sale-buy-price').value) || 0;
+      const sellPrice = parseFloat(document.getElementById('sale-sell-price').value) || 0;
+      const status = document.getElementById('sale-payment-status').value;
+
+      const totalVal = sellPrice * qty;
+      const totalCost = buyPrice * qty;
+      const profit = totalVal - totalCost;
+
+      let paid = totalVal;
+      if (status === 'PARTIAL') {
+        paid = parseFloat(document.getElementById('sale-paid-amount').value) || 0;
+      }
+
+      const mKey = date.substring(0, 7);
+      ensureMonthStructure(mKey);
+
+      const seqNum = state.salesNextSeq++;
+
+      state.monthlyData[mKey].sales.push({
+        id: 'sale_' + Date.now(),
+        salesSeqNumber: seqNum,
+        businessType: bType,
+        date,
+        quantity: qty,
+        productName: product,
+        customerName: customer,
+        buyPrice,
+        sellPrice,
+        totalValue: totalVal,
+        profit,
+        paymentStatus: status,
+        paidAmount: paid
+      });
+
+      closeModal('addSaleModal');
+      document.getElementById('sale-product').value = '';
+      document.getElementById('sale-customer').value = '';
+      document.getElementById('sale-buy-price').value = '';
+      document.getElementById('sale-sell-price').value = '';
+
+      renderAll();
+      await saveUserData();
+    }
+
+    function findSaleById(saleId) {
+      for (const mKey of Object.keys(state.monthlyData)) {
+        const m = state.monthlyData[mKey];
+        if (m.sales && Array.isArray(m.sales)) {
+          const found = m.sales.find(s => s.id === saleId);
+          if (found) return { sale: found, monthKey: mKey };
+        }
+      }
+      return null;
+    }
+
+    function openEditSaleModal(saleId) {
+      const res = findSaleById(saleId);
+      if (!res) return;
+      const s = res.sale;
+
+      document.getElementById('edit-sale-full-id').value = s.id;
+      document.getElementById('edit-sale-modal-title').textContent = `Edit Sale #${String(s.salesSeqNumber || 0).padStart(3, '0')}`;
+      
+      populateBusinessSelect('edit-sale-business-type', s.businessType);
+      document.getElementById('edit-sale-date').value = s.date;
+      document.getElementById('edit-sale-qty').value = s.quantity;
+      document.getElementById('edit-sale-product').value = s.productName;
+      document.getElementById('edit-sale-customer').value = s.customerName;
+      document.getElementById('edit-sale-buy-price').value = s.buyPrice;
+      document.getElementById('edit-sale-sell-price').value = s.sellPrice;
+      document.getElementById('edit-sale-payment-status').value = s.paymentStatus || 'FULL';
+      document.getElementById('edit-sale-modal-paid-amount').value = s.paidAmount;
+
+      toggleEditSaleModalPartialInput();
+      openModal('editSaleModal');
+    }
+
+    async function handleEditSale(e) {
+      e.preventDefault();
+      const saleId = document.getElementById('edit-sale-full-id').value;
+      const res = findSaleById(saleId);
+      if (!res) return;
+
+      const oldSale = res.sale;
+      const oldMonthKey = res.monthKey;
+
+      const bType = document.getElementById('edit-sale-business-type').value;
+      const date = document.getElementById('edit-sale-date').value;
+      const qty = parseInt(document.getElementById('edit-sale-qty').value, 10) || 1;
+      const product = document.getElementById('edit-sale-product').value;
+      const customer = document.getElementById('edit-sale-customer').value;
+      const buyPrice = parseFloat(document.getElementById('edit-sale-buy-price').value) || 0;
+      const sellPrice = parseFloat(document.getElementById('edit-sale-sell-price').value) || 0;
+      const status = document.getElementById('edit-sale-payment-status').value;
+
+      const totalVal = sellPrice * qty;
+      const totalCost = buyPrice * qty;
+      const profit = totalVal - totalCost;
+
+      let paid = totalVal;
+      if (status === 'PARTIAL') {
+        paid = parseFloat(document.getElementById('edit-sale-modal-paid-amount').value) || 0;
+      }
+
+      const newMonthKey = date.substring(0, 7);
+
+      // Remove from old month list
+      state.monthlyData[oldMonthKey].sales = state.monthlyData[oldMonthKey].sales.filter(s => s.id !== saleId);
+
+      // Add to new month list
+      ensureMonthStructure(newMonthKey);
+      state.monthlyData[newMonthKey].sales.push({
+        id: oldSale.id,
+        salesSeqNumber: oldSale.salesSeqNumber,
+        businessType: bType,
+        date,
+        quantity: qty,
+        productName: product,
+        customerName: customer,
+        buyPrice,
+        sellPrice,
+        totalValue: totalVal,
+        profit,
+        paymentStatus: status,
+        paidAmount: paid
+      });
+
+      closeModal('editSaleModal');
+      renderAll();
+      await saveUserData();
+    }
+
+    function openUpdateSalePayment(saleId) {
+      const res = findSaleById(saleId);
+      if (!res) return;
+      const s = res.sale;
+
+      document.getElementById('edit-sale-id').value = s.id;
+      document.getElementById('edit-sale-status').value = s.paymentStatus;
+      document.getElementById('edit-sale-paid-amount').value = s.paidAmount;
+
+      toggleEditSalePartialInput();
+      openModal('updateSalePaymentModal');
+    }
+
+    function toggleEditSalePartialInput() {
+      const st = document.getElementById('edit-sale-status').value;
+      const cont = document.getElementById('edit-sale-paid-container');
+      if (st === 'PARTIAL') cont.classList.remove('hidden');
+      else cont.classList.add('hidden');
+    }
+
+    async function handleUpdateSalePayment(e) {
+      e.preventDefault();
+      const saleId = document.getElementById('edit-sale-id').value;
+      const res = findSaleById(saleId);
+      if (!res) return;
+
+      const st = document.getElementById('edit-sale-status').value;
+      const paid = st === 'FULL' ? res.sale.totalValue : parseFloat(document.getElementById('edit-sale-paid-amount').value) || 0;
+
+      res.sale.paymentStatus = st;
+      res.sale.paidAmount = paid;
+
+      closeModal('updateSalePaymentModal');
+      renderAll();
+      await saveUserData();
+    }
+
+    async function handleAddBusinessOption(e) {
       e.preventDefault();
       const name = document.getElementById('new-business-name-input').value.trim();
-      if (!name) return;
-      if (!state.businessTypes.includes(name)) {
+      if (name && !state.businessTypes.includes(name)) {
         state.businessTypes.push(name);
+        state.activeBusinessType = name;
       }
-      state.activeBusinessType = name;
       closeModal('addBusinessModal');
       document.getElementById('new-business-name-input').value = '';
-      saveUserData();
-      renderAllViews();
+      renderAppearichTab();
+      await saveUserData();
     }
 
-    // EXCEL IMPORT WITH PERMANENT SALES NUMBERS
+    async function deleteSingleSale(saleId) {
+      const res = findSaleById(saleId);
+      if (!res) return;
+
+      const seqStr = 'Sale #' + String(res.sale.salesSeqNumber || 0).padStart(3, '0');
+      if (!confirm(`Are you sure you want to delete ${seqStr}? This action cannot be undone.`)) {
+        return;
+      }
+
+      const deletedSeqNum = res.sale.salesSeqNumber;
+
+      // Perform deletion
+      state.monthlyData[res.monthKey].sales = state.monthlyData[res.monthKey].sales.filter(s => s.id !== saleId);
+      state.selectedSaleIds = state.selectedSaleIds.filter(id => id !== saleId);
+
+      handleProfitStartPostDeletion([deletedSeqNum]);
+
+      renderAll();
+      await saveUserData();
+    }
+
+    async function deleteSelectedSales() {
+      if (state.selectedSaleIds.length === 0) return;
+
+      const count = state.selectedSaleIds.length;
+      if (!confirm(`Are you sure you want to delete ${count} selected sales? This action cannot be undone.`)) {
+        return;
+      }
+
+      const deletedSeqNums = [];
+
+      Object.keys(state.monthlyData).forEach(mKey => {
+        const m = state.monthlyData[mKey];
+        if (m.sales && Array.isArray(m.sales)) {
+          m.sales.forEach(s => {
+            if (state.selectedSaleIds.includes(s.id)) {
+              deletedSeqNums.push(s.salesSeqNumber);
+            }
+          });
+          m.sales = m.sales.filter(s => !state.selectedSaleIds.includes(s.id));
+        }
+      });
+
+      state.selectedSaleIds = [];
+
+      handleProfitStartPostDeletion(deletedSeqNums);
+
+      renderAll();
+      await saveUserData();
+    }
+
+    function handleProfitStartPostDeletion(deletedSeqNums) {
+      if (deletedSeqNums.includes(state.profitStartSalesNumber)) {
+        const allSales = getAllSalesFlat();
+        if (allSales.length === 0) {
+          state.profitStartSalesNumber = 1;
+        } else {
+          // Find next valid sale with seqNum >= deleted profitStartSalesNumber
+          const validNextSales = allSales
+            .filter(s => s.salesSeqNumber >= state.profitStartSalesNumber)
+            .sort((a, b) => a.salesSeqNumber - b.salesSeqNumber);
+
+          if (validNextSales.length > 0) {
+            state.profitStartSalesNumber = validNextSales[0].salesSeqNumber;
+            alert(`The transaction selected as the profit starting point was deleted. The starting point has automatically moved to Sale #${String(state.profitStartSalesNumber).padStart(3, '0')}.`);
+          } else {
+            // Find highest existing seqNum
+            const sortedAll = allSales.sort((a, b) => a.salesSeqNumber - b.salesSeqNumber);
+            state.profitStartSalesNumber = sortedAll[0].salesSeqNumber;
+            alert(`The transaction selected as the profit starting point was deleted. The starting point has automatically adjusted to Sale #${String(state.profitStartSalesNumber).padStart(3, '0')}.`);
+          }
+        }
+      }
+    }
+
+    // EXCEL IMPORT ENGINE
     function previewExcelFile(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -2260,276 +2308,245 @@
         const workbook = XLSX.read(data, { type: 'array' });
         const firstSheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[firstSheetName];
-        const rawJson = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-        pendingExcelRecords = parseExcelSalesData(rawJson);
-        const previewBody = document.getElementById('excel-preview-body');
-        previewBody.innerHTML = '';
-        document.getElementById('preview-count').textContent = pendingExcelRecords.length;
+        if (json.length < 2) {
+          alert('Excel sheet is empty or invalid.');
+          return;
+        }
 
-        pendingExcelRecords.slice(0, 15).forEach(r => {
-          const tr = document.createElement('tr');
-          tr.className = 'hover:bg-gray-50';
-          tr.innerHTML = `
-            <td class="p-2">${r.date}</td>
-            <td class="p-2 font-bold">${r.productName}</td>
-            <td class="p-2">${r.ml || '-'}</td>
-            <td class="p-2">${r.qty}</td>
-            <td class="p-2">${formatMoney(r.sellPrice * r.qty)}</td>
-            <td class="p-2">${formatMoney(r.paidAmount)}</td>
-            <td class="p-2"><span class="px-1.5 py-0.5 rounded text-[9px] ${r.status === 'FULL' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}">${r.status}</span></td>
-            <td class="p-2 text-emerald-600 font-bold">${formatMoney(r.profit)}</td>
-            <td class="p-2">${r.customer}</td>
-            <td class="p-2">${formatMoney(r.costPrice * r.qty)}</td>
-          `;
-          previewBody.appendChild(tr);
+        const headers = json[0].map(h => String(h || '').trim().toLowerCase());
+        const rows = json.slice(1);
+
+        pendingExcelRecords = [];
+        let currentYear = '2025';
+        let currentMonthNum = '05';
+
+        rows.forEach(row => {
+          if (!row || row.length === 0) return;
+          const firstCol = String(row[0] || '').trim();
+
+          // Detect year/month header row
+          if (firstCol.match(/\b(2025|2026)\b/i) || firstCol.match(/may|june|july|august|september|october|november|december|january|february|march|april/i)) {
+            const yearMatch = firstCol.match(/\b(2025|2026)\b/);
+            if (yearMatch) currentYear = yearMatch[1];
+
+            const monthMatch = firstCol.match(/may|june|july|august|september|october|november|december|january|february|march|april/i);
+            if (monthMatch) {
+              const mName = monthMatch[0].toLowerCase();
+              if (MONTH_MAP[mName]) currentMonthNum = MONTH_MAP[mName];
+            }
+            return;
+          }
+
+          // Parse sale record row
+          let dateStr = '';
+          if (firstCol && firstCol.match(/^\d{1,2}\/\d{1,2}/)) {
+            const parts = firstCol.split('/');
+            const day = String(parts[0]).padStart(2, '0');
+            const m = String(parts[1]).padStart(2, '0');
+            dateStr = `${currentYear}-${m}-${day}`;
+          } else if (firstCol && firstCol.match(/^\d{1,2}$/)) {
+            const day = String(firstCol).padStart(2, '0');
+            dateStr = `${currentYear}-${currentMonthNum}-${day}`;
+          } else {
+            dateStr = `${currentYear}-${currentMonthNum}-01`;
+          }
+
+          const perfume = String(row[1] || row[2] || 'Perfume Item').trim();
+          const qty = parseInt(row[3] || row[2] || 1, 10) || 1;
+          const sellPrice = parseFloat(row[4] || row[5] || 0) || 0;
+          const buyPrice = Math.round(sellPrice * 0.6); // default 40% margin fallback
+          const totalVal = sellPrice * qty;
+          const profit = totalVal - (buyPrice * qty);
+          const customer = String(row[8] || row[7] || 'Excel Customer').trim();
+          const status = String(row[6] || '').toUpperCase().includes('PARTIAL') ? 'PARTIAL' : 'FULL';
+
+          if (perfume && perfume.toLowerCase() !== 'perfume name' && sellPrice > 0) {
+            pendingExcelRecords.push({
+              date: dateStr,
+              productName: perfume,
+              quantity: qty,
+              buyPrice,
+              sellPrice,
+              totalValue: totalVal,
+              profit,
+              customerName: customer,
+              paymentStatus: status,
+              paidAmount: status === 'FULL' ? totalVal : Math.round(totalVal * 0.5)
+            });
+          }
         });
+
+        document.getElementById('preview-count').textContent = pendingExcelRecords.length;
+        const tbody = document.getElementById('excel-preview-body');
+        tbody.innerHTML = pendingExcelRecords.slice(0, 10).map(r => `
+          <tr>
+            <td class="p-2">${r.date}</td>
+            <td class="p-2">${r.productName}</td>
+            <td class="p-2">50ml</td>
+            <td class="p-2">${r.quantity}</td>
+            <td class="p-2">${r.sellPrice}</td>
+            <td class="p-2">${r.totalValue}</td>
+            <td class="p-2">${r.paymentStatus}</td>
+            <td class="p-2">${r.profit}</td>
+            <td class="p-2">${r.customerName}</td>
+            <td class="p-2">${r.totalValue}</td>
+          </tr>
+        `).join('');
 
         document.getElementById('excel-preview-container').classList.remove('hidden');
       };
       reader.readAsArrayBuffer(file);
     }
 
-    function parseExcelSalesData(rows) {
-      if (!rows || rows.length < 2) return [];
+    async function confirmExcelImport() {
+      if (pendingExcelRecords.length === 0) return;
 
-      let headersIdx = 0;
-      for (let i = 0; i < Math.min(10, rows.length); i++) {
-        const rStr = rows[i].map(x => String(x).toLowerCase()).join(' ');
-        if (rStr.includes('date') || rStr.includes('perfume') || rStr.includes('amount') || rStr.includes('sale')) {
-          headersIdx = i;
-          break;
-        }
-      }
+      pendingExcelRecords.forEach(rec => {
+        const mKey = rec.date.substring(0, 7);
+        ensureMonthStructure(mKey);
 
-      const headers = rows[headersIdx].map(x => String(x).toLowerCase().trim());
-      const findCol = (keys) => headers.findIndex(h => keys.some(k => h.includes(k)));
+        const seqNum = state.salesNextSeq++;
 
-      const dateCol = findCol(['date', 's/n']);
-      const nameCol = findCol(['perfume', 'product', 'item']);
-      const mlCol = findCol(['ml']);
-      const qtyCol = findCol(['qty', 'quantity']);
-      const amountCol = findCol(['amount']);
-      const saleCol = findCol(['sale', 'paid', 'received']);
-      const statusCol = findCol(['status']);
-      const profitCol = findCol(['profit']);
-      const customerCol = findCol(['customer', 'details', 'name']);
-      const costCol = findCol(['expected', 'buying', 'cost']);
-
-      const records = [];
-      let currentYear = '2025';
-
-      for (let i = headersIdx + 1; i < rows.length; i++) {
-        const row = rows[i];
-        if (!row || row.length === 0) continue;
-
-        const rawName = nameCol >= 0 ? String(row[nameCol] || '').trim() : '';
-        if (!rawName) continue;
-
-        let rawDate = dateCol >= 0 ? String(row[dateCol] || '').trim() : '';
-        let parsedDate = '2025-05-01';
-
-        if (rawDate) {
-          if (rawDate.match(/\d{4}-\d{2}-\d{2}/)) {
-            parsedDate = rawDate;
-          } else {
-            const parts = rawDate.split(/[\s\/\-]+/);
-            if (parts.length >= 2) {
-              let day = parseInt(parts[0], 10) || 1;
-              let monthStr = parts[1].toLowerCase();
-              let mNum = MONTH_MAP[monthStr] || '05';
-              if (parts[2] && parts[2].length === 4) currentYear = parts[2];
-              parsedDate = `${currentYear}-${mNum}-${String(day).padStart(2, '0')}`;
-            }
-          }
-        }
-
-        const qty = qtyCol >= 0 ? (Number(row[qtyCol]) || 1) : 1;
-        const totalAmount = amountCol >= 0 ? (Number(row[amountCol]) || 0) : 0;
-        const totalPaid = saleCol >= 0 ? (Number(row[saleCol]) || totalAmount) : totalAmount;
-        const totalProfit = profitCol >= 0 ? (Number(row[profitCol]) || 0) : 0;
-        const totalCost = costCol >= 0 ? (Number(row[costCol]) || (totalAmount - totalProfit)) : (totalAmount - totalProfit);
-
-        const unitSell = qty > 0 ? (totalAmount / qty) : totalAmount;
-        const unitCost = qty > 0 ? (totalCost / qty) : totalCost;
-
-        let status = 'FULL';
-        if (statusCol >= 0) {
-          const stStr = String(row[statusCol] || '').toUpperCase();
-          if (stStr.includes('PARTIAL') || stStr.includes('UNPAID')) status = 'PARTIAL';
-        } else if (totalPaid < totalAmount) {
-          status = 'PARTIAL';
-        }
-
-        records.push({
-          date: parsedDate,
-          productName: rawName,
-          ml: mlCol >= 0 ? String(row[mlCol] || '') : '',
-          qty,
-          costPrice: unitCost,
-          sellPrice: unitSell,
-          paidAmount: totalPaid,
-          status,
-          profit: totalProfit || ((unitSell - unitCost) * qty),
-          customer: customerCol >= 0 ? String(row[customerCol] || 'Excel Import') : 'Excel Import'
-        });
-      }
-
-      return records;
-    }
-
-    function confirmExcelImport() {
-      if (!pendingExcelRecords || pendingExcelRecords.length === 0) return;
-
-      // Assign stable incrementing Sales Numbers to imported records
-      pendingExcelRecords.forEach(r => {
-        const currentSeq = state.nextSaleSeq++;
-        state.allSalesList.push({
-          id: 'sale_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
-          saleNum: currentSeq,
-          saleNumFormatted: 'Sale #' + String(currentSeq).padStart(3, '0'),
-          date: r.date,
-          businessType: 'Appearich Main',
-          productName: r.productName,
-          qty: r.qty,
-          costPrice: r.costPrice,
-          sellPrice: r.sellPrice,
-          customer: r.customer,
-          status: r.status,
-          paidAmount: r.paidAmount,
-          profit: r.profit
+        state.monthlyData[mKey].sales.push({
+          id: 'sale_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+          salesSeqNumber: seqNum,
+          businessType: 'Perfumes',
+          date: rec.date,
+          quantity: rec.quantity,
+          productName: rec.productName,
+          customerName: rec.customerName,
+          buyPrice: rec.buyPrice,
+          sellPrice: rec.sellPrice,
+          totalValue: rec.totalValue,
+          profit: rec.profit,
+          paymentStatus: rec.paymentStatus,
+          paidAmount: rec.paidAmount
         });
       });
-
-      sortAllSalesChronologically();
-      syncSalesToMonthlyData();
 
       closeModal('importExcelModal');
       pendingExcelRecords = [];
-      document.getElementById('excel-file-input').value = '';
       document.getElementById('excel-preview-container').classList.add('hidden');
+      document.getElementById('excel-file-input').value = '';
 
-      saveUserData();
-      renderAllViews();
-      alert('Excel sales successfully imported and permanently attached to your account!');
+      renderAll();
+      await saveUserData();
+      alert('Excel sales history successfully imported and saved permanently!');
     }
 
-    // ACCOUNTS TAB
     function renderAccountsTab() {
-      const totalLiquid = Object.values(state.accounts).reduce((sum, a) => sum + Number(a), 0);
+      const totalLiquid = Object.values(state.accounts).reduce((s, v) => s + (Number(v) || 0), 0);
       document.getElementById('accounts-total-money').textContent = formatMoney(totalLiquid);
 
       const grid = document.getElementById('account-cards-grid');
-      grid.innerHTML = '';
+      const accNames = ['CRDB', 'SELCOM', 'MPESA', 'LIPA NAMBA', 'CASH'];
 
-      Object.keys(state.accounts).forEach(acc => {
-        const bal = state.accounts[acc];
-        const card = document.createElement('div');
-        card.className = 'p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4';
-        card.innerHTML = `
-          <div class="flex justify-between items-center">
-            <span class="text-xs font-bold uppercase tracking-wider text-brand-muted">${acc}</span>
-            <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center font-bold text-xs text-brand-black">${acc.charAt(0)}</div>
-          </div>
-          <div>
-            <p class="text-xs text-brand-muted">Balance</p>
-            <p class="font-display text-2xl font-extrabold text-brand-black mt-0.5">${formatMoney(bal)}</p>
+      grid.innerHTML = accNames.map(acc => {
+        const bal = state.accounts[acc] || 0;
+        return `
+          <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4">
+            <div class="flex justify-between items-center">
+              <span class="text-xs font-bold text-brand-black uppercase tracking-wider">${acc}</span>
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+            </div>
+            <div>
+              <p class="text-[10px] text-brand-muted uppercase font-bold">Available Balance</p>
+              <p class="font-display text-2xl font-extrabold text-brand-black mt-1">${formatMoney(bal)}</p>
+            </div>
           </div>
         `;
-        grid.appendChild(card);
-      });
+      }).join('');
     }
 
-    function handleTransfer(e) {
+    async function handleTransfer(e) {
       e.preventDefault();
       const from = document.getElementById('tr-from').value;
       const to = document.getElementById('tr-to').value;
-      const amt = Number(document.getElementById('tr-amount').value);
+      const amount = parseFloat(document.getElementById('tr-amount').value) || 0;
 
-      if (from === to || isNaN(amt) || amt <= 0) return;
-      if ((state.accounts[from] || 0) < amt) {
+      if (from === to) {
+        alert('Source and destination accounts must be different.');
+        return;
+      }
+      if ((state.accounts[from] || 0) < amount) {
         alert('Insufficient balance in source account.');
         return;
       }
 
-      state.accounts[from] -= amt;
-      state.accounts[to] = (state.accounts[to] || 0) + amt;
+      state.accounts[from] -= amount;
+      state.accounts[to] = (state.accounts[to] || 0) + amount;
 
       closeModal('transferModal');
       document.getElementById('tr-amount').value = '';
-      saveUserData();
+
       renderAccountsTab();
-      renderHomeDashboard();
+      renderDashboard();
+      await saveUserData();
     }
 
-    function handleAddMoneyAccount(e) {
+    async function handleAddMoneyAccount(e) {
       e.preventDefault();
       const acc = document.getElementById('am-account').value;
-      const amt = Number(document.getElementById('am-amount').value);
-      if (isNaN(amt) || amt <= 0) return;
+      const amount = parseFloat(document.getElementById('am-amount').value) || 0;
 
-      state.accounts[acc] = (state.accounts[acc] || 0) + amt;
+      state.accounts[acc] = (state.accounts[acc] || 0) + amount;
 
       closeModal('addMoneyModal');
       document.getElementById('am-amount').value = '';
-      saveUserData();
+
       renderAccountsTab();
-      renderHomeDashboard();
+      renderDashboard();
+      await saveUserData();
     }
 
-    // LOANS TAB
     function renderLoansTab() {
-      const list = state.loans || [];
-      const totalOwed = list.reduce((sum, l) => sum + Math.max(0, Number(l.amount) - Number(l.paid)), 0);
+      const totalOwed = state.loans.reduce((sum, l) => sum + Math.max(0, l.amount - l.paidAmount), 0);
       document.getElementById('loan-total-owed').textContent = formatMoney(totalOwed);
 
-      const grid = document.getElementById('loan-cards-list');
-      grid.innerHTML = '';
-
-      if (list.length === 0) {
-        grid.innerHTML = '<p class="text-xs text-brand-muted col-span-3">No active loans recorded.</p>';
-        return;
-      }
-
-      list.forEach(l => {
-        const rem = Math.max(0, l.amount - l.paid);
-        const card = document.createElement('div');
-        card.className = 'p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4 flex flex-col justify-between';
-        card.innerHTML = `
-          <div>
-            <div class="flex justify-between items-center">
-              <h4 class="font-bold text-base text-brand-black">${l.borrower}</h4>
-              <span class="text-[10px] text-brand-muted">${l.date}</span>
+      const list = document.getElementById('loan-cards-list');
+      list.innerHTML = state.loans.map(loan => {
+        const rem = Math.max(0, loan.amount - loan.paidAmount);
+        return `
+          <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4 flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <h4 class="font-bold text-base text-brand-black">${loan.borrower}</h4>
+                <span class="text-[10px] text-brand-muted font-bold">${loan.date}</span>
+              </div>
+              <p class="text-xs text-brand-muted">${loan.note || 'No note'}</p>
             </div>
-            <p class="text-xs text-brand-muted mt-1">${l.note || 'No note'}</p>
-          </div>
-          <div class="space-y-2 border-t border-gray-100 pt-3">
-            <div class="flex justify-between text-xs"><span>Borrowed:</span> <strong>${formatMoney(l.amount)}</strong></div>
-            <div class="flex justify-between text-xs"><span>Paid So Far:</span> <strong class="text-emerald-600">${formatMoney(l.paid)}</strong></div>
-            <div class="flex justify-between text-xs font-bold pt-1 border-t border-gray-50"><span>Remaining Owed:</span> <strong class="text-red-600">${formatMoney(rem)}</strong></div>
-            <button onclick="openUpdateLoanModal('${l.id}')" class="w-full mt-2 bg-gray-100 hover:bg-gray-200 text-brand-black font-bold py-2 rounded-xl text-xs transition">Update Repayment</button>
+            <div class="space-y-2 pt-2 border-t border-gray-100">
+              <div class="flex justify-between text-xs">
+                <span class="text-brand-muted">Borrowed / Paid:</span>
+                <span class="font-bold text-brand-black">${formatMoney(loan.amount)} / ${formatMoney(loan.paidAmount)}</span>
+              </div>
+              <div class="flex justify-between text-xs">
+                <span class="text-brand-muted">Remaining Balance:</span>
+                <span class="font-bold ${rem > 0 ? 'text-red-500' : 'text-emerald-600'}">${formatMoney(rem)}</span>
+              </div>
+              <button onclick="openUpdateLoanModal('${loan.id}')" class="w-full mt-2 bg-gray-100 hover:bg-gray-200 text-brand-black font-bold py-2 rounded-xl text-xs transition">Update Repayment</button>
+            </div>
           </div>
         `;
-        grid.appendChild(card);
-      });
+      }).join('') || `<p class="text-xs text-brand-muted col-span-full">No active loans recorded.</p>`;
     }
 
-    function handleAddLoan(e) {
+    async function handleAddLoan(e) {
       e.preventDefault();
       const borrower = document.getElementById('loan-borrower').value;
-      const amount = Number(document.getElementById('loan-amount').value);
+      const amount = parseFloat(document.getElementById('loan-amount').value) || 0;
       const date = document.getElementById('loan-date').value;
-      const paid = Number(document.getElementById('loan-paid').value) || 0;
+      const paid = parseFloat(document.getElementById('loan-paid').value) || 0;
       const note = document.getElementById('loan-note').value;
-
-      if (!borrower || isNaN(amount) || !date) return;
 
       state.loans.push({
         id: 'loan_' + Date.now(),
         borrower,
         amount,
         date,
-        paid,
+        paidAmount: paid,
         note
       });
 
@@ -2537,67 +2554,65 @@
       document.getElementById('loan-borrower').value = '';
       document.getElementById('loan-amount').value = '';
       document.getElementById('loan-note').value = '';
-      saveUserData();
+
       renderLoansTab();
+      await saveUserData();
     }
 
     function openUpdateLoanModal(loanId) {
-      const l = state.loans.find(x => x.id === loanId);
-      if (!l) return;
-      document.getElementById('edit-loan-id').value = l.id;
-      document.getElementById('edit-loan-paid').value = l.paid;
+      const loan = state.loans.find(l => l.id === loanId);
+      if (!loan) return;
+      document.getElementById('edit-loan-id').value = loan.id;
+      document.getElementById('edit-loan-paid').value = loan.paidAmount;
       openModal('updateLoanModal');
     }
 
-    function handleUpdateLoan(e) {
+    async function handleUpdateLoan(e) {
       e.preventDefault();
-      const id = document.getElementById('edit-loan-id').value;
-      const paid = Number(document.getElementById('edit-loan-paid').value);
-      const l = state.loans.find(x => x.id === id);
-      if (l && !isNaN(paid)) {
-        l.paid = paid;
-        saveUserData();
-        closeModal('updateLoanModal');
-        renderLoansTab();
-      }
+      const loanId = document.getElementById('edit-loan-id').value;
+      const paid = parseFloat(document.getElementById('edit-loan-paid').value) || 0;
+      const loan = state.loans.find(l => l.id === loanId);
+
+      if (loan) loan.paidAmount = paid;
+
+      closeModal('updateLoanModal');
+      renderLoansTab();
+      await saveUserData();
     }
 
-    // PROGRESS TAB
     function renderProgressTab() {
-      const totalProfitCalculated = calculateTotalProfitFromStartingPoint();
-      document.getElementById('progress-overall-profit').textContent = formatMoney(totalProfitCalculated);
+      let overallProfit = 0;
+      const monthGrid = document.getElementById('progress-monthly-grid');
 
-      ensureMonthExists(state.activeMonth);
-      const activeSales = state.allSalesList.filter(s => s.date.startsWith(state.activeMonth) && (s.saleNum || 0) >= Number(state.profitStartSaleNum));
-      const activeProfit = activeSales.reduce((sum, s) => sum + Number(s.profit), 0);
+      const monthCardsHTML = Object.keys(state.monthlyData).map(mKey => {
+        const m = state.monthlyData[mKey];
+        const sales = m.sales || [];
+        const validSales = sales.filter(s => (s.salesSeqNumber || 0) >= state.profitStartSalesNumber);
+        const mSalesProfit = validSales.reduce((sum, s) => sum + (Number(s.profit) || 0), 0);
+        overallProfit += mSalesProfit;
 
-      document.getElementById('progress-active-month-profit').textContent = formatMoney(activeProfit);
+        return `
+          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex justify-between items-center">
+            <div>
+              <p class="text-xs font-bold text-brand-black uppercase">${mKey}</p>
+              <p class="text-[10px] text-brand-muted">${sales.length} Sales Recorded</p>
+            </div>
+            <p class="font-display font-bold text-lg text-emerald-600">${formatMoney(mSalesProfit)}</p>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('progress-overall-profit').textContent = formatMoney(overallProfit);
+
+      const activeMonthData = state.monthlyData[state.activeMonth] || {};
+      const activeSales = activeMonthData.sales || [];
+      const activeValidSales = activeSales.filter(s => (s.salesSeqNumber || 0) >= state.profitStartSalesNumber);
+      const activeProf = activeValidSales.reduce((sum, s) => sum + (Number(s.profit) || 0), 0);
+
+      document.getElementById('progress-active-month-profit').textContent = formatMoney(activeProf);
       document.getElementById('progress-active-month-name').textContent = `Month: ${state.activeMonth}`;
 
-      const grid = document.getElementById('progress-monthly-grid');
-      grid.innerHTML = '';
-
-      const months = Object.keys(state.monthlyData).sort().reverse();
-      if (months.length === 0) {
-        grid.innerHTML = '<p class="text-xs text-brand-muted col-span-3">No monthly records found.</p>';
-        return;
-      }
-
-      months.forEach(m => {
-        const mSales = state.allSalesList.filter(s => s.date.startsWith(m) && (s.saleNum || 0) >= Number(state.profitStartSaleNum));
-        const mProf = mSales.reduce((sum, s) => sum + Number(s.profit), 0);
-
-        const card = document.createElement('div');
-        card.className = 'p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex justify-between items-center';
-        card.innerHTML = `
-          <div>
-            <p class="font-bold text-sm text-brand-black">${m}</p>
-            <p class="text-[10px] text-brand-muted">${mSales.length} Applicable Sales</p>
-          </div>
-          <p class="font-display font-bold text-lg text-emerald-600">${formatMoney(mProf)}</p>
-        `;
-        grid.appendChild(card);
-      });
+      monthGrid.innerHTML = monthCardsHTML || `<p class="text-xs text-brand-muted col-span-full">No monthly profit history available.</p>`;
     }
   </script>
 </body>
