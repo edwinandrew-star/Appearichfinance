@@ -101,13 +101,14 @@
   </style>
 </head>
 <body class="bg-brand-bg min-h-screen pb-28 text-brand-black">
-  <!-- SPLASH SCREEN -->
+  <!-- 2. SPLASH SCREEN -->
   <div id="splash-screen" class="fixed inset-0 z-50 bg-white flex items-center justify-center">
     <img src="images/appearich-logo.png" alt="Appearich Logo" class="max-w-[200px] max-h-[200px] object-contain animate-pop-in">
   </div>
-  <!-- SIGN IN / SIGN UP AREA -->
+  <!-- 3. SIGN IN / SIGN UP AREA -->
   <div id="auth-container" class="fixed inset-0 z-40 bg-white hidden flex-col items-center justify-center p-6 overflow-y-auto">
     <div class="w-full max-w-sm space-y-8 bg-white my-auto">
+      <!-- 4. LOGIN SENTENCES -->
       <div class="space-y-2 text-center">
         <h2 class="animate-sentence-1 font-display text-3xl font-bold tracking-tight text-brand-black">Track Your Money.</h2>
         <h2 class="animate-sentence-2 font-display text-3xl font-bold tracking-tight text-brand-gold">Build Your Business.</h2>
@@ -305,6 +306,7 @@
                 <p class="text-[10px] text-brand-muted">Add Stream</p>
               </div>
             </button>
+            
             <button onclick="openModal('addSaleModal')" class="p-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-2xl shadow-sm transition text-left flex items-center space-x-3 group">
               <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition flex-shrink-0">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
@@ -759,7 +761,7 @@
       </div>
     </nav>
   </div>
-  <!-- MODALS -->
+  <!-- ==================== MODALS ==================== -->
   <div id="addIncomeModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
@@ -1048,11 +1050,11 @@
   </div>
   <!-- JAVASCRIPT ENGINE & SUPABASE PERSISTENCE -->
   <script>
-    // SUPABASE CONFIGURATION
+    // 5. SUPABASE CONFIGURATION
     const SUPABASE_URL = 'https://zudqubbglwphfxaviqsg.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1ZHF1YmJnbHdwaGZ4YXZpcXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0NjcyNTUsImV4cCI6MjA5ODA0MzI1NX0.7pRbRqz9-5gN8SG_ALn5ecHOWQofykPvhbrE2HQROCE';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    let authMode = 'login';
+    let authMode = 'login'; // 'login' or 'signup'
     let currentUser = null;
     let pendingExcelRecords = [];
     function getCurrentMonthKey() {
@@ -1065,7 +1067,6 @@
       userName: '',
       activeMonth: getCurrentMonthKey(),
       expenseActiveMonth: getCurrentMonthKey(),
-      historicalDataSeeded: false,
       monthlyData: {
         [getCurrentMonthKey()]: {
           incomes: [],
@@ -1099,111 +1100,107 @@
       accounts: { 'CRDB': 0, 'SELCOM': 0, 'MPESA': 0, 'LIPA NAMBA': 0, 'CASH': 0 },
       currentTab: 'dashboard',
       appearichPeriod: 'day',
-      utilitiesExpanded: false
+      utilitiesExpanded: false,
+      seededHistoricalSales: false
     };
 
-    // HISTORICAL SEED RECORDS DATA
-    const historicalSeedRecords = [
-      // May (2025)
-      { monthKey: '2025-05', date: '2025-05-15', business: 'Perfume', product: 'Aqua Di Gio (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'KrecyKate' },
-      { monthKey: '2025-05', date: '2025-05-15', business: 'Perfume', product: 'Lacoste White (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'KamalaCareen' },
-      { monthKey: '2025-05', date: '2025-05-15', business: 'Perfume', product: 'Coconut Passion (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'AnethReggie' },
-      { monthKey: '2025-05', date: '2025-05-15', business: 'Perfume', product: 'Sugar Candy (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'RashidAlex' },
-      { monthKey: '2025-05', date: '2025-05-15', business: 'Perfume', product: 'Pink Chiffon (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'ShemejiInnocent' },
-      { monthKey: '2025-05', date: '2025-05-15', business: 'Perfume', product: 'La Nutt Dl Homme (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'CharlesBrian' },
-      { monthKey: '2025-05', date: '2025-05-15', business: 'Perfume', product: 'Cool Men (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'KrecyMil' },
-      { monthKey: '2025-05', date: '2025-05-15', business: 'Perfume', product: 'Strawberry (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'KrecyNyam' },
-      { monthKey: '2025-05', date: '2025-05-15', business: 'Perfume', product: 'Tag Sunset (50ml)', qty: 1, buyPrice: 20000, sellPrice: 35000, status: 'SOLD', customer: 'AishaFelix' },
-      { monthKey: '2025-05', date: '2025-05-15', business: 'Perfume', product: 'Aqua Di Arman (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'RashidKate' },
-      // June (2025)
-      { monthKey: '2025-06', date: '2025-06-15', business: 'Perfume', product: 'Pink Vanilla Coconut (100ml)', qty: 1, buyPrice: 35000, sellPrice: 55000, status: 'SOLD', customer: 'AdzenoelaLutome' },
-      { monthKey: '2025-06', date: '2025-06-15', business: 'Perfume', product: 'Tag Sunset (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'Niraelpost' },
-      // July (2025)
-      { monthKey: '2025-07', date: '2025-07-15', business: 'Perfume', product: 'Strawberry (30ml)', qty: 3, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'SistaAidan' },
-      // August (2025)
-      { monthKey: '2025-08', date: '2025-08-15', business: 'Perfume', product: 'Aqua Di Gio (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'DannyChamson' },
-      { monthKey: '2025-08', date: '2025-08-15', business: 'Perfume', product: 'Baccart (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'SistaAnna' },
-      { monthKey: '2025-08', date: '2025-08-15', business: 'Perfume', product: 'Strawberry (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'Nirael' },
-      { monthKey: '2025-08', date: '2025-08-15', business: 'Perfume', product: 'Savage Dior (30ml)', qty: 1, buyPrice: 15000, sellPrice: 20000, status: 'SOLD', customer: 'Shine' },
-      // October (2025)
-      { monthKey: '2025-10', date: '2025-10-15', business: 'Perfume', product: 'Pink Shiffon (50ml)', qty: 1, buyPrice: 20000, sellPrice: 35000, status: 'SOLD', customer: 'Sarah' },
-      // November (2025)
-      { monthKey: '2025-11', date: '2025-11-15', business: 'Perfume', product: 'Savage Dior (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'Hassan' },
-      { monthKey: '2025-11', date: '2025-11-15', business: 'Perfume', product: 'Sugar Candy (50ml)', qty: 1, buyPrice: 20000, sellPrice: 35000, status: 'SOLD', customer: 'Rashid' },
-      // December (2025)
-      { monthKey: '2025-12', date: '2025-12-15', business: 'Perfume', product: 'Pink Chiffon (50ml)', qty: 1, buyPrice: 20000, sellPrice: 35000, status: 'SOLD', customer: 'Dorica' },
-      { monthKey: '2025-12', date: '2025-12-15', business: 'Perfume', product: 'Profondo (50ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'Danny' },
-      { monthKey: '2025-12', date: '2025-12-15', business: 'Perfume', product: 'Stronger with You (50ml)', qty: 1, buyPrice: 20000, sellPrice: 35000, status: 'SOLD', customer: 'Charles' },
-      { monthKey: '2025-12', date: '2025-12-15', business: 'Perfume', product: 'Eden Juice Apple (30ml)', qty: 1, buyPrice: 22500, sellPrice: 37500, status: 'SOLD', customer: 'Krecy' },
-      { monthKey: '2025-12', date: '2025-12-15', business: 'Perfume', product: 'Stronger with You (50ml)', qty: 1, buyPrice: 20000, sellPrice: 35000, status: 'SOLD', customer: 'Basil' },
-      { monthKey: '2025-12', date: '2025-12-15', business: 'Perfume', product: 'Eden Juice Apple (30ml)', qty: 1, buyPrice: 17500, sellPrice: 25000, status: 'SOLD', customer: 'Krecy' },
-      // January 2026
-      { monthKey: '2026-01', date: '2026-01-15', business: 'Perfume', product: 'Strawberry (30ml)', qty: 1, buyPrice: 15000, sellPrice: 20000, status: 'SOLD', customer: 'Careen' },
-      { monthKey: '2026-01', date: '2026-01-15', business: 'Perfume', product: 'Profondo (20ml)', qty: 1, buyPrice: 10000, sellPrice: 15000, status: 'SOLD', customer: 'Charles DIT' },
-      { monthKey: '2026-01', date: '2026-01-15', business: 'Perfume', product: 'Sugar Candy (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'Neema' },
-      { monthKey: '2026-01', date: '2026-01-15', business: 'Perfume', product: 'Invictus (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'Alexander' },
-      // February 2026
-      { monthKey: '2026-02', date: '2026-02-15', business: 'Perfume', product: 'Pink Chiffon (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'Nirael Lema' },
-      { monthKey: '2026-02', date: '2026-02-15', business: 'Perfume', product: 'Strawberry (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'Nirael Lema' },
-      { monthKey: '2026-02', date: '2026-02-15', business: 'Perfume', product: 'Savage Dior (50ml)', qty: 1, buyPrice: 20000, sellPrice: 35000, status: 'SOLD', customer: 'Dr Magen' },
-      { monthKey: '2026-02', date: '2026-02-15', business: 'Perfume', product: '212 VIP (20ml)', qty: 1, buyPrice: 10000, sellPrice: 15000, status: 'SOLD', customer: 'Malick' },
-      // March 2026
-      { monthKey: '2026-03', date: '2026-03-15', business: 'Perfume', product: '212 VIP (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'Cathe' },
-      { monthKey: '2026-03', date: '2026-03-15', business: 'Perfume', product: 'Stronger with you (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'Shine' },
-      { monthKey: '2026-03', date: '2026-03-15', business: 'Perfume', product: 'Aqqua Di Gio (50ml)', qty: 1, buyPrice: 20000, sellPrice: 25000, status: 'SOLD', customer: 'Lutome' },
-      // April 2026
-      { monthKey: '2026-04', date: '2026-04-15', business: 'Perfume', product: 'Aqua Di Gio (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'Tesha' },
-      { monthKey: '2026-04', date: '2026-04-15', business: 'Perfume', product: 'Invictus (50ml)', qty: 1, buyPrice: 20000, sellPrice: 25000, status: 'SOLD', customer: 'Ronnah' },
-      { monthKey: '2026-04', date: '2026-04-15', business: 'Perfume', product: 'Eden Juice Apple (50ml)', qty: 1, buyPrice: 22500, sellPrice: 35000, status: 'SOLD', customer: 'Magen' },
-      { monthKey: '2026-04', date: '2026-04-15', business: 'Perfume', product: 'Creed Aventus (50ml)', qty: 1, buyPrice: 20000, sellPrice: 40000, status: 'SOLD', customer: 'Basil' },
-      { monthKey: '2026-04', date: '2026-04-15', business: 'Perfume', product: 'Sugar Candy (50ml)', qty: 1, buyPrice: 20000, sellPrice: 35000, status: 'SOLD', customer: 'Rashid' },
-      { monthKey: '2026-04', date: '2026-04-15', business: 'Perfume', product: 'Vanilla Eden Juice (50ml)', qty: 1, buyPrice: 17500, sellPrice: 25000, status: 'SOLD', customer: 'Anne' },
-      { monthKey: '2026-04', date: '2026-04-15', business: 'Perfume', product: 'Invictus (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'Krecy' },
-      // May 2026
-      { monthKey: '2026-05', date: '2026-05-15', business: 'Perfume', product: '212 VIP (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'Malick' },
-      // June 2026
-      { monthKey: '2026-06', date: '2026-06-15', business: 'Perfume', product: 'Eden Juice & Strawberry (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'Kareen' },
-      { monthKey: '2026-06', date: '2026-06-15', business: 'Perfume', product: '212 VIP (20ml)', qty: 1, buyPrice: 10000, sellPrice: 15000, status: 'SOLD', customer: 'Lutome' },
-      { monthKey: '2026-06', date: '2026-06-15', business: 'Perfume', product: 'Invictus (20ml)', qty: 1, buyPrice: 10000, sellPrice: 15000, status: 'SOLD', customer: 'Shedy' },
-      { monthKey: '2026-06', date: '2026-06-15', business: 'Perfume', product: 'Invictus (20ml)', qty: 1, buyPrice: 10000, sellPrice: 15000, status: 'SOLD', customer: 'Wilson' },
-      { monthKey: '2026-06', date: '2026-06-15', business: 'Perfume', product: 'Eden Juice & Tag sunset (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'Evirce' },
-      { monthKey: '2026-06', date: '2026-06-15', business: 'Perfume', product: 'Eden Juice & Tag sunset (50ml)', qty: 1, buyPrice: 20000, sellPrice: 30000, status: 'SOLD', customer: 'Krecy' },
-      { monthKey: '2026-06', date: '2026-06-15', business: 'Perfume', product: '9PM (50ml)', qty: 1, buyPrice: 20000, sellPrice: 30000, status: 'SOLD', customer: 'Aidan' },
-      { monthKey: '2026-06', date: '2026-06-15', business: 'Perfume', product: '9PM (50ml)', qty: 1, buyPrice: 20000, sellPrice: 35000, status: 'SOLD', customer: 'Hassan' },
-      // July 2026
-      { monthKey: '2026-07', date: '2026-07-15', business: 'Perfume', product: 'Mango Peach (50ml)', qty: 1, buyPrice: 20000, sellPrice: 35000, status: 'SOLD', customer: 'Sista' },
-      { monthKey: '2026-07', date: '2026-07-15', business: 'Perfume', product: 'Vanilla & Profondo (50ml)', qty: 1, buyPrice: 20000, sellPrice: 30000, status: 'SOLD', customer: 'Alexander' },
-      // August 2026
-      { monthKey: '2026-08', date: '2026-08-15', business: 'Perfume', product: 'Sexy love & Tag Sunset (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'Witty' },
-      { monthKey: '2026-08', date: '2026-08-15', business: 'Perfume', product: 'Savage Dior (50ml)', qty: 1, buyPrice: 20000, sellPrice: 35000, status: 'SOLD', customer: 'Dr Magen' },
-      { monthKey: '2026-08', date: '2026-08-15', business: 'Perfume', product: 'Stronger with you (10ml)', qty: 1, buyPrice: 6500, sellPrice: 10000, status: 'SOLD', customer: 'Dr Magen' },
-      { monthKey: '2026-08', date: '2026-08-15', business: 'Perfume', product: 'Invictus (30ml)', qty: 1, buyPrice: 15000, sellPrice: 25000, status: 'SOLD', customer: 'Evirce' }
+    // HISTORICAL SEED DATA DATASET
+    const RAW_HISTORICAL_SALES = [
+      { month: '2025-05', perfume: 'Aqua Di Gio', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'KrecyKate' },
+      { month: '2025-05', perfume: 'Lacoste White', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'KamalaCareen' },
+      { month: '2025-05', perfume: 'Coconut Passion', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'AnethReggie' },
+      { month: '2025-05', perfume: 'Sugar Candy', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'RashidAlex' },
+      { month: '2025-05', perfume: 'Pink Chiffon', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'ShemejiInnocent' },
+      { month: '2025-05', perfume: 'La Nutt Dl Homme', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 20000, customer: 'CharlesBrian' },
+      { month: '2025-05', perfume: 'Cool Men', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'KrecyMil' },
+      { month: '2025-05', perfume: 'Strawberry', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'KrecyNyam' },
+      { month: '2025-05', perfume: 'Tag Sunset', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'AishaFelix' },
+      { month: '2025-05', perfume: 'Aqua Di Arman', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'RashidKate' },
+      { month: '2025-06', perfume: 'Pink Vanilla Coconut', ml: 100, qty: 1, amount: 15000, sale: 55000, status: 'SOLD', profit: 20000, customer: 'AdzenoelaLutome' },
+      { month: '2025-06', perfume: 'Tag Sunset', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Niraelpost' },
+      { month: '2025-07', perfume: 'Strawberry', ml: 30, qty: 3, amount: 15000, sale: 75000, status: 'SOLD', profit: 30000, customer: 'SistaAidan' },
+      { month: '2025-08', perfume: 'Aqua Di Gio', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'DannyChamson' },
+      { month: '2025-08', perfume: 'Baccart', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'SistaAnna' },
+      { month: '2025-08', perfume: 'Strawberry', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Nirael' },
+      { month: '2025-08', perfume: 'Savage Dior', ml: 30, qty: 1, amount: 15000, sale: 20000, status: 'SOLD', profit: 5000, customer: 'Shine' },
+      { month: '2025-10', perfume: 'Pink Shiffon', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Sarah' },
+      { month: '2025-11', perfume: 'Savage Dior', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Hassan' },
+      { month: '2025-11', perfume: 'Sugar Candy', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Rashid' },
+      { month: '2025-12', perfume: 'Pink Chiffon', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Dorica' },
+      { month: '2025-12', perfume: 'Profondo', ml: 50, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Danny' },
+      { month: '2025-12', perfume: 'Stronger with You', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Charles' },
+      { month: '2025-12', perfume: 'Eden Juice Apple', ml: 30, qty: 1, amount: 22500, sale: 37500, status: 'SOLD', profit: 12500, customer: 'Krecy' },
+      { month: '2025-12', perfume: 'Stronger with You', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Basil' },
+      { month: '2025-12', perfume: 'Eden Juice Apple', ml: 30, qty: 1, amount: 17500, sale: 25000, status: 'SOLD', profit: 7500, customer: 'Krecy' },
+      { month: '2026-01', perfume: 'Strawberry', ml: 30, qty: 1, amount: 15000, sale: 20000, status: 'SOLD', profit: 5000, customer: 'Careen' },
+      { month: '2026-01', perfume: 'Profondo', ml: 20, qty: 1, amount: 10000, sale: 15000, status: 'SOLD', profit: 5000, customer: 'Charles DIT' },
+      { month: '2026-01', perfume: 'Sugar Candy', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Neema' },
+      { month: '2026-01', perfume: 'Invictus', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Alexander' },
+      { month: '2026-02', perfume: 'Pink Chiffon', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Nirael Lema' },
+      { month: '2026-02', perfume: 'Strawberry', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Nirael Lema' },
+      { month: '2026-02', perfume: 'Savage Dior', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Dr Magen' },
+      { month: '2026-02', perfume: '212 VIP', ml: 20, qty: 1, amount: 10000, sale: 15000, status: 'SOLD', profit: 5000, customer: 'Malick' },
+      { month: '2026-03', perfume: '212 VIP', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Cathe' },
+      { month: '2026-03', perfume: 'Stronger with you', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Shine' },
+      { month: '2026-03', perfume: 'Aqqua Di Gio', ml: 50, qty: 1, amount: 20000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Lutome' },
+      { month: '2026-04', perfume: 'Aqua Di Gio', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Tesha' },
+      { month: '2026-04', perfume: 'Invictus', ml: 50, qty: 1, amount: 20000, sale: 25000, status: 'SOLD', profit: 15000, customer: 'Ronnah' },
+      { month: '2026-04', perfume: 'Eden Juice Apple', ml: 50, qty: 1, amount: 22500, sale: 35000, status: 'SOLD', profit: 12500, customer: 'Magen' },
+      { month: '2026-04', perfume: 'Creed Aventus', ml: 50, qty: 1, amount: 20000, sale: 40000, status: 'SOLD', profit: 15000, customer: 'Basil' },
+      { month: '2026-04', perfume: 'Sugar Candy', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Rashid' },
+      { month: '2026-04', perfume: 'Vanilla Eden Juice', ml: 50, qty: 1, amount: 17500, sale: 25000, status: 'SOLD', profit: 7500, customer: 'Anne' },
+      { month: '2026-04', perfume: 'Invictus', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Krecy' },
+      { month: '2026-05', perfume: '212 VIP', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Malick' },
+      { month: '2026-06', perfume: 'Eden Juice & Strawberry', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Kareen' },
+      { month: '2026-06', perfume: '212 VIP', ml: 20, qty: 1, amount: 10000, sale: 15000, status: 'SOLD', profit: 5000, customer: 'Lutome' },
+      { month: '2026-06', perfume: 'Invictus', ml: 20, qty: 1, amount: 10000, sale: 15000, status: 'SOLD', profit: 5000, customer: 'Shedy' },
+      { month: '2026-06', perfume: 'Invictus', ml: 20, qty: 1, amount: 10000, sale: 15000, status: 'SOLD', profit: 5000, customer: 'Wilson' },
+      { month: '2026-06', perfume: 'Eden Juice & Tag sunset', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 7500, customer: 'Evirce' },
+      { month: '2026-06', perfume: 'Eden Juice & Tag sunset', ml: 50, qty: 1, amount: 20000, sale: 30000, status: 'SOLD', profit: 7500, customer: 'Krecy' },
+      { month: '2026-06', perfume: '9PM', ml: 50, qty: 1, amount: 20000, sale: 30000, status: 'SOLD', profit: 10000, customer: 'Aidan' },
+      { month: '2026-06', perfume: '9PM', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Hassan' },
+      { month: '2026-07', perfume: 'Mango Peach', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Sista' },
+      { month: '2026-07', perfume: 'Vanilla & Profondo', ml: 50, qty: 1, amount: 20000, sale: 30000, status: 'SOLD', profit: 10000, customer: 'Alexander' },
+      { month: '2026-08', perfume: 'Sexy love & Tag Sunset', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Witty' },
+      { month: '2026-08', perfume: 'Savage Dior', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Dr Magen' },
+      { month: '2026-08', perfume: 'Stronger with you', ml: 10, qty: 1, amount: 6500, sale: 10000, status: 'SOLD', profit: 3500, customer: 'Dr Magen' },
+      { month: '2026-08', perfume: 'Invictus', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Evirce' }
     ];
 
-    function seedHistoricalRecords() {
-      if (state.historicalDataSeeded) return;
-      historicalSeedRecords.forEach(rec => {
-        ensureMonthExists(rec.monthKey);
-        // Check if duplicate exists
-        const exists = state.monthlyData[rec.monthKey].sales.some(
-          s => s.product === rec.product && s.customer === rec.customer && s.date === rec.date
-        );
+    function seedHistoricalSalesData() {
+      if (state.seededHistoricalSales) return;
+      if (!state.businessTypes.includes('Perfume')) {
+        state.businessTypes.push('Perfume');
+      }
+      RAW_HISTORICAL_SALES.forEach((rec, idx) => {
+        const mKey = rec.month;
+        if (!state.monthlyData[mKey]) {
+          state.monthlyData[mKey] = {
+            incomes: [],
+            sales: [],
+            expenses: [],
+            categorySpent: { 'Expenses': 0, 'Other': 0 },
+            utilitiesSubSpent: { 'Internet': 0, 'Umeme': 0, 'Taka': 0, 'Transport': 0 }
+          };
+        }
+        const saleObj = {
+          id: 'hist_seed_' + mKey + '_' + idx,
+          businessType: 'Perfume',
+          date: mKey + '-01',
+          product: rec.perfume + (rec.ml ? ' (' + rec.ml + 'ml)' : ''),
+          customer: rec.customer || '',
+          quantity: Number(rec.qty) || 1,
+          buyingPrice: Number(rec.amount) || 0,
+          sellingPrice: Number(rec.sale) || 0,
+          status: 'FULL',
+          paidAmount: Number(rec.sale) || 0
+        };
+        const exists = state.monthlyData[mKey].sales.some(s => s.id === saleObj.id);
         if (!exists) {
-          state.monthlyData[rec.monthKey].sales.push({
-            id: 'seed_' + Math.random().toString(36).substr(2, 9),
-            businessType: rec.business,
-            date: rec.date,
-            qty: rec.qty,
-            product: rec.product,
-            customer: rec.customer,
-            buyPrice: rec.buyPrice,
-            sellPrice: rec.sellPrice,
-            paymentStatus: rec.status === 'SOLD' ? 'FULL' : 'PARTIAL',
-            amountPaid: rec.sellPrice * rec.qty
-          });
+          state.monthlyData[mKey].sales.push(saleObj);
         }
       });
-      state.historicalDataSeeded = true;
+      state.seededHistoricalSales = true;
     }
 
     // SUPABASE DATA SYNC ENGINE
@@ -1222,7 +1219,7 @@
         if (data && data.state) {
           Object.assign(state, data.state);
         }
-        seedHistoricalRecords();
+        seedHistoricalSalesData();
         await saveUserData();
       } catch (err) {
         console.error("Failed to load user state:", err);
@@ -1328,11 +1325,10 @@
         navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed:', err));
       }
       setTimeout(async () => {
-        const splash = document.getElementById('splash-screen');
-        splash.classList.add('hidden');
-        const { data: { session } } = await supabaseClient.auth.getSession();
-        if (session && session.user) {
-          currentUser = session.user;
+        document.getElementById('splash-screen').classList.add('hidden');
+        const sessionRes = await supabaseClient.auth.getSession();
+        if (sessionRes.data && sessionRes.data.session) {
+          currentUser = sessionRes.data.session.user;
           await loadUserData();
           if (currentUser.user_metadata && currentUser.user_metadata.full_name && !state.userName) {
             state.userName = currentUser.user_metadata.full_name;
@@ -1342,11 +1338,75 @@
         } else {
           document.getElementById('auth-container').classList.remove('hidden');
         }
-      }, 1200);
+      }, 1500);
     });
-    function ensureMonthExists(monthKey) {
-      if (!state.monthlyData[monthKey]) {
-        state.monthlyData[monthKey] = {
+
+    // HELPERS & UI CONTROLLERS
+    function formatMoney(num) {
+      return Number(num || 0).toLocaleString() + ' Sh';
+    }
+    function switchTab(tabId) {
+      state.currentTab = tabId;
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-tab').forEach(el => {
+        el.classList.remove('bg-brand-black', 'text-white', 'shadow-sm');
+        el.classList.add('text-brand-muted');
+      });
+      document.querySelectorAll('.bnav-btn').forEach(el => {
+        el.classList.remove('text-brand-black');
+        el.classList.add('text-brand-muted');
+      });
+      const activeTab = document.getElementById(`tab-${tabId}`);
+      if (activeTab) activeTab.classList.remove('hidden');
+      const activeNav = document.getElementById(`nav-${tabId}`);
+      if (activeNav) {
+        activeNav.classList.add('bg-brand-black', 'text-white', 'shadow-sm');
+        activeNav.classList.remove('text-brand-muted');
+      }
+      const activeBnav = document.getElementById(`bnav-${tabId}`);
+      if (activeBnav) {
+        activeBnav.classList.add('text-brand-black');
+        activeBnav.classList.remove('text-brand-muted');
+      }
+      renderAll();
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function toggleUtilitiesAccordion() {
+      state.utilitiesExpanded = !state.utilitiesExpanded;
+      const content = document.getElementById('utilities-accordion');
+      const chevron = document.getElementById('utilities-chevron');
+      if (state.utilitiesExpanded) {
+        content.classList.add('expanded');
+        chevron.classList.add('rotate-180');
+      } else {
+        content.classList.remove('expanded');
+        chevron.classList.remove('rotate-180');
+      }
+    }
+
+    function handleHeroUpload(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          state.heroImageUrl = evt.target.result;
+          renderHero();
+          saveUserData();
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function ensureMonthStructure(mKey) {
+      if (!state.monthlyData[mKey]) {
+        state.monthlyData[mKey] = {
           incomes: [],
           sales: [],
           expenses: [],
@@ -1355,294 +1415,290 @@
         };
       }
     }
-    function formatSh(amount) {
-      return new Intl.NumberFormat('en-US').format(Math.round(amount || 0)) + ' Sh';
-    }
-    function calculateMonthMetrics(monthKey) {
-      ensureMonthExists(monthKey);
-      const data = state.monthlyData[monthKey];
-      
-      const generalIncome = data.incomes.reduce((sum, inc) => sum + inc.amount, 0);
-      let salesIncome = 0;
-      let salesCost = 0;
-      let salesReceived = 0;
-      let salesOutstanding = 0;
-      data.sales.forEach(sale => {
-        const totalValue = sale.sellPrice * sale.qty;
-        const totalCost = sale.buyPrice * sale.qty;
-        const paid = sale.paymentStatus === 'FULL' ? totalValue : (sale.amountPaid || 0);
-        salesIncome += totalValue;
-        salesCost += totalCost;
-        salesReceived += paid;
-        salesOutstanding += (totalValue - paid);
-      });
-      const totalIncome = generalIncome + salesReceived;
-      const godTithe = totalIncome * 0.10;
-      const availableBudget = totalIncome - godTithe;
-      const salesProfit = salesReceived - salesCost;
-      let totalSpent = 0;
-      Object.values(data.utilitiesSubSpent || {}).forEach(v => totalSpent += v);
-      Object.values(data.categorySpent || {}).forEach(v => totalSpent += v);
-      
-      return {
-        generalIncome,
-        salesIncome,
-        salesCost,
-        salesReceived,
-        salesOutstanding,
-        totalIncome,
-        godTithe,
-        availableBudget,
-        salesProfit,
-        totalSpent
-      };
-    }
-
-    function switchTab(tabId) {
-      state.currentTab = tabId;
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      const activeTab = document.getElementById('tab-' + tabId);
-      if (activeTab) activeTab.classList.remove('hidden');
-
-      document.querySelectorAll('.nav-tab').forEach(el => {
-        el.classList.remove('bg-brand-black', 'text-white', 'shadow-sm');
-        el.classList.add('text-brand-muted', 'hover:text-brand-black');
-      });
-      const activeNav = document.getElementById('nav-' + tabId);
-      if (activeNav) {
-        activeNav.classList.remove('text-brand-muted', 'hover:text-brand-black');
-        activeNav.classList.add('bg-brand-black', 'text-white', 'shadow-sm');
-      }
-
-      document.querySelectorAll('.bnav-btn').forEach(el => {
-        el.classList.remove('text-brand-black');
-        el.classList.add('text-brand-muted', 'hover:text-brand-black');
-      });
-      const bnav = document.getElementById('bnav-' + tabId);
-      if (bnav) {
-        bnav.classList.remove('text-brand-muted');
-        bnav.classList.add('text-brand-black');
-      }
-      renderAll();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function openModal(id) {
-      document.getElementById(id).classList.remove('hidden');
-      if (id === 'addSaleModal') {
-        const sel = document.getElementById('sale-business-type');
-        sel.innerHTML = state.businessTypes.map(b => `<option value="${b}">${b}</option>`).join('');
-        document.getElementById('sale-date').value = new Date().toISOString().split('T')[0];
-      }
-      if (id === 'addTransactionModal') {
-        document.getElementById('tx-date').value = new Date().toISOString().split('T')[0];
-      }
-      if (id === 'addLoanModal') {
-        document.getElementById('loan-date').value = new Date().toISOString().split('T')[0];
-      }
-    }
-    function closeModal(id) {
-      document.getElementById(id).classList.add('hidden');
-    }
-
-    function renderAll() {
-      document.getElementById('welcome-greeting').innerText = state.userName ? `Welcome, ${state.userName}` : 'Welcome, User';
-      
-      // Dashboard metrics
-      const metrics = calculateMonthMetrics(state.activeMonth);
-      document.getElementById('dash-total-income').innerText = formatSh(metrics.totalIncome);
-      document.getElementById('dash-god-amount').innerText = formatSh(metrics.godTithe);
-      
-      let totalMoney = 0;
-      Object.values(state.accounts).forEach(v => totalMoney += v);
-      document.getElementById('dash-total-money').innerText = formatSh(totalMoney);
-      document.getElementById('dash-remaining-budget').innerText = formatSh(metrics.availableBudget - metrics.totalSpent);
-
-      // Render other tabs
-      renderIncomeTab();
-      renderBudgetTab();
-      renderDailyExpensesTab();
-      renderInvestmentTab();
-      renderAppearichTab();
-      renderAccountsTab();
-      renderLoansTab();
-      renderProgressTab();
-    }
-
-    function renderIncomeTab() {
-      document.getElementById('income-month-picker').value = state.activeMonth;
-      document.getElementById('income-month-label').innerText = state.activeMonth;
-      const metrics = calculateMonthMetrics(state.activeMonth);
-      document.getElementById('income-god-total').innerText = formatSh(metrics.godTithe);
-
-      const data = state.monthlyData[state.activeMonth];
-      const container = document.getElementById('income-list-container');
-      if (!data.incomes.length && !data.sales.length) {
-        container.innerHTML = `<div class="col-span-full py-8 text-center text-xs text-brand-muted">No income records found for ${state.activeMonth}.</div>`;
-        return;
-      }
-      let html = '';
-      data.incomes.forEach(inc => {
-        html += `<div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-between">
-          <div><p class="text-xs font-bold text-brand-black">${inc.name}</p><p class="text-[10px] text-brand-muted">General Income</p></div>
-          <p class="font-display font-bold text-sm text-brand-black">${formatSh(inc.amount)}</p>
-        </div>`;
-      });
-      data.sales.forEach(sale => {
-        const val = sale.sellPrice * sale.qty;
-        html += `<div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-between">
-          <div><p class="text-xs font-bold text-brand-black">${sale.product} (${sale.businessType})</p><p class="text-[10px] text-brand-muted">Customer: ${sale.customer}</p></div>
-          <p class="font-display font-bold text-sm text-emerald-600">+${formatSh(val)}</p>
-        </div>`;
-      });
-      container.innerHTML = html;
-    }
 
     function handleMonthChange(e) {
-      state.activeMonth = e.target.value;
+      state.activeMonth = e.target.value || getCurrentMonthKey();
+      ensureMonthStructure(state.activeMonth);
       renderAll();
     }
     function handleExpenseMonthChange(e) {
-      state.expenseActiveMonth = e.target.value;
-      renderDailyExpensesTab();
+      state.expenseActiveMonth = e.target.value || getCurrentMonthKey();
+      ensureMonthStructure(state.expenseActiveMonth);
+      renderAll();
+    }
+
+    function calculateMonthSummary(mKey) {
+      ensureMonthStructure(mKey);
+      const mData = state.monthlyData[mKey];
+      const incomeTotal = mData.incomes.reduce((acc, curr) => acc + Number(curr.amount || 0), 0);
+      const salesReceived = mData.sales.reduce((acc, curr) => acc + Number(curr.paidAmount || 0), 0);
+      const grossPool = incomeTotal + salesReceived;
+      const godAmount = grossPool * 0.10;
+      const remainingPool = grossPool * 0.90;
+
+      let totalExpenses = mData.expenses.reduce((acc, curr) => acc + Number(curr.amount || 0), 0);
+
+      const salesProfit = mData.sales.reduce((acc, curr) => {
+        const cost = Number(curr.buyingPrice || 0) * Number(curr.quantity || 1);
+        const paid = Number(curr.paidAmount || 0);
+        return acc + (paid - cost);
+      }, 0);
+
+      return {
+        incomeTotal,
+        salesReceived,
+        grossPool,
+        godAmount,
+        remainingPool,
+        totalExpenses,
+        salesProfit
+      };
+    }
+
+    // MAIN RENDER ENGINE
+    function renderAll() {
+      renderHero();
+      renderDashboard();
+      renderIncome();
+      renderBudget();
+      renderDailyExpenses();
+      renderInvestment();
+      renderAppearich();
+      renderAccounts();
+      renderLoans();
+      renderProgress();
+    }
+
+    function renderHero() {
+      const name = state.userName || (currentUser ? (currentUser.user_metadata?.full_name || currentUser.email) : 'User');
+      document.getElementById('welcome-greeting').innerText = `Welcome, ${name}`;
+      if (state.heroImageUrl) {
+        document.getElementById('hero-bg-img').style.backgroundImage = `url('${state.heroImageUrl}')`;
+      }
+    }
+
+    function renderDashboard() {
+      const summary = calculateMonthSummary(state.activeMonth);
+      document.getElementById('dash-total-income').innerText = formatMoney(summary.grossPool);
+      document.getElementById('dash-god-amount').innerText = formatMoney(summary.godAmount);
+      
+      const totalMoney = Object.values(state.accounts).reduce((a, b) => Number(a) + Number(b), 0);
+      document.getElementById('dash-total-money').innerText = formatMoney(totalMoney);
+      
+      const remainingBudget = summary.remainingPool - summary.totalExpenses;
+      document.getElementById('dash-remaining-budget').innerText = formatMoney(remainingBudget);
+    }
+
+    function renderIncome() {
+      ensureMonthStructure(state.activeMonth);
+      document.getElementById('income-month-picker').value = state.activeMonth;
+      const summary = calculateMonthSummary(state.activeMonth);
+      document.getElementById('income-god-total').innerText = formatMoney(summary.godAmount);
+      document.getElementById('income-month-label').innerText = `Month: ${state.activeMonth}`;
+
+      const container = document.getElementById('income-list-container');
+      container.innerHTML = '';
+      const list = state.monthlyData[state.activeMonth].incomes;
+
+      if (list.length === 0) {
+        container.innerHTML = `<p class="text-xs text-brand-muted col-span-full py-4">No income records added for ${state.activeMonth}. Click "+ Add Income" above.</p>`;
+        return;
+      }
+
+      list.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = "p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-3";
+        card.innerHTML = `
+          <div class="flex justify-between items-start">
+            <div>
+              <h4 class="font-bold text-sm text-brand-black">${item.name}</h4>
+              <p class="text-[10px] text-brand-muted font-bold uppercase">Source Record</p>
+            </div>
+            <button onclick="removeIncome(${index})" class="text-gray-300 hover:text-red-500 font-bold text-sm">&times;</button>
+          </div>
+          <p class="font-display text-2xl font-bold text-brand-black">${formatMoney(item.amount)}</p>
+          <div class="pt-2 border-t border-gray-100 flex justify-between items-center text-[11px]">
+            <span class="text-brand-muted">Auto GOD Tithe (10%)</span>
+            <span class="font-bold text-brand-gold">${formatMoney(item.amount * 0.10)}</span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
     }
 
     function handleAddIncome(e) {
       e.preventDefault();
       const name = document.getElementById('income-name-input').value;
-      const amount = parseFloat(document.getElementById('income-amount-input').value);
-      ensureMonthExists(state.activeMonth);
-      state.monthlyData[state.activeMonth].incomes.push({ id: Date.now().toString(), name, amount });
-      state.accounts['CRDB'] += amount;
-      saveUserData();
+      const amount = Number(document.getElementById('income-amount-input').value);
+      ensureMonthStructure(state.activeMonth);
+      state.monthlyData[state.activeMonth].incomes.push({ name, amount });
       closeModal('addIncomeModal');
-      e.target.reset();
+      document.getElementById('income-name-input').value = '';
+      document.getElementById('income-amount-input').value = '';
+      saveUserData();
       renderAll();
     }
 
-    function renderBudgetTab() {
-      const metrics = calculateMonthMetrics(state.activeMonth);
-      document.getElementById('budget-pool-total').innerText = formatSh(metrics.availableBudget);
-
-      let totalTarget = state.categories.reduce((sum, c) => sum + c.amount, 0);
-      let percent = totalTarget > 0 ? Math.min(100, Math.round((totalTarget / (metrics.availableBudget || 1)) * 100)) : 0;
-      document.getElementById('budget-allocated-percent').innerText = percent + '%';
-      document.getElementById('budget-allocated-bar').style.width = percent + '%';
-
-      // Utilities subcategories
-      const subContainer = document.getElementById('utilities-subcategories-list');
-      let subHtml = '';
-      state.utilitiesSub.forEach(sub => {
-        const spent = state.monthlyData[state.activeMonth].utilitiesSubSpent[sub.name] || 0;
-        subHtml += `<div class="p-4 rounded-xl bg-white border border-gray-100 flex items-center justify-between">
-          <span class="text-xs font-bold text-brand-black">${sub.name}</span>
-          <span class="text-xs font-semibold text-brand-muted">Spent: ${formatSh(spent)}</span>
-        </div>`;
-      });
-      subContainer.innerHTML = subHtml;
-
-      const utilCat = state.categories.find(c => c.id === 'cat-utilities');
-      const utilAmount = utilCat ? utilCat.amount : 0;
-      document.getElementById('cat-amount-cat-utilities').value = utilAmount || '';
-      let utilSpent = Object.values(state.monthlyData[state.activeMonth].utilitiesSubSpent).reduce((a,b)=>a+b,0);
-      document.getElementById('utilities-spent-summary').innerText = `Spent: ${formatSh(utilSpent)}`;
-      document.getElementById('utilities-remaining-summary').innerText = `Remaining: ${formatSh(utilAmount - utilSpent)}`;
-
-      // Main categories list
-      const mainList = document.getElementById('main-categories-list');
-      let mainHtml = '';
-      state.categories.filter(c => !c.isExpandable).forEach(cat => {
-        const spent = state.monthlyData[state.activeMonth].categorySpent[cat.name] || 0;
-        const rem = cat.amount - spent;
-        mainHtml += `<div class="rounded-3xl bg-white border border-gray-100 shadow-premium p-6 flex flex-col justify-between space-y-4">
-          <div class="flex items-center justify-between">
-            <h4 class="font-bold text-base text-brand-black">${cat.name.toUpperCase()}</h4>
-            <span class="px-2.5 py-0.5 rounded-full bg-gray-100 text-brand-black text-[11px] font-bold">${cat.amount > 0 ? Math.round((cat.amount / metrics.availableBudget)*100) : 0}%</span>
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-brand-muted uppercase mb-1">Target Amount (Sh)</label>
-            <input type="number" value="${cat.amount || ''}" oninput="handleCategoryAmountInput('${cat.id}', this.value)" placeholder="Enter amount" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm font-bold text-brand-black">
-          </div>
-          <div class="flex justify-between text-xs pt-2 border-t border-gray-100">
-            <span class="text-brand-muted">Spent: ${formatSh(spent)}</span>
-            <span class="font-bold text-emerald-600">Remaining: ${formatSh(rem)}</span>
-          </div>
-        </div>`;
-      });
-      mainList.innerHTML = mainHtml;
+    function removeIncome(index) {
+      ensureMonthStructure(state.activeMonth);
+      state.monthlyData[state.activeMonth].incomes.splice(index, 1);
+      saveUserData();
+      renderAll();
     }
 
-    function toggleUtilitiesAccordion() {
-      state.utilitiesExpanded = !state.utilitiesExpanded;
-      const acc = document.getElementById('utilities-accordion');
-      const chev = document.getElementById('utilities-chevron');
-      if (state.utilitiesExpanded) {
-        acc.classList.add('expanded');
-        chev.classList.add('rotate-180');
-      } else {
-        acc.classList.remove('expanded');
-        chev.classList.remove('rotate-180');
-      }
+    function renderBudget() {
+      const summary = calculateMonthSummary(state.activeMonth);
+      const pool = summary.remainingPool;
+      document.getElementById('budget-pool-total').innerText = formatMoney(pool);
+
+      let totalTargetAllocated = state.categories.reduce((acc, cat) => acc + Number(cat.amount || 0), 0);
+      let pct = pool > 0 ? Math.min(100, Math.round((totalTargetAllocated / pool) * 100)) : 0;
+
+      document.getElementById('budget-allocated-percent').innerText = `${pct}% Allocated`;
+      document.getElementById('budget-allocated-bar').style.width = `${pct}%`;
+
+      // Render Utilities Accordion Subcategories
+      const utilsSubContainer = document.getElementById('utilities-subcategories-list');
+      utilsSubContainer.innerHTML = '';
+      const activeData = state.monthlyData[state.activeMonth];
+      let totalUtilsSpent = 0;
+
+      state.utilitiesSub.forEach(sub => {
+        const spent = activeData.utilitiesSubSpent[sub.name] || 0;
+        totalUtilsSpent += spent;
+        const row = document.createElement('div');
+        row.className = "flex items-center justify-between p-3 rounded-xl bg-white border border-gray-100 text-xs";
+        row.innerHTML = `
+          <span class="font-bold text-brand-black">${sub.name}</span>
+          <span class="font-semibold text-brand-muted">Spent: <strong class="text-brand-black">${formatMoney(spent)}</strong></span>
+        `;
+        utilsSubContainer.appendChild(row);
+      });
+
+      const utilsCat = state.categories.find(c => c.id === 'cat-utilities');
+      const utilsTarget = utilsCat ? Number(utilsCat.amount || 0) : 0;
+      document.getElementById('cat-amount-cat-utilities').value = utilsTarget || '';
+      document.getElementById('utilities-spent-summary').innerText = `Spent: ${formatMoney(totalUtilsSpent)}`;
+      const utilsRem = utilsTarget - totalUtilsSpent;
+      document.getElementById('utilities-remaining-summary').innerText = `Remaining: ${formatMoney(utilsRem)}`;
+      document.getElementById('utilities-remaining-summary').className = utilsRem < 0 ? "font-bold text-red-600" : "font-bold text-emerald-600";
+
+      // Render Primary Categories
+      const mainCatContainer = document.getElementById('main-categories-list');
+      mainCatContainer.innerHTML = '';
+
+      state.categories.filter(c => c.id !== 'cat-utilities').forEach(cat => {
+        let spent = activeData.categorySpent[cat.name] || 0;
+        const target = Number(cat.amount || 0);
+        const remaining = target - spent;
+
+        const card = document.createElement('div');
+        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4";
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center font-bold text-brand-black text-xs uppercase">
+                ${cat.name.slice(0, 2)}
+              </div>
+              <h4 class="font-bold text-base text-brand-black uppercase">${cat.name}</h4>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-brand-muted uppercase mb-1">Target Budget Amount (Sh)</label>
+            <input type="number" value="${target || ''}" oninput="handleCategoryAmountInput('${cat.id}', this.value)" placeholder="Set target" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm font-bold text-brand-black">
+          </div>
+          <div class="flex justify-between text-xs pt-2 border-t border-gray-100">
+            <span class="text-brand-muted">Spent: ${formatMoney(spent)}</span>
+            <span class="${remaining < 0 ? 'font-bold text-red-600' : 'font-bold text-emerald-600'}">Remaining: ${formatMoney(remaining)}</span>
+          </div>
+        `;
+        mainCatContainer.appendChild(card);
+      });
     }
 
     function handleCategoryAmountInput(catId, val) {
-      const amount = parseFloat(val) || 0;
       const cat = state.categories.find(c => c.id === catId);
       if (cat) {
-        cat.amount = amount;
+        cat.amount = Number(val || 0);
         saveUserData();
-        renderBudgetTab();
+        renderBudget();
       }
     }
 
     function handleAddCategory(e) {
       e.preventDefault();
       const name = document.getElementById('cat-name-input').value;
-      const amount = parseFloat(document.getElementById('cat-amount-input').value);
-      const id = 'cat_' + Date.now();
-      state.categories.push({ id, name, amount, isExpandable: false });
-      saveUserData();
+      const amount = Number(document.getElementById('cat-amount-input').value);
+      const newId = 'cat-' + Date.now();
+      state.categories.push({ id: newId, name, amount, isExpandable: false });
       closeModal('addCategoryModal');
-      e.target.reset();
-      renderBudgetTab();
+      document.getElementById('cat-name-input').value = '';
+      document.getElementById('cat-amount-input').value = '';
+      saveUserData();
+      renderAll();
     }
 
-    function renderDailyExpensesTab() {
+    function renderDailyExpenses() {
+      ensureMonthStructure(state.expenseActiveMonth);
       document.getElementById('daily-expense-month-picker').value = state.expenseActiveMonth;
-      document.getElementById('daily-expense-month-label').innerText = state.expenseActiveMonth;
-      ensureMonthExists(state.expenseActiveMonth);
-      const data = state.monthlyData[state.expenseActiveMonth];
-      
-      const grid = document.getElementById('category-budget-comparison-grid');
-      let gridHtml = '';
-      state.categories.forEach(cat => {
-        const spent = cat.name === 'Utilities' 
-          ? Object.values(data.utilitiesSubSpent).reduce((a,b)=>a+b,0)
-          : (data.categorySpent[cat.name] || 0);
-        gridHtml += `<div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-sm space-y-2">
-          <div class="flex justify-between items-center"><span class="text-xs font-bold text-brand-black uppercase">${cat.name}</span><span class="text-xs text-brand-muted">Target: ${formatSh(cat.amount)}</span></div>
-          <div class="flex justify-between items-baseline"><span class="font-display font-bold text-lg text-brand-black">${formatSh(spent)}</span><span class="text-[11px] font-semibold text-emerald-600">Rem: ${formatSh(cat.amount - spent)}</span></div>
-        </div>`;
-      });
-      grid.innerHTML = gridHtml;
+      document.getElementById('daily-expense-month-label').innerText = `Month: ${state.expenseActiveMonth}`;
 
+      const activeData = state.monthlyData[state.expenseActiveMonth];
+
+      // Render Comparison Cards
+      const grid = document.getElementById('category-budget-comparison-grid');
+      grid.innerHTML = '';
+
+      state.categories.forEach(cat => {
+        let spent = 0;
+        if (cat.id === 'cat-utilities') {
+          spent = Object.values(activeData.utilitiesSubSpent).reduce((a, b) => a + b, 0);
+        } else {
+          spent = activeData.categorySpent[cat.name] || 0;
+        }
+        const budget = Number(cat.amount || 0);
+        const rem = budget - spent;
+
+        const card = document.createElement('div');
+        card.className = "p-4 rounded-2xl bg-white border border-gray-100 shadow-sm flex flex-col justify-between space-y-2";
+        card.innerHTML = `
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-xs uppercase text-brand-black">${cat.name}</span>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${rem < 0 ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-emerald-600'}">
+              ${rem < 0 ? 'Over Budget' : 'Within Budget'}
+            </span>
+          </div>
+          <div class="flex justify-between items-baseline pt-1">
+            <span class="text-xs text-brand-muted">Spent: <strong class="text-brand-black">${formatMoney(spent)}</strong></span>
+            <span class="text-xs text-brand-muted">Budget: <strong class="text-brand-black">${formatMoney(budget)}</strong></span>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      // Render Table Logs
       const tbody = document.getElementById('daily-expense-table-body');
-      document.getElementById('daily-expense-log-count').innerText = `${data.expenses.length} Expenses Recorded`;
-      let tHtml = '';
-      if (!data.expenses.length) {
-        tHtml = `<tr><td colspan="5" class="py-4 text-center text-brand-muted">No expenses recorded for this month.</td></tr>`;
-      } else {
-        data.expenses.forEach(tx => {
-          tHtml += `<tr class="hover:bg-gray-50/50">
-            <td class="py-3 font-semibold">${tx.date}</td>
-            <td class="py-3 font-bold text-brand-black">${tx.name}</td>
-            <td class="py-3"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-brand-black text-[10px] font-bold">${tx.category}</span></td>
-            <td class="py-3 text-brand-muted">${tx.account}</td>
-            <td class="py-3 text-right font-bold text-red-600">-${formatSh(tx.amount)}</td>
-          </tr>`;
-        });
+      tbody.innerHTML = '';
+      const list = activeData.expenses;
+      document.getElementById('daily-expense-log-count').innerText = `${list.length} Expenses Recorded`;
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-brand-muted">No expenses recorded for this month.</td></tr>`;
+        return;
       }
-      tbody.innerHTML = tHtml;
+
+      list.forEach((tx) => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-gray-50/50 transition";
+        tr.innerHTML = `
+          <td class="py-3 text-brand-muted">${tx.date}</td>
+          <td class="py-3 font-bold text-brand-black">${tx.name}</td>
+          <td class="py-3"><span class="px-2 py-0.5 rounded-md bg-gray-100 text-brand-black font-semibold text-[10px]">${tx.category}</span></td>
+          <td class="py-3 text-brand-muted">${tx.account}</td>
+          <td class="py-3 text-right font-bold text-red-600">-${formatMoney(tx.amount)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
     }
 
     function handleAddTransaction(e) {
@@ -1650,514 +1706,670 @@
       const name = document.getElementById('tx-name').value;
       const category = document.getElementById('tx-category').value;
       const account = document.getElementById('tx-account').value;
-      const amount = parseFloat(document.getElementById('tx-amount').value);
-      const date = document.getElementById('tx-date').value;
-      const monthKey = date.substring(0, 7);
-      ensureMonthExists(monthKey);
+      const amount = Number(document.getElementById('tx-amount').value);
+      const date = document.getElementById('tx-date').value || new Date().toISOString().split('T')[0];
 
-      state.monthlyData[monthKey].expenses.push({ id: Date.now().toString(), name, category, account, amount, date });
+      const mKey = date.slice(0, 7);
+      ensureMonthStructure(mKey);
+
+      // Check account balance
+      if ((state.accounts[account] || 0) < amount) {
+        alert("Insufficient balance in selected account!");
+        return;
+      }
+
+      state.accounts[account] -= amount;
+
+      const txObj = { id: Date.now(), name, category, account, amount, date };
+      state.monthlyData[mKey].expenses.push(txObj);
+
+      // Deduct/Track Category Spent
       if (['Internet', 'Umeme', 'Taka', 'Transport'].includes(category)) {
-        state.monthlyData[monthKey].utilitiesSubSpent[category] = (state.monthlyData[monthKey].utilitiesSubSpent[category] || 0) + amount;
+        state.monthlyData[mKey].utilitiesSubSpent[category] = (state.monthlyData[mKey].utilitiesSubSpent[category] || 0) + amount;
       } else {
-        state.monthlyData[monthKey].categorySpent[category] = (state.monthlyData[monthKey].categorySpent[category] || 0) + amount;
+        state.monthlyData[mKey].categorySpent[category] = (state.monthlyData[mKey].categorySpent[category] || 0) + amount;
       }
 
-      if (state.accounts[account] !== undefined) {
-        state.accounts[account] -= amount;
-      }
-
-      saveUserData();
       closeModal('addTransactionModal');
-      e.target.reset();
+      document.getElementById('tx-name').value = '';
+      document.getElementById('tx-amount').value = '';
+      saveUserData();
       renderAll();
     }
 
-    function renderInvestmentTab() {
-      document.getElementById('inv-total-invested').innerText = formatSh(state.investment.totalInvested);
-      document.getElementById('inv-current-value').innerText = formatSh(state.investment.currentValue);
-      const gain = state.investment.currentValue - state.investment.totalInvested;
-      const ret = state.investment.totalInvested > 0 ? (gain / state.investment.totalInvested) * 100 : 0;
-      
-      const gainElem = document.getElementById('inv-gain-loss');
-      gainElem.innerText = (gain >= 0 ? '+' : '') + formatSh(gain);
-      gainElem.className = 'font-display text-3xl font-extrabold ' + (gain >= 0 ? 'text-emerald-600' : 'text-red-500');
+    function renderInvestment() {
+      const totalInv = state.investment.totalInvested || 0;
+      const currVal = state.investment.currentValue || 0;
+      const gain = currVal - totalInv;
+      const pct = totalInv > 0 ? ((gain / totalInv) * 100).toFixed(2) : '0.00';
 
-      const retElem = document.getElementById('inv-percentage-return');
-      retElem.innerText = (ret >= 0 ? '+' : '') + ret.toFixed(2) + '%';
-      retElem.className = 'font-display text-3xl font-extrabold ' + (ret >= 0 ? 'text-emerald-600' : 'text-red-500');
+      document.getElementById('inv-total-invested').innerText = formatMoney(totalInv);
+      document.getElementById('inv-current-value').innerText = formatMoney(currVal);
+      document.getElementById('inv-gain-loss').innerText = (gain >= 0 ? '+' : '') + formatMoney(gain);
+      document.getElementById('inv-gain-loss').className = `font-display text-3xl font-extrabold ${gain >= 0 ? 'text-emerald-600' : 'text-red-600'} mt-1`;
+      document.getElementById('inv-percentage-return').innerText = `${gain >= 0 ? '+' : ''}${pct}%`;
+      document.getElementById('inv-percentage-return').className = `font-display text-3xl font-extrabold ${gain >= 0 ? 'text-emerald-600' : 'text-red-600'} mt-1`;
 
-      const list = document.getElementById('investment-history-list');
-      let html = '';
-      if (!state.investment.history.length) {
-        html = `<div class="col-span-full py-4 text-center text-xs text-brand-muted">No investment history logs.</div>`;
-      } else {
-        state.investment.history.forEach(h => {
-          html += `<div class="p-4 rounded-2xl bg-white border border-gray-100 shadow-sm flex justify-between items-center">
-            <div><p class="text-xs font-bold">${h.type}</p><p class="text-[10px] text-brand-muted">${h.date}</p></div>
-            <p class="font-bold text-sm text-brand-black">${formatSh(h.amount)}</p>
-          </div>`;
-        });
+      const historyContainer = document.getElementById('investment-history-list');
+      historyContainer.innerHTML = '';
+
+      if (state.investment.history.length === 0) {
+        historyContainer.innerHTML = `<p class="text-xs text-brand-muted col-span-full">No investment actions recorded yet.</p>`;
+        return;
       }
-      list.innerHTML = html;
+
+      state.investment.history.slice().reverse().forEach(item => {
+        const card = document.createElement('div');
+        card.className = "p-4 rounded-2xl bg-gray-50 border border-gray-100 space-y-1 text-xs";
+        card.innerHTML = `
+          <div class="flex justify-between font-bold text-brand-black">
+            <span>${item.type}</span>
+            <span>${item.date}</span>
+          </div>
+          <p class="text-brand-muted">${item.description}</p>
+        `;
+        historyContainer.appendChild(card);
+      });
     }
 
     function handleAddInvestmentCapital(e) {
       e.preventDefault();
-      const amount = parseFloat(document.getElementById('inv-add-amount').value);
-      state.investment.totalInvested += amount;
-      state.investment.currentValue += amount;
-      state.investment.history.push({ id: Date.now().toString(), type: 'Capital Addition', amount, date: new Date().toISOString().split('T')[0] });
-      saveUserData();
+      const amt = Number(document.getElementById('inv-add-amount').value);
+      state.investment.totalInvested += amt;
+      state.investment.currentValue += amt;
+      state.investment.history.push({
+        type: 'CAPITAL ADDITION',
+        date: new Date().toISOString().split('T')[0],
+        description: `Added capital of ${formatMoney(amt)}`
+      });
       closeModal('addInvestmentModal');
-      e.target.reset();
+      document.getElementById('inv-add-amount').value = '';
+      saveUserData();
       renderAll();
     }
 
     function handleUpdateInvestmentValue(e) {
       e.preventDefault();
-      const newVal = parseFloat(document.getElementById('inv-update-value').value);
-      state.investment.currentValue = newVal;
-      state.investment.history.push({ id: Date.now().toString(), type: 'Valuation Update', amount: newVal, date: new Date().toISOString().split('T')[0] });
-      saveUserData();
+      const val = Number(document.getElementById('inv-update-value').value);
+      state.investment.currentValue = val;
+      state.investment.history.push({
+        type: 'VALUATION UPDATE',
+        date: new Date().toISOString().split('T')[0],
+        description: `Updated valuation to ${formatMoney(val)}`
+      });
       closeModal('updateInvestmentModal');
-      e.target.reset();
+      document.getElementById('inv-update-value').value = '';
+      saveUserData();
       renderAll();
     }
 
-    function renderAppearichTab() {
-      const bar = document.getElementById('business-types-bar');
-      bar.innerHTML = state.businessTypes.map(b => `
-        <button onclick="switchBusinessType('${b}')" class="px-4 py-2 rounded-xl text-xs font-bold transition flex-shrink-0 ${state.activeBusinessType === b ? 'bg-brand-black text-white shadow-sm' : 'bg-gray-100 text-brand-muted hover:text-brand-black'}">${b}</button>
-      `).join('');
+    function renderAppearich() {
+      // Render Business Options Tabs Bar
+      const typesBar = document.getElementById('business-types-bar');
+      typesBar.innerHTML = '';
+      state.businessTypes.forEach(bType => {
+        const btn = document.createElement('button');
+        btn.className = `px-4 py-2 rounded-xl text-xs font-bold transition flex-shrink-0 ${state.activeBusinessType === bType ? 'bg-brand-black text-white' : 'bg-gray-100 text-brand-muted hover:text-brand-black'}`;
+        btn.innerText = bType;
+        btn.onclick = () => {
+          state.activeBusinessType = bType;
+          renderAppearich();
+        };
+        typesBar.appendChild(btn);
+      });
 
       document.getElementById('active-business-view-label').innerText = `Active Business View: ${state.activeBusinessType}`;
 
-      // Calculate totals across sales
-      let todaySales = 0;
+      // Calculate Metrics Across Monthly Sales Data
+      const now = new Date();
+      const todayStr = now.toISOString().split('T')[0];
+      const currentMonthStr = getCurrentMonthKey();
+
+      let todaySalesReceived = 0;
       let todayProfit = 0;
-      let monthRev = 0;
-      let totalOut = 0;
-      let totalProf = 0;
-      const todayStr = new Date().toISOString().split('T')[0];
+      let monthRevenue = 0;
+      let totalOutstanding = 0;
+      let totalProfitAllTime = 0;
 
-      Object.entries(state.monthlyData).forEach(([mKey, mData]) => {
-        mData.sales.forEach(s => {
-          if (state.activeBusinessType !== 'Appearich Main' && s.businessType !== state.activeBusinessType) return;
-          const val = s.sellPrice * s.qty;
-          const cost = s.buyPrice * s.qty;
-          const paid = s.paymentStatus === 'FULL' ? val : (s.amountPaid || 0);
-          const prof = paid - cost;
-          totalProf += prof;
-          totalOut += (val - paid);
+      // Filtered Sales List for Period View
+      let allSales = [];
 
-          if (mKey === state.activeMonth) {
-            monthRev += paid;
-          }
-          if (s.date === todayStr) {
-            todaySales += paid;
-            todayProfit += prof;
+      Object.keys(state.monthlyData).forEach(mKey => {
+        const salesList = state.monthlyData[mKey].sales || [];
+        salesList.forEach(sale => {
+          if (sale.businessType === state.activeBusinessType) {
+            allSales.push(sale);
+            const totalVal = Number(sale.sellingPrice || 0) * Number(sale.quantity || 1);
+            const paid = Number(sale.paidAmount || 0);
+            const cost = Number(sale.buyingPrice || 0) * Number(sale.quantity || 1);
+            const unpaid = totalVal - paid;
+            const profit = paid - cost;
+
+            if (sale.date === todayStr) {
+              todaySalesReceived += paid;
+              todayProfit += profit;
+            }
+            if (mKey === currentMonthStr) {
+              monthRevenue += paid;
+            }
+            if (unpaid > 0) {
+              totalOutstanding += unpaid;
+            }
+            totalProfitAllTime += profit;
           }
         });
       });
 
-      document.getElementById('app-today-sales').innerText = formatSh(todaySales);
-      document.getElementById('app-today-profit').innerText = formatSh(todayProfit);
-      document.getElementById('app-month-revenue').innerText = formatSh(monthRev);
-      document.getElementById('app-total-outstanding').innerText = formatSh(totalOut);
-      document.getElementById('app-total-profit').innerText = formatSh(totalProf);
+      document.getElementById('app-today-sales').innerText = formatMoney(todaySalesReceived);
+      document.getElementById('app-today-profit').innerText = formatMoney(todayProfit);
+      document.getElementById('app-month-revenue').innerText = formatMoney(monthRevenue);
+      document.getElementById('app-total-outstanding').innerText = formatMoney(totalOutstanding);
+      document.getElementById('app-total-profit').innerText = formatMoney(totalProfitAllTime);
 
-      // Period metrics
-      let pSold = 0, pRev = 0, pCost = 0;
-      const currentMonthData = state.monthlyData[state.activeMonth] || { sales: [] };
-      currentMonthData.sales.forEach(s => {
-        if (state.activeBusinessType !== 'Appearich Main' && s.businessType !== state.activeBusinessType) return;
-        pSold += s.qty;
-        pRev += (s.paymentStatus === 'FULL' ? s.sellPrice * s.qty : (s.amountPaid || 0));
-        pCost += s.buyPrice * s.qty;
+      // Period Calculation (Day, Week, Month, Year)
+      let filteredByPeriod = allSales.filter(s => {
+        if (state.appearichPeriod === 'day') return s.date === todayStr;
+        if (state.appearichPeriod === 'month') return s.date?.startsWith(currentMonthStr);
+        if (state.appearichPeriod === 'year') return s.date?.startsWith(now.getFullYear().toString());
+        if (state.appearichPeriod === 'week') {
+          const sDate = new Date(s.date);
+          const diffDays = (now - sDate) / (1000 * 3600 * 24);
+          return diffDays >= 0 && diffDays <= 7;
+        }
+        return true;
       });
 
-      document.getElementById('app-period-sold').innerText = pSold;
-      document.getElementById('app-period-revenue').innerText = formatSh(pRev);
-      document.getElementById('app-period-cost').innerText = formatSh(pCost);
-      const margin = pRev > 0 ? ((pRev - pCost) / pRev) * 100 : 0;
-      document.getElementById('app-period-margin').innerText = margin.toFixed(1) + '%';
+      let periodSold = filteredByPeriod.reduce((acc, s) => acc + Number(s.quantity || 1), 0);
+      let periodRevenue = filteredByPeriod.reduce((acc, s) => acc + Number(s.paidAmount || 0), 0);
+      let periodCost = filteredByPeriod.reduce((acc, s) => acc + (Number(s.buyingPrice || 0) * Number(s.quantity || 1)), 0);
+      let periodMargin = periodRevenue > 0 ? (((periodRevenue - periodCost) / periodRevenue) * 100).toFixed(1) : 0;
 
-      // Table
-      const table = document.getElementById('appearich-sales-table');
-      let tHtml = '';
-      let salesList = [];
-      Object.values(state.monthlyData).forEach(m => salesList.push(...m.sales));
-      salesList = salesList.filter(s => state.activeBusinessType === 'Appearich Main' || s.businessType === state.activeBusinessType);
+      document.getElementById('app-period-sold').innerText = periodSold;
+      document.getElementById('app-period-revenue').innerText = formatMoney(periodRevenue);
+      document.getElementById('app-period-cost').innerText = formatMoney(periodCost);
+      document.getElementById('app-period-margin').innerText = `${periodMargin}%`;
 
-      if (!salesList.length) {
-        tHtml = `<tr><td colspan="9" class="py-4 text-center text-brand-muted">No sales records found.</td></tr>`;
-      } else {
-        salesList.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(s => {
-          const val = s.sellPrice * s.qty;
-          const paid = s.paymentStatus === 'FULL' ? val : (s.amountPaid || 0);
-          const unp = val - paid;
-          tHtml += `<tr class="hover:bg-gray-50/50">
-            <td class="py-3">${s.date}</td>
-            <td class="py-3"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-[10px] font-bold">${s.businessType}</span></td>
-            <td class="py-3 font-bold text-brand-black">${s.product}</td>
-            <td class="py-3">${s.customer}</td>
-            <td class="py-3">${formatSh(val)}</td>
-            <td class="py-3 font-bold text-emerald-600">${formatSh(paid)}</td>
-            <td class="py-3 font-bold text-red-500">${formatSh(unp)}</td>
-            <td class="py-3"><span class="px-2.5 py-0.5 rounded-full ${s.paymentStatus === 'FULL' ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'} text-[10px] font-bold">${s.paymentStatus}</span></td>
-            <td class="py-3"><button onclick="openUpdateSaleModal('${s.id}')" class="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 text-brand-black rounded-lg text-[10px] font-bold transition">Update</button></td>
-          </tr>`;
-        });
+      // Sales Log Table
+      const tableBody = document.getElementById('appearich-sales-table');
+      tableBody.innerHTML = '';
+
+      if (allSales.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="9" class="py-4 text-center text-brand-muted">No sales records found for ${state.activeBusinessType}.</td></tr>`;
+        return;
       }
-      table.innerHTML = tHtml;
+
+      allSales.sort((a, b) => new Date(b.date) - new Date(a.date)).forEach(s => {
+        const totalVal = Number(s.sellingPrice || 0) * Number(s.quantity || 1);
+        const paid = Number(s.paidAmount || 0);
+        const unpaid = totalVal - paid;
+
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-gray-50/50 transition border-b border-gray-100";
+        tr.innerHTML = `
+          <td class="py-3 text-brand-muted">${s.date}</td>
+          <td class="py-3 font-semibold text-brand-black">${s.businessType}</td>
+          <td class="py-3 font-bold text-brand-black">${s.product} (x${s.quantity})</td>
+          <td class="py-3 text-brand-black">${s.customer}</td>
+          <td class="py-3 font-bold text-brand-black">${formatMoney(totalVal)}</td>
+          <td class="py-3 font-bold text-emerald-600">${formatMoney(paid)}</td>
+          <td class="py-3 font-bold ${unpaid > 0 ? 'text-red-600' : 'text-brand-muted'}">${formatMoney(unpaid)}</td>
+          <td class="py-3">
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${unpaid === 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}">
+              ${unpaid === 0 ? 'FULL' : 'PARTIAL'}
+            </span>
+          </td>
+          <td class="py-3">
+            <button onclick="openEditSaleModal('${s.id}')" class="px-2.5 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-brand-black font-bold text-[10px]">
+              Payment
+            </button>
+          </td>
+        `;
+        tableBody.appendChild(tr);
+      });
+
+      // Update Select Options inside Add Sale Modal
+      const saleBusSelect = document.getElementById('sale-business-type');
+      saleBusSelect.innerHTML = '';
+      state.businessTypes.forEach(b => {
+        const opt = document.createElement('option');
+        opt.value = b;
+        opt.innerText = b;
+        saleBusSelect.appendChild(opt);
+      });
     }
 
-    function switchBusinessType(b) {
-      state.activeBusinessType = b;
-      renderAppearichTab();
-    }
-    function switchAppearichPeriod(period) {
-      state.appearichPeriod = period;
+    function switchAppearichPeriod(p) {
+      state.appearichPeriod = p;
       document.querySelectorAll('.app-period-btn').forEach(btn => {
-        btn.classList.remove('bg-brand-black', 'text-white');
+        btn.classList.remove('bg-brand-black', 'text-white', 'active');
         btn.classList.add('bg-gray-100', 'text-brand-muted');
       });
-      document.getElementById('app-period-' + period).classList.remove('bg-gray-100', 'text-brand-muted');
-      document.getElementById('app-period-' + period).classList.add('bg-brand-black', 'text-white');
-    }
-
-    function handleAddBusinessOption(e) {
-      e.preventDefault();
-      const name = document.getElementById('new-business-name-input').value.trim();
-      if (name && !state.businessTypes.includes(name)) {
-        state.businessTypes.push(name);
-        saveUserData();
+      const activeBtn = document.getElementById(`app-period-${p}`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-brand-black', 'text-white', 'active');
+        activeBtn.classList.remove('bg-gray-100', 'text-brand-muted');
       }
-      closeModal('addBusinessModal');
-      e.target.reset();
-      renderAppearichTab();
+      renderAppearich();
     }
 
     function toggleSalePartialInput() {
-      const status = document.getElementById('sale-payment-status').value;
-      const cont = document.getElementById('sale-partial-container');
-      if (status === 'PARTIAL') cont.classList.remove('hidden');
-      else cont.classList.add('hidden');
-    }
-    function toggleEditSalePartialInput() {
-      const status = document.getElementById('edit-sale-status').value;
-      const cont = document.getElementById('edit-sale-paid-container');
-      if (status === 'PARTIAL') cont.classList.remove('hidden');
-      else cont.classList.add('hidden');
+      const st = document.getElementById('sale-payment-status').value;
+      const container = document.getElementById('sale-partial-container');
+      if (st === 'PARTIAL') {
+        container.classList.remove('hidden');
+      } else {
+        container.classList.add('hidden');
+      }
     }
 
     function handleAddSale(e) {
       e.preventDefault();
       const businessType = document.getElementById('sale-business-type').value;
-      const date = document.getElementById('sale-date').value;
-      const qty = parseInt(document.getElementById('sale-qty').value) || 1;
+      const date = document.getElementById('sale-date').value || new Date().toISOString().split('T')[0];
+      const quantity = Number(document.getElementById('sale-qty').value || 1);
       const product = document.getElementById('sale-product').value;
       const customer = document.getElementById('sale-customer').value;
-      const buyPrice = parseFloat(document.getElementById('sale-buy-price').value);
-      const sellPrice = parseFloat(document.getElementById('sale-sell-price').value);
-      const paymentStatus = document.getElementById('sale-payment-status').value;
-      const amountPaid = paymentStatus === 'PARTIAL' ? parseFloat(document.getElementById('sale-paid-amount').value) || 0 : (sellPrice * qty);
+      const buyingPrice = Number(document.getElementById('sale-buy-price').value);
+      const sellingPrice = Number(document.getElementById('sale-sell-price').value);
+      const status = document.getElementById('sale-payment-status').value;
 
-      const monthKey = date.substring(0, 7);
-      ensureMonthExists(monthKey);
+      const totalVal = sellingPrice * quantity;
+      let paidAmount = totalVal;
+      if (status === 'PARTIAL') {
+        paidAmount = Number(document.getElementById('sale-paid-amount').value || 0);
+      }
 
-      state.monthlyData[monthKey].sales.push({
+      const mKey = date.slice(0, 7);
+      ensureMonthStructure(mKey);
+
+      const saleObj = {
         id: 'sale_' + Date.now(),
         businessType,
         date,
-        qty,
+        quantity,
         product,
         customer,
-        buyPrice,
-        sellPrice,
-        paymentStatus,
-        amountPaid
-      });
+        buyingPrice,
+        sellingPrice,
+        status,
+        paidAmount
+      };
 
-      // Credit money to account
-      state.accounts['CRDB'] += amountPaid;
-
-      saveUserData();
+      state.monthlyData[mKey].sales.push(saleObj);
       closeModal('addSaleModal');
-      e.target.reset();
+      saveUserData();
       renderAll();
     }
 
-    let editingSaleId = null;
-    function openUpdateSaleModal(saleId) {
-      editingSaleId = saleId;
+    function handleAddBusinessOption(e) {
+      e.preventDefault();
+      const bName = document.getElementById('new-business-name-input').value.trim();
+      if (bName && !state.businessTypes.includes(bName)) {
+        state.businessTypes.push(bName);
+        state.activeBusinessType = bName;
+      }
+      closeModal('addBusinessModal');
+      document.getElementById('new-business-name-input').value = '';
+      saveUserData();
+      renderAll();
+    }
+
+    function openEditSaleModal(saleId) {
+      let foundSale = null;
+      Object.keys(state.monthlyData).forEach(m => {
+        const s = state.monthlyData[m].sales.find(x => x.id === saleId);
+        if (s) foundSale = s;
+      });
+      if (!foundSale) return;
+
+      document.getElementById('edit-sale-id').value = foundSale.id;
+      document.getElementById('edit-sale-status').value = foundSale.status;
+      document.getElementById('edit-sale-paid-amount').value = foundSale.paidAmount;
+
+      toggleEditSalePartialInput();
       openModal('updateSalePaymentModal');
     }
+
+    function toggleEditSalePartialInput() {
+      const st = document.getElementById('edit-sale-status').value;
+      const container = document.getElementById('edit-sale-paid-container');
+      if (st === 'PARTIAL') {
+        container.classList.remove('hidden');
+      } else {
+        container.classList.remove('hidden'); // allow view
+      }
+    }
+
     function handleUpdateSalePayment(e) {
       e.preventDefault();
-      const status = document.getElementById('edit-sale-status').value;
-      const paidAmt = parseFloat(document.getElementById('edit-sale-paid-amount').value) || 0;
+      const saleId = document.getElementById('edit-sale-id').value;
+      const newStatus = document.getElementById('edit-sale-status').value;
+      const newPaid = Number(document.getElementById('edit-sale-paid-amount').value);
 
-      Object.values(state.monthlyData).forEach(m => {
-        const found = m.sales.find(s => s.id === editingSaleId);
-        if (found) {
-          found.paymentStatus = status;
-          found.amountPaid = status === 'FULL' ? (found.sellPrice * found.qty) : paidAmt;
+      Object.keys(state.monthlyData).forEach(m => {
+        const s = state.monthlyData[m].sales.find(x => x.id === saleId);
+        if (s) {
+          s.status = newStatus;
+          s.paidAmount = newPaid;
         }
       });
-      saveUserData();
+
       closeModal('updateSalePaymentModal');
-      renderAll();
-    }
-
-    // EXCEL PREVIEW & IMPORT ENGINE
-    function previewExcelFile(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        try {
-          const data = new Uint8Array(evt.target.result);
-          const workbook = XLSX.read(data, { type: 'array' });
-          const firstSheet = workbook.SheetNames[0];
-          const rows = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet], { header: 1 });
-          
-          pendingExcelRecords = [];
-          // Parse rows starting from index 1 (skip header)
-          for (let i = 1; i < rows.length; i++) {
-            const r = rows[i];
-            if (!r || r.length === 0) continue;
-            // Map row data based on format
-            const dateStr = r[0] || '2026-01-01';
-            const perfume = r[1] || 'Perfume Item';
-            const ml = r[2] || '30';
-            const qty = parseInt(r[3]) || 1;
-            const amount = parseFloat(r[4]) || 15000;
-            const sellPrice = parseFloat(r[5]) || 25000;
-            const status = r[6] || 'SOLD';
-            const profit = parseFloat(r[7]) || 10000;
-            const customer = r[8] || 'Customer';
-            const expected = r[9] || '';
-
-            pendingExcelRecords.push({
-              date: typeof dateStr === 'number' ? new Date((dateStr - (25567 + 2)) * 86400 * 1000).toISOString().split('T')[0] : '2026-05-15',
-              product: `${perfume} (${ml}ml)`,
-              qty,
-              buyPrice: amount,
-              sellPrice,
-              status,
-              customer,
-              expected
-            });
-          }
-
-          document.getElementById('preview-count').innerText = pendingExcelRecords.length;
-          const tbody = document.getElementById('excel-preview-body');
-          tbody.innerHTML = pendingExcelRecords.map(rec => `
-            <tr>
-              <td class="p-2">${rec.date}</td>
-              <td class="p-2 font-bold">${rec.product}</td>
-              <td class="p-2">-</td>
-              <td class="p-2">${rec.qty}</td>
-              <td class="p-2">${formatSh(rec.buyPrice)}</td>
-              <td class="p-2">${formatSh(rec.sellPrice)}</td>
-              <td class="p-2">${rec.status}</td>
-              <td class="p-2 text-emerald-600">${formatSh(rec.sellPrice - rec.buyPrice)}</td>
-              <td class="p-2">${rec.customer}</td>
-              <td class="p-2">${rec.expected}</td>
-            </tr>
-          `).join('');
-          document.getElementById('excel-preview-container').classList.remove('hidden');
-        } catch (err) {
-          alert('Error parsing excel file: ' + err.message);
-        }
-      };
-      reader.readAsArrayBuffer(file);
-    }
-
-    function confirmExcelImport() {
-      if (!pendingExcelRecords.length) return;
-      pendingExcelRecords.forEach(rec => {
-        const monthKey = rec.date.substring(0, 7);
-        ensureMonthExists(monthKey);
-        state.monthlyData[monthKey].sales.push({
-          id: 'imp_' + Math.random().toString(36).substr(2, 9),
-          businessType: 'Perfume',
-          date: rec.date,
-          qty: rec.qty,
-          product: rec.product,
-          customer: rec.customer,
-          buyPrice: rec.buyPrice,
-          sellPrice: rec.sellPrice,
-          paymentStatus: rec.status === 'SOLD' ? 'FULL' : 'PARTIAL',
-          amountPaid: rec.sellPrice * rec.qty
-        });
-      });
       saveUserData();
-      closeModal('importExcelModal');
-      alert(`Successfully imported ${pendingExcelRecords.length} sales records!`);
-      pendingExcelRecords = [];
       renderAll();
     }
 
-    function renderAccountsTab() {
-      let totalMoney = 0;
-      Object.values(state.accounts).forEach(v => totalMoney += v);
-      document.getElementById('accounts-total-money').innerText = formatSh(totalMoney);
-
+    function renderAccounts() {
       const grid = document.getElementById('account-cards-grid');
-      let html = '';
-      Object.entries(state.accounts).forEach(([acc, val]) => {
-        html += `<div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4">
+      grid.innerHTML = '';
+
+      let total = 0;
+      Object.keys(state.accounts).forEach(accName => {
+        const bal = state.accounts[accName] || 0;
+        total += Number(bal);
+
+        const card = document.createElement('div');
+        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4";
+        card.innerHTML = `
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">${acc}</span>
-            <div class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-brand-black">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+            <span class="font-extrabold text-sm text-brand-black tracking-wider uppercase">${accName}</span>
+            <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center font-bold text-xs text-brand-black">
+              ${accName.slice(0, 2)}
             </div>
           </div>
           <div>
-            <p class="font-display text-3xl font-extrabold text-brand-black">${formatSh(val)}</p>
-            <p class="text-[11px] text-brand-muted mt-1">Available Liquid Balance</p>
+            <span class="text-xs font-bold text-brand-muted uppercase">Balance</span>
+            <p class="font-display text-2xl font-bold text-brand-black mt-1">${formatMoney(bal)}</p>
           </div>
-        </div>`;
+        `;
+        grid.appendChild(card);
       });
-      grid.innerHTML = html;
-    }
 
-    function handleAddMoneyAccount(e) {
-      e.preventDefault();
-      const acc = document.getElementById('am-account').value;
-      const amount = parseFloat(document.getElementById('am-amount').value);
-      state.accounts[acc] = (state.accounts[acc] || 0) + amount;
-      saveUserData();
-      closeModal('addMoneyModal');
-      e.target.reset();
-      renderAll();
+      document.getElementById('accounts-total-money').innerText = formatMoney(total);
     }
 
     function handleTransfer(e) {
       e.preventDefault();
       const from = document.getElementById('tr-from').value;
       const to = document.getElementById('tr-to').value;
-      const amount = parseFloat(document.getElementById('tr-amount').value);
+      const amt = Number(document.getElementById('tr-amount').value);
 
       if (from === to) {
-        alert("Cannot transfer to the same account.");
+        alert("Please select two different accounts!");
         return;
       }
-      if ((state.accounts[from] || 0) < amount) {
-        alert("Insufficient funds in source account.");
+      if ((state.accounts[from] || 0) < amt) {
+        alert(`Insufficient funds in ${from}!`);
         return;
       }
 
-      state.accounts[from] -= amount;
-      state.accounts[to] = (state.accounts[to] || 0) + amount;
-      saveUserData();
+      state.accounts[from] -= amt;
+      state.accounts[to] = (state.accounts[to] || 0) + amt;
+
       closeModal('transferModal');
-      e.target.reset();
+      document.getElementById('tr-amount').value = '';
+      saveUserData();
       renderAll();
     }
 
-    function renderLoansTab() {
-      let totalOwed = 0;
-      state.loans.forEach(l => {
-        totalOwed += (l.amount - l.paidAmount);
-      });
-      document.getElementById('loan-total-owed').innerText = formatSh(totalOwed);
+    function handleAddMoneyAccount(e) {
+      e.preventDefault();
+      const acc = document.getElementById('am-account').value;
+      const amt = Number(document.getElementById('am-amount').value);
 
-      const list = document.getElementById('loan-cards-list');
-      let html = '';
-      if (!state.loans.length) {
-        html = `<div class="col-span-full py-8 text-center text-xs text-brand-muted">No active loan records.</div>`;
-      } else {
-        state.loans.forEach(l => {
-          const rem = l.amount - l.paidAmount;
-          html += `<div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4">
-            <div class="flex items-center justify-between">
-              <div><h4 class="font-bold text-base text-brand-black">${l.borrower}</h4><p class="text-[10px] text-brand-muted">${l.date} ${l.note ? '• ' + l.note : ''}</p></div>
-              <span class="px-2.5 py-0.5 rounded-full ${rem === 0 ? 'bg-emerald-50 text-emerald-700' : 'bg-yellow-50 text-yellow-700'} text-[10px] font-bold">${rem === 0 ? 'PAID' : 'ACTIVE'}</span>
-            </div>
-            <div class="grid grid-cols-2 gap-2 pt-2 border-t border-gray-100 text-xs">
-              <div><span class="text-brand-muted">Total Owed</span><p class="font-bold text-brand-black">${formatSh(l.amount)}</p></div>
-              <div><span class="text-brand-muted">Remaining</span><p class="font-bold text-red-600">${formatSh(rem)}</p></div>
-            </div>
-            <button onclick="openUpdateLoanModal('${l.id}')" class="w-full py-2 bg-gray-50 hover:bg-gray-100 text-brand-black rounded-xl font-bold text-xs transition">Update Repayment</button>
-          </div>`;
-        });
+      state.accounts[acc] = (state.accounts[acc] || 0) + amt;
+
+      closeModal('addMoneyModal');
+      document.getElementById('am-amount').value = '';
+      saveUserData();
+      renderAll();
+    }
+
+    function renderLoans() {
+      const container = document.getElementById('loan-cards-list');
+      container.innerHTML = '';
+
+      let totalOwed = 0;
+      if (state.loans.length === 0) {
+        container.innerHTML = `<p class="text-xs text-brand-muted col-span-full py-4">No loan records registered yet.</p>`;
+        document.getElementById('loan-total-owed').innerText = formatMoney(0);
+        return;
       }
-      list.innerHTML = html;
+
+      state.loans.forEach((loan) => {
+        const rem = loan.amount - loan.paid;
+        totalOwed += rem;
+
+        const card = document.createElement('div');
+        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4";
+        card.innerHTML = `
+          <div class="flex justify-between items-start">
+            <div>
+              <h4 class="font-bold text-base text-brand-black">${loan.borrower}</h4>
+              <p class="text-[10px] font-bold text-brand-muted uppercase">${loan.date} ${loan.note ? '• ' + loan.note : ''}</p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${rem <= 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-yellow-50 text-yellow-700'}">
+              ${rem <= 0 ? 'CLEARED' : 'PENDING'}
+            </span>
+          </div>
+          <div class="grid grid-cols-2 gap-2 text-xs border-y border-gray-100 py-3">
+            <div><span class="text-brand-muted">Borrowed:</span> <strong class="text-brand-black block">${formatMoney(loan.amount)}</strong></div>
+            <div><span class="text-brand-muted">Paid So Far:</span> <strong class="text-emerald-600 block">${formatMoney(loan.paid)}</strong></div>
+          </div>
+          <div class="flex items-center justify-between pt-1">
+            <div>
+              <span class="text-[10px] font-bold text-brand-muted uppercase">Remaining Owed</span>
+              <p class="font-display font-bold text-lg ${rem > 0 ? 'text-red-600' : 'text-emerald-600'}">${formatMoney(rem)}</p>
+            </div>
+            <button onclick="openUpdateLoanModal('${loan.id}')" class="px-3 py-1.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-brand-black font-bold text-xs">
+              Update
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      document.getElementById('loan-total-owed').innerText = formatMoney(totalOwed);
     }
 
     function handleAddLoan(e) {
       e.preventDefault();
       const borrower = document.getElementById('loan-borrower').value;
-      const amount = parseFloat(document.getElementById('loan-amount').value);
-      const date = document.getElementById('loan-date').value;
-      const paidAmount = parseFloat(document.getElementById('loan-paid').value) || 0;
+      const amount = Number(document.getElementById('loan-amount').value);
+      const date = document.getElementById('loan-date').value || new Date().toISOString().split('T')[0];
+      const paid = Number(document.getElementById('loan-paid').value || 0);
       const note = document.getElementById('loan-note').value;
 
-      state.loans.push({ id: 'loan_' + Date.now(), borrower, amount, date, paidAmount, note });
-      saveUserData();
+      state.loans.push({ id: 'loan_' + Date.now(), borrower, amount, date, paid, note });
+
       closeModal('addLoanModal');
-      e.target.reset();
-      renderLoansTab();
+      document.getElementById('loan-borrower').value = '';
+      document.getElementById('loan-amount').value = '';
+      saveUserData();
+      renderAll();
     }
 
-    let editingLoanId = null;
     function openUpdateLoanModal(loanId) {
-      editingLoanId = loanId;
-      const l = state.loans.find(x => x.id === loanId);
-      if (l) {
-        document.getElementById('edit-loan-paid').value = l.paidAmount;
-      }
+      const loan = state.loans.find(l => l.id === loanId);
+      if (!loan) return;
+      document.getElementById('edit-loan-id').value = loan.id;
+      document.getElementById('edit-loan-paid').value = loan.paid;
       openModal('updateLoanModal');
     }
+
     function handleUpdateLoan(e) {
       e.preventDefault();
-      const paidAmt = parseFloat(document.getElementById('edit-loan-paid').value) || 0;
-      const l = state.loans.find(x => x.id === editingLoanId);
-      if (l) {
-        l.paidAmount = paidAmt;
+      const loanId = document.getElementById('edit-loan-id').value;
+      const newPaid = Number(document.getElementById('edit-loan-paid').value);
+
+      const loan = state.loans.find(l => l.id === loanId);
+      if (loan) {
+        loan.paid = newPaid;
       }
-      saveUserData();
+
       closeModal('updateLoanModal');
-      renderLoansTab();
+      saveUserData();
+      renderAll();
     }
 
-    function renderProgressTab() {
-      let overallProfit = 0;
-      Object.keys(state.monthlyData).forEach(mKey => {
-        const mMetrics = calculateMonthMetrics(mKey);
-        overallProfit += mMetrics.salesProfit;
-      });
-
-      const activeMetrics = calculateMonthMetrics(state.activeMonth);
-      document.getElementById('progress-overall-profit').innerText = formatSh(overallProfit);
-      document.getElementById('progress-active-month-profit').innerText = formatSh(activeMetrics.salesProfit);
-      document.getElementById('progress-active-month-name').innerText = `Active Month (${state.activeMonth}) Profit`;
-
+    function renderProgress() {
+      let combinedProfit = 0;
       const grid = document.getElementById('progress-monthly-grid');
-      let html = '';
-      Object.entries(state.monthlyData).forEach(([mKey, mData]) => {
-        const mMetrics = calculateMonthMetrics(mKey);
-        html += `<div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-sm space-y-2">
-          <div class="flex justify-between items-center"><span class="text-xs font-bold text-brand-black">${mKey}</span><span class="text-[10px] font-semibold text-emerald-600">Net Profit</span></div>
-          <p class="font-display font-bold text-xl text-brand-black">${formatSh(mMetrics.salesProfit)}</p>
-        </div>`;
+      grid.innerHTML = '';
+
+      Object.keys(state.monthlyData).sort().reverse().forEach(mKey => {
+        const summary = calculateMonthSummary(mKey);
+        combinedProfit += summary.salesProfit;
+
+        if (mKey === state.activeMonth) {
+          document.getElementById('progress-active-month-profit').innerText = formatMoney(summary.salesProfit);
+          document.getElementById('progress-active-month-name').innerText = `Active Month (${mKey}) Net Sales Profit`;
+        }
+
+        const card = document.createElement('div');
+        card.className = "p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-3";
+        card.innerHTML = `
+          <div class="flex justify-between items-center border-b border-gray-100 pb-2">
+            <span class="font-bold text-sm text-brand-black">${mKey}</span>
+            <span class="text-[10px] font-bold text-emerald-600 uppercase bg-emerald-50 px-2 py-0.5 rounded-full">History</span>
+          </div>
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs"><span class="text-brand-muted">Income Pool:</span><span class="font-bold">${formatMoney(summary.grossPool)}</span></div>
+            <div class="flex justify-between text-xs"><span class="text-brand-muted">Expenses:</span><span class="font-bold text-red-600">-${formatMoney(summary.totalExpenses)}</span></div>
+            <div class="flex justify-between text-xs pt-2 border-t border-gray-100"><span class="font-bold text-brand-black">Net Sales Profit:</span><span class="font-bold text-emerald-600">${formatMoney(summary.salesProfit)}</span></div>
+          </div>
+        `;
+        grid.appendChild(card);
       });
-      grid.innerHTML = html;
+
+      document.getElementById('progress-overall-profit').innerText = formatMoney(combinedProfit);
     }
 
-    function handleHeroUpload(e) {
+    // EXCEL IMPORT PARSER & PREVIEW
+    function previewExcelFile(e) {
       const file = e.target.files[0];
       if (!file) return;
+
       const reader = new FileReader();
       reader.onload = function(evt) {
-        state.heroImageUrl = evt.target.result;
-        document.getElementById('hero-bg-img').style.backgroundImage = `url('${state.heroImageUrl}')`;
-        saveUserData();
+        const data = new Uint8Array(evt.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+        const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+
+        pendingExcelRecords = [];
+        const tbody = document.getElementById('excel-preview-body');
+        tbody.innerHTML = '';
+
+        let currentYear = '2025';
+
+        for (let i = 1; i < jsonData.length; i++) {
+          const row = jsonData[i];
+          if (!row || row.length === 0) continue;
+
+          let monthCol = String(row[0] || '').trim();
+          if (monthCol.includes('2026')) {
+            currentYear = '2026';
+          }
+
+          const perfume = row[1];
+          const ml = row[2];
+          const qty = row[3];
+          const amount = row[4];
+          const sale = row[5];
+          const status = row[6];
+          const profit = row[7];
+          const customer = row[8];
+          const expected = row[9];
+
+          if (!perfume && !amount && !sale) continue;
+
+          let monthNum = '05';
+          const lowerM = monthCol.toLowerCase();
+          if (lowerM.includes('may')) monthNum = '05';
+          else if (lowerM.includes('june')) monthNum = '06';
+          else if (lowerM.includes('july')) monthNum = '07';
+          else if (lowerM.includes('august')) monthNum = '08';
+          else if (lowerM.includes('october')) monthNum = '10';
+          else if (lowerM.includes('november')) monthNum = '11';
+          else if (lowerM.includes('december')) monthNum = '12';
+          else if (lowerM.includes('january')) monthNum = '01';
+          else if (lowerM.includes('february')) monthNum = '02';
+          else if (lowerM.includes('march')) monthNum = '03';
+          else if (lowerM.includes('april')) monthNum = '04';
+
+          const formattedMonthKey = `${currentYear}-${monthNum}`;
+
+          const rec = {
+            monthKey: formattedMonthKey,
+            perfume: perfume || 'Perfume Item',
+            ml: ml || '',
+            quantity: Number(qty) || 1,
+            buyingPrice: Number(amount) || 0,
+            sellingPrice: Number(sale) || 0,
+            status: String(status || 'SOLD').toUpperCase(),
+            profit: Number(profit) || 0,
+            customer: customer || '',
+            expected: expected || ''
+          };
+
+          pendingExcelRecords.push(rec);
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td class="p-2 text-brand-muted">${rec.monthKey}</td>
+            <td class="p-2 font-bold">${rec.perfume}</td>
+            <td class="p-2">${rec.ml}</td>
+            <td class="p-2">${rec.quantity}</td>
+            <td class="p-2">${rec.buyingPrice}</td>
+            <td class="p-2">${rec.sellingPrice}</td>
+            <td class="p-2"><span class="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-600 font-bold">${rec.status}</span></td>
+            <td class="p-2 text-emerald-600 font-bold">${rec.profit}</td>
+            <td class="p-2">${rec.customer}</td>
+            <td class="p-2 text-brand-muted">${rec.expected}</td>
+          `;
+          tbody.appendChild(tr);
+        }
+
+        document.getElementById('preview-count').innerText = pendingExcelRecords.length;
+        document.getElementById('excel-preview-container').classList.remove('hidden');
       };
-      reader.readAsDataURL(file);
+      reader.readAsArrayBuffer(file);
+    }
+
+    function confirmExcelImport() {
+      if (!pendingExcelRecords || pendingExcelRecords.length === 0) return;
+
+      if (!state.businessTypes.includes('Perfume')) {
+        state.businessTypes.push('Perfume');
+      }
+
+      pendingExcelRecords.forEach((rec, idx) => {
+        const mKey = rec.monthKey;
+        ensureMonthStructure(mKey);
+
+        const saleObj = {
+          id: 'excel_import_' + mKey + '_' + idx + '_' + Date.now(),
+          businessType: 'Perfume',
+          date: `${mKey}-01`,
+          product: rec.perfume + (rec.ml ? ` (${rec.ml}ml)` : ''),
+          customer: rec.customer,
+          quantity: rec.quantity,
+          buyingPrice: rec.buyingPrice,
+          sellingPrice: rec.sellingPrice,
+          status: 'FULL',
+          paidAmount: rec.sellingPrice
+        };
+
+        state.monthlyData[mKey].sales.push(saleObj);
+      });
+
+      closeModal('importExcelModal');
+      document.getElementById('excel-file-input').value = '';
+      document.getElementById('excel-preview-container').classList.add('hidden');
+      saveUserData();
+      renderAll();
+      alert(`Successfully imported ${pendingExcelRecords.length} historical perfume sales!`);
     }
   </script>
 </body>
