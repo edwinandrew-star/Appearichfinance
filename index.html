@@ -101,14 +101,14 @@
   </style>
 </head>
 <body class="bg-brand-bg min-h-screen pb-28 text-brand-black">
-  <!-- SPLASH SCREEN -->
+  <!-- 2. SPLASH SCREEN -->
   <div id="splash-screen" class="fixed inset-0 z-50 bg-white flex items-center justify-center">
-    <img src="images/appearich-logo.png" alt="Appearich Splash Logo" class="max-w-[200px] max-h-[200px] object-contain animate-pop-in">
+    <img src="images/appearich-logo.png" alt="Appearich Logo" class="max-w-[200px] max-h-[200px] object-contain animate-pop-in">
   </div>
-
-  <!-- AUTHENTICATION CONTAINER -->
+  <!-- 3. SIGN IN / SIGN UP AREA -->
   <div id="auth-container" class="fixed inset-0 z-40 bg-white hidden flex-col items-center justify-center p-6 overflow-y-auto">
     <div class="w-full max-w-sm space-y-8 bg-white my-auto">
+      <!-- 4. LOGIN SENTENCES -->
       <div class="space-y-2 text-center">
         <h2 class="animate-sentence-1 font-display text-3xl font-bold tracking-tight text-brand-black">Track Your Money.</h2>
         <h2 class="animate-sentence-2 font-display text-3xl font-bold tracking-tight text-brand-gold">Build Your Business.</h2>
@@ -141,169 +141,909 @@
       </div>
     </div>
   </div>
-
   <!-- MAIN APP WRAPPER -->
   <div id="app-wrapper" class="hidden">
-    <!-- APP HEADER -->
+    <!-- TOP APP HEADER -->
     <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-gray-100 px-4 lg:px-8 py-4">
       <div class="max-w-6xl mx-auto flex justify-between items-center">
         <div class="flex items-center space-x-3">
-          <img src="images/appearich-logo1.png" alt="Appearich Header Logo" class="h-10 w-auto object-contain">
+          <img src="images/appearich-logo1.png" alt="Appearich Logo" class="h-10 w-auto object-contain">
           <div>
             <h1 class="font-display font-bold text-xl tracking-tight text-brand-black">APPEARICH</h1>
             <p class="text-[10px] font-bold tracking-widest text-brand-gold uppercase">Track Your Money. Build Your Business. See Your Growth.</p>
           </div>
         </div>
         <div class="flex items-center space-x-3">
-          <button onclick="handleLogout()" title="Log Out" class="w-10 h-10 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center font-bold text-xs text-brand-black hover:bg-gray-100 transition">
-            LOGOUT
+          <button onclick="openModal('addTransactionModal')" class="hidden sm:flex items-center space-x-2 bg-brand-black text-white px-4 py-2.5 rounded-xl font-medium text-sm hover:bg-gray-800 transition shadow-sm">
+            <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            <span>+ Expense</span>
+          </button>
+          <button id="user-avatar-btn" onclick="handleLogout()" title="Log Out" class="w-10 h-10 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center font-bold text-xs text-brand-black hover:bg-gray-100 transition">
+            TZ
           </button>
         </div>
       </div>
     </header>
-
     <!-- MAIN CONTAINER -->
     <main class="max-w-6xl mx-auto px-4 lg:px-8 pt-6 space-y-8">
-      <!-- HERO BANNER -->
-      <div id="hero-section" class="relative rounded-3xl overflow-hidden bg-brand-black text-white shadow-2xl p-6 lg:p-10 min-h-[220px] flex items-center">
+      
+      <!-- REAL IMAGE HERO SECTION WITH CUSTOM UPLOAD -->
+      <div id="hero-section" class="relative rounded-3xl overflow-hidden bg-brand-black text-white shadow-2xl p-6 lg:p-10 min-h-[260px] flex items-center">
+        <div id="hero-bg-img" class="absolute inset-0 bg-cover bg-center pointer-events-none transition-all duration-300" style="background-image: url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1600&auto=format&fit=crop');"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-brand-black via-brand-black/80 to-transparent"></div>
+        
         <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 w-full">
           <div class="space-y-2 max-w-lg">
             <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-gold/20 text-brand-gold text-xs font-bold tracking-wider">
-              <span>APPEARICH FINANCIAL CENTER</span>
+              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              <span>APPEARICH FINANCE</span>
             </div>
-            <h2 id="welcome-greeting" class="font-display font-extrabold text-3xl lg:text-4xl tracking-tight">Welcome</h2>
-            <p class="text-xs lg:text-sm text-gray-300">Synchronized Cloud Accounting with Row Level Security across all devices.</p>
+            <h2 id="welcome-greeting" class="font-display font-extrabold text-3xl lg:text-4xl tracking-tight">Welcome, User</h2>
+            <p class="text-xs lg:text-sm text-gray-300">Your complete wealth ecosystem at a glance. Intelligent automated 10% GOD allocation and robust multi-account management.</p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto items-stretch sm:items-center">
+            <input type="file" id="hero-upload-input" accept="image/*" class="hidden" onchange="handleHeroUpload(event)">
+            <button onclick="document.getElementById('hero-upload-input').click()" class="px-4 py-3 rounded-xl bg-white/20 hover:bg-white/30 text-white font-bold text-xs uppercase tracking-wider transition border border-white/20 text-center flex items-center justify-center space-x-2">
+              <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+              <span>Change Hero Image</span>
+            </button>
+            <button onclick="switchTab('budget')" class="px-5 py-3 rounded-xl bg-brand-gold text-brand-black font-bold text-xs uppercase tracking-wider hover:bg-yellow-400 transition shadow-gold-glow text-center">
+              Budget
+            </button>
+            <button onclick="switchTab('progress')" class="px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider transition border border-white/10 text-center">
+              Growth
+            </button>
           </div>
         </div>
       </div>
-
-      <!-- MAIN NAVIGATION TABS -->
+      <!-- VIEW TABS NAVIGATION SWITCHER -->
       <div class="flex items-center space-x-2 border-b border-gray-200 overflow-x-auto no-scrollbar pb-2">
-        <button id="nav-sales" onclick="switchTab('sales')" class="nav-tab active px-5 py-2.5 rounded-xl text-sm font-semibold transition flex items-center space-x-2 bg-brand-black text-white shadow-sm flex-shrink-0">
-          <img src="images/appearich-logo1.png" class="w-4 h-4 object-contain" alt="">
-          <span>Sales Transactions</span>
+        <button id="nav-dashboard" onclick="switchTab('dashboard')" class="nav-tab active px-5 py-2.5 rounded-xl text-sm font-semibold transition flex items-center space-x-2 bg-brand-black text-white shadow-sm flex-shrink-0">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+          <span>Home</span>
+        </button>
+        <button id="nav-income" onclick="switchTab('income')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <span>Income & GOD</span>
+        </button>
+        <button id="nav-budget" onclick="switchTab('budget')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" /></svg>
+          <span>Budget</span>
+        </button>
+        <button id="nav-daily-expenses" onclick="switchTab('daily-expenses')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
+          <span>Daily Expenses</span>
+        </button>
+        <button id="nav-investment" onclick="switchTab('investment')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+          <span>Investment</span>
+        </button>
+        <button id="nav-appearich" onclick="switchTab('appearich')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+          <span>Appearich</span>
+        </button>
+        <button id="nav-accounts" onclick="switchTab('accounts')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+          <span>Accounts</span>
+        </button>
+        <button id="nav-loans" onclick="switchTab('loans')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+          <span>Loans</span>
+        </button>
+        <button id="nav-progress" onclick="switchTab('progress')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+          <span>Progress</span>
         </button>
       </div>
-
-      <!-- TAB: SALES TRANSACTIONS -->
-      <div id="tab-sales" class="tab-content space-y-8">
-        <!-- CONTROLS & SETTINGS BAR -->
-        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-6">
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100 pb-4">
-            <div>
-              <h3 class="font-bold text-lg text-brand-black">Accounting Settings</h3>
-              <p class="text-xs text-brand-muted">Set starting point for accounting profit without removing historical records.</p>
-            </div>
-            <div class="flex items-center space-x-3">
-              <label class="text-xs font-bold text-brand-black uppercase">Accounting Profit Start Point:</label>
-              <input type="month" id="profit-start-date-picker" onchange="updateProfitStartPoint(this.value)" class="px-3 py-2 rounded-xl border border-gray-200 text-xs font-bold bg-white text-brand-black shadow-sm">
-            </div>
+      <!-- ==================== TAB 1: HOME DASHBOARD ==================== -->
+      <div id="tab-dashboard" class="tab-content space-y-8">
+        
+        <!-- HOME DASHBOARD COMPACT CARDS -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="font-bold text-base text-brand-black">Your Money At A Glance</h3>
+            <span class="text-xs text-brand-muted">Real-time calculations</span>
           </div>
-
-          <!-- ACTION BUTTONS -->
-          <div class="flex flex-wrap items-center justify-between gap-4">
-            <div class="flex flex-wrap items-center gap-2">
-              <button onclick="openModal('importExcelModal')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl font-medium text-xs flex items-center space-x-1.5 transition shadow-sm">
-                <span>Import Excel Sales</span>
-              </button>
-              <button onclick="openModal('addSaleModal')" class="bg-brand-black text-white px-4 py-2.5 rounded-xl font-medium text-xs flex items-center space-x-1.5 shadow-sm hover:bg-gray-800 transition">
-                <span>+ Add New Sale</span>
-              </button>
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Total Income -->
+            <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between">
+              <div class="flex items-center justify-between text-brand-muted">
+                <span class="text-xs font-semibold uppercase tracking-wider">Total Income</span>
+                <svg class="w-4 h-4 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              </div>
+              <div class="mt-4">
+                <p id="dash-total-income" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-black">0 Sh</p>
+              </div>
             </div>
-            <div id="bulk-delete-container" class="hidden">
-              <button onclick="deleteSelectedSales()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 rounded-xl font-medium text-xs flex items-center space-x-1.5 transition shadow-sm">
-                <span>Delete Selected (<span id="selected-count">0</span>)</span>
-              </button>
+            <!-- GOD 10% -->
+            <div class="p-5 rounded-2xl bg-brand-black text-white shadow-premium relative overflow-hidden flex flex-col justify-between">
+              <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-brand-gold/10 rounded-full blur-xl pointer-events-none"></div>
+              <div class="flex items-center justify-between text-brand-gold">
+                <span class="text-xs font-semibold uppercase tracking-wider">GOD — 10%</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>
+              </div>
+              <div class="mt-4">
+                <p id="dash-god-amount" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-gold">0 Sh</p>
+              </div>
+            </div>
+            <!-- Total Money (Liquid Accounts) -->
+            <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between">
+              <div class="flex items-center justify-between text-brand-muted">
+                <span class="text-xs font-semibold uppercase tracking-wider">Total Money</span>
+                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+              </div>
+              <div class="mt-4">
+                <p id="dash-total-money" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-black">0 Sh</p>
+              </div>
+            </div>
+            <!-- Remaining Budget -->
+            <div class="p-5 rounded-2xl bg-white border border-brand-black/10 shadow-premium flex flex-col justify-between">
+              <div class="flex items-center justify-between text-brand-muted">
+                <span class="text-xs font-semibold uppercase tracking-wider text-brand-black">Remaining</span>
+                <svg class="w-4 h-4 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              </div>
+              <div class="mt-4">
+                <p id="dash-remaining-budget" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-black">0 Sh</p>
+              </div>
             </div>
           </div>
         </div>
-
-        <!-- PROFIT SUMMARY METRICS -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium">
-            <p class="text-xs font-semibold text-brand-muted uppercase">Calculated Accounting Profit</p>
-            <p id="calculated-profit-display" class="font-display text-2xl font-bold text-emerald-600 mt-2">0 Sh</p>
-            <p id="profit-start-label" class="text-[10px] text-brand-muted mt-1">From selected start point</p>
+        <!-- REORGANIZED GRID QUICK ACTIONS BAR -->
+        <div class="p-5 rounded-3xl bg-brand-surface border border-gray-200 shadow-sm space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-brand-black">Quick Actions</span>
+            <span class="text-[11px] text-brand-muted">Most-Used Tools</span>
           </div>
-          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium">
-            <p class="text-xs font-semibold text-brand-muted uppercase">Total Historical Sales</p>
-            <p id="total-historical-sales-count" class="font-display text-2xl font-bold text-brand-black mt-2">0 Records</p>
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+            <button onclick="openModal('addIncomeModal')" class="p-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-2xl shadow-sm transition text-left flex items-center space-x-3 group">
+              <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition flex-shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+              </div>
+              <div>
+                <p class="text-xs font-bold text-brand-black uppercase">Income</p>
+                <p class="text-[10px] text-brand-muted">Add Stream</p>
+              </div>
+            </button>
+            
+            <button onclick="openModal('addSaleModal')" class="p-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-2xl shadow-sm transition text-left flex items-center space-x-3 group">
+              <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition flex-shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+              </div>
+              <div>
+                <p class="text-xs font-bold text-brand-black uppercase">Sale</p>
+                <p class="text-[10px] text-brand-muted">Record Business</p>
+              </div>
+            </button>
+            <button onclick="openModal('addTransactionModal')" class="p-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-2xl shadow-sm transition text-left flex items-center space-x-3 group">
+              <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition flex-shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              </div>
+              <div>
+                <p class="text-xs font-bold text-brand-black uppercase">Expense</p>
+                <p class="text-[10px] text-brand-muted">Track Outflow</p>
+              </div>
+            </button>
+            <button onclick="openModal('transferModal')" class="p-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-2xl shadow-sm transition text-left flex items-center space-x-3 group">
+              <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition flex-shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
+              </div>
+              <div>
+                <p class="text-xs font-bold text-brand-black uppercase">Transfer</p>
+                <p class="text-[10px] text-brand-muted">Move Money</p>
+              </div>
+            </button>
+            <button onclick="openModal('addLoanModal')" class="p-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-2xl shadow-sm transition text-left flex items-center space-x-3 group">
+              <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition flex-shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+              </div>
+              <div>
+                <p class="text-xs font-bold text-brand-black uppercase">Loan</p>
+                <p class="text-[10px] text-brand-muted">Record Debt</p>
+              </div>
+            </button>
+            <button onclick="switchTab('investment')" class="p-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-2xl shadow-sm transition text-left flex items-center space-x-3 group">
+              <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition flex-shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+              </div>
+              <div>
+                <p class="text-xs font-bold text-brand-black uppercase">Invest</p>
+                <p class="text-[10px] text-brand-muted">Portfolio</p>
+              </div>
+            </button>
+            <button onclick="switchTab('progress')" class="p-3 bg-brand-black hover:bg-gray-800 text-white rounded-2xl shadow-sm transition text-left flex items-center space-x-3 group col-span-2 sm:col-span-1">
+              <div class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-brand-gold flex-shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+              </div>
+              <div>
+                <p class="text-xs font-bold uppercase text-white">Progress</p>
+                <p class="text-[10px] text-brand-gold">Total Profits</p>
+              </div>
+            </button>
           </div>
-          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium">
-            <p class="text-xs font-semibold text-brand-muted uppercase">Imported Documents</p>
-            <div id="imported-documents-list" class="mt-2 space-y-1">
-              <span class="text-xs text-brand-muted">No documents imported yet</span>
+        </div>
+      </div>
+      <!-- ==================== TAB 2: INCOME & GOD ==================== -->
+      <div id="tab-income" class="tab-content hidden space-y-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="font-display font-bold text-2xl text-brand-black">Income & Tithe Tracking</h2>
+            <p class="text-xs text-brand-muted">Monthly income management with automatic 10% God Tithe allocation.</p>
+          </div>
+          <div class="flex items-center space-x-3">
+            <input type="month" id="income-month-picker" onchange="handleMonthChange(event)" class="px-3 py-2 rounded-xl border border-gray-200 text-xs font-bold bg-white text-brand-black shadow-sm">
+            <button onclick="openModal('addIncomeModal')" class="bg-brand-black text-white px-4 py-2.5 rounded-xl font-medium text-xs flex items-center space-x-1.5 shadow-sm hover:bg-gray-800 transition">
+              <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+              <span>+ Add Income</span>
+            </button>
+          </div>
+        </div>
+        <!-- GOD Tithe Banner -->
+        <div class="p-8 rounded-3xl bg-brand-black text-white shadow-premium relative overflow-hidden">
+          <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-brand-gold/20 rounded-full blur-3xl"></div>
+          <div class="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+            <div class="flex items-center space-x-6">
+              <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-gold/30 to-brand-black border border-brand-gold/40 flex items-center justify-center shadow-gold-glow flex-shrink-0 text-brand-gold">
+                <svg class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-dasharray="2 2" />
+                  <polygon points="12,3 15,9 21,12 15,15 12,21 9,15 3,12 9,9" fill="rgba(212, 175, 55, 0.2)" stroke="currentColor"/>
+                  <circle cx="12" cy="12" r="3" fill="currentColor"/>
+                </svg>
+              </div>
+              <div>
+                <span class="text-xs font-bold text-brand-gold tracking-widest uppercase">Automatic Allocation</span>
+                <h3 class="font-display font-bold text-3xl mt-1 text-white">GOD 10% TITHE</h3>
+                <p class="text-xs text-gray-400 mt-1">10% is automatically set aside from every income and sale recorded in this active month.</p>
+              </div>
+            </div>
+            <div class="text-right w-full md:w-auto border-t md:border-t-0 border-gray-800 pt-4 md:pt-0">
+              <p class="text-xs text-gray-400 font-medium">Selected Month Tithe</p>
+              <p id="income-god-total" class="font-display text-4xl font-extrabold text-brand-gold mt-1">0 Sh</p>
             </div>
           </div>
         </div>
-
-        <!-- SALES TRANSACTIONS TABLE -->
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 id="income-list-heading" class="font-bold text-lg text-brand-black">Income Records</h3>
+            <span id="income-month-label" class="text-xs font-bold text-brand-muted uppercase">Current Active Month</span>
+          </div>
+          <div id="income-list-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+      </div>
+      <!-- ==================== TAB 3: BUDGET ==================== -->
+      <div id="tab-budget" class="tab-content hidden space-y-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="font-display font-bold text-2xl text-brand-black">Budget Structure (90% Remaining)</h2>
+            <p class="text-xs text-brand-muted">Utilities, Investment, Expenses, and Other allocations.</p>
+          </div>
+          <button onclick="openModal('addCategoryModal')" class="bg-brand-black text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-sm hover:bg-gray-800 transition">
+            <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+            <span>+ Custom Category</span>
+          </button>
+        </div>
+        <!-- Pool summary -->
+        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col md:flex-row items-center justify-between gap-6">
+          <div>
+            <p class="text-xs font-bold text-brand-muted uppercase tracking-wider">Available Budget Pool (90%)</p>
+            <p id="budget-pool-total" class="font-display text-3xl font-bold text-brand-black mt-1">0 Sh</p>
+          </div>
+          <div class="w-full md:w-1/2 space-y-2">
+            <div class="flex justify-between text-xs font-semibold">
+              <span class="text-brand-muted">Allocated Percentage</span>
+              <span id="budget-allocated-percent">0%</span>
+            </div>
+            <div class="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
+              <div id="budget-allocated-bar" class="h-full bg-brand-black transition-all duration-500" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+        <div class="space-y-4">
+          <h3 class="font-bold text-lg text-brand-black">Primary Categories</h3>
+          <div id="budget-categories-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- UTILITIES EXPANDABLE CARD -->
+            <div class="rounded-3xl bg-white border border-gray-100 shadow-premium overflow-hidden transition-all duration-300 flex flex-col justify-between">
+              <div onclick="toggleUtilitiesAccordion()" class="p-6 flex items-center justify-between cursor-pointer hover:bg-gray-50/50 transition">
+                <div class="flex items-center space-x-4">
+                  <div class="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center text-brand-black">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                  </div>
+                  <div>
+                    <div class="flex items-center space-x-2">
+                      <h4 class="font-bold text-base text-brand-black">UTILITIES</h4>
+                      <span id="utilities-percent-badge" class="px-2.5 py-0.5 rounded-full bg-gray-100 text-brand-black text-[11px] font-bold">0%</span>
+                    </div>
+                    <p class="text-xs text-brand-muted mt-0.5">Internet, Umeme, Taka, Transport</p>
+                  </div>
+                </div>
+                <div class="flex items-center space-x-3">
+                  <svg id="utilities-chevron" class="w-6 h-6 text-brand-black transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                </div>
+              </div>
+              <div class="px-6 pb-6 pt-0 space-y-3">
+                <div>
+                  <label class="block text-xs font-bold text-brand-muted uppercase mb-1">Target Amount (Sh)</label>
+                  <input type="number" id="cat-amount-cat-utilities" oninput="handleCategoryAmountInput('cat-utilities', this.value)" placeholder="Enter amount" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm font-bold text-brand-black">
+                </div>
+                <div class="flex justify-between text-xs pt-2 border-t border-gray-100">
+                  <span id="utilities-spent-summary" class="text-brand-muted">Spent: 0 Sh</span>
+                  <span id="utilities-remaining-summary" class="font-bold text-emerald-600">Remaining: 0 Sh</span>
+                </div>
+              </div>
+              <!-- Accordion Content -->
+              <div id="utilities-accordion" class="accordion-content border-t border-gray-100 bg-brand-surface p-6 space-y-4">
+                <p class="text-xs font-semibold text-brand-muted uppercase tracking-wider">Subcategory Breakdown</p>
+                <div id="utilities-subcategories-list" class="grid grid-cols-1 gap-4"></div>
+              </div>
+            </div>
+            <!-- OTHER CATEGORIES Dynamic Container -->
+            <div id="main-categories-list" class="contents"></div>
+          </div>
+        </div>
+      </div>
+      <!-- ==================== TAB 3.5: DAILY EXPENSES ==================== -->
+      <div id="tab-daily-expenses" class="tab-content hidden space-y-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="font-display font-bold text-2xl text-brand-black">Daily Expense Tracking</h2>
+            <p class="text-xs text-brand-muted">Record expenses, organize by month, and monitor spending against budget limits.</p>
+          </div>
+          <div class="flex items-center space-x-3">
+            <input type="month" id="daily-expense-month-picker" onchange="handleExpenseMonthChange(event)" class="px-3 py-2 rounded-xl border border-gray-200 text-xs font-bold bg-white text-brand-black shadow-sm">
+            <button onclick="openModal('addTransactionModal')" class="bg-brand-black text-white px-4 py-2.5 rounded-xl font-medium text-xs flex items-center space-x-1.5 shadow-sm hover:bg-gray-800 transition">
+              <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+              <span>+ Record Expense</span>
+            </button>
+          </div>
+        </div>
+        <!-- Budget Comparison Status Summary -->
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="font-bold text-lg text-brand-black">Budget vs. Actual Spending</h3>
+            <span id="daily-expense-month-label" class="text-xs font-bold text-brand-muted uppercase">Current Selected Month</span>
+          </div>
+          <div id="category-budget-comparison-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </div>
+        <!-- Daily Expense Records Table -->
         <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
           <div class="flex items-center justify-between border-b border-gray-100 pb-4">
-            <h3 class="font-bold text-base text-brand-black">Sales Transactions Log</h3>
-            <span id="sales-record-count" class="text-xs font-bold text-brand-muted">0 Entries</span>
+            <h3 class="font-bold text-base text-brand-black">Expense Log</h3>
+            <span id="daily-expense-log-count" class="text-xs text-brand-muted">0 Expenses Recorded</span>
           </div>
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
               <thead>
                 <tr class="border-b border-gray-100 text-brand-muted font-semibold uppercase">
-                  <th class="pb-3 pr-2"><input type="checkbox" id="select-all-sales" onchange="toggleSelectAllSales(this.checked)"></th>
-                  <th class="pb-3">Day / Month</th>
-                  <th class="pb-3">Perfume</th>
-                  <th class="pb-3">Ml</th>
-                  <th class="pb-3">Qty</th>
-                  <th class="pb-3">Amount</th>
-                  <th class="pb-3">Sale</th>
-                  <th class="pb-3">Status</th>
-                  <th class="pb-3">Profit</th>
-                  <th class="pb-3">Customer</th>
-                  <th class="pb-3">Expected</th>
-                  <th class="pb-3 text-right">Actions</th>
+                  <th class="pb-3">Date</th>
+                  <th class="pb-3">Description</th>
+                  <th class="pb-3">Category</th>
+                  <th class="pb-3">Account</th>
+                  <th class="pb-3 text-right">Amount</th>
                 </tr>
               </thead>
-              <tbody id="sales-transactions-table-body" class="divide-y divide-gray-100 font-medium"></tbody>
+              <tbody id="daily-expense-table-body" class="divide-y divide-gray-100 font-medium"></tbody>
             </table>
           </div>
         </div>
       </div>
-    </main>
-  </div>
-
-  <!-- MODALS -->
-
-  <!-- ADD / EDIT SALE MODAL -->
-  <div id="addSaleModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-lg w-full space-y-4 shadow-2xl border border-gray-100 max-h-[90vh] overflow-y-auto">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 id="sale-modal-title" class="font-bold text-lg text-brand-black">Record Sales Transaction</h3>
-        <button onclick="closeModal('addSaleModal')" class="text-gray-400 hover:text-black">&times;</button>
+      <!-- ==================== TAB 4: INVESTMENT ==================== -->
+      <div id="tab-investment" class="tab-content hidden space-y-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="font-display font-bold text-2xl text-brand-black">Investment Portfolio</h2>
+            <p class="text-xs text-brand-muted">Track principal capital additions and valuation growth separately.</p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button onclick="openModal('addInvestmentModal')" class="bg-gray-100 text-brand-black hover:bg-gray-200 px-4 py-2.5 rounded-xl font-medium text-sm transition">
+              + Add Capital
+            </button>
+            <button onclick="openModal('updateInvestmentModal')" class="bg-brand-black text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-sm hover:bg-gray-800 transition">
+              <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+              <span>Update Value</span>
+            </button>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium">
+            <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">Total Invested</span>
+            <p id="inv-total-invested" class="font-display text-3xl font-extrabold text-brand-black mt-1">0 Sh</p>
+          </div>
+          <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium">
+            <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">Current Value</span>
+            <p id="inv-current-value" class="font-display text-3xl font-extrabold text-brand-black mt-1">0 Sh</p>
+          </div>
+          <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium">
+            <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">Growth / Gain</span>
+            <p id="inv-gain-loss" class="font-display text-3xl font-extrabold text-emerald-600 mt-1">+0 Sh</p>
+          </div>
+          <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium">
+            <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">Return %</span>
+            <p id="inv-percentage-return" class="font-display text-3xl font-extrabold text-emerald-600 mt-1">+0.00%</p>
+          </div>
+        </div>
+        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
+          <h3 class="font-bold text-base text-brand-black">Investment History Log</h3>
+          <div id="investment-history-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </div>
       </div>
-      <form onsubmit="handleSaveSale(event)" class="space-y-3">
-        <input type="hidden" id="sale-edit-id">
-        <div class="grid grid-cols-2 gap-3">
-          <div><label class="block text-xs font-bold uppercase mb-1">Day / Month / Year</label><input id="form-sale-day" type="text" required placeholder="e.g. May or May 2026" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-          <div><label class="block text-xs font-bold uppercase mb-1">Perfume Name</label><input id="form-sale-perfume" type="text" required placeholder="e.g. Aqua Di Gio" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+      <!-- ==================== TAB 5: APPEARICH BUSINESS ==================== -->
+      <div id="tab-appearich" class="tab-content hidden space-y-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="font-display font-bold text-2xl text-brand-black">Appearich Business System</h2>
+            <p class="text-xs text-brand-muted">Dedicated business sales tracking and payment status management.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button onclick="openModal('importExcelModal')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-1.5 transition shadow-sm">
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+              <span>Import Excel Sales</span>
+            </button>
+            <button onclick="openModal('manageExcelDocsModal')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-1.5 transition shadow-sm">
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+              <span>Manage Imported Docs</span>
+            </button>
+            <button onclick="openModal('addBusinessModal')" class="bg-gray-100 text-brand-black hover:bg-gray-200 px-4 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-1.5 transition">
+              <svg class="w-4 h-4 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+              <span>+ Add Business</span>
+            </button>
+            <button onclick="openModal('addSaleModal')" class="bg-brand-black text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-sm hover:bg-gray-800 transition">
+              <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+              <span>+ ADD SALE</span>
+            </button>
+          </div>
         </div>
-        <div class="grid grid-cols-3 gap-3">
-          <div><label class="block text-xs font-bold uppercase mb-1">Ml</label><input id="form-sale-ml" type="number" placeholder="30" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-          <div><label class="block text-xs font-bold uppercase mb-1">Quantity</label><input id="form-sale-quantity" type="number" value="1" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-          <div><label class="block text-xs font-bold uppercase mb-1">Amount</label><input id="form-sale-amount" type="number" placeholder="15000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+
+        <!-- ACCOUNTING PROFIT START POINT SETTING BAR -->
+        <div class="p-4 rounded-2xl bg-brand-surface border border-gray-200 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-brand-gold/10 border border-brand-gold/30 flex items-center justify-center text-brand-gold flex-shrink-0">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+            </div>
+            <div>
+              <p class="text-xs font-bold uppercase text-brand-black">Accounting Profit Start Point</p>
+              <p class="text-[11px] text-brand-muted">Only transactions from this date onward are calculated in total profits. Historical records are preserved.</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2 w-full md:w-auto">
+            <input type="month" id="accounting-start-picker" onchange="handleAccountingStartChange(event)" class="px-3 py-2 rounded-xl border border-gray-200 text-xs font-bold bg-white text-brand-black shadow-sm">
+            <button onclick="clearAccountingStartPoint()" class="px-3 py-2 text-xs font-bold text-gray-500 hover:text-red-600 transition">Reset All Time</button>
+          </div>
         </div>
-        <div class="grid grid-cols-3 gap-3">
-          <div><label class="block text-xs font-bold uppercase mb-1">Sale Price</label><input id="form-sale-price" type="number" placeholder="25000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-          <div><label class="block text-xs font-bold uppercase mb-1">Status</label><input id="form-sale-status" type="text" value="SOLD" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-          <div><label class="block text-xs font-bold uppercase mb-1">Profit</label><input id="form-sale-profit" type="number" placeholder="10000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+
+        <div id="business-types-bar" class="flex items-center space-x-2 border-b border-gray-100 pb-3 overflow-x-auto no-scrollbar"></div>
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
+          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium">
+            <p class="text-xs font-semibold text-brand-muted">TODAY'S RECEIVED</p>
+            <p id="app-today-sales" class="font-display text-2xl font-bold text-brand-black mt-2">0 Sh</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium">
+            <p class="text-xs font-semibold text-brand-muted">TODAY'S PROFIT</p>
+            <p id="app-today-profit" class="font-display text-2xl font-bold text-emerald-600 mt-2">0 Sh</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium">
+            <p class="text-xs font-semibold text-brand-muted">THIS MONTH REVENUE</p>
+            <p id="app-month-revenue" class="font-display text-2xl font-bold text-brand-black mt-2">0 Sh</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-white border border-red-200 shadow-premium">
+            <p class="text-xs font-semibold text-red-500 flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-red-500 inline-block animate-pulse"></span>
+              OUTSTANDING
+            </p>
+            <p id="app-total-outstanding" class="font-display text-2xl font-bold text-red-600 mt-2">0 Sh</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-brand-black text-white shadow-gold-glow">
+            <p class="text-xs font-semibold text-brand-gold">TOTAL PROFIT</p>
+            <p id="app-total-profit" class="font-display text-2xl font-bold text-brand-gold mt-2">0 Sh</p>
+          </div>
         </div>
-        <div class="grid grid-cols-2 gap-3">
-          <div><label class="block text-xs font-bold uppercase mb-1">Customer / Buyer</label><input id="form-sale-customer" type="text" placeholder="Customer Name" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-          <div><label class="block text-xs font-bold uppercase mb-1">Expected</label><input id="form-sale-expected" type="number" placeholder="Expected Value" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-4">
+            <div class="flex space-x-2">
+              <button onclick="switchAppearichPeriod('day')" id="app-period-day" class="app-period-btn active px-4 py-1.5 rounded-lg text-xs font-bold bg-brand-black text-white">DAY</button>
+              <button onclick="switchAppearichPeriod('week')" id="app-period-week" class="app-period-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-brand-muted hover:text-brand-black">WEEK</button>
+              <button onclick="switchAppearichPeriod('month')" id="app-period-month" class="app-period-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-brand-muted hover:text-brand-black">MONTH</button>
+              <button onclick="switchAppearichPeriod('year')" id="app-period-year" class="app-period-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-brand-muted hover:text-brand-black">YEAR</button>
+            </div>
+            <span id="active-business-view-label" class="text-xs font-bold text-emerald-600">Active Business View: Appearich Main</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+            <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100"><p class="text-[10px] text-brand-muted uppercase font-bold">Products Sold</p><p id="app-period-sold" class="font-display font-bold text-xl text-brand-black mt-1">0</p></div>
+            <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100"><p class="text-[10px] text-brand-muted uppercase font-bold">Total Revenue</p><p id="app-period-revenue" class="font-display font-bold text-xl text-brand-black mt-1">0 Sh</p></div>
+            <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100"><p class="text-[10px] text-brand-muted uppercase font-bold">Buying Cost</p><p id="app-period-cost" class="font-display font-bold text-xl text-brand-black mt-1">0 Sh</p></div>
+            <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100"><p class="text-[10px] text-brand-muted uppercase font-bold">Profit Margin</p><p id="app-period-margin" class="font-display font-bold text-xl text-emerald-600 mt-1">0%</p></div>
+          </div>
         </div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Save Record</button>
+        <!-- Sales Transactions Log with Batch Controls -->
+        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-4">
+            <h3 class="font-bold text-base text-brand-black">Sales Transactions Log</h3>
+            <div id="batch-delete-controls" class="hidden flex items-center space-x-3">
+              <span id="selected-count-label" class="text-xs font-bold text-brand-muted">0 Selected</span>
+              <button onclick="executeBatchDelete()" class="px-3 py-1.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs transition flex items-center space-x-1">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                <span>Delete Selected</span>
+              </button>
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="border-b border-gray-100 text-brand-muted font-semibold uppercase">
+                  <th class="pb-3 px-2"><input type="checkbox" id="select-all-sales" onchange="toggleSelectAllSales(this)" class="rounded border-gray-300"></th>
+                  <th class="pb-3">Date</th>
+                  <th class="pb-3">Business</th>
+                  <th class="pb-3">Product</th>
+                  <th class="pb-3">Customer</th>
+                  <th class="pb-3">Total Value</th>
+                  <th class="pb-3">Amount Paid</th>
+                  <th class="pb-3">Unpaid Balance</th>
+                  <th class="pb-3">Status</th>
+                  <th class="pb-3 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="appearich-sales-table" class="divide-y divide-gray-100 font-medium"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- ==================== TAB 6: ACCOUNTS ==================== -->
+      <div id="tab-accounts" class="tab-content hidden space-y-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="font-display font-bold text-2xl text-brand-black">Accounts — Money Distribution</h2>
+            <p class="text-xs text-brand-muted">CRDB, SELCOM, MPESA, LIPA NAMBA, and CASH liquid asset distribution.</p>
+          </div>
+          <div class="flex space-x-2">
+            <button onclick="openModal('addMoneyModal')" class="bg-gray-100 text-brand-black hover:bg-gray-200 px-4 py-2.5 rounded-xl font-medium text-sm transition">
+              + Add Money
+            </button>
+            <button onclick="openModal('transferModal')" class="bg-brand-black text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-sm hover:bg-gray-800 transition">
+              <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
+              <span>Transfer Funds</span>
+            </button>
+          </div>
+        </div>
+        <div class="p-8 rounded-3xl bg-brand-black text-white shadow-premium flex flex-col sm:flex-row items-center justify-between gap-6 border border-brand-black">
+          <div>
+            <span class="text-xs font-bold text-brand-gold uppercase tracking-widest">TOTAL LIQUID MONEY</span>
+            <p id="accounts-total-money" class="font-display text-4xl font-extrabold text-white mt-1">0 Sh</p>
+          </div>
+          <span class="px-3 py-1 rounded-full bg-brand-gold/20 text-brand-gold text-xs font-bold">5 Active Accounts</span>
+        </div>
+        <div id="account-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+      </div>
+      <!-- ==================== TAB 7: LOANS MANAGEMENT ==================== -->
+      <div id="tab-loans" class="tab-content hidden space-y-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="font-display font-bold text-2xl text-brand-black">Money Borrowed / Loans Given</h2>
+            <p class="text-xs text-brand-muted">Track funds lent to people and manage outstanding debt balances easily.</p>
+          </div>
+          <button onclick="openModal('addLoanModal')" class="bg-brand-black text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-sm hover:bg-gray-800 transition">
+            <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+            <span>+ Record Loan</span>
+          </button>
+        </div>
+        <div class="p-8 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-brand-muted">Total Outstanding Debt Owed To You</span>
+            <p id="loan-total-owed" class="font-display text-3xl lg:text-4xl font-extrabold text-brand-black mt-1">0 Sh</p>
+          </div>
+          <span class="px-3 py-1 rounded-full bg-yellow-50 text-yellow-700 border border-yellow-200 text-xs font-bold">Active Records</span>
+        </div>
+        <div class="space-y-4">
+          <h3 class="font-bold text-lg text-brand-black">Active Loans</h3>
+          <div id="loan-cards-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+      </div>
+      <!-- ==================== TAB 8: PROGRESS ==================== -->
+      <div id="tab-progress" class="tab-content hidden space-y-8">
+        <div>
+          <h2 class="font-display font-bold text-2xl text-brand-black">Overall Profit Progress</h2>
+          <p class="text-xs text-brand-muted">Aggregated combined total profit across all saved historical months.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="p-8 rounded-3xl bg-brand-black text-white shadow-premium flex flex-col justify-between space-y-4 relative overflow-hidden">
+            <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-brand-gold/10 rounded-full blur-xl pointer-events-none"></div>
+            <div>
+              <span class="text-xs font-bold text-brand-gold uppercase tracking-wider">COMBINED OVERALL PROFIT</span>
+              <p id="progress-overall-profit" class="font-display text-4xl font-extrabold text-white mt-2">0 Sh</p>
+            </div>
+            <p class="text-xs text-gray-400">Summed total net profit from all stored months to date.</p>
+          </div>
+          <div class="p-8 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4">
+            <div>
+              <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">ACTIVE MONTH PROFIT</span>
+              <p id="progress-active-month-profit" class="font-display text-4xl font-extrabold text-emerald-600 mt-2">0 Sh</p>
+            </div>
+            <p id="progress-active-month-name" class="text-xs text-brand-muted font-semibold">Current Month Profit</p>
+          </div>
+        </div>
+        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
+          <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+            <h3 class="font-bold text-base text-brand-black">Monthly Profit Breakdown</h3>
+            <span class="text-xs font-bold text-brand-muted">Individual Monthly History</span>
+          </div>
+          <div id="progress-monthly-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </div>
+      </div>
+    </main>
+    <!-- SIMPLE BOTTOM NAVIGATION -->
+    <nav class="fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-t border-gray-200 px-4 py-2.5">
+      <div class="max-w-md mx-auto flex items-center justify-between">
+        <button onclick="switchTab('dashboard')" id="bnav-dashboard" class="bnav-btn flex flex-col items-center space-y-1 text-brand-black">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+          <span class="text-[10px] font-bold">Home</span>
+        </button>
+        <button onclick="switchTab('budget')" id="bnav-budget" class="bnav-btn flex flex-col items-center space-y-1 text-brand-muted hover:text-brand-black">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" /></svg>
+          <span class="text-[10px] font-bold">Budget</span>
+        </button>
+        <button onclick="openModal('addTransactionModal')" class="flex flex-col items-center justify-center w-11 h-11 rounded-2xl bg-brand-black text-white shadow-gold-glow -mt-5 hover:scale-105 transition">
+          <svg class="w-6 h-6 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+        </button>
+        <button onclick="switchTab('accounts')" id="bnav-accounts" class="bnav-btn flex flex-col items-center space-y-1 text-brand-muted hover:text-brand-black">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+          <span class="text-[10px] font-bold">Accounts</span>
+        </button>
+        <button onclick="switchTab('progress')" id="bnav-progress" class="bnav-btn flex flex-col items-center space-y-1 text-brand-muted hover:text-brand-black">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+          <span class="text-[10px] font-bold">Progress</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+  <!-- ==================== MODALS ==================== -->
+  <div id="addIncomeModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-lg text-brand-black">Add Income Source</h3>
+        <button onclick="closeModal('addIncomeModal')" class="text-gray-400 hover:text-black">&times;</button>
+      </div>
+      <form onsubmit="handleAddIncome(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-brand-black uppercase mb-1">Source Name</label>
+          <input id="income-name-input" type="text" required placeholder="e.g. Consulting / Salary" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-brand-black uppercase mb-1">Amount (Sh)</label>
+          <input id="income-amount-input" type="number" required placeholder="500000" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm">
+        </div>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Save Income</button>
       </form>
     </div>
   </div>
-
-  <!-- EXCEL IMPORT MODAL -->
+  <div id="addSaleModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-lg w-full space-y-4 shadow-2xl border border-gray-100 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-lg text-brand-black">Record Sale</h3>
+        <button onclick="closeModal('addSaleModal')" class="text-gray-400 hover:text-black">&times;</button>
+      </div>
+      <form onsubmit="handleAddSale(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold uppercase mb-1">Business / Sales Type</label>
+          <select id="sale-business-type" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white font-medium"></select>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-bold uppercase mb-1">Date</label><input id="sale-date" type="date" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+          <div><label class="block text-xs font-bold uppercase mb-1">Quantity</label><input id="sale-qty" type="number" value="1" min="1" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        </div>
+        <div><label class="block text-xs font-bold uppercase mb-1">Product Name</label><input id="sale-product" type="text" required placeholder="Item Name" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        <div><label class="block text-xs font-bold uppercase mb-1">Customer Name</label><input id="sale-customer" type="text" required placeholder="Customer" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-bold uppercase mb-1">Buying Price (Sh)</label><input id="sale-buy-price" type="number" required placeholder="35000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+          <div><label class="block text-xs font-bold uppercase mb-1">Selling Price (Sh)</label><input id="sale-sell-price" type="number" required placeholder="55000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase mb-1">Payment Status</label>
+          <select id="sale-payment-status" onchange="toggleSalePartialInput()" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white font-medium">
+            <option value="FULL">Full Payment</option>
+            <option value="PARTIAL">Partial Payment</option>
+          </select>
+        </div>
+        <div id="sale-partial-container" class="hidden">
+          <label class="block text-xs font-bold uppercase mb-1 text-red-600">Amount Paid So Far (Sh)</label>
+          <input id="sale-paid-amount" type="number" placeholder="Enter amount paid" class="w-full px-3 py-2 rounded-xl border border-red-300 text-sm">
+        </div>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Record Sale</button>
+      </form>
+    </div>
+  </div>
+  <div id="addBusinessModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-lg text-brand-black">Add Appearich Business</h3>
+        <button onclick="closeModal('addBusinessModal')" class="text-gray-400 hover:text-black">&times;</button>
+      </div>
+      <form onsubmit="handleAddBusinessOption(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold uppercase mb-1">Business Name</label>
+          <input id="new-business-name-input" type="text" required placeholder="e.g. Perfumes, Clothing, Electronics" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm">
+        </div>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Add Business</button>
+      </form>
+    </div>
+  </div>
+  <div id="updateSalePaymentModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-lg text-brand-black">Update Sale Payment Status</h3>
+        <button onclick="closeModal('updateSalePaymentModal')" class="text-gray-400 hover:text-black">&times;</button>
+      </div>
+      <form onsubmit="handleUpdateSalePayment(event)" class="space-y-4">
+        <input type="hidden" id="edit-sale-id">
+        <div>
+          <label class="block text-xs font-bold uppercase mb-1">Payment Status</label>
+          <select id="edit-sale-status" onchange="toggleEditSalePartialInput()" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white font-medium">
+            <option value="FULL">Full Payment</option>
+            <option value="PARTIAL">Partial Payment</option>
+          </select>
+        </div>
+        <div id="edit-sale-paid-container">
+          <label class="block text-xs font-bold uppercase mb-1">Total Amount Paid So Far (Sh)</label>
+          <input id="edit-sale-paid-amount" type="number" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm">
+        </div>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Save Payment Changes</button>
+      </form>
+    </div>
+  </div>
+  <div id="addLoanModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-lg text-brand-black">Record Loan Given</h3>
+        <button onclick="closeModal('addLoanModal')" class="text-gray-400 hover:text-black">&times;</button>
+      </div>
+      <form onsubmit="handleAddLoan(event)" class="space-y-4">
+        <div><label class="block text-xs font-bold uppercase mb-1">Person's Name</label><input id="loan-borrower" type="text" required placeholder="e.g. John Doe" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-bold uppercase mb-1">Amount Borrowed (Sh)</label><input id="loan-amount" type="number" required placeholder="100000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+          <div><label class="block text-xs font-bold uppercase mb-1">Date</label><input id="loan-date" type="date" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        </div>
+        <div><label class="block text-xs font-bold uppercase mb-1">Amount Paid So Far (Sh)</label><input id="loan-paid" type="number" value="0" min="0" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        <div><label class="block text-xs font-bold uppercase mb-1">Optional Note / Purpose</label><input id="loan-note" type="text" placeholder="e.g. Emergency funds" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Save Loan Record</button>
+      </form>
+    </div>
+  </div>
+  <div id="updateLoanModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-lg text-brand-black">Update Loan Repayment</h3>
+        <button onclick="closeModal('updateLoanModal')" class="text-gray-400 hover:text-black">&times;</button>
+      </div>
+      <form onsubmit="handleUpdateLoan(event)" class="space-y-4">
+        <input type="hidden" id="edit-loan-id">
+        <div>
+          <label class="block text-xs font-bold uppercase mb-1">Total Amount Paid So Far (Sh)</label>
+          <input id="edit-loan-paid" type="number" min="0" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm">
+        </div>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Update Loan Balance</button>
+      </form>
+    </div>
+  </div>
+  <div id="addTransactionModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-lg text-brand-black">Add Expense Transaction</h3>
+        <button onclick="closeModal('addTransactionModal')" class="text-gray-400 hover:text-black">&times;</button>
+      </div>
+      <form onsubmit="handleAddTransaction(event)" class="space-y-4">
+        <div><label class="block text-xs font-bold uppercase mb-1">Description</label><input id="tx-name" type="text" required placeholder="e.g. Internet" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold uppercase mb-1">Category</label>
+            <select id="tx-category" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
+              <option value="Internet">Internet</option>
+              <option value="Umeme">Umeme</option>
+              <option value="Taka">Taka</option>
+              <option value="Transport">Transport</option>
+              <option value="Expenses">Expenses</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase mb-1">Account</label>
+            <select id="tx-account" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
+              <option value="CRDB">CRDB</option>
+              <option value="SELCOM">SELCOM</option>
+              <option value="MPESA">MPESA</option>
+              <option value="LIPA NAMBA">LIPA NAMBA</option>
+              <option value="CASH">CASH</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-bold uppercase mb-1">Amount (Sh)</label><input id="tx-amount" type="number" required placeholder="40000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+          <div><label class="block text-xs font-bold uppercase mb-1">Date</label><input id="tx-date" type="date" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        </div>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Execute Expense</button>
+      </form>
+    </div>
+  </div>
+  <div id="transferModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-lg text-brand-black">Transfer Between Accounts</h3>
+        <button onclick="closeModal('transferModal')" class="text-gray-400 hover:text-black">&times;</button>
+      </div>
+      <form onsubmit="handleTransfer(event)" class="space-y-4">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold uppercase mb-1">From</label>
+            <select id="tr-from" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
+              <option value="CRDB">CRDB</option><option value="SELCOM">SELCOM</option><option value="MPESA">MPESA</option><option value="LIPA NAMBA">LIPA NAMBA</option><option value="CASH">CASH</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase mb-1">To</label>
+            <select id="tr-to" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
+              <option value="MPESA">MPESA</option><option value="CRDB">CRDB</option><option value="SELCOM">SELCOM</option><option value="LIPA NAMBA">LIPA NAMBA</option><option value="CASH">CASH</option>
+            </select>
+          </div>
+        </div>
+        <div><label class="block text-xs font-bold uppercase mb-1">Amount (Sh)</label><input id="tr-amount" type="number" required placeholder="50000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Transfer Funds</button>
+      </form>
+    </div>
+  </div>
+  <div id="addMoneyModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-lg text-brand-black">Add Money to Account</h3>
+        <button onclick="closeModal('addMoneyModal')" class="text-gray-400 hover:text-black">&times;</button>
+      </div>
+      <form onsubmit="handleAddMoneyAccount(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold uppercase mb-1">Account</label>
+          <select id="am-account" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
+            <option value="CRDB">CRDB</option><option value="SELCOM">SELCOM</option><option value="MPESA">MPESA</option><option value="LIPA NAMBA">LIPA NAMBA</option><option value="CASH">CASH</option>
+          </select>
+        </div>
+        <div><label class="block text-xs font-bold uppercase mb-1">Amount (Sh)</label><input id="am-amount" type="number" required placeholder="100000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Deposit</button>
+      </form>
+    </div>
+  </div>
+  <div id="addInvestmentModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-lg text-brand-black">Add Investment Capital</h3>
+        <button onclick="closeModal('addInvestmentModal')" class="text-gray-400 hover:text-black">&times;</button>
+      </div>
+      <form onsubmit="handleAddInvestmentCapital(event)" class="space-y-4">
+        <div><label class="block text-xs font-bold uppercase mb-1">Additional Amount (Sh)</label><input id="inv-add-amount" type="number" required placeholder="100000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Add Capital</button>
+      </form>
+    </div>
+  </div>
+  <div id="updateInvestmentModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-lg text-brand-black">Update Investment Portfolio Value</h3>
+        <button onclick="closeModal('updateInvestmentModal')" class="text-gray-400 hover:text-black">&times;</button>
+      </div>
+      <form onsubmit="handleUpdateInvestmentValue(event)" class="space-y-4">
+        <div><label class="block text-xs font-bold uppercase mb-1">Current Total Value (Sh)</label><input id="inv-update-value" type="number" required placeholder="700000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Update Valuation</button>
+      </form>
+    </div>
+  </div>
+  <div id="addCategoryModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-lg text-brand-black">Add Custom Budget Category</h3>
+        <button onclick="closeModal('addCategoryModal')" class="text-gray-400 hover:text-black">&times;</button>
+      </div>
+      <form onsubmit="handleAddCategory(event)" class="space-y-4">
+        <div><label class="block text-xs font-bold uppercase mb-1">Category Name</label><input id="cat-name-input" type="text" required placeholder="e.g. Health" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm"></div>
+        <div><label class="block text-xs font-bold uppercase mb-1">Target Amount (Sh)</label><input id="cat-amount-input" type="number" required placeholder="50000" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm"></div>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Create Category</button>
+      </form>
+    </div>
+  </div>
+  
+  <!-- IMPORT EXCEL SALES MODAL -->
   <div id="importExcelModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-2xl w-full space-y-4 shadow-2xl border border-gray-100 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
@@ -313,59 +1053,107 @@
       <div class="space-y-4">
         <div>
           <label class="block text-xs font-bold uppercase mb-1 text-brand-muted">Select Sales Excel File</label>
-          <input type="file" id="excel-file-input" accept=".xlsx, .xls" onchange="previewExcelFile(event)" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-xs">
+          <input type="file" id="excel-file-input" accept=".xlsx, .xls" onchange="previewExcelFile(event)" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
         </div>
-        <div id="excel-preview-container" class="hidden space-y-2">
-          <p class="text-xs font-bold uppercase text-brand-black">Data Preview (<span id="excel-preview-count">0</span> records found)</p>
-          <div class="max-h-60 overflow-y-auto border border-gray-200 rounded-xl p-2 bg-gray-50">
-            <table class="w-full text-[10px] text-left">
-              <thead>
-                <tr class="border-b font-bold text-gray-600">
-                  <th class="p-1">DAY</th><th class="p-1">PERFUME</th><th class="p-1">Ml</th><th class="p-1">QTY</th><th class="p-1">AMOUNT</th><th class="p-1">SALE</th><th class="p-1">PROFIT</th><th class="p-1">CUSTOMER</th>
+        <div id="excel-preview-container" class="hidden space-y-3">
+          <p class="text-xs font-bold uppercase text-brand-black">Data Preview</p>
+          <div class="max-h-60 overflow-auto border border-gray-200 rounded-xl">
+            <table class="w-full text-left text-[11px]">
+              <thead class="bg-gray-50 border-b border-gray-200 text-brand-muted font-bold">
+                <tr>
+                  <th class="p-2">DAY</th>
+                  <th class="p-2">PERFUME</th>
+                  <th class="p-2">Ml</th>
+                  <th class="p-2">QTY</th>
+                  <th class="p-2">AMOUNT</th>
+                  <th class="p-2">SALE</th>
+                  <th class="p-2">STATUS</th>
+                  <th class="p-2">PROFIT</th>
+                  <th class="p-2">Customers</th>
+                  <th class="p-2">Expected</th>
                 </tr>
               </thead>
-              <tbody id="excel-preview-body"></tbody>
+              <tbody id="excel-preview-body" class="divide-y divide-gray-100"></tbody>
             </table>
           </div>
-          <button onclick="confirmExcelImport()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition text-sm">Confirm & Import Sales</button>
+          <button id="confirm-excel-import-btn" onclick="executeExcelImport()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition text-sm">
+            Confirm & Import Records
+          </button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- APPLICATION LOGIC -->
-  <script>
-    // 1. SUPABASE CLIENT INITIALIZATION
-    const SUPABASE_URL = "YOUR_SUPABASE_URL_HERE"; 
-    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY_HERE";
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  <!-- MANAGE IMPORTED EXCEL DOCS MODAL -->
+  <div id="manageExcelDocsModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-lg w-full space-y-4 shadow-2xl border border-gray-100">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-lg text-brand-black">Manage Imported Documents</h3>
+        <button onclick="closeModal('manageExcelDocsModal')" class="text-gray-400 hover:text-black">&times;</button>
+      </div>
+      <div id="imported-excel-docs-list" class="space-y-3 max-h-80 overflow-y-auto"></div>
+    </div>
+  </div>
 
-    // STATE MANAGEMENT
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // SUPABASE CONFIGURATION
+    const SUPABASE_URL = 'https://YOUR_SUPABASE_URL.supabase.co'; 
+    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY'; 
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // APP STATE
     let currentUser = null;
     let isSignUpMode = false;
-    let salesTransactions = [];
+    let activeTab = 'dashboard';
+    let activeMonth = new Date().toISOString().substring(0, 7);
+    let activeBusinessView = 'Appearich Main';
+    let appearichPeriod = 'day';
+    let pendingExcelData = [];
+    let currentFileName = '';
     let accountingProfitStartDate = null;
     let selectedSalesIds = new Set();
-    let parsedExcelData = [];
-    let importedDocuments = [];
+
+    let appData = {
+      incomes: [],
+      transactions: [],
+      budgets: {},
+      categories: [
+        { id: 'cat-utilities', name: 'UTILITIES', amount: 0, subcategories: ['Internet', 'Umeme', 'Taka', 'Transport'] },
+        { id: 'cat-expenses', name: 'Expenses', amount: 0 },
+        { id: 'cat-other', name: 'Other', amount: 0 }
+      ],
+      investments: { totalInvested: 0, currentValue: 0, history: [] },
+      accounts: [
+        { id: 'CRDB', name: 'CRDB', balance: 0 },
+        { id: 'SELCOM', name: 'SELCOM', balance: 0 },
+        { id: 'MPESA', name: 'MPESA', balance: 0 },
+        { id: 'LIPA NAMBA', name: 'LIPA NAMBA', balance: 0 },
+        { id: 'CASH', name: 'CASH', balance: 0 }
+      ],
+      loans: [],
+      businesses: ['Appearich Main']
+    };
+
+    let salesTransactions = [];
 
     // SEED HISTORICAL SALES DATA
-    const SEED_DATA = [
-      { day: 'May', perfume: 'Aqua Di Gio', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'KrecyKate', expected: null },
-      { day: 'May', perfume: 'Lacoste White', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'KamalaCareen', expected: null },
-      { day: 'May', perfume: 'Coconut Passion', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'AnethReggie', expected: null },
-      { day: 'May', perfume: 'Sugar Candy', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'RashidAlex', expected: null },
-      { day: 'May', perfume: 'Pink Chiffon', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'ShemejiInnocent', expected: null },
-      { day: 'May', perfume: 'La Nutt Dl Homme', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 20000, customers: 'CharlesBrian', expected: null },
-      { day: 'May', perfume: 'Cool Men', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'KrecyMil', expected: null },
-      { day: 'May', perfume: 'Strawberry', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'KrecyNyam', expected: null },
-      { day: 'May', perfume: 'Tag Sunset', ml: 50, quantity: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customers: 'AishaFelix', expected: null },
-      { day: 'May', perfume: 'Aqua Di Arman', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'RashidKate', expected: null },
-      { day: 'June', perfume: 'Pink Vanilla Coconut', ml: 100, quantity: 1, amount: 15000, sale: 55000, status: 'SOLD', profit: 20000, customers: 'AdzenoelaLutome', expected: null },
-      { day: 'June', perfume: 'Tag Sunset', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Niraelpost', expected: null },
-      { day: 'July', perfume: 'Strawberry', ml: 30, quantity: 3, amount: 15000, sale: 75000, status: 'SOLD', profit: 30000, customers: 'SistaAidan', expected: null },
-      { day: 'August', perfume: 'Aqua Di Gio', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'DannyChamson', expected: null },
-      { day: 'August', perfume: 'Baccart', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'SistaAnna', expected: null },
+    const SEED_SALES_DATA = [
+      { day: 'May', perfume: 'Aqua Di Gio', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Krecy', expected: 'Kate' },
+      { day: 'May', perfume: 'Lacoste White', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Kamala', expected: 'Careen' },
+      { day: 'May', perfume: 'Coconut Passion', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Aneth', expected: 'Reggie' },
+      { day: 'May', perfume: 'Sugar Candy', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Rashid', expected: 'Alex' },
+      { day: 'May', perfume: 'Pink Chiffon', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Shemeji', expected: 'Innocent' },
+      { day: 'May', perfume: 'La Nutt Dl Homme', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 20000, customers: 'Charles', expected: 'Brian' },
+      { day: 'May', perfume: 'Cool Men', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Krecy', expected: 'Mil' },
+      { day: 'May', perfume: 'Strawberry', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Krecy', expected: 'Nyam' },
+      { day: 'May', perfume: 'Tag Sunset', ml: 50, quantity: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customers: 'Aisha', expected: 'Felix' },
+      { day: 'May', perfume: 'Aqua Di Arman', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Rashid', expected: 'Kate' },
+      { day: 'June', perfume: 'Pink Vanilla Coconut', ml: 100, quantity: 1, amount: 15000, sale: 55000, status: 'SOLD', profit: 20000, customers: 'Adzenoela', expected: 'Lutome' },
+      { day: 'June', perfume: 'Tag Sunset', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Nirael', expected: 'post' },
+      { day: 'July', perfume: 'Strawberry', ml: 30, quantity: 3, amount: 15000, sale: 75000, status: 'SOLD', profit: 30000, customers: 'Sista', expected: 'Aidan' },
+      { day: 'August', perfume: 'Aqua Di Gio', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Danny', expected: 'Chamson' },
+      { day: 'August', perfume: 'Baccart', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Sista', expected: 'Anna' },
       { day: 'August', perfume: 'Strawberry', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Nirael', expected: null },
       { day: 'August', perfume: 'Savage Dior', ml: 30, quantity: 1, amount: 15000, sale: 20000, status: 'SOLD', profit: 5000, customers: 'Shine', expected: null },
       { day: 'October', perfume: 'Pink Shiffon', ml: 50, quantity: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customers: 'Sarah', expected: null },
@@ -395,7 +1183,7 @@
       { day: 'April 2026', perfume: 'Sugar Candy', ml: 50, quantity: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customers: 'Rashid', expected: null },
       { day: 'April 2026', perfume: 'Vanilla Eden Juice', ml: 50, quantity: 1, amount: 17500, sale: 25000, status: 'SOLD', profit: 7500, customers: 'Anne', expected: null },
       { day: 'April 2026', perfume: 'Invictus', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Krecy', expected: null },
-      { day: 'May 2026', perfume: '212 VIP', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: null, profit: 10000, customers: 'Malick', expected: null },
+      { day: 'May 2026', perfume: '212 VIP', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Malick', expected: null },
       { day: 'June 2026', perfume: 'Eden Juice & Strawberry', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Kareen', expected: null },
       { day: 'June 2026', perfume: '212 VIP', ml: 20, quantity: 1, amount: 10000, sale: 15000, status: 'SOLD', profit: 5000, customers: 'Lutome', expected: null },
       { day: 'June 2026', perfume: 'Invictus', ml: 20, quantity: 1, amount: 10000, sale: 15000, status: 'SOLD', profit: 5000, customers: 'Shedy', expected: null },
@@ -412,158 +1200,172 @@
       { day: 'August 2026', perfume: 'Invictus', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Evirce', expected: null }
     ];
 
-    // INITIALIZATION & SESSION HANDLER
+    // INITIALIZATION
     window.addEventListener('DOMContentLoaded', async () => {
-      setTimeout(() => {
-        document.getElementById('splash-screen').classList.add('hidden');
-      }, 1200);
+      // Set pickers
+      document.getElementById('income-month-picker').value = activeMonth;
+      document.getElementById('daily-expense-month-picker').value = activeMonth;
+      const today = new Date().toISOString().substring(0, 10);
+      document.getElementById('sale-date').value = today;
+      document.getElementById('tx-date').value = today;
+      document.getElementById('loan-date').value = today;
 
+      // Check Supabase Session
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
         currentUser = session.user;
-        showAppShell();
+        await initializeUserCloudData();
       } else {
         showAuthScreen();
       }
 
-      supabase.auth.onAuthStateChange((event, session) => {
-        if (session) {
-          currentUser = session.user;
-          showAppShell();
-        } else {
-          currentUser = null;
-          showAuthScreen();
-        }
-      });
+      // Hide Splash
+      setTimeout(() => {
+        const splash = document.getElementById('splash-screen');
+        if (splash) splash.style.display = 'none';
+      }, 800);
     });
 
-    // UI CONTROL FUNCTIONS
-    function showAuthScreen() {
-      document.getElementById('auth-container').classList.remove('hidden');
-      document.getElementById('auth-container').classList.add('flex');
-      document.getElementById('app-wrapper').classList.add('hidden');
-    }
-
-    function showAppShell() {
-      document.getElementById('auth-container').classList.add('hidden');
-      document.getElementById('auth-container').classList.remove('flex');
-      document.getElementById('app-wrapper').classList.remove('hidden');
-
-      const fullName = currentUser?.user_metadata?.full_name || 'User';
-      document.getElementById('welcome-greeting').innerText = `Welcome, ${fullName}`;
-
-      loadUserData();
-    }
-
+    // AUTH FUNCTIONS
     function toggleAuthMode() {
       isSignUpMode = !isSignUpMode;
       document.getElementById('name-field-container').classList.toggle('hidden', !isSignUpMode);
       document.getElementById('confirm-password-container').classList.toggle('hidden', !isSignUpMode);
-      document.getElementById('auth-submit-btn').innerText = isSignUpMode ? 'Sign Up' : 'Sign In';
-      document.getElementById('auth-toggle-btn').innerText = isSignUpMode ? 'Already have an account? Sign In' : 'Need an account? Sign Up';
+      document.getElementById('auth-submit-btn').textContent = isSignUpMode ? 'Create Account' : 'Sign In';
+      document.getElementById('auth-toggle-btn').textContent = isSignUpMode ? 'Already have an account? Sign In' : 'Need an account? Sign Up';
       document.getElementById('auth-error').classList.add('hidden');
     }
 
-    // AUTHENTICATION LOGIC
-    async function handleAuth(event) {
-      event.preventDefault();
+    async function handleAuth(e) {
+      e.preventDefault();
       const email = document.getElementById('auth-email').value;
       const password = document.getElementById('auth-password').value;
-      const errorElem = document.getElementById('auth-error');
-      errorElem.classList.add('hidden');
+      const errorEl = document.getElementById('auth-error');
+      errorEl.classList.add('hidden');
 
       if (isSignUpMode) {
-        const name = document.getElementById('auth-name').value;
         const confirmPassword = document.getElementById('auth-confirm-password').value;
+        const fullName = document.getElementById('auth-name').value.trim();
 
-        if (!name.trim()) {
-          errorElem.innerText = "Please enter your full name.";
-          errorElem.classList.remove('hidden');
+        if (password !== confirmPassword) {
+          errorEl.textContent = "Passwords do not match.";
+          errorEl.classList.remove('hidden');
           return;
         }
 
-        if (password !== confirmPassword) {
-          errorElem.innerText = "Passwords do not match!";
-          errorElem.classList.remove('hidden');
+        if (!fullName) {
+          errorEl.textContent = "Please enter your full name.";
+          errorEl.classList.remove('hidden');
           return;
         }
 
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
-          options: { data: { full_name: name } }
+          options: { data: { full_name: fullName } }
         });
 
         if (error) {
-          errorElem.innerText = error.message;
-          errorElem.classList.remove('hidden');
+          errorEl.textContent = error.message;
+          errorEl.classList.remove('hidden');
         } else {
-          alert('Account created! Please sign in.');
-          toggleAuthMode();
+          currentUser = data.user;
+          // Save Profile Name
+          await supabase.from('profiles').upsert({ id: currentUser.id, full_name: fullName });
+          await initializeUserCloudData();
         }
       } else {
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) {
-          errorElem.innerText = error.message;
-          errorElem.classList.remove('hidden');
+          errorEl.textContent = error.message;
+          errorEl.classList.remove('hidden');
+        } else {
+          currentUser = data.user;
+          await initializeUserCloudData();
         }
       }
     }
 
     async function handleLogout() {
       await supabase.auth.signOut();
+      currentUser = null;
+      showAuthScreen();
     }
 
-    // DATA SYNCHRONIZATION
-    async function loadUserData() {
-      await fetchUserSettings();
+    function showAuthScreen() {
+      document.getElementById('auth-container').classList.remove('hidden');
+      document.getElementById('app-wrapper').classList.add('hidden');
+    }
+
+    function showAppScreen() {
+      document.getElementById('auth-container').classList.add('hidden');
+      document.getElementById('app-wrapper').classList.remove('hidden');
+    }
+
+    // CLOUD DATA INITIALIZATION
+    async function initializeUserCloudData() {
+      showAppScreen();
+
+      // 1. Fetch Profile Name
+      let displayName = currentUser.user_metadata?.full_name;
+      const { data: profile } = await supabase.from('profiles').select('full_name, hero_bg_url').eq('id', currentUser.id).single();
+      if (profile && profile.full_name) {
+        displayName = profile.full_name;
+      }
+      if (profile && profile.hero_bg_url) {
+        document.getElementById('hero-bg-img').style.backgroundImage = `url('${profile.hero_bg_url}')`;
+      }
+      
+      document.getElementById('welcome-greeting').textContent = `Welcome, ${displayName || 'User'}`;
+      if (displayName) {
+        const initials = displayName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        document.getElementById('user-avatar-btn').textContent = initials;
+      }
+
+      // 2. Fetch User Settings (Accounting Start Point & Seed Status)
+      const { data: settings } = await supabase.from('user_settings').select('*').eq('user_id', currentUser.id).single();
+      if (settings) {
+        accountingProfitStartDate = settings.accounting_profit_start_date || null;
+        if (accountingProfitStartDate) {
+          document.getElementById('accounting-start-picker').value = accountingProfitStartDate;
+        }
+      }
+
+      // 3. Seed Historical Sales Data if needed
+      if (!settings || !settings.is_seeded) {
+        await seedHistoricalSalesData();
+        await supabase.from('user_settings').upsert({
+          user_id: currentUser.id,
+          is_seeded: true,
+          accounting_profit_start_date: accountingProfitStartDate
+        });
+      }
+
+      // 4. Fetch Sales Transactions
       await fetchSalesTransactions();
-    }
 
-    async function fetchUserSettings() {
-      const { data, error } = await supabase
-        .from('user_settings')
-        .select('*')
-        .eq('user_id', currentUser.id)
-        .single();
-
-      if (data && data.profit_start_date) {
-        accountingProfitStartDate = data.profit_start_date;
-        document.getElementById('profit-start-date-picker').value = accountingProfitStartDate;
-      }
-    }
-
-    async function updateProfitStartPoint(value) {
-      accountingProfitStartDate = value;
-      document.getElementById('profit-start-label').innerText = value ? `Calculated from ${value} onward` : 'Includes all historical sales';
-
-      await supabase.from('user_settings').upsert({
-        user_id: currentUser.id,
-        profit_start_date: value,
-        updated_at: new Date().toISOString()
-      });
-
-      renderSalesTable();
-    }
-
-    async function fetchSalesTransactions() {
-      const { data, error } = await supabase
-        .from('sales_transactions')
-        .select('*')
-        .eq('user_id', currentUser.id)
-        .order('created_at', { ascending: true });
-
-      if (data && data.length > 0) {
-        salesTransactions = data;
+      // 5. Fetch App General Financial State
+      const { data: stateData } = await supabase.from('user_app_data').select('*').eq('user_id', currentUser.id).single();
+      if (stateData) {
+        appData = {
+          incomes: stateData.incomes || [],
+          transactions: stateData.transactions || [],
+          budgets: stateData.budgets || {},
+          categories: stateData.categories || appData.categories,
+          investments: stateData.investments || appData.investments,
+          accounts: stateData.accounts || appData.accounts,
+          loans: stateData.loans || [],
+          businesses: stateData.businesses || appData.businesses
+        };
       } else {
-        await seedHistoricalSales();
+        await syncAppDataToCloud();
       }
 
-      renderSalesTable();
+      refreshAllUI();
     }
 
-    async function seedHistoricalSales() {
-      const formattedSeed = SEED_DATA.map(item => ({
+    async function seedHistoricalSalesData() {
+      const recordsToInsert = SEED_SALES_DATA.map(item => ({
         user_id: currentUser.id,
         day: item.day,
         perfume: item.perfume,
@@ -574,317 +1376,680 @@
         status: item.status,
         profit: item.profit,
         customers: item.customers,
-        expected: item.expected
+        expected: item.expected,
+        business_type: 'Appearich Main',
+        is_imported: true
       }));
 
-      const { data, error } = await supabase
-        .from('sales_transactions')
-        .insert(formattedSeed)
-        .select();
+      await supabase.from('sales_transactions').insert(recordsToInsert);
+    }
 
-      if (data) {
+    async function fetchSalesTransactions() {
+      const { data, error } = await supabase.from('sales_transactions').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+      if (!error && data) {
         salesTransactions = data;
       }
     }
 
-    // RENDER SALES TABLE & CALCULATE PROFIT
-    function renderSalesTable() {
-      const tbody = document.getElementById('sales-transactions-table-body');
-      tbody.innerHTML = '';
-
-      let totalProfit = 0;
-      selectedSalesIds.clear();
-      updateBulkDeleteVisibility();
-
-      salesTransactions.forEach(record => {
-        // Accounting Start Date Filter Logic
-        let includeInCalculation = true;
-        if (accountingProfitStartDate && record.day) {
-          includeInCalculation = isDateAfterOrEqual(record.day, accountingProfitStartDate);
-        }
-
-        if (includeInCalculation && record.profit) {
-          totalProfit += Number(record.profit);
-        }
-
-        const tr = document.createElement('tr');
-        tr.className = "hover:bg-gray-50 transition border-b border-gray-100";
-        tr.innerHTML = `
-          <td class="py-3 pr-2"><input type="checkbox" onchange="toggleSelectSale('${record.id}', this.checked)"></td>
-          <td class="py-3 font-semibold">${record.day || ''}</td>
-          <td class="py-3 font-bold">${record.perfume || ''}</td>
-          <td class="py-3">${record.ml || ''}</td>
-          <td class="py-3">${record.quantity || 1}</td>
-          <td class="py-3">${record.amount ? record.amount.toLocaleString() + ' Sh' : ''}</td>
-          <td class="py-3 font-bold">${record.sale ? record.sale.toLocaleString() + ' Sh' : ''}</td>
-          <td class="py-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${record.status === 'SOLD' ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-800'}">${record.status || 'N/A'}</span></td>
-          <td class="py-3 font-bold text-emerald-600">${record.profit ? record.profit.toLocaleString() + ' Sh' : ''}</td>
-          <td class="py-3">${record.customers || ''}</td>
-          <td class="py-3">${record.expected ? record.expected.toLocaleString() + ' Sh' : ''}</td>
-          <td class="py-3 text-right space-x-2">
-            <button onclick="editSaleRecord('${record.id}')" class="text-xs text-blue-600 hover:underline">Edit</button>
-            <button onclick="deleteSingleSale('${record.id}')" class="text-xs text-red-600 hover:underline">Delete</button>
-          </td>
-        `;
-        tbody.appendChild(tr);
+    async function syncAppDataToCloud() {
+      await supabase.from('user_app_data').upsert({
+        user_id: currentUser.id,
+        incomes: appData.incomes,
+        transactions: appData.transactions,
+        budgets: appData.budgets,
+        categories: appData.categories,
+        investments: appData.investments,
+        accounts: appData.accounts,
+        loans: appData.loans,
+        businesses: appData.businesses,
+        updated_at: new Date().toISOString()
       });
-
-      document.getElementById('sales-record-count').innerText = `${salesTransactions.length} Entries`;
-      document.getElementById('total-historical-sales-count').innerText = `${salesTransactions.length} Records`;
-      document.getElementById('calculated-profit-display').innerText = `${totalProfit.toLocaleString()} Sh`;
     }
 
-    function isDateAfterOrEqual(recordDayStr, startMonthYearStr) {
-      // Helper function to evaluate month-year ordering for accounting start date calculations
-      return true; // Simple inclusion fallback for historical records format
+    // ACCOUNTING START POINT LOGIC
+    async function handleAccountingStartChange(e) {
+      accountingProfitStartDate = e.target.value;
+      await supabase.from('user_settings').upsert({
+        user_id: currentUser.id,
+        accounting_profit_start_date: accountingProfitStartDate
+      });
+      refreshAllUI();
     }
 
-    // BULK & SINGLE SELECTION / DELETE
-    function toggleSelectSale(id, checked) {
-      if (checked) {
-        selectedSalesIds.add(id);
+    async function clearAccountingStartPoint() {
+      accountingProfitStartDate = null;
+      document.getElementById('accounting-start-picker').value = '';
+      await supabase.from('user_settings').upsert({
+        user_id: currentUser.id,
+        accounting_profit_start_date: null
+      });
+      refreshAllUI();
+    }
+
+    // EXCEL IMPORT & DOC MANAGEMENT
+    function previewExcelFile(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      currentFileName = file.name;
+
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        const data = new Uint8Array(evt.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const firstSheet = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[firstSheet];
+        const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+        pendingExcelData = [];
+        const tbody = document.getElementById('excel-preview-body');
+        tbody.innerHTML = '';
+
+        // Excel Column Order: DAY, PERFUME, Ml, QUANTITY, AMOUNT, SALE, STATUS, PROFIT, Customers, Expected
+        for (let i = 1; i < json.length; i++) {
+          const row = json[i];
+          if (!row || row.length === 0) continue;
+
+          const record = {
+            day: row[0] || '',
+            perfume: row[1] || '',
+            ml: row[2] ? Number(row[2]) : null,
+            quantity: row[3] ? Number(row[3]) : 1,
+            amount: row[4] ? Number(row[4]) : 0,
+            sale: row[5] ? Number(row[5]) : 0,
+            status: row[6] || 'SOLD',
+            profit: row[7] ? Number(row[7]) : 0,
+            customers: row[8] || '',
+            expected: row[9] || null
+          };
+
+          pendingExcelData.push(record);
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td class="p-2 border-b">${record.day}</td>
+            <td class="p-2 border-b">${record.perfume}</td>
+            <td class="p-2 border-b">${record.ml || ''}</td>
+            <td class="p-2 border-b">${record.quantity}</td>
+            <td class="p-2 border-b">${record.amount}</td>
+            <td class="p-2 border-b">${record.sale}</td>
+            <td class="p-2 border-b">${record.status}</td>
+            <td class="p-2 border-b">${record.profit}</td>
+            <td class="p-2 border-b">${record.customers}</td>
+            <td class="p-2 border-b">${record.expected || ''}</td>
+          `;
+          tbody.appendChild(tr);
+        }
+
+        document.getElementById('excel-preview-container').classList.remove('hidden');
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    async function executeExcelImport() {
+      if (pendingExcelData.length === 0) return;
+
+      const { data: batchFile } = await supabase.from('imported_excel_files').insert({
+        user_id: currentUser.id,
+        file_name: currentFileName
+      }).select().single();
+
+      const batchId = batchFile ? batchFile.id : null;
+
+      const recordsToInsert = pendingExcelData.map(item => ({
+        user_id: currentUser.id,
+        ...item,
+        business_type: activeBusinessView,
+        is_imported: true,
+        import_batch_id: batchId
+      }));
+
+      await supabase.from('sales_transactions').insert(recordsToInsert);
+      await fetchSalesTransactions();
+      
+      closeModal('importExcelModal');
+      document.getElementById('excel-file-input').value = '';
+      document.getElementById('excel-preview-container').classList.add('hidden');
+      pendingExcelData = [];
+      refreshAllUI();
+    }
+
+    async function openModalManageExcelDocs() {
+      const { data: files } = await supabase.from('imported_excel_files').select('*').eq('user_id', currentUser.id).order('uploaded_at', { ascending: false });
+      const container = document.getElementById('imported-excel-docs-list');
+      container.innerHTML = '';
+
+      if (!files || files.length === 0) {
+        container.innerHTML = '<p class="text-xs text-brand-muted text-center py-4">No imported Excel documents stored.</p>';
       } else {
-        selectedSalesIds.delete(id);
+        files.forEach(f => {
+          const div = document.createElement('div');
+          div.className = "p-4 rounded-2xl bg-gray-50 border border-gray-200 flex items-center justify-between";
+          div.innerHTML = `
+            <div>
+              <p class="text-xs font-bold text-brand-black">${f.file_name}</p>
+              <p class="text-[10px] text-brand-muted">${new Date(f.uploaded_at).toLocaleDateString()}</p>
+            </div>
+            <div class="flex items-center space-x-2">
+              <button onclick="deleteExcelDocument('${f.id}', false)" class="px-2.5 py-1.5 rounded-lg bg-gray-200 text-brand-black text-[11px] font-bold hover:bg-gray-300">Delete Doc Only</button>
+              <button onclick="deleteExcelDocument('${f.id}', true)" class="px-2.5 py-1.5 rounded-lg bg-red-600 text-white text-[11px] font-bold hover:bg-red-700">Delete Doc & Sales</button>
+            </div>
+          `;
+          container.appendChild(div);
+        });
       }
-      updateBulkDeleteVisibility();
+      openModal('manageExcelDocsModal');
     }
 
-    function toggleSelectAllSales(checked) {
-      const checkboxes = document.querySelectorAll('#sales-transactions-table-body input[type="checkbox"]');
+    async function deleteExcelDocument(batchId, deleteAssociatedSales) {
+      if (deleteAssociatedSales) {
+        if (!confirm("Are you sure you want to delete this document AND all sales transactions imported from it?")) return;
+        await supabase.from('sales_transactions').delete().eq('import_batch_id', batchId);
+      } else {
+        if (!confirm("Are you sure you want to delete this document reference? (Imported sales will be retained)")) return;
+      }
+
+      await supabase.from('imported_excel_files').delete().eq('id', batchId);
+      await fetchSalesTransactions();
+      openModalManageExcelDocs();
+      refreshAllUI();
+    }
+
+    // MULTI-ROW DELETION LOGIC
+    function toggleSelectAllSales(masterCheckbox) {
+      const checkboxes = document.querySelectorAll('.sale-checkbox');
       checkboxes.forEach(cb => {
-        cb.checked = checked;
-        const tr = cb.closest('tr');
+        cb.checked = masterCheckbox.checked;
+        if (masterCheckbox.checked) {
+          selectedSalesIds.add(cb.value);
+        } else {
+          selectedSalesIds.delete(cb.value);
+        }
       });
-
-      if (checked) {
-        salesTransactions.forEach(s => selectedSalesIds.add(s.id));
-      } else {
-        selectedSalesIds.clear();
-      }
-      updateBulkDeleteVisibility();
+      updateBatchDeleteUI();
     }
 
-    function updateBulkDeleteVisibility() {
-      const container = document.getElementById('bulk-delete-container');
-      const countLabel = document.getElementById('selected-count');
+    function handleSaleSelectChange(cb) {
+      if (cb.checked) {
+        selectedSalesIds.add(cb.value);
+      } else {
+        selectedSalesIds.delete(cb.value);
+      }
+      updateBatchDeleteUI();
+    }
+
+    function updateBatchDeleteUI() {
+      const container = document.getElementById('batch-delete-controls');
+      const label = document.getElementById('selected-count-label');
       if (selectedSalesIds.size > 0) {
         container.classList.remove('hidden');
-        countLabel.innerText = selectedSalesIds.size;
+        label.textContent = `${selectedSalesIds.size} Selected`;
       } else {
         container.classList.add('hidden');
       }
     }
 
-    async function deleteSingleSale(id) {
-      if (!confirm("Are you sure you want to delete this sale record?")) return;
-
-      await supabase.from('sales_transactions').delete().eq('id', id);
-      salesTransactions = salesTransactions.filter(s => s.id !== id);
-      renderSalesTable();
-    }
-
-    async function deleteSelectedSales() {
-      if (!confirm(`Are you sure you want to delete ${selectedSalesIds.size} selected transaction(s)?`)) return;
+    async function executeBatchDelete() {
+      if (selectedSalesIds.size === 0) return;
+      if (!confirm(`Are you sure you want to permanently delete these ${selectedSalesIds.size} sales transactions?`)) return;
 
       const idsArray = Array.from(selectedSalesIds);
       await supabase.from('sales_transactions').delete().in('id', idsArray);
-      salesTransactions = salesTransactions.filter(s => !selectedSalesIds.has(s.id));
+      
       selectedSalesIds.clear();
-      renderSalesTable();
+      updateBatchDeleteUI();
+      await fetchSalesTransactions();
+      refreshAllUI();
     }
 
-    // SAVE & EDIT TRANSACTION
-    function openModal(id) {
-      document.getElementById(id).classList.remove('hidden');
+    async function deleteSingleSale(id) {
+      if (!confirm("Are you sure you want to delete this sales transaction record?")) return;
+      await supabase.from('sales_transactions').delete().eq('id', id);
+      await fetchSalesTransactions();
+      refreshAllUI();
     }
 
-    function closeModal(id) {
-      document.getElementById(id).classList.add('hidden');
-    }
-
-    function editSaleRecord(id) {
-      const record = salesTransactions.find(s => s.id === id);
-      if (!record) return;
-
-      document.getElementById('sale-edit-id').value = record.id;
-      document.getElementById('form-sale-day').value = record.day || '';
-      document.getElementById('form-sale-perfume').value = record.perfume || '';
-      document.getElementById('form-sale-ml').value = record.ml || '';
-      document.getElementById('form-sale-quantity').value = record.quantity || 1;
-      document.getElementById('form-sale-amount').value = record.amount || '';
-      document.getElementById('form-sale-price').value = record.sale || '';
-      document.getElementById('form-sale-status').value = record.status || 'SOLD';
-      document.getElementById('form-sale-profit').value = record.profit || '';
-      document.getElementById('form-sale-customer').value = record.customers || '';
-      document.getElementById('form-sale-expected').value = record.expected || '';
-
-      document.getElementById('sale-modal-title').innerText = "Edit Sales Transaction";
-      openModal('addSaleModal');
-    }
-
-    async function handleSaveSale(event) {
-      event.preventDefault();
-      const editId = document.getElementById('sale-edit-id').value;
-
-      const payload = {
-        user_id: currentUser.id,
-        day: document.getElementById('form-sale-day').value,
-        perfume: document.getElementById('form-sale-perfume').value,
-        ml: document.getElementById('form-sale-ml').value ? Number(document.getElementById('form-sale-ml').value) : null,
-        quantity: document.getElementById('form-sale-quantity').value ? Number(document.getElementById('form-sale-quantity').value) : 1,
-        amount: document.getElementById('form-sale-amount').value ? Number(document.getElementById('form-sale-amount').value) : null,
-        sale: document.getElementById('form-sale-price').value ? Number(document.getElementById('form-sale-price').value) : null,
-        status: document.getElementById('form-sale-status').value,
-        profit: document.getElementById('form-sale-profit').value ? Number(document.getElementById('form-sale-profit').value) : null,
-        customers: document.getElementById('form-sale-customer').value,
-        expected: document.getElementById('form-sale-expected').value ? Number(document.getElementById('form-sale-expected').value) : null
-      };
-
-      if (editId) {
-        const { data, error } = await supabase
-          .from('sales_transactions')
-          .update(payload)
-          .eq('id', editId)
-          .select();
-
-        if (data) {
-          const index = salesTransactions.findIndex(s => s.id === editId);
-          salesTransactions[index] = data[0];
-        }
-      } else {
-        const { data, error } = await supabase
-          .from('sales_transactions')
-          .insert([payload])
-          .select();
-
-        if (data) {
-          salesTransactions.push(data[0]);
-        }
-      }
-
-      closeModal('addSaleModal');
-      renderSalesTable();
-    }
-
-    // EXCEL FILE IMPORT & PREVIEW
-    function previewExcelFile(event) {
-      const file = event.target.files[0];
+    // HERO UPLOAD LOGIC
+    async function handleHeroUpload(e) {
+      const file = e.target.files[0];
       if (!file) return;
 
       const reader = new FileReader();
-      reader.onload = function(e) {
-        const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
-        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-        const jsonData = XLSX.utils.sheet_to_json(firstSheet, { defval: "" });
-
-        parsedExcelData = jsonData.map(row => ({
-          day: row.DAY || row.Day || '',
-          perfume: row.PERFUME || row.Perfume || '',
-          ml: row.Ml || row.ML || row.ml || null,
-          quantity: row.QUANTITY || row.Quantity || 1,
-          amount: row.AMOUNT || row.Amount || null,
-          sale: row.SALE || row.Sale || null,
-          status: row.STATUS || row.Status || '',
-          profit: row.PROFIT || row.Profit || null,
-          customers: row.Customers || row.CUSTOMERS || row.Customer || '',
-          expected: row.Expected || row.EXPECTED || null,
-          fileName: file.name
-        }));
-
-        renderExcelPreview(parsedExcelData);
+      reader.onload = async (evt) => {
+        const bgUrl = evt.target.result;
+        document.getElementById('hero-bg-img').style.backgroundImage = `url('${bgUrl}')`;
+        await supabase.from('profiles').upsert({ id: currentUser.id, hero_bg_url: bgUrl });
       };
-      reader.readAsArrayBuffer(file);
+      reader.readAsDataURL(file);
     }
 
-    function renderExcelPreview(data) {
-      const tbody = document.getElementById('excel-preview-body');
-      tbody.innerHTML = '';
-      document.getElementById('excel-preview-count').innerText = data.length;
-
-      data.slice(0, 10).forEach(row => {
-        const tr = document.createElement('tr');
-        tr.className = "border-b";
-        tr.innerHTML = `
-          <td class="p-1">${row.day}</td>
-          <td class="p-1 font-bold">${row.perfume}</td>
-          <td class="p-1">${row.ml || ''}</td>
-          <td class="p-1">${row.quantity}</td>
-          <td class="p-1">${row.amount || ''}</td>
-          <td class="p-1">${row.sale || ''}</td>
-          <td class="p-1 text-emerald-600">${row.profit || ''}</td>
-          <td class="p-1">${row.customers}</td>
-        `;
-        tbody.appendChild(tr);
+    // UI REFRESH & TAB SWITCHING
+    function switchTab(tabId) {
+      activeTab = tabId;
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-tab').forEach(el => {
+        el.classList.remove('active', 'bg-brand-black', 'text-white');
+        el.classList.add('text-brand-muted');
       });
 
-      document.getElementById('excel-preview-container').classList.remove('hidden');
-    }
+      const activeTabEl = document.getElementById(`tab-${tabId}`);
+      if (activeTabEl) activeTabEl.classList.remove('hidden');
 
-    async function confirmExcelImport() {
-      if (!parsedExcelData || parsedExcelData.length === 0) return;
-
-      const payload = parsedExcelData.map(item => ({
-        user_id: currentUser.id,
-        day: item.day,
-        perfume: item.perfume,
-        ml: item.ml ? Number(item.ml) : null,
-        quantity: item.quantity ? Number(item.quantity) : 1,
-        amount: item.amount ? Number(item.amount) : null,
-        sale: item.sale ? Number(item.sale) : null,
-        status: item.status,
-        profit: item.profit ? Number(item.profit) : null,
-        customers: item.customers,
-        expected: item.expected ? Number(item.expected) : null
-      }));
-
-      const { data, error } = await supabase
-        .from('sales_transactions')
-        .insert(payload)
-        .select();
-
-      if (data) {
-        salesTransactions.push(...data);
-        const fileName = parsedExcelData[0].fileName;
-        if (!importedDocuments.includes(fileName)) {
-          importedDocuments.push(fileName);
-          renderImportedDocumentsList();
-        }
-        alert(`Successfully imported ${data.length} sales records!`);
+      const activeNavBtn = document.getElementById(`nav-${tabId}`);
+      if (activeNavBtn) {
+        activeNavBtn.classList.add('active', 'bg-brand-black', 'text-white');
+        activeNavBtn.classList.remove('text-brand-muted');
       }
 
-      closeModal('importExcelModal');
-      renderSalesTable();
+      refreshAllUI();
     }
 
-    function renderImportedDocumentsList() {
-      const container = document.getElementById('imported-documents-list');
+    function refreshAllUI() {
+      renderDashboardTab();
+      renderIncomeTab();
+      renderBudgetTab();
+      renderDailyExpensesTab();
+      renderInvestmentTab();
+      renderAppearichTab();
+      renderAccountsTab();
+      renderLoansTab();
+      renderProgressTab();
+    }
+
+    // RENDER LOGIC
+    function renderDashboardTab() {
+      const monthIncomes = appData.incomes.filter(i => i.month === activeMonth);
+      const totalIncome = monthIncomes.reduce((acc, curr) => acc + curr.amount, 0);
+      
+      // Calculate active accounting profit filtered sales
+      let validSales = salesTransactions;
+      if (accountingProfitStartDate) {
+        validSales = validSales.filter(s => parseSaleMonthKey(s.day) >= accountingProfitStartDate);
+      }
+
+      const totalGod = totalIncome * 0.1;
+      const totalLiquidMoney = appData.accounts.reduce((acc, curr) => acc + curr.balance, 0);
+
+      document.getElementById('dash-total-income').textContent = `${totalIncome.toLocaleString()} Sh`;
+      document.getElementById('dash-god-amount').textContent = `${totalGod.toLocaleString()} Sh`;
+      document.getElementById('dash-total-money').textContent = `${totalLiquidMoney.toLocaleString()} Sh`;
+      document.getElementById('dash-remaining-budget').textContent = `${(totalIncome * 0.9).toLocaleString()} Sh`;
+    }
+
+    function renderIncomeTab() {
+      document.getElementById('income-month-label').textContent = `Month: ${activeMonth}`;
+      const monthIncomes = appData.incomes.filter(i => i.month === activeMonth);
+      const totalIncome = monthIncomes.reduce((acc, curr) => acc + curr.amount, 0);
+      document.getElementById('income-god-total').textContent = `${(totalIncome * 0.1).toLocaleString()} Sh`;
+
+      const container = document.getElementById('income-list-container');
       container.innerHTML = '';
 
-      importedDocuments.forEach((docName, index) => {
+      if (monthIncomes.length === 0) {
+        container.innerHTML = '<p class="text-xs text-brand-muted col-span-full py-4">No income sources recorded for this month.</p>';
+        return;
+      }
+
+      monthIncomes.forEach(item => {
         const div = document.createElement('div');
-        div.className = "flex items-center justify-between text-xs bg-gray-50 p-1.5 rounded-lg border border-gray-200";
+        div.className = "p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex items-center justify-between";
         div.innerHTML = `
-          <span class="font-bold text-gray-700 truncate max-w-[150px]">${docName}</span>
-          <button onclick="removeImportedDocument(${index})" class="text-[10px] text-red-600 hover:underline">Delete Doc</button>
+          <div>
+            <p class="font-bold text-sm text-brand-black">${item.name}</p>
+            <p class="text-xs font-extrabold text-emerald-600 mt-1">${item.amount.toLocaleString()} Sh</p>
+          </div>
+          <button onclick="deleteIncome('${item.id}')" class="text-xs font-bold text-red-500 hover:text-red-700">Delete</button>
         `;
         container.appendChild(div);
       });
     }
 
-    function removeImportedDocument(index) {
-      if (confirm("Remove this document entry? (This will NOT delete the imported sales records unless explicitly removed from the table).")) {
-        importedDocuments.splice(index, 1);
-        if (importedDocuments.length === 0) {
-          document.getElementById('imported-documents-list').innerHTML = '<span class="text-xs text-brand-muted">No documents imported yet</span>';
-        } else {
-          renderImportedDocumentsList();
-        }
+    function renderBudgetTab() {
+      const monthIncomes = appData.incomes.filter(i => i.month === activeMonth);
+      const totalIncome = monthIncomes.reduce((acc, curr) => acc + curr.amount, 0);
+      const availablePool = totalIncome * 0.9;
+
+      document.getElementById('budget-pool-total').textContent = `${availablePool.toLocaleString()} Sh`;
+
+      const mainContainer = document.getElementById('main-categories-list');
+      mainContainer.innerHTML = '';
+
+      appData.categories.forEach(cat => {
+        if (cat.id === 'cat-utilities') return;
+
+        const div = document.createElement('div');
+        div.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-3 flex flex-col justify-between";
+        div.innerHTML = `
+          <div>
+            <h4 class="font-bold text-base text-brand-black uppercase">${cat.name}</h4>
+            <p class="text-xs text-brand-muted mt-0.5">Budget Allocation</p>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-brand-muted uppercase mb-1">Target Amount (Sh)</label>
+            <input type="number" value="${cat.amount || ''}" oninput="handleCategoryAmountInput('${cat.id}', this.value)" placeholder="Enter amount" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm font-bold text-brand-black">
+          </div>
+        `;
+        mainContainer.appendChild(div);
+      });
+    }
+
+    function renderDailyExpensesTab() {
+      const monthTxs = appData.transactions.filter(t => t.date && t.date.substring(0, 7) === activeMonth);
+      document.getElementById('daily-expense-log-count').textContent = `${monthTxs.length} Expenses Recorded`;
+
+      const tbody = document.getElementById('daily-expense-table-body');
+      tbody.innerHTML = '';
+
+      monthTxs.forEach(tx => {
+        const tr = document.createElement('tr');
+        tr.className = "border-b border-gray-100 hover:bg-gray-50/50";
+        tr.innerHTML = `
+          <td class="py-3">${tx.date}</td>
+          <td class="py-3 font-bold text-brand-black">${tx.name}</td>
+          <td class="py-3">${tx.category}</td>
+          <td class="py-3">${tx.account}</td>
+          <td class="py-3 text-right font-extrabold text-red-600">-${tx.amount.toLocaleString()} Sh</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderInvestmentTab() {
+      const inv = appData.investments;
+      const gain = inv.currentValue - inv.totalInvested;
+      const returnPct = inv.totalInvested > 0 ? ((gain / inv.totalInvested) * 100).toFixed(2) : '0.00';
+
+      document.getElementById('inv-total-invested').textContent = `${inv.totalInvested.toLocaleString()} Sh`;
+      document.getElementById('inv-current-value').textContent = `${inv.currentValue.toLocaleString()} Sh`;
+      document.getElementById('inv-gain-loss').textContent = `${gain >= 0 ? '+' : ''}${gain.toLocaleString()} Sh`;
+      document.getElementById('inv-percentage-return').textContent = `${gain >= 0 ? '+' : ''}${returnPct}%`;
+    }
+
+    function renderAppearichTab() {
+      // Filter Sales by Active Business and Accounting Start Point
+      let filteredSales = salesTransactions.filter(s => (s.business_type || 'Appearich Main') === activeBusinessView);
+      
+      if (accountingProfitStartDate) {
+        filteredSales = filteredSales.filter(s => parseSaleMonthKey(s.day) >= accountingProfitStartDate);
+      }
+
+      const totalProfit = filteredSales.reduce((acc, curr) => acc + (Number(curr.profit) || 0), 0);
+      document.getElementById('app-total-profit').textContent = `${totalProfit.toLocaleString()} Sh`;
+
+      const tbody = document.getElementById('appearich-sales-table');
+      tbody.innerHTML = '';
+
+      filteredSales.forEach(s => {
+        const tr = document.createElement('tr');
+        tr.className = "border-b border-gray-100 hover:bg-gray-50/50";
+        tr.innerHTML = `
+          <td class="py-3 px-2"><input type="checkbox" value="${s.id}" onchange="handleSaleSelectChange(this)" class="sale-checkbox rounded border-gray-300" ${selectedSalesIds.has(s.id) ? 'checked' : ''}></td>
+          <td class="py-3">${s.day || 'N/A'}</td>
+          <td class="py-3 font-bold">${s.business_type || 'Appearich Main'}</td>
+          <td class="py-3 font-bold text-brand-black">${s.perfume || 'Item'}</td>
+          <td class="py-3">${s.customers || '-'}</td>
+          <td class="py-3 font-extrabold text-brand-black">${(Number(s.sale) || 0).toLocaleString()} Sh</td>
+          <td class="py-3 text-emerald-600 font-bold">${(Number(s.sale) || 0).toLocaleString()} Sh</td>
+          <td class="py-3 text-gray-400">0 Sh</td>
+          <td class="py-3"><span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 text-[10px] font-bold">${s.status || 'SOLD'}</span></td>
+          <td class="py-3 text-right">
+            <button onclick="deleteSingleSale('${s.id}')" class="text-xs font-bold text-red-500 hover:text-red-700">Delete</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderAccountsTab() {
+      const container = document.getElementById('account-cards-grid');
+      container.innerHTML = '';
+      let totalMoney = 0;
+
+      appData.accounts.forEach(acc => {
+        totalMoney += acc.balance;
+        const div = document.createElement('div');
+        div.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4 flex flex-col justify-between";
+        div.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-brand-muted">${acc.name}</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+          </div>
+          <div>
+            <p class="font-display text-3xl font-extrabold text-brand-black">${acc.balance.toLocaleString()} Sh</p>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+
+      document.getElementById('accounts-total-money').textContent = `${totalMoney.toLocaleString()} Sh`;
+    }
+
+    function renderLoansTab() {
+      const container = document.getElementById('loan-cards-list');
+      container.innerHTML = '';
+      let totalOwed = 0;
+
+      appData.loans.forEach(loan => {
+        const remaining = loan.amount - loan.paid;
+        totalOwed += remaining;
+
+        const div = document.createElement('div');
+        div.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-3";
+        div.innerHTML = `
+          <div class="flex justify-between items-start">
+            <div>
+              <h4 class="font-bold text-base text-brand-black">${loan.borrower}</h4>
+              <p class="text-xs text-brand-muted">${loan.date}</p>
+            </div>
+            <span class="px-2.5 py-0.5 rounded-full bg-yellow-50 text-yellow-700 text-[10px] font-bold">${remaining > 0 ? 'ACTIVE' : 'CLEARED'}</span>
+          </div>
+          <div class="pt-2 border-t border-gray-100 flex justify-between text-xs">
+            <span class="text-brand-muted">Borrowed: ${loan.amount.toLocaleString()} Sh</span>
+            <span class="font-bold text-brand-black">Remaining: ${remaining.toLocaleString()} Sh</span>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+
+      document.getElementById('loan-total-owed').textContent = `${totalOwed.toLocaleString()} Sh`;
+    }
+
+    function renderProgressTab() {
+      let validSales = salesTransactions;
+      if (accountingProfitStartDate) {
+        validSales = validSales.filter(s => parseSaleMonthKey(s.day) >= accountingProfitStartDate);
+      }
+
+      const overallProfit = validSales.reduce((acc, curr) => acc + (Number(curr.profit) || 0), 0);
+      document.getElementById('progress-overall-profit').textContent = `${overallProfit.toLocaleString()} Sh`;
+    }
+
+    // HELPER UTILS
+    function parseSaleMonthKey(dayStr) {
+      if (!dayStr) return '2026-05';
+      const months = { 'January': '01', 'February': '02', 'March': '03', 'April': '04', 'May': '05', 'June': '06', 'July': '07', 'August': '08', 'September': '09', 'October': '10', 'November': '11', 'December': '12' };
+      
+      const parts = dayStr.split(' ');
+      const monthName = parts[0];
+      const year = parts[1] || '2025';
+      const monthNum = months[monthName] || '01';
+      return `${year}-${monthNum}`;
+    }
+
+    // HANDLERS FOR FORMS
+    async function handleAddIncome(e) {
+      e.preventDefault();
+      const name = document.getElementById('income-name-input').value;
+      const amount = Number(document.getElementById('income-amount-input').value);
+
+      appData.incomes.push({ id: Date.now().toString(), name, amount, month: activeMonth });
+      await syncAppDataToCloud();
+      closeModal('addIncomeModal');
+      refreshAllUI();
+    }
+
+    async function handleAddSale(e) {
+      e.preventDefault();
+      const businessType = document.getElementById('sale-business-type').value || 'Appearich Main';
+      const date = document.getElementById('sale-date').value;
+      const qty = Number(document.getElementById('sale-qty').value);
+      const product = document.getElementById('sale-product').value;
+      const customer = document.getElementById('sale-customer').value;
+      const buyPrice = Number(document.getElementById('sale-buy-price').value);
+      const sellPrice = Number(document.getElementById('sale-sell-price').value);
+      const profit = (sellPrice - buyPrice) * qty;
+
+      await supabase.from('sales_transactions').insert({
+        user_id: currentUser.id,
+        day: date,
+        perfume: product,
+        quantity: qty,
+        amount: buyPrice,
+        sale: sellPrice,
+        status: 'SOLD',
+        profit: profit,
+        customers: customer,
+        business_type: businessType
+      });
+
+      await fetchSalesTransactions();
+      closeModal('addSaleModal');
+      refreshAllUI();
+    }
+
+    async function handleAddTransaction(e) {
+      e.preventDefault();
+      const name = document.getElementById('tx-name').value;
+      const category = document.getElementById('tx-category').value;
+      const account = document.getElementById('tx-account').value;
+      const amount = Number(document.getElementById('tx-amount').value);
+      const date = document.getElementById('tx-date').value;
+
+      appData.transactions.push({ id: Date.now().toString(), name, category, account, amount, date });
+
+      // Deduct from account
+      const accObj = appData.accounts.find(a => a.id === account);
+      if (accObj) accObj.balance -= amount;
+
+      await syncAppDataToCloud();
+      closeModal('addTransactionModal');
+      refreshAllUI();
+    }
+
+    async function handleTransfer(e) {
+      e.preventDefault();
+      const fromAcc = document.getElementById('tr-from').value;
+      const toAcc = document.getElementById('tr-to').value;
+      const amount = Number(document.getElementById('tr-amount').value);
+
+      const src = appData.accounts.find(a => a.id === fromAcc);
+      const dest = appData.accounts.find(a => a.id === toAcc);
+
+      if (src && dest) {
+        src.balance -= amount;
+        dest.balance += amount;
+      }
+
+      await syncAppDataToCloud();
+      closeModal('transferModal');
+      refreshAllUI();
+    }
+
+    async function handleAddMoneyAccount(e) {
+      e.preventDefault();
+      const account = document.getElementById('am-account').value;
+      const amount = Number(document.getElementById('am-amount').value);
+
+      const accObj = appData.accounts.find(a => a.id === account);
+      if (accObj) accObj.balance += amount;
+
+      await syncAppDataToCloud();
+      closeModal('addMoneyModal');
+      refreshAllUI();
+    }
+
+    async function handleAddLoan(e) {
+      e.preventDefault();
+      const borrower = document.getElementById('loan-borrower').value;
+      const amount = Number(document.getElementById('loan-amount').value);
+      const date = document.getElementById('loan-date').value;
+      const paid = Number(document.getElementById('loan-paid').value);
+
+      appData.loans.push({ id: Date.now().toString(), borrower, amount, date, paid });
+      await syncAppDataToCloud();
+      closeModal('addLoanModal');
+      refreshAllUI();
+    }
+
+    async function handleAddBusinessOption(e) {
+      e.preventDefault();
+      const bName = document.getElementById('new-business-name-input').value.trim();
+      if (bName && !appData.businesses.includes(bName)) {
+        appData.businesses.push(bName);
+        await syncAppDataToCloud();
+      }
+      closeModal('addBusinessModal');
+      refreshAllUI();
+    }
+
+    function handleCategoryAmountInput(catId, val) {
+      const cat = appData.categories.find(c => c.id === catId);
+      if (cat) {
+        cat.amount = Number(val) || 0;
+        syncAppDataToCloud();
       }
     }
 
-    function switchTab(tabId) {
-      // Tab switching handler
+    function handleMonthChange(e) {
+      activeMonth = e.target.value;
+      refreshAllUI();
+    }
+
+    function handleExpenseMonthChange(e) {
+      activeMonth = e.target.value;
+      refreshAllUI();
+    }
+
+    function switchAppearichPeriod(period) {
+      appearichPeriod = period;
+      document.querySelectorAll('.app-period-btn').forEach(btn => btn.classList.remove('active', 'bg-brand-black', 'text-white'));
+      const activeBtn = document.getElementById(`app-period-${period}`);
+      if (activeBtn) activeBtn.classList.add('active', 'bg-brand-black', 'text-white');
+    }
+
+    function toggleUtilitiesAccordion() {
+      const accordion = document.getElementById('utilities-accordion');
+      const chevron = document.getElementById('utilities-chevron');
+      accordion.classList.toggle('expanded');
+      chevron.classList.toggle('rotate-180');
+    }
+
+    function toggleSalePartialInput() {
+      const status = document.getElementById('sale-payment-status').value;
+      document.getElementById('sale-partial-container').classList.toggle('hidden', status !== 'PARTIAL');
+    }
+
+    function openModal(id) {
+      if (id === 'addSaleModal') {
+        const select = document.getElementById('sale-business-type');
+        select.innerHTML = '';
+        appData.businesses.forEach(b => {
+          const opt = document.createElement('option');
+          opt.value = b;
+          opt.textContent = b;
+          select.appendChild(opt);
+        });
+      }
+      if (id === 'manageExcelDocsModal') {
+        openModalManageExcelDocs();
+        return;
+      }
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('hidden');
     }
   </script>
 </body>
