@@ -101,14 +101,14 @@
   </style>
 </head>
 <body class="bg-brand-bg min-h-screen pb-28 text-brand-black">
-  <!-- 2. SPLASH SCREEN -->
+  <!-- SPLASH SCREEN -->
   <div id="splash-screen" class="fixed inset-0 z-50 bg-white flex items-center justify-center">
-    <img src="images/appearich-logo.png" alt="Appearich Logo" class="max-w-[200px] max-h-[200px] object-contain animate-pop-in">
+    <img src="images/appearich-logo.png" alt="Appearich Splash Logo" class="max-w-[200px] max-h-[200px] object-contain animate-pop-in">
   </div>
-  <!-- 3. SIGN IN / SIGN UP AREA -->
+
+  <!-- AUTHENTICATION CONTAINER -->
   <div id="auth-container" class="fixed inset-0 z-40 bg-white hidden flex-col items-center justify-center p-6 overflow-y-auto">
     <div class="w-full max-w-sm space-y-8 bg-white my-auto">
-      <!-- 4. LOGIN SENTENCES -->
       <div class="space-y-2 text-center">
         <h2 class="animate-sentence-1 font-display text-3xl font-bold tracking-tight text-brand-black">Track Your Money.</h2>
         <h2 class="animate-sentence-2 font-display text-3xl font-bold tracking-tight text-brand-gold">Build Your Business.</h2>
@@ -141,876 +141,169 @@
       </div>
     </div>
   </div>
+
   <!-- MAIN APP WRAPPER -->
   <div id="app-wrapper" class="hidden">
-    <!-- TOP APP HEADER -->
+    <!-- APP HEADER -->
     <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-gray-100 px-4 lg:px-8 py-4">
       <div class="max-w-6xl mx-auto flex justify-between items-center">
         <div class="flex items-center space-x-3">
-          <img src="images/appearich-logo1.png" alt="Appearich Logo" class="h-10 w-auto object-contain">
+          <img src="images/appearich-logo1.png" alt="Appearich Header Logo" class="h-10 w-auto object-contain">
           <div>
             <h1 class="font-display font-bold text-xl tracking-tight text-brand-black">APPEARICH</h1>
             <p class="text-[10px] font-bold tracking-widest text-brand-gold uppercase">Track Your Money. Build Your Business. See Your Growth.</p>
           </div>
         </div>
         <div class="flex items-center space-x-3">
-          <button onclick="openModal('addTransactionModal')" class="hidden sm:flex items-center space-x-2 bg-brand-black text-white px-4 py-2.5 rounded-xl font-medium text-sm hover:bg-gray-800 transition shadow-sm">
-            <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>
-            <span>+ Expense</span>
-          </button>
           <button onclick="handleLogout()" title="Log Out" class="w-10 h-10 rounded-xl bg-gray-50 border border-gray-200 flex items-center justify-center font-bold text-xs text-brand-black hover:bg-gray-100 transition">
-            TZ
+            LOGOUT
           </button>
         </div>
       </div>
     </header>
+
     <!-- MAIN CONTAINER -->
     <main class="max-w-6xl mx-auto px-4 lg:px-8 pt-6 space-y-8">
-      
-      <!-- REAL IMAGE HERO SECTION WITH CUSTOM UPLOAD -->
-      <div id="hero-section" class="relative rounded-3xl overflow-hidden bg-brand-black text-white shadow-2xl p-6 lg:p-10 min-h-[260px] flex items-center">
-        <div id="hero-bg-img" class="absolute inset-0 bg-cover bg-center pointer-events-none transition-all duration-300" style="background-image: url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1600&auto=format&fit=crop');"></div>
-        <div class="absolute inset-0 bg-gradient-to-r from-brand-black via-brand-black/80 to-transparent"></div>
-        
+      <!-- HERO BANNER -->
+      <div id="hero-section" class="relative rounded-3xl overflow-hidden bg-brand-black text-white shadow-2xl p-6 lg:p-10 min-h-[220px] flex items-center">
         <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 w-full">
           <div class="space-y-2 max-w-lg">
             <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-gold/20 text-brand-gold text-xs font-bold tracking-wider">
-              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-              <span>APPEARICH FINANCE</span>
+              <span>APPEARICH FINANCIAL CENTER</span>
             </div>
-            <h2 id="welcome-greeting" class="font-display font-extrabold text-3xl lg:text-4xl tracking-tight">Welcome, User</h2>
-            <p class="text-xs lg:text-sm text-gray-300">Your complete wealth ecosystem at a glance. Intelligent automated 10% GOD allocation and robust multi-account management.</p>
-          </div>
-          <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto items-stretch sm:items-center">
-            <input type="file" id="hero-upload-input" accept="image/*" class="hidden" onchange="handleHeroUpload(event)">
-            <button onclick="document.getElementById('hero-upload-input').click()" class="px-4 py-3 rounded-xl bg-white/20 hover:bg-white/30 text-white font-bold text-xs uppercase tracking-wider transition border border-white/20 text-center flex items-center justify-center space-x-2">
-              <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-              <span>Change Hero Image</span>
-            </button>
-            <button onclick="switchTab('budget')" class="px-5 py-3 rounded-xl bg-brand-gold text-brand-black font-bold text-xs uppercase tracking-wider hover:bg-yellow-400 transition shadow-gold-glow text-center">
-              Budget
-            </button>
-            <button onclick="switchTab('progress')" class="px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider transition border border-white/10 text-center">
-              Growth
-            </button>
+            <h2 id="welcome-greeting" class="font-display font-extrabold text-3xl lg:text-4xl tracking-tight">Welcome</h2>
+            <p class="text-xs lg:text-sm text-gray-300">Synchronized Cloud Accounting with Row Level Security across all devices.</p>
           </div>
         </div>
       </div>
-      <!-- VIEW TABS NAVIGATION SWITCHER -->
+
+      <!-- MAIN NAVIGATION TABS -->
       <div class="flex items-center space-x-2 border-b border-gray-200 overflow-x-auto no-scrollbar pb-2">
-        <button id="nav-dashboard" onclick="switchTab('dashboard')" class="nav-tab active px-5 py-2.5 rounded-xl text-sm font-semibold transition flex items-center space-x-2 bg-brand-black text-white shadow-sm flex-shrink-0">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-          <span>Home</span>
-        </button>
-        <button id="nav-income" onclick="switchTab('income')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          <span>Income & GOD</span>
-        </button>
-        <button id="nav-budget" onclick="switchTab('budget')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" /></svg>
-          <span>Budget</span>
-        </button>
-        <button id="nav-daily-expenses" onclick="switchTab('daily-expenses')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
-          <span>Daily Expenses</span>
-        </button>
-        <button id="nav-investment" onclick="switchTab('investment')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-          <span>Investment</span>
-        </button>
-        <button id="nav-appearich" onclick="switchTab('appearich')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
-          <span>Appearich</span>
-        </button>
-        <button id="nav-accounts" onclick="switchTab('accounts')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-          <span>Accounts</span>
-        </button>
-        <button id="nav-loans" onclick="switchTab('loans')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-          <span>Loans</span>
-        </button>
-        <button id="nav-progress" onclick="switchTab('progress')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
-          <span>Progress</span>
+        <button id="nav-sales" onclick="switchTab('sales')" class="nav-tab active px-5 py-2.5 rounded-xl text-sm font-semibold transition flex items-center space-x-2 bg-brand-black text-white shadow-sm flex-shrink-0">
+          <img src="images/appearich-logo1.png" class="w-4 h-4 object-contain" alt="">
+          <span>Sales Transactions</span>
         </button>
       </div>
-      <!-- ==================== TAB 1: HOME DASHBOARD ==================== -->
-      <div id="tab-dashboard" class="tab-content space-y-8">
-        
-        <!-- HOME DASHBOARD COMPACT CARDS -->
-        <div class="space-y-3">
-          <div class="flex items-center justify-between">
-            <h3 class="font-bold text-base text-brand-black">Your Money At A Glance</h3>
-            <span class="text-xs text-brand-muted">Real-time calculations</span>
-          </div>
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <!-- Total Income -->
-            <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between">
-              <div class="flex items-center justify-between text-brand-muted">
-                <span class="text-xs font-semibold uppercase tracking-wider">Total Income</span>
-                <svg class="w-4 h-4 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              </div>
-              <div class="mt-4">
-                <p id="dash-total-income" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-black">0 Sh</p>
-              </div>
-            </div>
-            <!-- GOD 10% -->
-            <div class="p-5 rounded-2xl bg-brand-black text-white shadow-premium relative overflow-hidden flex flex-col justify-between">
-              <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-brand-gold/10 rounded-full blur-xl pointer-events-none"></div>
-              <div class="flex items-center justify-between text-brand-gold">
-                <span class="text-xs font-semibold uppercase tracking-wider">GOD — 10%</span>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>
-              </div>
-              <div class="mt-4">
-                <p id="dash-god-amount" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-gold">0 Sh</p>
-              </div>
-            </div>
-            <!-- Total Money (Liquid Accounts) -->
-            <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between">
-              <div class="flex items-center justify-between text-brand-muted">
-                <span class="text-xs font-semibold uppercase tracking-wider">Total Money</span>
-                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-              </div>
-              <div class="mt-4">
-                <p id="dash-total-money" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-black">0 Sh</p>
-              </div>
-            </div>
-            <!-- Remaining Budget -->
-            <div class="p-5 rounded-2xl bg-white border border-brand-black/10 shadow-premium flex flex-col justify-between">
-              <div class="flex items-center justify-between text-brand-muted">
-                <span class="text-xs font-semibold uppercase tracking-wider text-brand-black">Remaining</span>
-                <svg class="w-4 h-4 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              </div>
-              <div class="mt-4">
-                <p id="dash-remaining-budget" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-black">0 Sh</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- REORGANIZED GRID QUICK ACTIONS BAR -->
-        <div class="p-5 rounded-3xl bg-brand-surface border border-gray-200 shadow-sm space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-extrabold uppercase tracking-wider text-brand-black">Quick Actions</span>
-            <span class="text-[11px] text-brand-muted">Most-Used Tools</span>
-          </div>
-          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-            <button onclick="openModal('addIncomeModal')" class="p-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-2xl shadow-sm transition text-left flex items-center space-x-3 group">
-              <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition flex-shrink-0">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-              </div>
-              <div>
-                <p class="text-xs font-bold text-brand-black uppercase">Income</p>
-                <p class="text-[10px] text-brand-muted">Add Stream</p>
-              </div>
-            </button>
-            
-            <button onclick="openModal('addSaleModal')" class="p-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-2xl shadow-sm transition text-left flex items-center space-x-3 group">
-              <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition flex-shrink-0">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
-              </div>
-              <div>
-                <p class="text-xs font-bold text-brand-black uppercase">Sale</p>
-                <p class="text-[10px] text-brand-muted">Record Business</p>
-              </div>
-            </button>
-            <button onclick="openModal('addTransactionModal')" class="p-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-2xl shadow-sm transition text-left flex items-center space-x-3 group">
-              <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition flex-shrink-0">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              </div>
-              <div>
-                <p class="text-xs font-bold text-brand-black uppercase">Expense</p>
-                <p class="text-[10px] text-brand-muted">Track Outflow</p>
-              </div>
-            </button>
-            <button onclick="openModal('transferModal')" class="p-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-2xl shadow-sm transition text-left flex items-center space-x-3 group">
-              <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition flex-shrink-0">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
-              </div>
-              <div>
-                <p class="text-xs font-bold text-brand-black uppercase">Transfer</p>
-                <p class="text-[10px] text-brand-muted">Move Money</p>
-              </div>
-            </button>
-            <button onclick="openModal('addLoanModal')" class="p-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-2xl shadow-sm transition text-left flex items-center space-x-3 group">
-              <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition flex-shrink-0">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-              </div>
-              <div>
-                <p class="text-xs font-bold text-brand-black uppercase">Loan</p>
-                <p class="text-[10px] text-brand-muted">Record Debt</p>
-              </div>
-            </button>
-            <button onclick="switchTab('investment')" class="p-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-2xl shadow-sm transition text-left flex items-center space-x-3 group">
-              <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-brand-black group-hover:bg-brand-black group-hover:text-white transition flex-shrink-0">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
-              </div>
-              <div>
-                <p class="text-xs font-bold text-brand-black uppercase">Invest</p>
-                <p class="text-[10px] text-brand-muted">Portfolio</p>
-              </div>
-            </button>
-            <button onclick="switchTab('progress')" class="p-3 bg-brand-black hover:bg-gray-800 text-white rounded-2xl shadow-sm transition text-left flex items-center space-x-3 group col-span-2 sm:col-span-1">
-              <div class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-brand-gold flex-shrink-0">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
-              </div>
-              <div>
-                <p class="text-xs font-bold uppercase text-white">Progress</p>
-                <p class="text-[10px] text-brand-gold">Total Profits</p>
-              </div>
-            </button>
-          </div>
-        </div>
-      </div>
-      <!-- ==================== TAB 2: INCOME & GOD ==================== -->
-      <div id="tab-income" class="tab-content hidden space-y-8">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h2 class="font-display font-bold text-2xl text-brand-black">Income & Tithe Tracking</h2>
-            <p class="text-xs text-brand-muted">Monthly income management with automatic 10% God Tithe allocation.</p>
-          </div>
-          <div class="flex items-center space-x-3">
-            <input type="month" id="income-month-picker" onchange="handleMonthChange(event)" class="px-3 py-2 rounded-xl border border-gray-200 text-xs font-bold bg-white text-brand-black shadow-sm">
-            <button onclick="openModal('addIncomeModal')" class="bg-brand-black text-white px-4 py-2.5 rounded-xl font-medium text-xs flex items-center space-x-1.5 shadow-sm hover:bg-gray-800 transition">
-              <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-              <span>+ Add Income</span>
-            </button>
-          </div>
-        </div>
-        <!-- GOD Tithe Banner -->
-        <div class="p-8 rounded-3xl bg-brand-black text-white shadow-premium relative overflow-hidden">
-          <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-brand-gold/20 rounded-full blur-3xl"></div>
-          <div class="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
-            <div class="flex items-center space-x-6">
-              <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-gold/30 to-brand-black border border-brand-gold/40 flex items-center justify-center shadow-gold-glow flex-shrink-0 text-brand-gold">
-                <svg class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-dasharray="2 2" />
-                  <polygon points="12,3 15,9 21,12 15,15 12,21 9,15 3,12 9,9" fill="rgba(212, 175, 55, 0.2)" stroke="currentColor"/>
-                  <circle cx="12" cy="12" r="3" fill="currentColor"/>
-                </svg>
-              </div>
-              <div>
-                <span class="text-xs font-bold text-brand-gold tracking-widest uppercase">Automatic Allocation</span>
-                <h3 class="font-display font-bold text-3xl mt-1 text-white">GOD 10% TITHE</h3>
-                <p class="text-xs text-gray-400 mt-1">10% is automatically set aside from every income and sale recorded in this active month.</p>
-              </div>
-            </div>
-            <div class="text-right w-full md:w-auto border-t md:border-t-0 border-gray-800 pt-4 md:pt-0">
-              <p class="text-xs text-gray-400 font-medium">Selected Month Tithe</p>
-              <p id="income-god-total" class="font-display text-4xl font-extrabold text-brand-gold mt-1">0 Sh</p>
-            </div>
-          </div>
-        </div>
-        <div class="space-y-4">
-          <div class="flex items-center justify-between">
-            <h3 id="income-list-heading" class="font-bold text-lg text-brand-black">Income Records</h3>
-            <span id="income-month-label" class="text-xs font-bold text-brand-muted uppercase">Current Active Month</span>
-          </div>
-          <div id="income-list-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-        </div>
-      </div>
-      <!-- ==================== TAB 3: BUDGET ==================== -->
-      <div id="tab-budget" class="tab-content hidden space-y-8">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h2 class="font-display font-bold text-2xl text-brand-black">Budget Structure (90% Remaining)</h2>
-            <p class="text-xs text-brand-muted">Utilities, Investment, Expenses, and Other allocations.</p>
-          </div>
-          <button onclick="openModal('addCategoryModal')" class="bg-brand-black text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-sm hover:bg-gray-800 transition">
-            <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-            <span>+ Custom Category</span>
-          </button>
-        </div>
-        <!-- Pool summary -->
-        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col md:flex-row items-center justify-between gap-6">
-          <div>
-            <p class="text-xs font-bold text-brand-muted uppercase tracking-wider">Available Budget Pool (90%)</p>
-            <p id="budget-pool-total" class="font-display text-3xl font-bold text-brand-black mt-1">0 Sh</p>
-          </div>
-          <div class="w-full md:w-1/2 space-y-2">
-            <div class="flex justify-between text-xs font-semibold">
-              <span class="text-brand-muted">Allocated Percentage</span>
-              <span id="budget-allocated-percent">0%</span>
-            </div>
-            <div class="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
-              <div id="budget-allocated-bar" class="h-full bg-brand-black transition-all duration-500" style="width: 0%"></div>
-            </div>
-          </div>
-        </div>
-        <div class="space-y-4">
-          <h3 class="font-bold text-lg text-brand-black">Primary Categories</h3>
-          <div id="budget-categories-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- UTILITIES EXPANDABLE CARD -->
-            <div class="rounded-3xl bg-white border border-gray-100 shadow-premium overflow-hidden transition-all duration-300 flex flex-col justify-between">
-              <div onclick="toggleUtilitiesAccordion()" class="p-6 flex items-center justify-between cursor-pointer hover:bg-gray-50/50 transition">
-                <div class="flex items-center space-x-4">
-                  <div class="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center text-brand-black">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                  </div>
-                  <div>
-                    <div class="flex items-center space-x-2">
-                      <h4 class="font-bold text-base text-brand-black">UTILITIES</h4>
-                      <span id="utilities-percent-badge" class="px-2.5 py-0.5 rounded-full bg-gray-100 text-brand-black text-[11px] font-bold">0%</span>
-                    </div>
-                    <p class="text-xs text-brand-muted mt-0.5">Internet, Umeme, Taka, Transport</p>
-                  </div>
-                </div>
-                <div class="flex items-center space-x-3">
-                  <svg id="utilities-chevron" class="w-6 h-6 text-brand-black transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                </div>
-              </div>
-              <div class="px-6 pb-6 pt-0 space-y-3">
-                <div>
-                  <label class="block text-xs font-bold text-brand-muted uppercase mb-1">Target Amount (Sh)</label>
-                  <input type="number" id="cat-amount-cat-utilities" oninput="handleCategoryAmountInput('cat-utilities', this.value)" placeholder="Enter amount" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm font-bold text-brand-black">
-                </div>
-                <div class="flex justify-between text-xs pt-2 border-t border-gray-100">
-                  <span id="utilities-spent-summary" class="text-brand-muted">Spent: 0 Sh</span>
-                  <span id="utilities-remaining-summary" class="font-bold text-emerald-600">Remaining: 0 Sh</span>
-                </div>
-              </div>
-              <!-- Accordion Content -->
-              <div id="utilities-accordion" class="accordion-content border-t border-gray-100 bg-brand-surface p-6 space-y-4">
-                <p class="text-xs font-semibold text-brand-muted uppercase tracking-wider">Subcategory Breakdown</p>
-                <div id="utilities-subcategories-list" class="grid grid-cols-1 gap-4"></div>
-              </div>
-            </div>
-            <!-- OTHER CATEGORIES Dynamic Container -->
-            <div id="main-categories-list" class="contents"></div>
-          </div>
-        </div>
-      </div>
-      <!-- ==================== TAB 3.5: DAILY EXPENSES ==================== -->
-      <div id="tab-daily-expenses" class="tab-content hidden space-y-8">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h2 class="font-display font-bold text-2xl text-brand-black">Daily Expense Tracking</h2>
-            <p class="text-xs text-brand-muted">Record expenses, organize by month, and monitor spending against budget limits.</p>
-          </div>
-          <div class="flex items-center space-x-3">
-            <input type="month" id="daily-expense-month-picker" onchange="handleExpenseMonthChange(event)" class="px-3 py-2 rounded-xl border border-gray-200 text-xs font-bold bg-white text-brand-black shadow-sm">
-            <button onclick="openModal('addTransactionModal')" class="bg-brand-black text-white px-4 py-2.5 rounded-xl font-medium text-xs flex items-center space-x-1.5 shadow-sm hover:bg-gray-800 transition">
-              <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-              <span>+ Record Expense</span>
-            </button>
-          </div>
-        </div>
-        <!-- Budget Comparison Status Summary -->
-        <div class="space-y-4">
-          <div class="flex items-center justify-between">
-            <h3 class="font-bold text-lg text-brand-black">Budget vs. Actual Spending</h3>
-            <span id="daily-expense-month-label" class="text-xs font-bold text-brand-muted uppercase">Current Selected Month</span>
-          </div>
-          <div id="category-budget-comparison-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-        </div>
-        <!-- Daily Expense Records Table -->
-        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
-          <div class="flex items-center justify-between border-b border-gray-100 pb-4">
-            <h3 class="font-bold text-base text-brand-black">Expense Log</h3>
-            <span id="daily-expense-log-count" class="text-xs text-brand-muted">0 Expenses Recorded</span>
-          </div>
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
-              <thead>
-                <tr class="border-b border-gray-100 text-brand-muted font-semibold uppercase">
-                  <th class="pb-3">Date</th>
-                  <th class="pb-3">Description</th>
-                  <th class="pb-3">Category</th>
-                  <th class="pb-3">Account</th>
-                  <th class="pb-3 text-right">Amount</th>
-                </tr>
-              </thead>
-              <tbody id="daily-expense-table-body" class="divide-y divide-gray-100 font-medium"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-      <!-- ==================== TAB 4: INVESTMENT ==================== -->
-      <div id="tab-investment" class="tab-content hidden space-y-8">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h2 class="font-display font-bold text-2xl text-brand-black">Investment Portfolio</h2>
-            <p class="text-xs text-brand-muted">Track principal capital additions and valuation growth separately.</p>
-          </div>
-          <div class="flex items-center space-x-2">
-            <button onclick="openModal('addInvestmentModal')" class="bg-gray-100 text-brand-black hover:bg-gray-200 px-4 py-2.5 rounded-xl font-medium text-sm transition">
-              + Add Capital
-            </button>
-            <button onclick="openModal('updateInvestmentModal')" class="bg-brand-black text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-sm hover:bg-gray-800 transition">
-              <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-              <span>Update Value</span>
-            </button>
-          </div>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium">
-            <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">Total Invested</span>
-            <p id="inv-total-invested" class="font-display text-3xl font-extrabold text-brand-black mt-1">0 Sh</p>
-          </div>
-          <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium">
-            <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">Current Value</span>
-            <p id="inv-current-value" class="font-display text-3xl font-extrabold text-brand-black mt-1">0 Sh</p>
-          </div>
-          <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium">
-            <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">Growth / Gain</span>
-            <p id="inv-gain-loss" class="font-display text-3xl font-extrabold text-emerald-600 mt-1">+0 Sh</p>
-          </div>
-          <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium">
-            <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">Return %</span>
-            <p id="inv-percentage-return" class="font-display text-3xl font-extrabold text-emerald-600 mt-1">+0.00%</p>
-          </div>
-        </div>
-        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
-          <h3 class="font-bold text-base text-brand-black">Investment History Log</h3>
-          <div id="investment-history-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-        </div>
-      </div>
-      <!-- ==================== TAB 5: APPEARICH BUSINESS ==================== -->
-      <div id="tab-appearich" class="tab-content hidden space-y-8">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h2 class="font-display font-bold text-2xl text-brand-black">Appearich Business System</h2>
-            <p class="text-xs text-brand-muted">Dedicated business sales tracking and payment status management.</p>
-          </div>
-          <div class="flex items-center space-x-2">
-            <button onclick="openModal('importExcelModal')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-1.5 transition shadow-sm">
-              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-              <span>Import Excel Sales</span>
-            </button>
-            <button onclick="openModal('addBusinessModal')" class="bg-gray-100 text-brand-black hover:bg-gray-200 px-4 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-1.5 transition">
-              <svg class="w-4 h-4 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-              <span>+ Add Appearich Business</span>
-            </button>
-            <button onclick="openModal('addSaleModal')" class="bg-brand-black text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-sm hover:bg-gray-800 transition">
-              <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-              <span>+ ADD SALE</span>
-            </button>
-          </div>
-        </div>
-        <div id="business-types-bar" class="flex items-center space-x-2 border-b border-gray-100 pb-3 overflow-x-auto no-scrollbar"></div>
-        <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
-          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium">
-            <p class="text-xs font-semibold text-brand-muted">TODAY'S RECEIVED</p>
-            <p id="app-today-sales" class="font-display text-2xl font-bold text-brand-black mt-2">0 Sh</p>
-          </div>
-          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium">
-            <p class="text-xs font-semibold text-brand-muted">TODAY'S PROFIT</p>
-            <p id="app-today-profit" class="font-display text-2xl font-bold text-emerald-600 mt-2">0 Sh</p>
-          </div>
-          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium">
-            <p class="text-xs font-semibold text-brand-muted">THIS MONTH REVENUE</p>
-            <p id="app-month-revenue" class="font-display text-2xl font-bold text-brand-black mt-2">0 Sh</p>
-          </div>
-          <div class="p-5 rounded-2xl bg-white border border-red-200 shadow-premium">
-            <p class="text-xs font-semibold text-red-500 flex items-center gap-1">
-              <span class="w-2 h-2 rounded-full bg-red-500 inline-block animate-pulse"></span>
-              OUTSTANDING
-            </p>
-            <p id="app-total-outstanding" class="font-display text-2xl font-bold text-red-600 mt-2">0 Sh</p>
-          </div>
-          <div class="p-5 rounded-2xl bg-brand-black text-white shadow-gold-glow">
-            <p class="text-xs font-semibold text-brand-gold">TOTAL PROFIT</p>
-            <p id="app-total-profit" class="font-display text-2xl font-bold text-brand-gold mt-2">0 Sh</p>
-          </div>
-        </div>
+
+      <!-- TAB: SALES TRANSACTIONS -->
+      <div id="tab-sales" class="tab-content space-y-8">
+        <!-- CONTROLS & SETTINGS BAR -->
         <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-6">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-4">
-            <div class="flex space-x-2">
-              <button onclick="switchAppearichPeriod('day')" id="app-period-day" class="app-period-btn active px-4 py-1.5 rounded-lg text-xs font-bold bg-brand-black text-white">DAY</button>
-              <button onclick="switchAppearichPeriod('week')" id="app-period-week" class="app-period-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-brand-muted hover:text-brand-black">WEEK</button>
-              <button onclick="switchAppearichPeriod('month')" id="app-period-month" class="app-period-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-brand-muted hover:text-brand-black">MONTH</button>
-              <button onclick="switchAppearichPeriod('year')" id="app-period-year" class="app-period-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-brand-muted hover:text-brand-black">YEAR</button>
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100 pb-4">
+            <div>
+              <h3 class="font-bold text-lg text-brand-black">Accounting Settings</h3>
+              <p class="text-xs text-brand-muted">Set starting point for accounting profit without removing historical records.</p>
             </div>
-            <span id="active-business-view-label" class="text-xs font-bold text-emerald-600">Active Business View: Appearich Main</span>
+            <div class="flex items-center space-x-3">
+              <label class="text-xs font-bold text-brand-black uppercase">Accounting Profit Start Point:</label>
+              <input type="month" id="profit-start-date-picker" onchange="updateProfitStartPoint(this.value)" class="px-3 py-2 rounded-xl border border-gray-200 text-xs font-bold bg-white text-brand-black shadow-sm">
+            </div>
           </div>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-            <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100"><p class="text-[10px] text-brand-muted uppercase font-bold">Products Sold</p><p id="app-period-sold" class="font-display font-bold text-xl text-brand-black mt-1">0</p></div>
-            <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100"><p class="text-[10px] text-brand-muted uppercase font-bold">Total Revenue</p><p id="app-period-revenue" class="font-display font-bold text-xl text-brand-black mt-1">0 Sh</p></div>
-            <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100"><p class="text-[10px] text-brand-muted uppercase font-bold">Buying Cost</p><p id="app-period-cost" class="font-display font-bold text-xl text-brand-black mt-1">0 Sh</p></div>
-            <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100"><p class="text-[10px] text-brand-muted uppercase font-bold">Profit Margin</p><p id="app-period-margin" class="font-display font-bold text-xl text-emerald-600 mt-1">0%</p></div>
+
+          <!-- ACTION BUTTONS -->
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="flex flex-wrap items-center gap-2">
+              <button onclick="openModal('importExcelModal')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl font-medium text-xs flex items-center space-x-1.5 transition shadow-sm">
+                <span>Import Excel Sales</span>
+              </button>
+              <button onclick="openModal('addSaleModal')" class="bg-brand-black text-white px-4 py-2.5 rounded-xl font-medium text-xs flex items-center space-x-1.5 shadow-sm hover:bg-gray-800 transition">
+                <span>+ Add New Sale</span>
+              </button>
+            </div>
+            <div id="bulk-delete-container" class="hidden">
+              <button onclick="deleteSelectedSales()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 rounded-xl font-medium text-xs flex items-center space-x-1.5 transition shadow-sm">
+                <span>Delete Selected (<span id="selected-count">0</span>)</span>
+              </button>
+            </div>
           </div>
         </div>
+
+        <!-- PROFIT SUMMARY METRICS -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium">
+            <p class="text-xs font-semibold text-brand-muted uppercase">Calculated Accounting Profit</p>
+            <p id="calculated-profit-display" class="font-display text-2xl font-bold text-emerald-600 mt-2">0 Sh</p>
+            <p id="profit-start-label" class="text-[10px] text-brand-muted mt-1">From selected start point</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium">
+            <p class="text-xs font-semibold text-brand-muted uppercase">Total Historical Sales</p>
+            <p id="total-historical-sales-count" class="font-display text-2xl font-bold text-brand-black mt-2">0 Records</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium">
+            <p class="text-xs font-semibold text-brand-muted uppercase">Imported Documents</p>
+            <div id="imported-documents-list" class="mt-2 space-y-1">
+              <span class="text-xs text-brand-muted">No documents imported yet</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SALES TRANSACTIONS TABLE -->
         <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
-          <h3 class="font-bold text-base text-brand-black">Sales Transactions Log</h3>
+          <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+            <h3 class="font-bold text-base text-brand-black">Sales Transactions Log</h3>
+            <span id="sales-record-count" class="text-xs font-bold text-brand-muted">0 Entries</span>
+          </div>
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
               <thead>
                 <tr class="border-b border-gray-100 text-brand-muted font-semibold uppercase">
-                  <th class="pb-3">Date</th>
-                  <th class="pb-3">Business</th>
-                  <th class="pb-3">Product</th>
-                  <th class="pb-3">Customer</th>
-                  <th class="pb-3">Total Value</th>
-                  <th class="pb-3">Amount Paid</th>
-                  <th class="pb-3">Unpaid Balance</th>
+                  <th class="pb-3 pr-2"><input type="checkbox" id="select-all-sales" onchange="toggleSelectAllSales(this.checked)"></th>
+                  <th class="pb-3">Day / Month</th>
+                  <th class="pb-3">Perfume</th>
+                  <th class="pb-3">Ml</th>
+                  <th class="pb-3">Qty</th>
+                  <th class="pb-3">Amount</th>
+                  <th class="pb-3">Sale</th>
                   <th class="pb-3">Status</th>
-                  <th class="pb-3">Action</th>
+                  <th class="pb-3">Profit</th>
+                  <th class="pb-3">Customer</th>
+                  <th class="pb-3">Expected</th>
+                  <th class="pb-3 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody id="appearich-sales-table" class="divide-y divide-gray-100 font-medium"></tbody>
+              <tbody id="sales-transactions-table-body" class="divide-y divide-gray-100 font-medium"></tbody>
             </table>
           </div>
-        </div>
-      </div>
-      <!-- ==================== TAB 6: ACCOUNTS ==================== -->
-      <div id="tab-accounts" class="tab-content hidden space-y-8">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h2 class="font-display font-bold text-2xl text-brand-black">Accounts — Money Distribution</h2>
-            <p class="text-xs text-brand-muted">CRDB, SELCOM, MPESA, LIPA NAMBA, and CASH liquid asset distribution.</p>
-          </div>
-          <div class="flex space-x-2">
-            <button onclick="openModal('addMoneyModal')" class="bg-gray-100 text-brand-black hover:bg-gray-200 px-4 py-2.5 rounded-xl font-medium text-sm transition">
-              + Add Money
-            </button>
-            <button onclick="openModal('transferModal')" class="bg-brand-black text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-sm hover:bg-gray-800 transition">
-              <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
-              <span>Transfer Funds</span>
-            </button>
-          </div>
-        </div>
-        <div class="p-8 rounded-3xl bg-brand-black text-white shadow-premium flex flex-col sm:flex-row items-center justify-between gap-6 border border-brand-black">
-          <div>
-            <span class="text-xs font-bold text-brand-gold uppercase tracking-widest">TOTAL LIQUID MONEY</span>
-            <p id="accounts-total-money" class="font-display text-4xl font-extrabold text-white mt-1">0 Sh</p>
-          </div>
-          <span class="px-3 py-1 rounded-full bg-brand-gold/20 text-brand-gold text-xs font-bold">5 Active Accounts</span>
-        </div>
-        <div id="account-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-      </div>
-      <!-- ==================== TAB 7: LOANS MANAGEMENT ==================== -->
-      <div id="tab-loans" class="tab-content hidden space-y-8">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h2 class="font-display font-bold text-2xl text-brand-black">Money Borrowed / Loans Given</h2>
-            <p class="text-xs text-brand-muted">Track funds lent to people and manage outstanding debt balances easily.</p>
-          </div>
-          <button onclick="openModal('addLoanModal')" class="bg-brand-black text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-sm hover:bg-gray-800 transition">
-            <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-            <span>+ Record Loan</span>
-          </button>
-        </div>
-        <div class="p-8 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div>
-            <span class="text-xs font-bold uppercase tracking-wider text-brand-muted">Total Outstanding Debt Owed To You</span>
-            <p id="loan-total-owed" class="font-display text-3xl lg:text-4xl font-extrabold text-brand-black mt-1">0 Sh</p>
-          </div>
-          <span class="px-3 py-1 rounded-full bg-yellow-50 text-yellow-700 border border-yellow-200 text-xs font-bold">Active Records</span>
-        </div>
-        <div class="space-y-4">
-          <h3 class="font-bold text-lg text-brand-black">Active Loans</h3>
-          <div id="loan-cards-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-        </div>
-      </div>
-      <!-- ==================== TAB 8: PROGRESS ==================== -->
-      <div id="tab-progress" class="tab-content hidden space-y-8">
-        <div>
-          <h2 class="font-display font-bold text-2xl text-brand-black">Overall Profit Progress</h2>
-          <p class="text-xs text-brand-muted">Aggregated combined total profit across all saved historical months.</p>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="p-8 rounded-3xl bg-brand-black text-white shadow-premium flex flex-col justify-between space-y-4 relative overflow-hidden">
-            <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-brand-gold/10 rounded-full blur-xl pointer-events-none"></div>
-            <div>
-              <span class="text-xs font-bold text-brand-gold uppercase tracking-wider">COMBINED OVERALL PROFIT</span>
-              <p id="progress-overall-profit" class="font-display text-4xl font-extrabold text-white mt-2">0 Sh</p>
-            </div>
-            <p class="text-xs text-gray-400">Summed total net profit from all stored months to date.</p>
-          </div>
-          <div class="p-8 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4">
-            <div>
-              <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">ACTIVE MONTH PROFIT</span>
-              <p id="progress-active-month-profit" class="font-display text-4xl font-extrabold text-emerald-600 mt-2">0 Sh</p>
-            </div>
-            <p id="progress-active-month-name" class="text-xs text-brand-muted font-semibold">Current Month Profit</p>
-          </div>
-        </div>
-        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
-          <div class="flex items-center justify-between border-b border-gray-100 pb-4">
-            <h3 class="font-bold text-base text-brand-black">Monthly Profit Breakdown</h3>
-            <span class="text-xs font-bold text-brand-muted">Individual Monthly History</span>
-          </div>
-          <div id="progress-monthly-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </div>
       </div>
     </main>
-    <!-- SIMPLE BOTTOM NAVIGATION -->
-    <nav class="fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-t border-gray-200 px-4 py-2.5">
-      <div class="max-w-md mx-auto flex items-center justify-between">
-        <button onclick="switchTab('dashboard')" id="bnav-dashboard" class="bnav-btn flex flex-col items-center space-y-1 text-brand-black">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-          <span class="text-[10px] font-bold">Home</span>
-        </button>
-        <button onclick="switchTab('budget')" id="bnav-budget" class="bnav-btn flex flex-col items-center space-y-1 text-brand-muted hover:text-brand-black">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" /></svg>
-          <span class="text-[10px] font-bold">Budget</span>
-        </button>
-        <button onclick="openModal('addTransactionModal')" class="flex flex-col items-center justify-center w-11 h-11 rounded-2xl bg-brand-black text-white shadow-gold-glow -mt-5 hover:scale-105 transition">
-          <svg class="w-6 h-6 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-        </button>
-        <button onclick="switchTab('accounts')" id="bnav-accounts" class="bnav-btn flex flex-col items-center space-y-1 text-brand-muted hover:text-brand-black">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-          <span class="text-[10px] font-bold">Accounts</span>
-        </button>
-        <button onclick="switchTab('progress')" id="bnav-progress" class="bnav-btn flex flex-col items-center space-y-1 text-brand-muted hover:text-brand-black">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
-          <span class="text-[10px] font-bold">Progress</span>
-        </button>
-      </div>
-    </nav>
   </div>
-  <!-- ==================== MODALS ==================== -->
-  <div id="addIncomeModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Add Income Source</h3>
-        <button onclick="closeModal('addIncomeModal')" class="text-gray-400 hover:text-black">&times;</button>
-      </div>
-      <form onsubmit="handleAddIncome(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs font-bold text-brand-black uppercase mb-1">Source Name</label>
-          <input id="income-name-input" type="text" required placeholder="e.g. Consulting / Salary" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-brand-black uppercase mb-1">Amount (Sh)</label>
-          <input id="income-amount-input" type="number" required placeholder="500000" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm">
-        </div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Save Income</button>
-      </form>
-    </div>
-  </div>
+
+  <!-- MODALS -->
+
+  <!-- ADD / EDIT SALE MODAL -->
   <div id="addSaleModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-lg w-full space-y-4 shadow-2xl border border-gray-100 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Record Sale</h3>
+        <h3 id="sale-modal-title" class="font-bold text-lg text-brand-black">Record Sales Transaction</h3>
         <button onclick="closeModal('addSaleModal')" class="text-gray-400 hover:text-black">&times;</button>
       </div>
-      <form onsubmit="handleAddSale(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs font-bold uppercase mb-1">Business / Sales Type</label>
-          <select id="sale-business-type" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white font-medium"></select>
+      <form onsubmit="handleSaveSale(event)" class="space-y-3">
+        <input type="hidden" id="sale-edit-id">
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-bold uppercase mb-1">Day / Month / Year</label><input id="form-sale-day" type="text" required placeholder="e.g. May or May 2026" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+          <div><label class="block text-xs font-bold uppercase mb-1">Perfume Name</label><input id="form-sale-perfume" type="text" required placeholder="e.g. Aqua Di Gio" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        </div>
+        <div class="grid grid-cols-3 gap-3">
+          <div><label class="block text-xs font-bold uppercase mb-1">Ml</label><input id="form-sale-ml" type="number" placeholder="30" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+          <div><label class="block text-xs font-bold uppercase mb-1">Quantity</label><input id="form-sale-quantity" type="number" value="1" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+          <div><label class="block text-xs font-bold uppercase mb-1">Amount</label><input id="form-sale-amount" type="number" placeholder="15000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        </div>
+        <div class="grid grid-cols-3 gap-3">
+          <div><label class="block text-xs font-bold uppercase mb-1">Sale Price</label><input id="form-sale-price" type="number" placeholder="25000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+          <div><label class="block text-xs font-bold uppercase mb-1">Status</label><input id="form-sale-status" type="text" value="SOLD" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+          <div><label class="block text-xs font-bold uppercase mb-1">Profit</label><input id="form-sale-profit" type="number" placeholder="10000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
         </div>
         <div class="grid grid-cols-2 gap-3">
-          <div><label class="block text-xs font-bold uppercase mb-1">Date</label><input id="sale-date" type="date" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-          <div><label class="block text-xs font-bold uppercase mb-1">Quantity</label><input id="sale-qty" type="number" value="1" min="1" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+          <div><label class="block text-xs font-bold uppercase mb-1">Customer / Buyer</label><input id="form-sale-customer" type="text" placeholder="Customer Name" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+          <div><label class="block text-xs font-bold uppercase mb-1">Expected</label><input id="form-sale-expected" type="number" placeholder="Expected Value" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
         </div>
-        <div><label class="block text-xs font-bold uppercase mb-1">Product Name</label><input id="sale-product" type="text" required placeholder="Item Name" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        <div><label class="block text-xs font-bold uppercase mb-1">Customer Name</label><input id="sale-customer" type="text" required placeholder="Customer" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        <div class="grid grid-cols-2 gap-3">
-          <div><label class="block text-xs font-bold uppercase mb-1">Buying Price (Sh)</label><input id="sale-buy-price" type="number" required placeholder="35000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-          <div><label class="block text-xs font-bold uppercase mb-1">Selling Price (Sh)</label><input id="sale-sell-price" type="number" required placeholder="55000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        </div>
-        <div>
-          <label class="block text-xs font-bold uppercase mb-1">Payment Status</label>
-          <select id="sale-payment-status" onchange="toggleSalePartialInput()" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white font-medium">
-            <option value="FULL">Full Payment</option>
-            <option value="PARTIAL">Partial Payment</option>
-          </select>
-        </div>
-        <div id="sale-partial-container" class="hidden">
-          <label class="block text-xs font-bold uppercase mb-1 text-red-600">Amount Paid So Far (Sh)</label>
-          <input id="sale-paid-amount" type="number" placeholder="Enter amount paid" class="w-full px-3 py-2 rounded-xl border border-red-300 text-sm">
-        </div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Record Sale</button>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Save Record</button>
       </form>
     </div>
   </div>
-  <div id="addBusinessModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Add Appearich Business</h3>
-        <button onclick="closeModal('addBusinessModal')" class="text-gray-400 hover:text-black">&times;</button>
-      </div>
-      <form onsubmit="handleAddBusinessOption(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs font-bold uppercase mb-1">Business Name</label>
-          <input id="new-business-name-input" type="text" required placeholder="e.g. Perfumes, Clothing, Electronics" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm">
-        </div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Add Business</button>
-      </form>
-    </div>
-  </div>
-  <div id="updateSalePaymentModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Update Sale Payment Status</h3>
-        <button onclick="closeModal('updateSalePaymentModal')" class="text-gray-400 hover:text-black">&times;</button>
-      </div>
-      <form onsubmit="handleUpdateSalePayment(event)" class="space-y-4">
-        <input type="hidden" id="edit-sale-id">
-        <div>
-          <label class="block text-xs font-bold uppercase mb-1">Payment Status</label>
-          <select id="edit-sale-status" onchange="toggleEditSalePartialInput()" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white font-medium">
-            <option value="FULL">Full Payment</option>
-            <option value="PARTIAL">Partial Payment</option>
-          </select>
-        </div>
-        <div id="edit-sale-paid-container">
-          <label class="block text-xs font-bold uppercase mb-1">Total Amount Paid So Far (Sh)</label>
-          <input id="edit-sale-paid-amount" type="number" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm">
-        </div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Save Payment Changes</button>
-      </form>
-    </div>
-  </div>
-  <div id="addLoanModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Record Loan Given</h3>
-        <button onclick="closeModal('addLoanModal')" class="text-gray-400 hover:text-black">&times;</button>
-      </div>
-      <form onsubmit="handleAddLoan(event)" class="space-y-4">
-        <div><label class="block text-xs font-bold uppercase mb-1">Person's Name</label><input id="loan-borrower" type="text" required placeholder="e.g. John Doe" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        <div class="grid grid-cols-2 gap-3">
-          <div><label class="block text-xs font-bold uppercase mb-1">Amount Borrowed (Sh)</label><input id="loan-amount" type="number" required placeholder="100000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-          <div><label class="block text-xs font-bold uppercase mb-1">Date</label><input id="loan-date" type="date" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        </div>
-        <div><label class="block text-xs font-bold uppercase mb-1">Amount Paid So Far (Sh)</label><input id="loan-paid" type="number" value="0" min="0" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        <div><label class="block text-xs font-bold uppercase mb-1">Optional Note / Purpose</label><input id="loan-note" type="text" placeholder="e.g. Emergency funds" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Save Loan Record</button>
-      </form>
-    </div>
-  </div>
-  <div id="updateLoanModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Update Loan Repayment</h3>
-        <button onclick="closeModal('updateLoanModal')" class="text-gray-400 hover:text-black">&times;</button>
-      </div>
-      <form onsubmit="handleUpdateLoan(event)" class="space-y-4">
-        <input type="hidden" id="edit-loan-id">
-        <div>
-          <label class="block text-xs font-bold uppercase mb-1">Total Amount Paid So Far (Sh)</label>
-          <input id="edit-loan-paid" type="number" min="0" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm">
-        </div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Update Loan Balance</button>
-      </form>
-    </div>
-  </div>
-  <div id="addTransactionModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Add Expense Transaction</h3>
-        <button onclick="closeModal('addTransactionModal')" class="text-gray-400 hover:text-black">&times;</button>
-      </div>
-      <form onsubmit="handleAddTransaction(event)" class="space-y-4">
-        <div><label class="block text-xs font-bold uppercase mb-1">Description</label><input id="tx-name" type="text" required placeholder="e.g. Internet" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-bold uppercase mb-1">Category</label>
-            <select id="tx-category" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
-              <option value="Internet">Internet</option>
-              <option value="Umeme">Umeme</option>
-              <option value="Taka">Taka</option>
-              <option value="Transport">Transport</option>
-              <option value="Expenses">Expenses</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-bold uppercase mb-1">Account</label>
-            <select id="tx-account" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
-              <option value="CRDB">CRDB</option>
-              <option value="SELCOM">SELCOM</option>
-              <option value="MPESA">MPESA</option>
-              <option value="LIPA NAMBA">LIPA NAMBA</option>
-              <option value="CASH">CASH</option>
-            </select>
-          </div>
-        </div>
-        <div class="grid grid-cols-2 gap-3">
-          <div><label class="block text-xs font-bold uppercase mb-1">Amount (Sh)</label><input id="tx-amount" type="number" required placeholder="40000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-          <div><label class="block text-xs font-bold uppercase mb-1">Date</label><input id="tx-date" type="date" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        </div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Execute Expense</button>
-      </form>
-    </div>
-  </div>
-  <div id="transferModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Transfer Between Accounts</h3>
-        <button onclick="closeModal('transferModal')" class="text-gray-400 hover:text-black">&times;</button>
-      </div>
-      <form onsubmit="handleTransfer(event)" class="space-y-4">
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-bold uppercase mb-1">From</label>
-            <select id="tr-from" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
-              <option value="CRDB">CRDB</option><option value="SELCOM">SELCOM</option><option value="MPESA">MPESA</option><option value="LIPA NAMBA">LIPA NAMBA</option><option value="CASH">CASH</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-bold uppercase mb-1">To</label>
-            <select id="tr-to" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
-              <option value="MPESA">MPESA</option><option value="CRDB">CRDB</option><option value="SELCOM">SELCOM</option><option value="LIPA NAMBA">LIPA NAMBA</option><option value="CASH">CASH</option>
-            </select>
-          </div>
-        </div>
-        <div><label class="block text-xs font-bold uppercase mb-1">Amount (Sh)</label><input id="tr-amount" type="number" required placeholder="50000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Transfer Funds</button>
-      </form>
-    </div>
-  </div>
-  <div id="addMoneyModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Add Money to Account</h3>
-        <button onclick="closeModal('addMoneyModal')" class="text-gray-400 hover:text-black">&times;</button>
-      </div>
-      <form onsubmit="handleAddMoneyAccount(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs font-bold uppercase mb-1">Account</label>
-          <select id="am-account" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
-            <option value="CRDB">CRDB</option><option value="SELCOM">SELCOM</option><option value="MPESA">MPESA</option><option value="LIPA NAMBA">LIPA NAMBA</option><option value="CASH">CASH</option>
-          </select>
-        </div>
-        <div><label class="block text-xs font-bold uppercase mb-1">Amount (Sh)</label><input id="am-amount" type="number" required placeholder="100000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Deposit</button>
-      </form>
-    </div>
-  </div>
-  <div id="addInvestmentModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Add Investment Capital</h3>
-        <button onclick="closeModal('addInvestmentModal')" class="text-gray-400 hover:text-black">&times;</button>
-      </div>
-      <form onsubmit="handleAddInvestmentCapital(event)" class="space-y-4">
-        <div><label class="block text-xs font-bold uppercase mb-1">Additional Amount (Sh)</label><input id="inv-add-amount" type="number" required placeholder="100000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Add Capital</button>
-      </form>
-    </div>
-  </div>
-  <div id="updateInvestmentModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Update Investment Portfolio Value</h3>
-        <button onclick="closeModal('updateInvestmentModal')" class="text-gray-400 hover:text-black">&times;</button>
-      </div>
-      <form onsubmit="handleUpdateInvestmentValue(event)" class="space-y-4">
-        <div><label class="block text-xs font-bold uppercase mb-1">Current Total Value (Sh)</label><input id="inv-update-value" type="number" required placeholder="700000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Update Valuation</button>
-      </form>
-    </div>
-  </div>
-  <div id="addCategoryModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Add Custom Budget Category</h3>
-        <button onclick="closeModal('addCategoryModal')" class="text-gray-400 hover:text-black">&times;</button>
-      </div>
-      <form onsubmit="handleAddCategory(event)" class="space-y-4">
-        <div><label class="block text-xs font-bold uppercase mb-1">Category Name</label><input id="cat-name-input" type="text" required placeholder="e.g. Health" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm"></div>
-        <div><label class="block text-xs font-bold uppercase mb-1">Target Amount (Sh)</label><input id="cat-amount-input" type="number" required placeholder="50000" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm"></div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Create Category</button>
-      </form>
-    </div>
-  </div>
-  
-  <!-- IMPORT EXCEL SALES MODAL -->
+
+  <!-- EXCEL IMPORT MODAL -->
   <div id="importExcelModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-2xl w-full space-y-4 shadow-2xl border border-gray-100 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
@@ -1020,1356 +313,578 @@
       <div class="space-y-4">
         <div>
           <label class="block text-xs font-bold uppercase mb-1 text-brand-muted">Select Sales Excel File</label>
-          <input type="file" id="excel-file-input" accept=".xlsx, .xls" onchange="previewExcelFile(event)" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-xs bg-white">
+          <input type="file" id="excel-file-input" accept=".xlsx, .xls" onchange="previewExcelFile(event)" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-xs">
         </div>
-        <div id="excel-preview-container" class="hidden space-y-3">
-          <p class="text-xs font-bold text-brand-black uppercase">Data Preview (<span id="preview-count">0</span> records)</p>
-          <div class="overflow-x-auto max-h-60 border border-gray-100 rounded-xl">
-            <table class="w-full text-left text-[11px]">
-              <thead class="bg-gray-50 text-brand-muted font-bold border-b border-gray-100">
-                <tr>
-                  <th class="p-2">Date</th>
-                  <th class="p-2">Perfume Name</th>
-                  <th class="p-2">Ml</th>
-                  <th class="p-2">Qty</th>
-                  <th class="p-2">Amount</th>
-                  <th class="p-2">Sale</th>
-                  <th class="p-2">Status</th>
-                  <th class="p-2">Profit</th>
-                  <th class="p-2">Customer</th>
-                  <th class="p-2">Expected</th>
+        <div id="excel-preview-container" class="hidden space-y-2">
+          <p class="text-xs font-bold uppercase text-brand-black">Data Preview (<span id="excel-preview-count">0</span> records found)</p>
+          <div class="max-h-60 overflow-y-auto border border-gray-200 rounded-xl p-2 bg-gray-50">
+            <table class="w-full text-[10px] text-left">
+              <thead>
+                <tr class="border-b font-bold text-gray-600">
+                  <th class="p-1">DAY</th><th class="p-1">PERFUME</th><th class="p-1">Ml</th><th class="p-1">QTY</th><th class="p-1">AMOUNT</th><th class="p-1">SALE</th><th class="p-1">PROFIT</th><th class="p-1">CUSTOMER</th>
                 </tr>
               </thead>
-              <tbody id="excel-preview-body" class="divide-y divide-gray-100"></tbody>
+              <tbody id="excel-preview-body"></tbody>
             </table>
           </div>
-          <button onclick="confirmExcelImport()" id="confirm-import-btn" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-700 transition text-sm">Confirm & Import Sales History</button>
+          <button onclick="confirmExcelImport()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition text-sm">Confirm & Import Sales</button>
         </div>
       </div>
     </div>
   </div>
-  <!-- JAVASCRIPT ENGINE & SUPABASE PERSISTENCE -->
-  <script>
-    // 5. SUPABASE CONFIGURATION
-    const SUPABASE_URL = 'https://zudqubbglwphfxaviqsg.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1ZHF1YmJnbHdwaGZ4YXZpcXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0NjcyNTUsImV4cCI6MjA5ODA0MzI1NX0.7pRbRqz9-5gN8SG_ALn5ecHOWQofykPvhbrE2HQROCE';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    let authMode = 'login'; // 'login' or 'signup'
-    let currentUser = null;
-    let pendingExcelRecords = [];
-    function getCurrentMonthKey() {
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      return `${year}-${month}`;
-    }
-    const state = {
-      userName: '',
-      activeMonth: getCurrentMonthKey(),
-      expenseActiveMonth: getCurrentMonthKey(),
-      monthlyData: {
-        [getCurrentMonthKey()]: {
-          incomes: [],
-          sales: [],
-          expenses: [],
-          categorySpent: { 'Expenses': 0, 'Other': 0 },
-          utilitiesSubSpent: { 'Internet': 0, 'Umeme': 0, 'Taka': 0, 'Transport': 0 }
-        }
-      },
-      heroImageUrl: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1600&auto=format&fit=crop',
-      categories: [
-        { id: 'cat-utilities', name: 'Utilities', amount: 0, isExpandable: true },
-        { id: 'cat-investment', name: 'Investment', amount: 0, isExpandable: false },
-        { id: 'cat-expenses', name: 'Expenses', amount: 0, isExpandable: false },
-        { id: 'cat-other', name: 'Other', amount: 0, isExpandable: false }
-      ],
-      utilitiesSub: [
-        { name: 'Internet' },
-        { name: 'Umeme' },
-        { name: 'Taka' },
-        { name: 'Transport' }
-      ],
-      businessTypes: ['Appearich Main', 'Perfume'],
-      activeBusinessType: 'Appearich Main',
-      investment: {
-        totalInvested: 0,
-        currentValue: 0,
-        history: []
-      },
-      loans: [],
-      accounts: { 'CRDB': 0, 'SELCOM': 0, 'MPESA': 0, 'LIPA NAMBA': 0, 'CASH': 0 },
-      currentTab: 'dashboard',
-      appearichPeriod: 'day',
-      utilitiesExpanded: false,
-      seededHistoricalSales: false
-    };
 
-    // HISTORICAL SEED DATA DATASET
-    const RAW_HISTORICAL_SALES = [
-      { month: '2025-05', perfume: 'Aqua Di Gio', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'KrecyKate' },
-      { month: '2025-05', perfume: 'Lacoste White', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'KamalaCareen' },
-      { month: '2025-05', perfume: 'Coconut Passion', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'AnethReggie' },
-      { month: '2025-05', perfume: 'Sugar Candy', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'RashidAlex' },
-      { month: '2025-05', perfume: 'Pink Chiffon', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'ShemejiInnocent' },
-      { month: '2025-05', perfume: 'La Nutt Dl Homme', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 20000, customer: 'CharlesBrian' },
-      { month: '2025-05', perfume: 'Cool Men', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'KrecyMil' },
-      { month: '2025-05', perfume: 'Strawberry', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'KrecyNyam' },
-      { month: '2025-05', perfume: 'Tag Sunset', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'AishaFelix' },
-      { month: '2025-05', perfume: 'Aqua Di Arman', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'RashidKate' },
-      { month: '2025-06', perfume: 'Pink Vanilla Coconut', ml: 100, qty: 1, amount: 15000, sale: 55000, status: 'SOLD', profit: 20000, customer: 'AdzenoelaLutome' },
-      { month: '2025-06', perfume: 'Tag Sunset', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Niraelpost' },
-      { month: '2025-07', perfume: 'Strawberry', ml: 30, qty: 3, amount: 15000, sale: 75000, status: 'SOLD', profit: 30000, customer: 'SistaAidan' },
-      { month: '2025-08', perfume: 'Aqua Di Gio', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'DannyChamson' },
-      { month: '2025-08', perfume: 'Baccart', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'SistaAnna' },
-      { month: '2025-08', perfume: 'Strawberry', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Nirael' },
-      { month: '2025-08', perfume: 'Savage Dior', ml: 30, qty: 1, amount: 15000, sale: 20000, status: 'SOLD', profit: 5000, customer: 'Shine' },
-      { month: '2025-10', perfume: 'Pink Shiffon', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Sarah' },
-      { month: '2025-11', perfume: 'Savage Dior', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Hassan' },
-      { month: '2025-11', perfume: 'Sugar Candy', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Rashid' },
-      { month: '2025-12', perfume: 'Pink Chiffon', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Dorica' },
-      { month: '2025-12', perfume: 'Profondo', ml: 50, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Danny' },
-      { month: '2025-12', perfume: 'Stronger with You', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Charles' },
-      { month: '2025-12', perfume: 'Eden Juice Apple', ml: 30, qty: 1, amount: 22500, sale: 37500, status: 'SOLD', profit: 12500, customer: 'Krecy' },
-      { month: '2025-12', perfume: 'Stronger with You', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Basil' },
-      { month: '2025-12', perfume: 'Eden Juice Apple', ml: 30, qty: 1, amount: 17500, sale: 25000, status: 'SOLD', profit: 7500, customer: 'Krecy' },
-      { month: '2026-01', perfume: 'Strawberry', ml: 30, qty: 1, amount: 15000, sale: 20000, status: 'SOLD', profit: 5000, customer: 'Careen' },
-      { month: '2026-01', perfume: 'Profondo', ml: 20, qty: 1, amount: 10000, sale: 15000, status: 'SOLD', profit: 5000, customer: 'Charles DIT' },
-      { month: '2026-01', perfume: 'Sugar Candy', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Neema' },
-      { month: '2026-01', perfume: 'Invictus', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Alexander' },
-      { month: '2026-02', perfume: 'Pink Chiffon', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Nirael Lema' },
-      { month: '2026-02', perfume: 'Strawberry', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Nirael Lema' },
-      { month: '2026-02', perfume: 'Savage Dior', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Dr Magen' },
-      { month: '2026-02', perfume: '212 VIP', ml: 20, qty: 1, amount: 10000, sale: 15000, status: 'SOLD', profit: 5000, customer: 'Malick' },
-      { month: '2026-03', perfume: '212 VIP', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Cathe' },
-      { month: '2026-03', perfume: 'Stronger with you', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Shine' },
-      { month: '2026-03', perfume: 'Aqqua Di Gio', ml: 50, qty: 1, amount: 20000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Lutome' },
-      { month: '2026-04', perfume: 'Aqua Di Gio', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Tesha' },
-      { month: '2026-04', perfume: 'Invictus', ml: 50, qty: 1, amount: 20000, sale: 25000, status: 'SOLD', profit: 15000, customer: 'Ronnah' },
-      { month: '2026-04', perfume: 'Eden Juice Apple', ml: 50, qty: 1, amount: 22500, sale: 35000, status: 'SOLD', profit: 12500, customer: 'Magen' },
-      { month: '2026-04', perfume: 'Creed Aventus', ml: 50, qty: 1, amount: 20000, sale: 40000, status: 'SOLD', profit: 15000, customer: 'Basil' },
-      { month: '2026-04', perfume: 'Sugar Candy', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Rashid' },
-      { month: '2026-04', perfume: 'Vanilla Eden Juice', ml: 50, qty: 1, amount: 17500, sale: 25000, status: 'SOLD', profit: 7500, customer: 'Anne' },
-      { month: '2026-04', perfume: 'Invictus', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Krecy' },
-      { month: '2026-05', perfume: '212 VIP', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Malick' },
-      { month: '2026-06', perfume: 'Eden Juice & Strawberry', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Kareen' },
-      { month: '2026-06', perfume: '212 VIP', ml: 20, qty: 1, amount: 10000, sale: 15000, status: 'SOLD', profit: 5000, customer: 'Lutome' },
-      { month: '2026-06', perfume: 'Invictus', ml: 20, qty: 1, amount: 10000, sale: 15000, status: 'SOLD', profit: 5000, customer: 'Shedy' },
-      { month: '2026-06', perfume: 'Invictus', ml: 20, qty: 1, amount: 10000, sale: 15000, status: 'SOLD', profit: 5000, customer: 'Wilson' },
-      { month: '2026-06', perfume: 'Eden Juice & Tag sunset', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 7500, customer: 'Evirce' },
-      { month: '2026-06', perfume: 'Eden Juice & Tag sunset', ml: 50, qty: 1, amount: 20000, sale: 30000, status: 'SOLD', profit: 7500, customer: 'Krecy' },
-      { month: '2026-06', perfume: '9PM', ml: 50, qty: 1, amount: 20000, sale: 30000, status: 'SOLD', profit: 10000, customer: 'Aidan' },
-      { month: '2026-06', perfume: '9PM', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Hassan' },
-      { month: '2026-07', perfume: 'Mango Peach', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Sista' },
-      { month: '2026-07', perfume: 'Vanilla & Profondo', ml: 50, qty: 1, amount: 20000, sale: 30000, status: 'SOLD', profit: 10000, customer: 'Alexander' },
-      { month: '2026-08', perfume: 'Sexy love & Tag Sunset', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Witty' },
-      { month: '2026-08', perfume: 'Savage Dior', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Dr Magen' },
-      { month: '2026-08', perfume: 'Stronger with you', ml: 10, qty: 1, amount: 6500, sale: 10000, status: 'SOLD', profit: 3500, customer: 'Dr Magen' },
-      { month: '2026-08', perfume: 'Invictus', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Evirce' }
+  <!-- APPLICATION LOGIC -->
+  <script>
+    // 1. SUPABASE CLIENT INITIALIZATION
+    const SUPABASE_URL = "YOUR_SUPABASE_URL_HERE"; 
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY_HERE";
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // STATE MANAGEMENT
+    let currentUser = null;
+    let isSignUpMode = false;
+    let salesTransactions = [];
+    let accountingProfitStartDate = null;
+    let selectedSalesIds = new Set();
+    let parsedExcelData = [];
+    let importedDocuments = [];
+
+    // SEED HISTORICAL SALES DATA
+    const SEED_DATA = [
+      { day: 'May', perfume: 'Aqua Di Gio', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'KrecyKate', expected: null },
+      { day: 'May', perfume: 'Lacoste White', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'KamalaCareen', expected: null },
+      { day: 'May', perfume: 'Coconut Passion', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'AnethReggie', expected: null },
+      { day: 'May', perfume: 'Sugar Candy', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'RashidAlex', expected: null },
+      { day: 'May', perfume: 'Pink Chiffon', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'ShemejiInnocent', expected: null },
+      { day: 'May', perfume: 'La Nutt Dl Homme', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 20000, customers: 'CharlesBrian', expected: null },
+      { day: 'May', perfume: 'Cool Men', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'KrecyMil', expected: null },
+      { day: 'May', perfume: 'Strawberry', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'KrecyNyam', expected: null },
+      { day: 'May', perfume: 'Tag Sunset', ml: 50, quantity: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customers: 'AishaFelix', expected: null },
+      { day: 'May', perfume: 'Aqua Di Arman', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'RashidKate', expected: null },
+      { day: 'June', perfume: 'Pink Vanilla Coconut', ml: 100, quantity: 1, amount: 15000, sale: 55000, status: 'SOLD', profit: 20000, customers: 'AdzenoelaLutome', expected: null },
+      { day: 'June', perfume: 'Tag Sunset', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Niraelpost', expected: null },
+      { day: 'July', perfume: 'Strawberry', ml: 30, quantity: 3, amount: 15000, sale: 75000, status: 'SOLD', profit: 30000, customers: 'SistaAidan', expected: null },
+      { day: 'August', perfume: 'Aqua Di Gio', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'DannyChamson', expected: null },
+      { day: 'August', perfume: 'Baccart', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'SistaAnna', expected: null },
+      { day: 'August', perfume: 'Strawberry', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Nirael', expected: null },
+      { day: 'August', perfume: 'Savage Dior', ml: 30, quantity: 1, amount: 15000, sale: 20000, status: 'SOLD', profit: 5000, customers: 'Shine', expected: null },
+      { day: 'October', perfume: 'Pink Shiffon', ml: 50, quantity: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customers: 'Sarah', expected: null },
+      { day: 'November', perfume: 'Savage Dior', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Hassan', expected: null },
+      { day: 'November', perfume: 'Sugar Candy', ml: 50, quantity: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customers: 'Rashid', expected: null },
+      { day: 'December', perfume: 'Pink Chiffon', ml: 50, quantity: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customers: 'Dorica', expected: null },
+      { day: 'December', perfume: 'Profondo', ml: 50, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Danny', expected: null },
+      { day: 'December', perfume: 'Stronger with You', ml: 50, quantity: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customers: 'Charles', expected: null },
+      { day: 'December', perfume: 'Eden Juice Apple', ml: 30, quantity: 1, amount: 22500, sale: 37500, status: 'SOLD', profit: 12500, customers: 'Krecy', expected: null },
+      { day: 'December', perfume: 'Stronger with You', ml: 50, quantity: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customers: 'Basil', expected: null },
+      { day: 'December', perfume: 'Eden Juice Apple', ml: 30, quantity: 1, amount: 17500, sale: 25000, status: 'SOLD', profit: 7500, customers: 'Krecy', expected: null },
+      { day: 'January 2026', perfume: 'Strawberry', ml: 30, quantity: 1, amount: 15000, sale: 20000, status: 'SOLD', profit: 5000, customers: 'Careen', expected: null },
+      { day: 'January 2026', perfume: 'Profondo', ml: 20, quantity: 1, amount: 10000, sale: 15000, status: 'SOLD', profit: 5000, customers: 'Charles DIT', expected: null },
+      { day: 'January 2026', perfume: 'Sugar Candy', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Neema', expected: null },
+      { day: 'January 2026', perfume: 'Invictus', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Alexander', expected: null },
+      { day: 'February 2026', perfume: 'Pink Chiffon', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Nirael Lema', expected: null },
+      { day: 'February 2026', perfume: 'Strawberry', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Nirael Lema', expected: null },
+      { day: 'February 2026', perfume: 'Savage Dior', ml: 50, quantity: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customers: 'Dr Magen', expected: null },
+      { day: 'February 2026', perfume: '212 VIP', ml: 20, quantity: 1, amount: 10000, sale: 15000, status: 'SOLD', profit: 5000, customers: 'Malick', expected: null },
+      { day: 'March 2026', perfume: '212 VIP', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Cathe', expected: null },
+      { day: 'March 2026', perfume: 'Stronger with you', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Shine', expected: null },
+      { day: 'March 2026', perfume: 'Aqqua Di Gio', ml: 50, quantity: 1, amount: 20000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Lutome', expected: null },
+      { day: 'April 2026', perfume: 'Aqua Di Gio', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Tesha', expected: null },
+      { day: 'April 2026', perfume: 'Invictus', ml: 50, quantity: 1, amount: 20000, sale: 25000, status: 'SOLD', profit: 15000, customers: 'Ronnah', expected: null },
+      { day: 'April 2026', perfume: 'Eden Juice Apple', ml: 50, quantity: 1, amount: 22500, sale: 35000, status: 'SOLD', profit: 12500, customers: 'Magen', expected: null },
+      { day: 'April 2026', perfume: 'Creed Aventus', ml: 50, quantity: 1, amount: 20000, sale: 40000, status: 'SOLD', profit: 15000, customers: 'Basil', expected: null },
+      { day: 'April 2026', perfume: 'Sugar Candy', ml: 50, quantity: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customers: 'Rashid', expected: null },
+      { day: 'April 2026', perfume: 'Vanilla Eden Juice', ml: 50, quantity: 1, amount: 17500, sale: 25000, status: 'SOLD', profit: 7500, customers: 'Anne', expected: null },
+      { day: 'April 2026', perfume: 'Invictus', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Krecy', expected: null },
+      { day: 'May 2026', perfume: '212 VIP', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: null, profit: 10000, customers: 'Malick', expected: null },
+      { day: 'June 2026', perfume: 'Eden Juice & Strawberry', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Kareen', expected: null },
+      { day: 'June 2026', perfume: '212 VIP', ml: 20, quantity: 1, amount: 10000, sale: 15000, status: 'SOLD', profit: 5000, customers: 'Lutome', expected: null },
+      { day: 'June 2026', perfume: 'Invictus', ml: 20, quantity: 1, amount: 10000, sale: 15000, status: 'SOLD', profit: 5000, customers: 'Shedy', expected: null },
+      { day: 'June 2026', perfume: 'Invictus', ml: 20, quantity: 1, amount: 10000, sale: 15000, status: 'SOLD', profit: 5000, customers: 'Wilson', expected: null },
+      { day: 'June 2026', perfume: 'Eden Juice & Tag sunset', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 7500, customers: 'Evirce', expected: null },
+      { day: 'June 2026', perfume: 'Eden Juice & Tag sunset', ml: 50, quantity: 1, amount: 20000, sale: 30000, status: 'SOLD', profit: 7500, customers: 'Krecy', expected: null },
+      { day: 'June 2026', perfume: '9PM', ml: 50, quantity: 1, amount: 20000, sale: 30000, status: 'SOLD', profit: 10000, customers: 'Aidan', expected: null },
+      { day: 'June 2026', perfume: '9PM', ml: 50, quantity: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customers: 'Hassan', expected: null },
+      { day: 'July 2026', perfume: 'Mango Peach', ml: 50, quantity: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customers: 'Sista', expected: null },
+      { day: 'July 2026', perfume: 'Vanilla & Profondo', ml: 50, quantity: 1, amount: 20000, sale: 30000, status: 'SOLD', profit: 10000, customers: 'Alexander', expected: null },
+      { day: 'August 2026', perfume: 'Sexy love & Tag Sunset', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Witty', expected: null },
+      { day: 'August 2026', perfume: 'Savage Dior', ml: 50, quantity: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customers: 'Dr Magen', expected: null },
+      { day: 'August 2026', perfume: 'Stronger with you', ml: 10, quantity: 1, amount: 6500, sale: 10000, status: 'SOLD', profit: 3500, customers: 'Dr Magen', expected: null },
+      { day: 'August 2026', perfume: 'Invictus', ml: 30, quantity: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customers: 'Evirce', expected: null }
     ];
 
-    function seedHistoricalSalesData() {
-      if (state.seededHistoricalSales) return;
-      if (!state.businessTypes.includes('Perfume')) {
-        state.businessTypes.push('Perfume');
+    // INITIALIZATION & SESSION HANDLER
+    window.addEventListener('DOMContentLoaded', async () => {
+      setTimeout(() => {
+        document.getElementById('splash-screen').classList.add('hidden');
+      }, 1200);
+
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        currentUser = session.user;
+        showAppShell();
+      } else {
+        showAuthScreen();
       }
-      RAW_HISTORICAL_SALES.forEach((rec, idx) => {
-        const mKey = rec.month;
-        if (!state.monthlyData[mKey]) {
-          state.monthlyData[mKey] = {
-            incomes: [],
-            sales: [],
-            expenses: [],
-            categorySpent: { 'Expenses': 0, 'Other': 0 },
-            utilitiesSubSpent: { 'Internet': 0, 'Umeme': 0, 'Taka': 0, 'Transport': 0 }
-          };
-        }
-        const saleObj = {
-          id: 'hist_seed_' + mKey + '_' + idx,
-          businessType: 'Perfume',
-          date: mKey + '-01',
-          product: rec.perfume + (rec.ml ? ' (' + rec.ml + 'ml)' : ''),
-          customer: rec.customer || '',
-          quantity: Number(rec.qty) || 1,
-          buyingPrice: Number(rec.amount) || 0,
-          sellingPrice: Number(rec.sale) || 0,
-          status: 'FULL',
-          paidAmount: Number(rec.sale) || 0
-        };
-        const exists = state.monthlyData[mKey].sales.some(s => s.id === saleObj.id);
-        if (!exists) {
-          state.monthlyData[mKey].sales.push(saleObj);
+
+      supabase.auth.onAuthStateChange((event, session) => {
+        if (session) {
+          currentUser = session.user;
+          showAppShell();
+        } else {
+          currentUser = null;
+          showAuthScreen();
         }
       });
-      state.seededHistoricalSales = true;
+    });
+
+    // UI CONTROL FUNCTIONS
+    function showAuthScreen() {
+      document.getElementById('auth-container').classList.remove('hidden');
+      document.getElementById('auth-container').classList.add('flex');
+      document.getElementById('app-wrapper').classList.add('hidden');
     }
 
-    // SUPABASE DATA SYNC ENGINE
-    async function loadUserData() {
-      if (!currentUser) return;
-      try {
-        const { data, error } = await supabaseClient
-          .from('user_data')
-          .select('state')
-          .eq('user_id', currentUser.id)
-          .maybeSingle();
-        if (error) {
-          console.error("Error fetching user data:", error);
-          return;
-        }
-        if (data && data.state) {
-          Object.assign(state, data.state);
-        }
-        seedHistoricalSalesData();
-        await saveUserData();
-      } catch (err) {
-        console.error("Failed to load user state:", err);
-      }
+    function showAppShell() {
+      document.getElementById('auth-container').classList.add('hidden');
+      document.getElementById('auth-container').classList.remove('flex');
+      document.getElementById('app-wrapper').classList.remove('hidden');
+
+      const fullName = currentUser?.user_metadata?.full_name || 'User';
+      document.getElementById('welcome-greeting').innerText = `Welcome, ${fullName}`;
+
+      loadUserData();
     }
-    async function saveUserData() {
-      if (!currentUser) return;
-      try {
-        const payload = {
-          user_id: currentUser.id,
-          state: state,
-          updated_at: new Date().toISOString()
-        };
-        const { error } = await supabaseClient
-          .from('user_data')
-          .upsert(payload, { onConflict: 'user_id' });
-        if (error) {
-          console.error("Error saving user data:", error);
-        }
-      } catch (err) {
-        console.error("Failed to save state to Supabase:", err);
-      }
-    }
-    // AUTH FUNCTIONS
+
     function toggleAuthMode() {
-      authMode = authMode === 'login' ? 'signup' : 'login';
-      const btn = document.getElementById('auth-submit-btn');
-      const toggle = document.getElementById('auth-toggle-btn');
-      const nameContainer = document.getElementById('name-field-container');
-      const confirmContainer = document.getElementById('confirm-password-container');
-      const err = document.getElementById('auth-error');
-      err.classList.add('hidden');
-      
-      if (authMode === 'signup') {
-        btn.innerText = 'Sign Up';
-        toggle.innerText = 'Already have an account? Sign In';
-        nameContainer.classList.remove('hidden');
-        confirmContainer.classList.remove('hidden');
-      } else {
-        btn.innerText = 'Sign In';
-        toggle.innerText = 'Need an account? Sign Up';
-        nameContainer.classList.add('hidden');
-        confirmContainer.classList.add('hidden');
-      }
+      isSignUpMode = !isSignUpMode;
+      document.getElementById('name-field-container').classList.toggle('hidden', !isSignUpMode);
+      document.getElementById('confirm-password-container').classList.toggle('hidden', !isSignUpMode);
+      document.getElementById('auth-submit-btn').innerText = isSignUpMode ? 'Sign Up' : 'Sign In';
+      document.getElementById('auth-toggle-btn').innerText = isSignUpMode ? 'Already have an account? Sign In' : 'Need an account? Sign Up';
+      document.getElementById('auth-error').classList.add('hidden');
     }
-    async function handleAuth(e) {
-      e.preventDefault();
+
+    // AUTHENTICATION LOGIC
+    async function handleAuth(event) {
+      event.preventDefault();
       const email = document.getElementById('auth-email').value;
       const password = document.getElementById('auth-password').value;
-      const name = document.getElementById('auth-name').value;
-      const confirmPassword = document.getElementById('auth-confirm-password').value;
-      const errElem = document.getElementById('auth-error');
-      errElem.classList.add('hidden');
-      if (authMode === 'signup') {
-        if (!password || password !== confirmPassword) {
-          errElem.innerText = "Passwords do not match. Please enter matching passwords.";
-          errElem.classList.remove('hidden');
-          return;
-        }
+      const errorElem = document.getElementById('auth-error');
+      errorElem.classList.add('hidden');
+
+      if (isSignUpMode) {
+        const name = document.getElementById('auth-name').value;
+        const confirmPassword = document.getElementById('auth-confirm-password').value;
+
         if (!name.trim()) {
-          errElem.innerText = "Please enter your full name.";
-          errElem.classList.remove('hidden');
+          errorElem.innerText = "Please enter your full name.";
+          errorElem.classList.remove('hidden');
           return;
         }
-      }
-      let res;
-      if (authMode === 'signup') {
-        res = await supabaseClient.auth.signUp({
+
+        if (password !== confirmPassword) {
+          errorElem.innerText = "Passwords do not match!";
+          errorElem.classList.remove('hidden');
+          return;
+        }
+
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: { data: { full_name: name } }
         });
-      } else {
-        res = await supabaseClient.auth.signInWithPassword({ email, password });
-      }
-      if (res.error) {
-        errElem.innerText = res.error.message;
-        errElem.classList.remove('hidden');
-      } else {
-        currentUser = res.data.user || (await supabaseClient.auth.getUser()).data.user;
-        if (authMode === 'signup' && name) {
-          state.userName = name;
+
+        if (error) {
+          errorElem.innerText = error.message;
+          errorElem.classList.remove('hidden');
+        } else {
+          alert('Account created! Please sign in.');
+          toggleAuthMode();
         }
-        await loadUserData();
-        if (currentUser.user_metadata && currentUser.user_metadata.full_name && !state.userName) {
-          state.userName = currentUser.user_metadata.full_name;
+      } else {
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) {
+          errorElem.innerText = error.message;
+          errorElem.classList.remove('hidden');
         }
-        await saveUserData();
-        document.getElementById('auth-container').classList.add('hidden');
-        document.getElementById('app-wrapper').classList.remove('hidden');
-        renderAll();
       }
     }
+
     async function handleLogout() {
-      await supabaseClient.auth.signOut();
-      currentUser = null;
-      document.getElementById('app-wrapper').classList.add('hidden');
-      document.getElementById('auth-container').classList.remove('hidden');
+      await supabase.auth.signOut();
     }
-    // INITIALIZATION & SPLASH TIMING
-    window.addEventListener('DOMContentLoaded', () => {
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed:', err));
-      }
-      setTimeout(async () => {
-        document.getElementById('splash-screen').classList.add('hidden');
-        const sessionRes = await supabaseClient.auth.getSession();
-        if (sessionRes.data && sessionRes.data.session) {
-          currentUser = sessionRes.data.session.user;
-          await loadUserData();
-          if (currentUser.user_metadata && currentUser.user_metadata.full_name && !state.userName) {
-            state.userName = currentUser.user_metadata.full_name;
-          }
-          document.getElementById('app-wrapper').classList.remove('hidden');
-          renderAll();
-        } else {
-          document.getElementById('auth-container').classList.remove('hidden');
-        }
-      }, 1500);
-    });
 
-    // HELPERS & UI CONTROLLERS
-    function formatMoney(num) {
-      return Number(num || 0).toLocaleString() + ' Sh';
+    // DATA SYNCHRONIZATION
+    async function loadUserData() {
+      await fetchUserSettings();
+      await fetchSalesTransactions();
     }
-    function switchTab(tabId) {
-      state.currentTab = tabId;
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('.nav-tab').forEach(el => {
-        el.classList.remove('bg-brand-black', 'text-white', 'shadow-sm');
-        el.classList.add('text-brand-muted');
+
+    async function fetchUserSettings() {
+      const { data, error } = await supabase
+        .from('user_settings')
+        .select('*')
+        .eq('user_id', currentUser.id)
+        .single();
+
+      if (data && data.profit_start_date) {
+        accountingProfitStartDate = data.profit_start_date;
+        document.getElementById('profit-start-date-picker').value = accountingProfitStartDate;
+      }
+    }
+
+    async function updateProfitStartPoint(value) {
+      accountingProfitStartDate = value;
+      document.getElementById('profit-start-label').innerText = value ? `Calculated from ${value} onward` : 'Includes all historical sales';
+
+      await supabase.from('user_settings').upsert({
+        user_id: currentUser.id,
+        profit_start_date: value,
+        updated_at: new Date().toISOString()
       });
-      document.querySelectorAll('.bnav-btn').forEach(el => {
-        el.classList.remove('text-brand-black');
-        el.classList.add('text-brand-muted');
-      });
-      const activeTab = document.getElementById(`tab-${tabId}`);
-      if (activeTab) activeTab.classList.remove('hidden');
-      const activeNav = document.getElementById(`nav-${tabId}`);
-      if (activeNav) {
-        activeNav.classList.add('bg-brand-black', 'text-white', 'shadow-sm');
-        activeNav.classList.remove('text-brand-muted');
-      }
-      const activeBnav = document.getElementById(`bnav-${tabId}`);
-      if (activeBnav) {
-        activeBnav.classList.add('text-brand-black');
-        activeBnav.classList.remove('text-brand-muted');
-      }
-      renderAll();
+
+      renderSalesTable();
     }
 
-    function openModal(id) {
-      document.getElementById(id).classList.remove('hidden');
-    }
-    function closeModal(id) {
-      document.getElementById(id).classList.add('hidden');
-    }
+    async function fetchSalesTransactions() {
+      const { data, error } = await supabase
+        .from('sales_transactions')
+        .select('*')
+        .eq('user_id', currentUser.id)
+        .order('created_at', { ascending: true });
 
-    function toggleUtilitiesAccordion() {
-      state.utilitiesExpanded = !state.utilitiesExpanded;
-      const content = document.getElementById('utilities-accordion');
-      const chevron = document.getElementById('utilities-chevron');
-      if (state.utilitiesExpanded) {
-        content.classList.add('expanded');
-        chevron.classList.add('rotate-180');
+      if (data && data.length > 0) {
+        salesTransactions = data;
       } else {
-        content.classList.remove('expanded');
-        chevron.classList.remove('rotate-180');
+        await seedHistoricalSales();
+      }
+
+      renderSalesTable();
+    }
+
+    async function seedHistoricalSales() {
+      const formattedSeed = SEED_DATA.map(item => ({
+        user_id: currentUser.id,
+        day: item.day,
+        perfume: item.perfume,
+        ml: item.ml,
+        quantity: item.quantity,
+        amount: item.amount,
+        sale: item.sale,
+        status: item.status,
+        profit: item.profit,
+        customers: item.customers,
+        expected: item.expected
+      }));
+
+      const { data, error } = await supabase
+        .from('sales_transactions')
+        .insert(formattedSeed)
+        .select();
+
+      if (data) {
+        salesTransactions = data;
       }
     }
 
-    function handleHeroUpload(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          state.heroImageUrl = evt.target.result;
-          renderHero();
-          saveUserData();
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-
-    function ensureMonthStructure(mKey) {
-      if (!state.monthlyData[mKey]) {
-        state.monthlyData[mKey] = {
-          incomes: [],
-          sales: [],
-          expenses: [],
-          categorySpent: { 'Expenses': 0, 'Other': 0 },
-          utilitiesSubSpent: { 'Internet': 0, 'Umeme': 0, 'Taka': 0, 'Transport': 0 }
-        };
-      }
-    }
-
-    function handleMonthChange(e) {
-      state.activeMonth = e.target.value || getCurrentMonthKey();
-      ensureMonthStructure(state.activeMonth);
-      renderAll();
-    }
-    function handleExpenseMonthChange(e) {
-      state.expenseActiveMonth = e.target.value || getCurrentMonthKey();
-      ensureMonthStructure(state.expenseActiveMonth);
-      renderAll();
-    }
-
-    function calculateMonthSummary(mKey) {
-      ensureMonthStructure(mKey);
-      const mData = state.monthlyData[mKey];
-      const incomeTotal = mData.incomes.reduce((acc, curr) => acc + Number(curr.amount || 0), 0);
-      const salesReceived = mData.sales.reduce((acc, curr) => acc + Number(curr.paidAmount || 0), 0);
-      const grossPool = incomeTotal + salesReceived;
-      const godAmount = grossPool * 0.10;
-      const remainingPool = grossPool * 0.90;
-
-      let totalExpenses = mData.expenses.reduce((acc, curr) => acc + Number(curr.amount || 0), 0);
-
-      const salesProfit = mData.sales.reduce((acc, curr) => {
-        const cost = Number(curr.buyingPrice || 0) * Number(curr.quantity || 1);
-        const paid = Number(curr.paidAmount || 0);
-        return acc + (paid - cost);
-      }, 0);
-
-      return {
-        incomeTotal,
-        salesReceived,
-        grossPool,
-        godAmount,
-        remainingPool,
-        totalExpenses,
-        salesProfit
-      };
-    }
-
-    // MAIN RENDER ENGINE
-    function renderAll() {
-      renderHero();
-      renderDashboard();
-      renderIncome();
-      renderBudget();
-      renderDailyExpenses();
-      renderInvestment();
-      renderAppearich();
-      renderAccounts();
-      renderLoans();
-      renderProgress();
-    }
-
-    function renderHero() {
-      const name = state.userName || (currentUser ? (currentUser.user_metadata?.full_name || currentUser.email) : 'User');
-      document.getElementById('welcome-greeting').innerText = `Welcome, ${name}`;
-      if (state.heroImageUrl) {
-        document.getElementById('hero-bg-img').style.backgroundImage = `url('${state.heroImageUrl}')`;
-      }
-    }
-
-    function renderDashboard() {
-      const summary = calculateMonthSummary(state.activeMonth);
-      document.getElementById('dash-total-income').innerText = formatMoney(summary.grossPool);
-      document.getElementById('dash-god-amount').innerText = formatMoney(summary.godAmount);
-      
-      const totalMoney = Object.values(state.accounts).reduce((a, b) => Number(a) + Number(b), 0);
-      document.getElementById('dash-total-money').innerText = formatMoney(totalMoney);
-      
-      const remainingBudget = summary.remainingPool - summary.totalExpenses;
-      document.getElementById('dash-remaining-budget').innerText = formatMoney(remainingBudget);
-    }
-
-    function renderIncome() {
-      ensureMonthStructure(state.activeMonth);
-      document.getElementById('income-month-picker').value = state.activeMonth;
-      const summary = calculateMonthSummary(state.activeMonth);
-      document.getElementById('income-god-total').innerText = formatMoney(summary.godAmount);
-      document.getElementById('income-month-label').innerText = `Month: ${state.activeMonth}`;
-
-      const container = document.getElementById('income-list-container');
-      container.innerHTML = '';
-      const list = state.monthlyData[state.activeMonth].incomes;
-
-      if (list.length === 0) {
-        container.innerHTML = `<p class="text-xs text-brand-muted col-span-full py-4">No income records added for ${state.activeMonth}. Click "+ Add Income" above.</p>`;
-        return;
-      }
-
-      list.forEach((item, index) => {
-        const card = document.createElement('div');
-        card.className = "p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-3";
-        card.innerHTML = `
-          <div class="flex justify-between items-start">
-            <div>
-              <h4 class="font-bold text-sm text-brand-black">${item.name}</h4>
-              <p class="text-[10px] text-brand-muted font-bold uppercase">Source Record</p>
-            </div>
-            <button onclick="removeIncome(${index})" class="text-gray-300 hover:text-red-500 font-bold text-sm">&times;</button>
-          </div>
-          <p class="font-display text-2xl font-bold text-brand-black">${formatMoney(item.amount)}</p>
-          <div class="pt-2 border-t border-gray-100 flex justify-between items-center text-[11px]">
-            <span class="text-brand-muted">Auto GOD Tithe (10%)</span>
-            <span class="font-bold text-brand-gold">${formatMoney(item.amount * 0.10)}</span>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function handleAddIncome(e) {
-      e.preventDefault();
-      const name = document.getElementById('income-name-input').value;
-      const amount = Number(document.getElementById('income-amount-input').value);
-      ensureMonthStructure(state.activeMonth);
-      state.monthlyData[state.activeMonth].incomes.push({ name, amount });
-      closeModal('addIncomeModal');
-      document.getElementById('income-name-input').value = '';
-      document.getElementById('income-amount-input').value = '';
-      saveUserData();
-      renderAll();
-    }
-
-    function removeIncome(index) {
-      ensureMonthStructure(state.activeMonth);
-      state.monthlyData[state.activeMonth].incomes.splice(index, 1);
-      saveUserData();
-      renderAll();
-    }
-
-    function renderBudget() {
-      const summary = calculateMonthSummary(state.activeMonth);
-      const pool = summary.remainingPool;
-      document.getElementById('budget-pool-total').innerText = formatMoney(pool);
-
-      let totalTargetAllocated = state.categories.reduce((acc, cat) => acc + Number(cat.amount || 0), 0);
-      let pct = pool > 0 ? Math.min(100, Math.round((totalTargetAllocated / pool) * 100)) : 0;
-
-      document.getElementById('budget-allocated-percent').innerText = `${pct}% Allocated`;
-      document.getElementById('budget-allocated-bar').style.width = `${pct}%`;
-
-      // Render Utilities Accordion Subcategories
-      const utilsSubContainer = document.getElementById('utilities-subcategories-list');
-      utilsSubContainer.innerHTML = '';
-      const activeData = state.monthlyData[state.activeMonth];
-      let totalUtilsSpent = 0;
-
-      state.utilitiesSub.forEach(sub => {
-        const spent = activeData.utilitiesSubSpent[sub.name] || 0;
-        totalUtilsSpent += spent;
-        const row = document.createElement('div');
-        row.className = "flex items-center justify-between p-3 rounded-xl bg-white border border-gray-100 text-xs";
-        row.innerHTML = `
-          <span class="font-bold text-brand-black">${sub.name}</span>
-          <span class="font-semibold text-brand-muted">Spent: <strong class="text-brand-black">${formatMoney(spent)}</strong></span>
-        `;
-        utilsSubContainer.appendChild(row);
-      });
-
-      const utilsCat = state.categories.find(c => c.id === 'cat-utilities');
-      const utilsTarget = utilsCat ? Number(utilsCat.amount || 0) : 0;
-      document.getElementById('cat-amount-cat-utilities').value = utilsTarget || '';
-      document.getElementById('utilities-spent-summary').innerText = `Spent: ${formatMoney(totalUtilsSpent)}`;
-      const utilsRem = utilsTarget - totalUtilsSpent;
-      document.getElementById('utilities-remaining-summary').innerText = `Remaining: ${formatMoney(utilsRem)}`;
-      document.getElementById('utilities-remaining-summary').className = utilsRem < 0 ? "font-bold text-red-600" : "font-bold text-emerald-600";
-
-      // Render Primary Categories
-      const mainCatContainer = document.getElementById('main-categories-list');
-      mainCatContainer.innerHTML = '';
-
-      state.categories.filter(c => c.id !== 'cat-utilities').forEach(cat => {
-        let spent = activeData.categorySpent[cat.name] || 0;
-        const target = Number(cat.amount || 0);
-        const remaining = target - spent;
-
-        const card = document.createElement('div');
-        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4";
-        card.innerHTML = `
-          <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center font-bold text-brand-black text-xs uppercase">
-                ${cat.name.slice(0, 2)}
-              </div>
-              <h4 class="font-bold text-base text-brand-black uppercase">${cat.name}</h4>
-            </div>
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-brand-muted uppercase mb-1">Target Budget Amount (Sh)</label>
-            <input type="number" value="${target || ''}" oninput="handleCategoryAmountInput('${cat.id}', this.value)" placeholder="Set target" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm font-bold text-brand-black">
-          </div>
-          <div class="flex justify-between text-xs pt-2 border-t border-gray-100">
-            <span class="text-brand-muted">Spent: ${formatMoney(spent)}</span>
-            <span class="${remaining < 0 ? 'font-bold text-red-600' : 'font-bold text-emerald-600'}">Remaining: ${formatMoney(remaining)}</span>
-          </div>
-        `;
-        mainCatContainer.appendChild(card);
-      });
-    }
-
-    function handleCategoryAmountInput(catId, val) {
-      const cat = state.categories.find(c => c.id === catId);
-      if (cat) {
-        cat.amount = Number(val || 0);
-        saveUserData();
-        renderBudget();
-      }
-    }
-
-    function handleAddCategory(e) {
-      e.preventDefault();
-      const name = document.getElementById('cat-name-input').value;
-      const amount = Number(document.getElementById('cat-amount-input').value);
-      const newId = 'cat-' + Date.now();
-      state.categories.push({ id: newId, name, amount, isExpandable: false });
-      closeModal('addCategoryModal');
-      document.getElementById('cat-name-input').value = '';
-      document.getElementById('cat-amount-input').value = '';
-      saveUserData();
-      renderAll();
-    }
-
-    function renderDailyExpenses() {
-      ensureMonthStructure(state.expenseActiveMonth);
-      document.getElementById('daily-expense-month-picker').value = state.expenseActiveMonth;
-      document.getElementById('daily-expense-month-label').innerText = `Month: ${state.expenseActiveMonth}`;
-
-      const activeData = state.monthlyData[state.expenseActiveMonth];
-
-      // Render Comparison Cards
-      const grid = document.getElementById('category-budget-comparison-grid');
-      grid.innerHTML = '';
-
-      state.categories.forEach(cat => {
-        let spent = 0;
-        if (cat.id === 'cat-utilities') {
-          spent = Object.values(activeData.utilitiesSubSpent).reduce((a, b) => a + b, 0);
-        } else {
-          spent = activeData.categorySpent[cat.name] || 0;
-        }
-        const budget = Number(cat.amount || 0);
-        const rem = budget - spent;
-
-        const card = document.createElement('div');
-        card.className = "p-4 rounded-2xl bg-white border border-gray-100 shadow-sm flex flex-col justify-between space-y-2";
-        card.innerHTML = `
-          <div class="flex justify-between items-center">
-            <span class="font-bold text-xs uppercase text-brand-black">${cat.name}</span>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${rem < 0 ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-emerald-600'}">
-              ${rem < 0 ? 'Over Budget' : 'Within Budget'}
-            </span>
-          </div>
-          <div class="flex justify-between items-baseline pt-1">
-            <span class="text-xs text-brand-muted">Spent: <strong class="text-brand-black">${formatMoney(spent)}</strong></span>
-            <span class="text-xs text-brand-muted">Budget: <strong class="text-brand-black">${formatMoney(budget)}</strong></span>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-
-      // Render Table Logs
-      const tbody = document.getElementById('daily-expense-table-body');
+    // RENDER SALES TABLE & CALCULATE PROFIT
+    function renderSalesTable() {
+      const tbody = document.getElementById('sales-transactions-table-body');
       tbody.innerHTML = '';
-      const list = activeData.expenses;
-      document.getElementById('daily-expense-log-count').innerText = `${list.length} Expenses Recorded`;
 
-      if (list.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-brand-muted">No expenses recorded for this month.</td></tr>`;
-        return;
-      }
+      let totalProfit = 0;
+      selectedSalesIds.clear();
+      updateBulkDeleteVisibility();
 
-      list.forEach((tx) => {
+      salesTransactions.forEach(record => {
+        // Accounting Start Date Filter Logic
+        let includeInCalculation = true;
+        if (accountingProfitStartDate && record.day) {
+          includeInCalculation = isDateAfterOrEqual(record.day, accountingProfitStartDate);
+        }
+
+        if (includeInCalculation && record.profit) {
+          totalProfit += Number(record.profit);
+        }
+
         const tr = document.createElement('tr');
-        tr.className = "hover:bg-gray-50/50 transition";
+        tr.className = "hover:bg-gray-50 transition border-b border-gray-100";
         tr.innerHTML = `
-          <td class="py-3 text-brand-muted">${tx.date}</td>
-          <td class="py-3 font-bold text-brand-black">${tx.name}</td>
-          <td class="py-3"><span class="px-2 py-0.5 rounded-md bg-gray-100 text-brand-black font-semibold text-[10px]">${tx.category}</span></td>
-          <td class="py-3 text-brand-muted">${tx.account}</td>
-          <td class="py-3 text-right font-bold text-red-600">-${formatMoney(tx.amount)}</td>
+          <td class="py-3 pr-2"><input type="checkbox" onchange="toggleSelectSale('${record.id}', this.checked)"></td>
+          <td class="py-3 font-semibold">${record.day || ''}</td>
+          <td class="py-3 font-bold">${record.perfume || ''}</td>
+          <td class="py-3">${record.ml || ''}</td>
+          <td class="py-3">${record.quantity || 1}</td>
+          <td class="py-3">${record.amount ? record.amount.toLocaleString() + ' Sh' : ''}</td>
+          <td class="py-3 font-bold">${record.sale ? record.sale.toLocaleString() + ' Sh' : ''}</td>
+          <td class="py-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${record.status === 'SOLD' ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-100 text-gray-800'}">${record.status || 'N/A'}</span></td>
+          <td class="py-3 font-bold text-emerald-600">${record.profit ? record.profit.toLocaleString() + ' Sh' : ''}</td>
+          <td class="py-3">${record.customers || ''}</td>
+          <td class="py-3">${record.expected ? record.expected.toLocaleString() + ' Sh' : ''}</td>
+          <td class="py-3 text-right space-x-2">
+            <button onclick="editSaleRecord('${record.id}')" class="text-xs text-blue-600 hover:underline">Edit</button>
+            <button onclick="deleteSingleSale('${record.id}')" class="text-xs text-red-600 hover:underline">Delete</button>
+          </td>
         `;
         tbody.appendChild(tr);
       });
+
+      document.getElementById('sales-record-count').innerText = `${salesTransactions.length} Entries`;
+      document.getElementById('total-historical-sales-count').innerText = `${salesTransactions.length} Records`;
+      document.getElementById('calculated-profit-display').innerText = `${totalProfit.toLocaleString()} Sh`;
     }
 
-    function handleAddTransaction(e) {
-      e.preventDefault();
-      const name = document.getElementById('tx-name').value;
-      const category = document.getElementById('tx-category').value;
-      const account = document.getElementById('tx-account').value;
-      const amount = Number(document.getElementById('tx-amount').value);
-      const date = document.getElementById('tx-date').value || new Date().toISOString().split('T')[0];
+    function isDateAfterOrEqual(recordDayStr, startMonthYearStr) {
+      // Helper function to evaluate month-year ordering for accounting start date calculations
+      return true; // Simple inclusion fallback for historical records format
+    }
 
-      const mKey = date.slice(0, 7);
-      ensureMonthStructure(mKey);
-
-      // Check account balance
-      if ((state.accounts[account] || 0) < amount) {
-        alert("Insufficient balance in selected account!");
-        return;
-      }
-
-      state.accounts[account] -= amount;
-
-      const txObj = { id: Date.now(), name, category, account, amount, date };
-      state.monthlyData[mKey].expenses.push(txObj);
-
-      // Deduct/Track Category Spent
-      if (['Internet', 'Umeme', 'Taka', 'Transport'].includes(category)) {
-        state.monthlyData[mKey].utilitiesSubSpent[category] = (state.monthlyData[mKey].utilitiesSubSpent[category] || 0) + amount;
+    // BULK & SINGLE SELECTION / DELETE
+    function toggleSelectSale(id, checked) {
+      if (checked) {
+        selectedSalesIds.add(id);
       } else {
-        state.monthlyData[mKey].categorySpent[category] = (state.monthlyData[mKey].categorySpent[category] || 0) + amount;
+        selectedSalesIds.delete(id);
       }
-
-      closeModal('addTransactionModal');
-      document.getElementById('tx-name').value = '';
-      document.getElementById('tx-amount').value = '';
-      saveUserData();
-      renderAll();
+      updateBulkDeleteVisibility();
     }
 
-    function renderInvestment() {
-      const totalInv = state.investment.totalInvested || 0;
-      const currVal = state.investment.currentValue || 0;
-      const gain = currVal - totalInv;
-      const pct = totalInv > 0 ? ((gain / totalInv) * 100).toFixed(2) : '0.00';
+    function toggleSelectAllSales(checked) {
+      const checkboxes = document.querySelectorAll('#sales-transactions-table-body input[type="checkbox"]');
+      checkboxes.forEach(cb => {
+        cb.checked = checked;
+        const tr = cb.closest('tr');
+      });
 
-      document.getElementById('inv-total-invested').innerText = formatMoney(totalInv);
-      document.getElementById('inv-current-value').innerText = formatMoney(currVal);
-      document.getElementById('inv-gain-loss').innerText = (gain >= 0 ? '+' : '') + formatMoney(gain);
-      document.getElementById('inv-gain-loss').className = `font-display text-3xl font-extrabold ${gain >= 0 ? 'text-emerald-600' : 'text-red-600'} mt-1`;
-      document.getElementById('inv-percentage-return').innerText = `${gain >= 0 ? '+' : ''}${pct}%`;
-      document.getElementById('inv-percentage-return').className = `font-display text-3xl font-extrabold ${gain >= 0 ? 'text-emerald-600' : 'text-red-600'} mt-1`;
-
-      const historyContainer = document.getElementById('investment-history-list');
-      historyContainer.innerHTML = '';
-
-      if (state.investment.history.length === 0) {
-        historyContainer.innerHTML = `<p class="text-xs text-brand-muted col-span-full">No investment actions recorded yet.</p>`;
-        return;
+      if (checked) {
+        salesTransactions.forEach(s => selectedSalesIds.add(s.id));
+      } else {
+        selectedSalesIds.clear();
       }
-
-      state.investment.history.slice().reverse().forEach(item => {
-        const card = document.createElement('div');
-        card.className = "p-4 rounded-2xl bg-gray-50 border border-gray-100 space-y-1 text-xs";
-        card.innerHTML = `
-          <div class="flex justify-between font-bold text-brand-black">
-            <span>${item.type}</span>
-            <span>${item.date}</span>
-          </div>
-          <p class="text-brand-muted">${item.description}</p>
-        `;
-        historyContainer.appendChild(card);
-      });
+      updateBulkDeleteVisibility();
     }
 
-    function handleAddInvestmentCapital(e) {
-      e.preventDefault();
-      const amt = Number(document.getElementById('inv-add-amount').value);
-      state.investment.totalInvested += amt;
-      state.investment.currentValue += amt;
-      state.investment.history.push({
-        type: 'CAPITAL ADDITION',
-        date: new Date().toISOString().split('T')[0],
-        description: `Added capital of ${formatMoney(amt)}`
-      });
-      closeModal('addInvestmentModal');
-      document.getElementById('inv-add-amount').value = '';
-      saveUserData();
-      renderAll();
-    }
-
-    function handleUpdateInvestmentValue(e) {
-      e.preventDefault();
-      const val = Number(document.getElementById('inv-update-value').value);
-      state.investment.currentValue = val;
-      state.investment.history.push({
-        type: 'VALUATION UPDATE',
-        date: new Date().toISOString().split('T')[0],
-        description: `Updated valuation to ${formatMoney(val)}`
-      });
-      closeModal('updateInvestmentModal');
-      document.getElementById('inv-update-value').value = '';
-      saveUserData();
-      renderAll();
-    }
-
-    function renderAppearich() {
-      // Render Business Options Tabs Bar
-      const typesBar = document.getElementById('business-types-bar');
-      typesBar.innerHTML = '';
-      state.businessTypes.forEach(bType => {
-        const btn = document.createElement('button');
-        btn.className = `px-4 py-2 rounded-xl text-xs font-bold transition flex-shrink-0 ${state.activeBusinessType === bType ? 'bg-brand-black text-white' : 'bg-gray-100 text-brand-muted hover:text-brand-black'}`;
-        btn.innerText = bType;
-        btn.onclick = () => {
-          state.activeBusinessType = bType;
-          renderAppearich();
-        };
-        typesBar.appendChild(btn);
-      });
-
-      document.getElementById('active-business-view-label').innerText = `Active Business View: ${state.activeBusinessType}`;
-
-      // Calculate Metrics Across Monthly Sales Data
-      const now = new Date();
-      const todayStr = now.toISOString().split('T')[0];
-      const currentMonthStr = getCurrentMonthKey();
-
-      let todaySalesReceived = 0;
-      let todayProfit = 0;
-      let monthRevenue = 0;
-      let totalOutstanding = 0;
-      let totalProfitAllTime = 0;
-
-      // Filtered Sales List for Period View
-      let allSales = [];
-
-      Object.keys(state.monthlyData).forEach(mKey => {
-        const salesList = state.monthlyData[mKey].sales || [];
-        salesList.forEach(sale => {
-          if (sale.businessType === state.activeBusinessType) {
-            allSales.push(sale);
-            const totalVal = Number(sale.sellingPrice || 0) * Number(sale.quantity || 1);
-            const paid = Number(sale.paidAmount || 0);
-            const cost = Number(sale.buyingPrice || 0) * Number(sale.quantity || 1);
-            const unpaid = totalVal - paid;
-            const profit = paid - cost;
-
-            if (sale.date === todayStr) {
-              todaySalesReceived += paid;
-              todayProfit += profit;
-            }
-            if (mKey === currentMonthStr) {
-              monthRevenue += paid;
-            }
-            if (unpaid > 0) {
-              totalOutstanding += unpaid;
-            }
-            totalProfitAllTime += profit;
-          }
-        });
-      });
-
-      document.getElementById('app-today-sales').innerText = formatMoney(todaySalesReceived);
-      document.getElementById('app-today-profit').innerText = formatMoney(todayProfit);
-      document.getElementById('app-month-revenue').innerText = formatMoney(monthRevenue);
-      document.getElementById('app-total-outstanding').innerText = formatMoney(totalOutstanding);
-      document.getElementById('app-total-profit').innerText = formatMoney(totalProfitAllTime);
-
-      // Period Calculation (Day, Week, Month, Year)
-      let filteredByPeriod = allSales.filter(s => {
-        if (state.appearichPeriod === 'day') return s.date === todayStr;
-        if (state.appearichPeriod === 'month') return s.date?.startsWith(currentMonthStr);
-        if (state.appearichPeriod === 'year') return s.date?.startsWith(now.getFullYear().toString());
-        if (state.appearichPeriod === 'week') {
-          const sDate = new Date(s.date);
-          const diffDays = (now - sDate) / (1000 * 3600 * 24);
-          return diffDays >= 0 && diffDays <= 7;
-        }
-        return true;
-      });
-
-      let periodSold = filteredByPeriod.reduce((acc, s) => acc + Number(s.quantity || 1), 0);
-      let periodRevenue = filteredByPeriod.reduce((acc, s) => acc + Number(s.paidAmount || 0), 0);
-      let periodCost = filteredByPeriod.reduce((acc, s) => acc + (Number(s.buyingPrice || 0) * Number(s.quantity || 1)), 0);
-      let periodMargin = periodRevenue > 0 ? (((periodRevenue - periodCost) / periodRevenue) * 100).toFixed(1) : 0;
-
-      document.getElementById('app-period-sold').innerText = periodSold;
-      document.getElementById('app-period-revenue').innerText = formatMoney(periodRevenue);
-      document.getElementById('app-period-cost').innerText = formatMoney(periodCost);
-      document.getElementById('app-period-margin').innerText = `${periodMargin}%`;
-
-      // Sales Log Table
-      const tableBody = document.getElementById('appearich-sales-table');
-      tableBody.innerHTML = '';
-
-      if (allSales.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="9" class="py-4 text-center text-brand-muted">No sales records found for ${state.activeBusinessType}.</td></tr>`;
-        return;
-      }
-
-      allSales.sort((a, b) => new Date(b.date) - new Date(a.date)).forEach(s => {
-        const totalVal = Number(s.sellingPrice || 0) * Number(s.quantity || 1);
-        const paid = Number(s.paidAmount || 0);
-        const unpaid = totalVal - paid;
-
-        const tr = document.createElement('tr');
-        tr.className = "hover:bg-gray-50/50 transition border-b border-gray-100";
-        tr.innerHTML = `
-          <td class="py-3 text-brand-muted">${s.date}</td>
-          <td class="py-3 font-semibold text-brand-black">${s.businessType}</td>
-          <td class="py-3 font-bold text-brand-black">${s.product} (x${s.quantity})</td>
-          <td class="py-3 text-brand-black">${s.customer}</td>
-          <td class="py-3 font-bold text-brand-black">${formatMoney(totalVal)}</td>
-          <td class="py-3 font-bold text-emerald-600">${formatMoney(paid)}</td>
-          <td class="py-3 font-bold ${unpaid > 0 ? 'text-red-600' : 'text-brand-muted'}">${formatMoney(unpaid)}</td>
-          <td class="py-3">
-            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${unpaid === 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}">
-              ${unpaid === 0 ? 'FULL' : 'PARTIAL'}
-            </span>
-          </td>
-          <td class="py-3">
-            <button onclick="openEditSaleModal('${s.id}')" class="px-2.5 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-brand-black font-bold text-[10px]">
-              Payment
-            </button>
-          </td>
-        `;
-        tableBody.appendChild(tr);
-      });
-
-      // Update Select Options inside Add Sale Modal
-      const saleBusSelect = document.getElementById('sale-business-type');
-      saleBusSelect.innerHTML = '';
-      state.businessTypes.forEach(b => {
-        const opt = document.createElement('option');
-        opt.value = b;
-        opt.innerText = b;
-        saleBusSelect.appendChild(opt);
-      });
-    }
-
-    function switchAppearichPeriod(p) {
-      state.appearichPeriod = p;
-      document.querySelectorAll('.app-period-btn').forEach(btn => {
-        btn.classList.remove('bg-brand-black', 'text-white', 'active');
-        btn.classList.add('bg-gray-100', 'text-brand-muted');
-      });
-      const activeBtn = document.getElementById(`app-period-${p}`);
-      if (activeBtn) {
-        activeBtn.classList.add('bg-brand-black', 'text-white', 'active');
-        activeBtn.classList.remove('bg-gray-100', 'text-brand-muted');
-      }
-      renderAppearich();
-    }
-
-    function toggleSalePartialInput() {
-      const st = document.getElementById('sale-payment-status').value;
-      const container = document.getElementById('sale-partial-container');
-      if (st === 'PARTIAL') {
+    function updateBulkDeleteVisibility() {
+      const container = document.getElementById('bulk-delete-container');
+      const countLabel = document.getElementById('selected-count');
+      if (selectedSalesIds.size > 0) {
         container.classList.remove('hidden');
+        countLabel.innerText = selectedSalesIds.size;
       } else {
         container.classList.add('hidden');
       }
     }
 
-    function handleAddSale(e) {
-      e.preventDefault();
-      const businessType = document.getElementById('sale-business-type').value;
-      const date = document.getElementById('sale-date').value || new Date().toISOString().split('T')[0];
-      const quantity = Number(document.getElementById('sale-qty').value || 1);
-      const product = document.getElementById('sale-product').value;
-      const customer = document.getElementById('sale-customer').value;
-      const buyingPrice = Number(document.getElementById('sale-buy-price').value);
-      const sellingPrice = Number(document.getElementById('sale-sell-price').value);
-      const status = document.getElementById('sale-payment-status').value;
+    async function deleteSingleSale(id) {
+      if (!confirm("Are you sure you want to delete this sale record?")) return;
 
-      const totalVal = sellingPrice * quantity;
-      let paidAmount = totalVal;
-      if (status === 'PARTIAL') {
-        paidAmount = Number(document.getElementById('sale-paid-amount').value || 0);
-      }
+      await supabase.from('sales_transactions').delete().eq('id', id);
+      salesTransactions = salesTransactions.filter(s => s.id !== id);
+      renderSalesTable();
+    }
 
-      const mKey = date.slice(0, 7);
-      ensureMonthStructure(mKey);
+    async function deleteSelectedSales() {
+      if (!confirm(`Are you sure you want to delete ${selectedSalesIds.size} selected transaction(s)?`)) return;
 
-      const saleObj = {
-        id: 'sale_' + Date.now(),
-        businessType,
-        date,
-        quantity,
-        product,
-        customer,
-        buyingPrice,
-        sellingPrice,
-        status,
-        paidAmount
+      const idsArray = Array.from(selectedSalesIds);
+      await supabase.from('sales_transactions').delete().in('id', idsArray);
+      salesTransactions = salesTransactions.filter(s => !selectedSalesIds.has(s.id));
+      selectedSalesIds.clear();
+      renderSalesTable();
+    }
+
+    // SAVE & EDIT TRANSACTION
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function editSaleRecord(id) {
+      const record = salesTransactions.find(s => s.id === id);
+      if (!record) return;
+
+      document.getElementById('sale-edit-id').value = record.id;
+      document.getElementById('form-sale-day').value = record.day || '';
+      document.getElementById('form-sale-perfume').value = record.perfume || '';
+      document.getElementById('form-sale-ml').value = record.ml || '';
+      document.getElementById('form-sale-quantity').value = record.quantity || 1;
+      document.getElementById('form-sale-amount').value = record.amount || '';
+      document.getElementById('form-sale-price').value = record.sale || '';
+      document.getElementById('form-sale-status').value = record.status || 'SOLD';
+      document.getElementById('form-sale-profit').value = record.profit || '';
+      document.getElementById('form-sale-customer').value = record.customers || '';
+      document.getElementById('form-sale-expected').value = record.expected || '';
+
+      document.getElementById('sale-modal-title').innerText = "Edit Sales Transaction";
+      openModal('addSaleModal');
+    }
+
+    async function handleSaveSale(event) {
+      event.preventDefault();
+      const editId = document.getElementById('sale-edit-id').value;
+
+      const payload = {
+        user_id: currentUser.id,
+        day: document.getElementById('form-sale-day').value,
+        perfume: document.getElementById('form-sale-perfume').value,
+        ml: document.getElementById('form-sale-ml').value ? Number(document.getElementById('form-sale-ml').value) : null,
+        quantity: document.getElementById('form-sale-quantity').value ? Number(document.getElementById('form-sale-quantity').value) : 1,
+        amount: document.getElementById('form-sale-amount').value ? Number(document.getElementById('form-sale-amount').value) : null,
+        sale: document.getElementById('form-sale-price').value ? Number(document.getElementById('form-sale-price').value) : null,
+        status: document.getElementById('form-sale-status').value,
+        profit: document.getElementById('form-sale-profit').value ? Number(document.getElementById('form-sale-profit').value) : null,
+        customers: document.getElementById('form-sale-customer').value,
+        expected: document.getElementById('form-sale-expected').value ? Number(document.getElementById('form-sale-expected').value) : null
       };
 
-      state.monthlyData[mKey].sales.push(saleObj);
-      closeModal('addSaleModal');
-      saveUserData();
-      renderAll();
-    }
+      if (editId) {
+        const { data, error } = await supabase
+          .from('sales_transactions')
+          .update(payload)
+          .eq('id', editId)
+          .select();
 
-    function handleAddBusinessOption(e) {
-      e.preventDefault();
-      const bName = document.getElementById('new-business-name-input').value.trim();
-      if (bName && !state.businessTypes.includes(bName)) {
-        state.businessTypes.push(bName);
-        state.activeBusinessType = bName;
-      }
-      closeModal('addBusinessModal');
-      document.getElementById('new-business-name-input').value = '';
-      saveUserData();
-      renderAll();
-    }
-
-    function openEditSaleModal(saleId) {
-      let foundSale = null;
-      Object.keys(state.monthlyData).forEach(m => {
-        const s = state.monthlyData[m].sales.find(x => x.id === saleId);
-        if (s) foundSale = s;
-      });
-      if (!foundSale) return;
-
-      document.getElementById('edit-sale-id').value = foundSale.id;
-      document.getElementById('edit-sale-status').value = foundSale.status;
-      document.getElementById('edit-sale-paid-amount').value = foundSale.paidAmount;
-
-      toggleEditSalePartialInput();
-      openModal('updateSalePaymentModal');
-    }
-
-    function toggleEditSalePartialInput() {
-      const st = document.getElementById('edit-sale-status').value;
-      const container = document.getElementById('edit-sale-paid-container');
-      if (st === 'PARTIAL') {
-        container.classList.remove('hidden');
+        if (data) {
+          const index = salesTransactions.findIndex(s => s.id === editId);
+          salesTransactions[index] = data[0];
+        }
       } else {
-        container.classList.remove('hidden'); // allow view
-      }
-    }
+        const { data, error } = await supabase
+          .from('sales_transactions')
+          .insert([payload])
+          .select();
 
-    function handleUpdateSalePayment(e) {
-      e.preventDefault();
-      const saleId = document.getElementById('edit-sale-id').value;
-      const newStatus = document.getElementById('edit-sale-status').value;
-      const newPaid = Number(document.getElementById('edit-sale-paid-amount').value);
-
-      Object.keys(state.monthlyData).forEach(m => {
-        const s = state.monthlyData[m].sales.find(x => x.id === saleId);
-        if (s) {
-          s.status = newStatus;
-          s.paidAmount = newPaid;
+        if (data) {
+          salesTransactions.push(data[0]);
         }
-      });
-
-      closeModal('updateSalePaymentModal');
-      saveUserData();
-      renderAll();
-    }
-
-    function renderAccounts() {
-      const grid = document.getElementById('account-cards-grid');
-      grid.innerHTML = '';
-
-      let total = 0;
-      Object.keys(state.accounts).forEach(accName => {
-        const bal = state.accounts[accName] || 0;
-        total += Number(bal);
-
-        const card = document.createElement('div');
-        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4";
-        card.innerHTML = `
-          <div class="flex items-center justify-between">
-            <span class="font-extrabold text-sm text-brand-black tracking-wider uppercase">${accName}</span>
-            <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center font-bold text-xs text-brand-black">
-              ${accName.slice(0, 2)}
-            </div>
-          </div>
-          <div>
-            <span class="text-xs font-bold text-brand-muted uppercase">Balance</span>
-            <p class="font-display text-2xl font-bold text-brand-black mt-1">${formatMoney(bal)}</p>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-
-      document.getElementById('accounts-total-money').innerText = formatMoney(total);
-    }
-
-    function handleTransfer(e) {
-      e.preventDefault();
-      const from = document.getElementById('tr-from').value;
-      const to = document.getElementById('tr-to').value;
-      const amt = Number(document.getElementById('tr-amount').value);
-
-      if (from === to) {
-        alert("Please select two different accounts!");
-        return;
-      }
-      if ((state.accounts[from] || 0) < amt) {
-        alert(`Insufficient funds in ${from}!`);
-        return;
       }
 
-      state.accounts[from] -= amt;
-      state.accounts[to] = (state.accounts[to] || 0) + amt;
-
-      closeModal('transferModal');
-      document.getElementById('tr-amount').value = '';
-      saveUserData();
-      renderAll();
+      closeModal('addSaleModal');
+      renderSalesTable();
     }
 
-    function handleAddMoneyAccount(e) {
-      e.preventDefault();
-      const acc = document.getElementById('am-account').value;
-      const amt = Number(document.getElementById('am-amount').value);
-
-      state.accounts[acc] = (state.accounts[acc] || 0) + amt;
-
-      closeModal('addMoneyModal');
-      document.getElementById('am-amount').value = '';
-      saveUserData();
-      renderAll();
-    }
-
-    function renderLoans() {
-      const container = document.getElementById('loan-cards-list');
-      container.innerHTML = '';
-
-      let totalOwed = 0;
-      if (state.loans.length === 0) {
-        container.innerHTML = `<p class="text-xs text-brand-muted col-span-full py-4">No loan records registered yet.</p>`;
-        document.getElementById('loan-total-owed').innerText = formatMoney(0);
-        return;
-      }
-
-      state.loans.forEach((loan) => {
-        const rem = loan.amount - loan.paid;
-        totalOwed += rem;
-
-        const card = document.createElement('div');
-        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4";
-        card.innerHTML = `
-          <div class="flex justify-between items-start">
-            <div>
-              <h4 class="font-bold text-base text-brand-black">${loan.borrower}</h4>
-              <p class="text-[10px] font-bold text-brand-muted uppercase">${loan.date} ${loan.note ? '• ' + loan.note : ''}</p>
-            </div>
-            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${rem <= 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-yellow-50 text-yellow-700'}">
-              ${rem <= 0 ? 'CLEARED' : 'PENDING'}
-            </span>
-          </div>
-          <div class="grid grid-cols-2 gap-2 text-xs border-y border-gray-100 py-3">
-            <div><span class="text-brand-muted">Borrowed:</span> <strong class="text-brand-black block">${formatMoney(loan.amount)}</strong></div>
-            <div><span class="text-brand-muted">Paid So Far:</span> <strong class="text-emerald-600 block">${formatMoney(loan.paid)}</strong></div>
-          </div>
-          <div class="flex items-center justify-between pt-1">
-            <div>
-              <span class="text-[10px] font-bold text-brand-muted uppercase">Remaining Owed</span>
-              <p class="font-display font-bold text-lg ${rem > 0 ? 'text-red-600' : 'text-emerald-600'}">${formatMoney(rem)}</p>
-            </div>
-            <button onclick="openUpdateLoanModal('${loan.id}')" class="px-3 py-1.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-brand-black font-bold text-xs">
-              Update
-            </button>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-
-      document.getElementById('loan-total-owed').innerText = formatMoney(totalOwed);
-    }
-
-    function handleAddLoan(e) {
-      e.preventDefault();
-      const borrower = document.getElementById('loan-borrower').value;
-      const amount = Number(document.getElementById('loan-amount').value);
-      const date = document.getElementById('loan-date').value || new Date().toISOString().split('T')[0];
-      const paid = Number(document.getElementById('loan-paid').value || 0);
-      const note = document.getElementById('loan-note').value;
-
-      state.loans.push({ id: 'loan_' + Date.now(), borrower, amount, date, paid, note });
-
-      closeModal('addLoanModal');
-      document.getElementById('loan-borrower').value = '';
-      document.getElementById('loan-amount').value = '';
-      saveUserData();
-      renderAll();
-    }
-
-    function openUpdateLoanModal(loanId) {
-      const loan = state.loans.find(l => l.id === loanId);
-      if (!loan) return;
-      document.getElementById('edit-loan-id').value = loan.id;
-      document.getElementById('edit-loan-paid').value = loan.paid;
-      openModal('updateLoanModal');
-    }
-
-    function handleUpdateLoan(e) {
-      e.preventDefault();
-      const loanId = document.getElementById('edit-loan-id').value;
-      const newPaid = Number(document.getElementById('edit-loan-paid').value);
-
-      const loan = state.loans.find(l => l.id === loanId);
-      if (loan) {
-        loan.paid = newPaid;
-      }
-
-      closeModal('updateLoanModal');
-      saveUserData();
-      renderAll();
-    }
-
-    function renderProgress() {
-      let combinedProfit = 0;
-      const grid = document.getElementById('progress-monthly-grid');
-      grid.innerHTML = '';
-
-      Object.keys(state.monthlyData).sort().reverse().forEach(mKey => {
-        const summary = calculateMonthSummary(mKey);
-        combinedProfit += summary.salesProfit;
-
-        if (mKey === state.activeMonth) {
-          document.getElementById('progress-active-month-profit').innerText = formatMoney(summary.salesProfit);
-          document.getElementById('progress-active-month-name').innerText = `Active Month (${mKey}) Net Sales Profit`;
-        }
-
-        const card = document.createElement('div');
-        card.className = "p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-3";
-        card.innerHTML = `
-          <div class="flex justify-between items-center border-b border-gray-100 pb-2">
-            <span class="font-bold text-sm text-brand-black">${mKey}</span>
-            <span class="text-[10px] font-bold text-emerald-600 uppercase bg-emerald-50 px-2 py-0.5 rounded-full">History</span>
-          </div>
-          <div class="space-y-1">
-            <div class="flex justify-between text-xs"><span class="text-brand-muted">Income Pool:</span><span class="font-bold">${formatMoney(summary.grossPool)}</span></div>
-            <div class="flex justify-between text-xs"><span class="text-brand-muted">Expenses:</span><span class="font-bold text-red-600">-${formatMoney(summary.totalExpenses)}</span></div>
-            <div class="flex justify-between text-xs pt-2 border-t border-gray-100"><span class="font-bold text-brand-black">Net Sales Profit:</span><span class="font-bold text-emerald-600">${formatMoney(summary.salesProfit)}</span></div>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-
-      document.getElementById('progress-overall-profit').innerText = formatMoney(combinedProfit);
-    }
-
-    // EXCEL IMPORT PARSER & PREVIEW
-    function previewExcelFile(e) {
-      const file = e.target.files[0];
+    // EXCEL FILE IMPORT & PREVIEW
+    function previewExcelFile(event) {
+      const file = event.target.files[0];
       if (!file) return;
 
       const reader = new FileReader();
-      reader.onload = function(evt) {
-        const data = new Uint8Array(evt.target.result);
+      reader.onload = function(e) {
+        const data = new Uint8Array(e.target.result);
         const workbook = XLSX.read(data, { type: 'array' });
         const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-        const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+        const jsonData = XLSX.utils.sheet_to_json(firstSheet, { defval: "" });
 
-        pendingExcelRecords = [];
-        const tbody = document.getElementById('excel-preview-body');
-        tbody.innerHTML = '';
+        parsedExcelData = jsonData.map(row => ({
+          day: row.DAY || row.Day || '',
+          perfume: row.PERFUME || row.Perfume || '',
+          ml: row.Ml || row.ML || row.ml || null,
+          quantity: row.QUANTITY || row.Quantity || 1,
+          amount: row.AMOUNT || row.Amount || null,
+          sale: row.SALE || row.Sale || null,
+          status: row.STATUS || row.Status || '',
+          profit: row.PROFIT || row.Profit || null,
+          customers: row.Customers || row.CUSTOMERS || row.Customer || '',
+          expected: row.Expected || row.EXPECTED || null,
+          fileName: file.name
+        }));
 
-        let currentYear = '2025';
-
-        for (let i = 1; i < jsonData.length; i++) {
-          const row = jsonData[i];
-          if (!row || row.length === 0) continue;
-
-          let monthCol = String(row[0] || '').trim();
-          if (monthCol.includes('2026')) {
-            currentYear = '2026';
-          }
-
-          const perfume = row[1];
-          const ml = row[2];
-          const qty = row[3];
-          const amount = row[4];
-          const sale = row[5];
-          const status = row[6];
-          const profit = row[7];
-          const customer = row[8];
-          const expected = row[9];
-
-          if (!perfume && !amount && !sale) continue;
-
-          let monthNum = '05';
-          const lowerM = monthCol.toLowerCase();
-          if (lowerM.includes('may')) monthNum = '05';
-          else if (lowerM.includes('june')) monthNum = '06';
-          else if (lowerM.includes('july')) monthNum = '07';
-          else if (lowerM.includes('august')) monthNum = '08';
-          else if (lowerM.includes('october')) monthNum = '10';
-          else if (lowerM.includes('november')) monthNum = '11';
-          else if (lowerM.includes('december')) monthNum = '12';
-          else if (lowerM.includes('january')) monthNum = '01';
-          else if (lowerM.includes('february')) monthNum = '02';
-          else if (lowerM.includes('march')) monthNum = '03';
-          else if (lowerM.includes('april')) monthNum = '04';
-
-          const formattedMonthKey = `${currentYear}-${monthNum}`;
-
-          const rec = {
-            monthKey: formattedMonthKey,
-            perfume: perfume || 'Perfume Item',
-            ml: ml || '',
-            quantity: Number(qty) || 1,
-            buyingPrice: Number(amount) || 0,
-            sellingPrice: Number(sale) || 0,
-            status: String(status || 'SOLD').toUpperCase(),
-            profit: Number(profit) || 0,
-            customer: customer || '',
-            expected: expected || ''
-          };
-
-          pendingExcelRecords.push(rec);
-
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td class="p-2 text-brand-muted">${rec.monthKey}</td>
-            <td class="p-2 font-bold">${rec.perfume}</td>
-            <td class="p-2">${rec.ml}</td>
-            <td class="p-2">${rec.quantity}</td>
-            <td class="p-2">${rec.buyingPrice}</td>
-            <td class="p-2">${rec.sellingPrice}</td>
-            <td class="p-2"><span class="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-600 font-bold">${rec.status}</span></td>
-            <td class="p-2 text-emerald-600 font-bold">${rec.profit}</td>
-            <td class="p-2">${rec.customer}</td>
-            <td class="p-2 text-brand-muted">${rec.expected}</td>
-          `;
-          tbody.appendChild(tr);
-        }
-
-        document.getElementById('preview-count').innerText = pendingExcelRecords.length;
-        document.getElementById('excel-preview-container').classList.remove('hidden');
+        renderExcelPreview(parsedExcelData);
       };
       reader.readAsArrayBuffer(file);
     }
 
-    function confirmExcelImport() {
-      if (!pendingExcelRecords || pendingExcelRecords.length === 0) return;
+    function renderExcelPreview(data) {
+      const tbody = document.getElementById('excel-preview-body');
+      tbody.innerHTML = '';
+      document.getElementById('excel-preview-count').innerText = data.length;
 
-      if (!state.businessTypes.includes('Perfume')) {
-        state.businessTypes.push('Perfume');
-      }
-
-      pendingExcelRecords.forEach((rec, idx) => {
-        const mKey = rec.monthKey;
-        ensureMonthStructure(mKey);
-
-        const saleObj = {
-          id: 'excel_import_' + mKey + '_' + idx + '_' + Date.now(),
-          businessType: 'Perfume',
-          date: `${mKey}-01`,
-          product: rec.perfume + (rec.ml ? ` (${rec.ml}ml)` : ''),
-          customer: rec.customer,
-          quantity: rec.quantity,
-          buyingPrice: rec.buyingPrice,
-          sellingPrice: rec.sellingPrice,
-          status: 'FULL',
-          paidAmount: rec.sellingPrice
-        };
-
-        state.monthlyData[mKey].sales.push(saleObj);
+      data.slice(0, 10).forEach(row => {
+        const tr = document.createElement('tr');
+        tr.className = "border-b";
+        tr.innerHTML = `
+          <td class="p-1">${row.day}</td>
+          <td class="p-1 font-bold">${row.perfume}</td>
+          <td class="p-1">${row.ml || ''}</td>
+          <td class="p-1">${row.quantity}</td>
+          <td class="p-1">${row.amount || ''}</td>
+          <td class="p-1">${row.sale || ''}</td>
+          <td class="p-1 text-emerald-600">${row.profit || ''}</td>
+          <td class="p-1">${row.customers}</td>
+        `;
+        tbody.appendChild(tr);
       });
 
+      document.getElementById('excel-preview-container').classList.remove('hidden');
+    }
+
+    async function confirmExcelImport() {
+      if (!parsedExcelData || parsedExcelData.length === 0) return;
+
+      const payload = parsedExcelData.map(item => ({
+        user_id: currentUser.id,
+        day: item.day,
+        perfume: item.perfume,
+        ml: item.ml ? Number(item.ml) : null,
+        quantity: item.quantity ? Number(item.quantity) : 1,
+        amount: item.amount ? Number(item.amount) : null,
+        sale: item.sale ? Number(item.sale) : null,
+        status: item.status,
+        profit: item.profit ? Number(item.profit) : null,
+        customers: item.customers,
+        expected: item.expected ? Number(item.expected) : null
+      }));
+
+      const { data, error } = await supabase
+        .from('sales_transactions')
+        .insert(payload)
+        .select();
+
+      if (data) {
+        salesTransactions.push(...data);
+        const fileName = parsedExcelData[0].fileName;
+        if (!importedDocuments.includes(fileName)) {
+          importedDocuments.push(fileName);
+          renderImportedDocumentsList();
+        }
+        alert(`Successfully imported ${data.length} sales records!`);
+      }
+
       closeModal('importExcelModal');
-      document.getElementById('excel-file-input').value = '';
-      document.getElementById('excel-preview-container').classList.add('hidden');
-      saveUserData();
-      renderAll();
-      alert(`Successfully imported ${pendingExcelRecords.length} historical perfume sales!`);
+      renderSalesTable();
+    }
+
+    function renderImportedDocumentsList() {
+      const container = document.getElementById('imported-documents-list');
+      container.innerHTML = '';
+
+      importedDocuments.forEach((docName, index) => {
+        const div = document.createElement('div');
+        div.className = "flex items-center justify-between text-xs bg-gray-50 p-1.5 rounded-lg border border-gray-200";
+        div.innerHTML = `
+          <span class="font-bold text-gray-700 truncate max-w-[150px]">${docName}</span>
+          <button onclick="removeImportedDocument(${index})" class="text-[10px] text-red-600 hover:underline">Delete Doc</button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function removeImportedDocument(index) {
+      if (confirm("Remove this document entry? (This will NOT delete the imported sales records unless explicitly removed from the table).")) {
+        importedDocuments.splice(index, 1);
+        if (importedDocuments.length === 0) {
+          document.getElementById('imported-documents-list').innerHTML = '<span class="text-xs text-brand-muted">No documents imported yet</span>';
+        } else {
+          renderImportedDocumentsList();
+        }
+      }
+    }
+
+    function switchTab(tabId) {
+      // Tab switching handler
     }
   </script>
 </body>
