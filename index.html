@@ -1103,7 +1103,6 @@
       utilitiesExpanded: false,
       seededHistoricalSales: false
     };
-
     // HISTORICAL SEED DATA DATASET
     const RAW_HISTORICAL_SALES = [
       { month: '2025-05', perfume: 'Aqua Di Gio', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'KrecyKate' },
@@ -1125,54 +1124,12 @@
       { month: '2025-08', perfume: 'Savage Dior', ml: 30, qty: 1, amount: 15000, sale: 20000, status: 'SOLD', profit: 5000, customer: 'Shine' },
       { month: '2025-10', perfume: 'Pink Shiffon', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Sarah' },
       { month: '2025-11', perfume: 'Savage Dior', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Hassan' },
-      { month: '2025-11', perfume: 'Sugar Candy', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Rashid' },
-      { month: '2025-12', perfume: 'Pink Chiffon', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Dorica' },
-      { month: '2025-12', perfume: 'Profondo', ml: 50, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Danny' },
-      { month: '2025-12', perfume: 'Stronger with You', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Charles' },
-      { month: '2025-12', perfume: 'Eden Juice Apple', ml: 30, qty: 1, amount: 22500, sale: 37500, status: 'SOLD', profit: 12500, customer: 'Krecy' },
-      { month: '2025-12', perfume: 'Stronger with You', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Basil' },
-      { month: '2025-12', perfume: 'Eden Juice Apple', ml: 30, qty: 1, amount: 17500, sale: 25000, status: 'SOLD', profit: 7500, customer: 'Krecy' },
-      { month: '2026-01', perfume: 'Strawberry', ml: 30, qty: 1, amount: 15000, sale: 20000, status: 'SOLD', profit: 5000, customer: 'Careen' },
-      { month: '2026-01', perfume: 'Profondo', ml: 20, qty: 1, amount: 10000, sale: 15000, status: 'SOLD', profit: 5000, customer: 'Charles DIT' },
-      { month: '2026-01', perfume: 'Sugar Candy', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Neema' },
-      { month: '2026-01', perfume: 'Invictus', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Alexander' },
-      { month: '2026-02', perfume: 'Pink Chiffon', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Nirael Lema' },
-      { month: '2026-02', perfume: 'Strawberry', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Nirael Lema' },
-      { month: '2026-02', perfume: 'Savage Dior', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Dr Magen' },
-      { month: '2026-02', perfume: '212 VIP', ml: 20, qty: 1, amount: 10000, sale: 15000, status: 'SOLD', profit: 5000, customer: 'Malick' },
-      { month: '2026-03', perfume: '212 VIP', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Cathe' },
-      { month: '2026-03', perfume: 'Stronger with you', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Shine' },
-      { month: '2026-03', perfume: 'Aqqua Di Gio', ml: 50, qty: 1, amount: 20000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Lutome' },
-      { month: '2026-04', perfume: 'Aqua Di Gio', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Tesha' },
-      { month: '2026-04', perfume: 'Invictus', ml: 50, qty: 1, amount: 20000, sale: 25000, status: 'SOLD', profit: 15000, customer: 'Ronnah' },
-      { month: '2026-04', perfume: 'Eden Juice Apple', ml: 50, qty: 1, amount: 22500, sale: 35000, status: 'SOLD', profit: 12500, customer: 'Magen' },
-      { month: '2026-04', perfume: 'Creed Aventus', ml: 50, qty: 1, amount: 20000, sale: 40000, status: 'SOLD', profit: 15000, customer: 'Basil' },
-      { month: '2026-04', perfume: 'Sugar Candy', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Rashid' },
-      { month: '2026-04', perfume: 'Vanilla Eden Juice', ml: 50, qty: 1, amount: 17500, sale: 25000, status: 'SOLD', profit: 7500, customer: 'Anne' },
-      { month: '2026-04', perfume: 'Invictus', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Krecy' },
-      { month: '2026-05', perfume: '212 VIP', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Malick' },
-      { month: '2026-06', perfume: 'Eden Juice & Strawberry', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Kareen' },
-      { month: '2026-06', perfume: '212 VIP', ml: 20, qty: 1, amount: 10000, sale: 15000, status: 'SOLD', profit: 5000, customer: 'Lutome' },
-      { month: '2026-06', perfume: 'Invictus', ml: 20, qty: 1, amount: 10000, sale: 15000, status: 'SOLD', profit: 5000, customer: 'Shedy' },
-      { month: '2026-06', perfume: 'Invictus', ml: 20, qty: 1, amount: 10000, sale: 15000, status: 'SOLD', profit: 5000, customer: 'Wilson' },
-      { month: '2026-06', perfume: 'Eden Juice & Tag sunset', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 7500, customer: 'Evirce' },
-      { month: '2026-06', perfume: 'Eden Juice & Tag sunset', ml: 50, qty: 1, amount: 20000, sale: 30000, status: 'SOLD', profit: 7500, customer: 'Krecy' },
-      { month: '2026-06', perfume: '9PM', ml: 50, qty: 1, amount: 20000, sale: 30000, status: 'SOLD', profit: 10000, customer: 'Aidan' },
-      { month: '2026-06', perfume: '9PM', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Hassan' },
-      { month: '2026-07', perfume: 'Mango Peach', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Sista' },
-      { month: '2026-07', perfume: 'Vanilla & Profondo', ml: 50, qty: 1, amount: 20000, sale: 30000, status: 'SOLD', profit: 10000, customer: 'Alexander' },
-      { month: '2026-08', perfume: 'Sexy love & Tag Sunset', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Witty' },
-      { month: '2026-08', perfume: 'Savage Dior', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Dr Magen' },
-      { month: '2026-08', perfume: 'Stronger with you', ml: 10, qty: 1, amount: 6500, sale: 10000, status: 'SOLD', profit: 3500, customer: 'Dr Magen' },
-      { month: '2026-08', perfume: 'Invictus', ml: 30, qty: 1, amount: 15000, sale: 25000, status: 'SOLD', profit: 10000, customer: 'Evirce' }
+      { month: '2025-11', perfume: 'Sugar Candy', ml: 50, qty: 1, amount: 20000, sale: 35000, status: 'SOLD', profit: 15000, customer: 'Rashid' }
     ];
 
     function seedHistoricalSalesData() {
       if (state.seededHistoricalSales) return;
-      if (!state.businessTypes.includes('Perfume')) {
-        state.businessTypes.push('Perfume');
-      }
-      RAW_HISTORICAL_SALES.forEach((rec, idx) => {
+      RAW_HISTORICAL_SALES.forEach((rec, index) => {
         const mKey = rec.month;
         if (!state.monthlyData[mKey]) {
           state.monthlyData[mKey] = {
@@ -1183,228 +1140,150 @@
             utilitiesSubSpent: { 'Internet': 0, 'Umeme': 0, 'Taka': 0, 'Transport': 0 }
           };
         }
-        const saleObj = {
-          id: 'hist_seed_' + mKey + '_' + idx,
+        const dateStr = `${mKey}-15`;
+        state.monthlyData[mKey].sales.push({
+          id: 'hist-' + mKey + '-' + index,
           businessType: 'Perfume',
-          date: mKey + '-01',
-          product: rec.perfume + (rec.ml ? ' (' + rec.ml + 'ml)' : ''),
-          customer: rec.customer || '',
-          quantity: Number(rec.qty) || 1,
-          buyingPrice: Number(rec.amount) || 0,
-          sellingPrice: Number(rec.sale) || 0,
-          status: 'FULL',
-          paidAmount: Number(rec.sale) || 0
-        };
-        const exists = state.monthlyData[mKey].sales.some(s => s.id === saleObj.id);
-        if (!exists) {
-          state.monthlyData[mKey].sales.push(saleObj);
-        }
+          date: dateStr,
+          product: `${rec.perfume} (${rec.ml}ml)`,
+          customer: rec.customer,
+          qty: rec.qty,
+          buyPrice: rec.amount,
+          sellPrice: rec.sale,
+          totalValue: rec.sale,
+          paidAmount: rec.sale,
+          paymentStatus: 'FULL',
+          profit: rec.profit
+        });
       });
       state.seededHistoricalSales = true;
     }
 
-    // SUPABASE DATA SYNC ENGINE
-    async function loadUserData() {
-      if (!currentUser) return;
-      try {
-        const { data, error } = await supabaseClient
-          .from('user_data')
-          .select('state')
-          .eq('user_id', currentUser.id)
-          .maybeSingle();
-        if (error) {
-          console.error("Error fetching user data:", error);
-          return;
-        }
-        if (data && data.state) {
-          Object.assign(state, data.state);
-        }
-        seedHistoricalSalesData();
-        await saveUserData();
-      } catch (err) {
-        console.error("Failed to load user state:", err);
-      }
-    }
-    async function saveUserData() {
-      if (!currentUser) return;
-      try {
-        const payload = {
-          user_id: currentUser.id,
-          state: state,
-          updated_at: new Date().toISOString()
-        };
-        const { error } = await supabaseClient
-          .from('user_data')
-          .upsert(payload, { onConflict: 'user_id' });
-        if (error) {
-          console.error("Error saving user data:", error);
-        }
-      } catch (err) {
-        console.error("Failed to save state to Supabase:", err);
-      }
-    }
-    // AUTH FUNCTIONS
+    // AUTH HELPER FUNCTIONS
     function toggleAuthMode() {
       authMode = authMode === 'login' ? 'signup' : 'login';
-      const btn = document.getElementById('auth-submit-btn');
-      const toggle = document.getElementById('auth-toggle-btn');
-      const nameContainer = document.getElementById('name-field-container');
-      const confirmContainer = document.getElementById('confirm-password-container');
-      const err = document.getElementById('auth-error');
-      err.classList.add('hidden');
-      
+      const nameBox = document.getElementById('name-field-container');
+      const confirmBox = document.getElementById('confirm-password-container');
+      const submitBtn = document.getElementById('auth-submit-btn');
+      const toggleBtn = document.getElementById('auth-toggle-btn');
       if (authMode === 'signup') {
-        btn.innerText = 'Sign Up';
-        toggle.innerText = 'Already have an account? Sign In';
-        nameContainer.classList.remove('hidden');
-        confirmContainer.classList.remove('hidden');
+        nameBox.classList.remove('hidden');
+        confirmBox.classList.remove('hidden');
+        submitBtn.innerText = 'Create Account';
+        toggleBtn.innerText = 'Already have an account? Sign In';
       } else {
-        btn.innerText = 'Sign In';
-        toggle.innerText = 'Need an account? Sign Up';
-        nameContainer.classList.add('hidden');
-        confirmContainer.classList.add('hidden');
+        nameBox.classList.add('hidden');
+        confirmBox.classList.add('hidden');
+        submitBtn.innerText = 'Sign In';
+        toggleBtn.innerText = 'Need an account? Sign Up';
       }
     }
+
     async function handleAuth(e) {
       e.preventDefault();
       const email = document.getElementById('auth-email').value;
       const password = document.getElementById('auth-password').value;
-      const name = document.getElementById('auth-name').value;
-      const confirmPassword = document.getElementById('auth-confirm-password').value;
-      const errElem = document.getElementById('auth-error');
-      errElem.classList.add('hidden');
+      const errorMsg = document.getElementById('auth-error');
+      errorMsg.classList.add('hidden');
+
       if (authMode === 'signup') {
-        if (!password || password !== confirmPassword) {
-          errElem.innerText = "Passwords do not match. Please enter matching passwords.";
-          errElem.classList.remove('hidden');
+        const name = document.getElementById('auth-name').value;
+        const confirmPass = document.getElementById('auth-confirm-password').value;
+        if (password !== confirmPass) {
+          errorMsg.innerText = 'Passwords do not match.';
+          errorMsg.classList.remove('hidden');
           return;
         }
-        if (!name.trim()) {
-          errElem.innerText = "Please enter your full name.";
-          errElem.classList.remove('hidden');
-          return;
-        }
-      }
-      let res;
-      if (authMode === 'signup') {
-        res = await supabaseClient.auth.signUp({
+        const { data, error } = await supabaseClient.auth.signUp({
           email,
           password,
           options: { data: { full_name: name } }
         });
-      } else {
-        res = await supabaseClient.auth.signInWithPassword({ email, password });
-      }
-      if (res.error) {
-        errElem.innerText = res.error.message;
-        errElem.classList.remove('hidden');
-      } else {
-        currentUser = res.data.user || (await supabaseClient.auth.getUser()).data.user;
-        if (authMode === 'signup' && name) {
-          state.userName = name;
+        if (error) {
+          errorMsg.innerText = error.message;
+          errorMsg.classList.remove('hidden');
+        } else {
+          alert('Registration successful! Please check your email or log in.');
+          toggleAuthMode();
         }
-        await loadUserData();
-        if (currentUser.user_metadata && currentUser.user_metadata.full_name && !state.userName) {
-          state.userName = currentUser.user_metadata.full_name;
+      } else {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) {
+          errorMsg.innerText = error.message;
+          errorMsg.classList.remove('hidden');
+        } else {
+          currentUser = data.user;
+          state.userName = currentUser.user_metadata?.full_name || currentUser.email.split('@')[0];
+          document.getElementById('welcome-greeting').innerText = `Welcome, ${state.userName}`;
+          document.getElementById('auth-container').classList.add('hidden');
+          document.getElementById('app-wrapper').classList.remove('hidden');
+          await loadUserData();
+          renderApp();
         }
-        await saveUserData();
-        document.getElementById('auth-container').classList.add('hidden');
-        document.getElementById('app-wrapper').classList.remove('hidden');
-        renderAll();
       }
     }
+
     async function handleLogout() {
       await supabaseClient.auth.signOut();
       currentUser = null;
       document.getElementById('app-wrapper').classList.add('hidden');
       document.getElementById('auth-container').classList.remove('hidden');
     }
-    // INITIALIZATION & SPLASH TIMING
-    window.addEventListener('DOMContentLoaded', () => {
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed:', err));
-      }
-      setTimeout(async () => {
-        document.getElementById('splash-screen').classList.add('hidden');
-        const sessionRes = await supabaseClient.auth.getSession();
-        if (sessionRes.data && sessionRes.data.session) {
-          currentUser = sessionRes.data.session.user;
-          await loadUserData();
-          if (currentUser.user_metadata && currentUser.user_metadata.full_name && !state.userName) {
-            state.userName = currentUser.user_metadata.full_name;
-          }
-          document.getElementById('app-wrapper').classList.remove('hidden');
-          renderAll();
-        } else {
-          document.getElementById('auth-container').classList.remove('hidden');
-        }
-      }, 1500);
-    });
 
-    // HELPERS & UI CONTROLLERS
-    function formatMoney(num) {
-      return Number(num || 0).toLocaleString() + ' Sh';
-    }
-    function switchTab(tabId) {
-      state.currentTab = tabId;
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('.nav-tab').forEach(el => {
-        el.classList.remove('bg-brand-black', 'text-white', 'shadow-sm');
-        el.classList.add('text-brand-muted');
+    // DATA PERSISTENCE
+    async function saveUserData() {
+      if (!currentUser) return;
+      const { error } = await supabaseClient.from('user_profiles').upsert({
+        id: currentUser.id,
+        state_data: state,
+        updated_at: new Date()
       });
-      document.querySelectorAll('.bnav-btn').forEach(el => {
-        el.classList.remove('text-brand-black');
-        el.classList.add('text-brand-muted');
-      });
-      const activeTab = document.getElementById(`tab-${tabId}`);
-      if (activeTab) activeTab.classList.remove('hidden');
-      const activeNav = document.getElementById(`nav-${tabId}`);
-      if (activeNav) {
-        activeNav.classList.add('bg-brand-black', 'text-white', 'shadow-sm');
-        activeNav.classList.remove('text-brand-muted');
-      }
-      const activeBnav = document.getElementById(`bnav-${tabId}`);
-      if (activeBnav) {
-        activeBnav.classList.add('text-brand-black');
-        activeBnav.classList.remove('text-brand-muted');
-      }
-      renderAll();
+      if (error) console.error('Save error:', error);
     }
 
-    function openModal(id) {
-      document.getElementById(id).classList.remove('hidden');
-    }
-    function closeModal(id) {
-      document.getElementById(id).classList.add('hidden');
-    }
-
-    function toggleUtilitiesAccordion() {
-      state.utilitiesExpanded = !state.utilitiesExpanded;
-      const content = document.getElementById('utilities-accordion');
-      const chevron = document.getElementById('utilities-chevron');
-      if (state.utilitiesExpanded) {
-        content.classList.add('expanded');
-        chevron.classList.add('rotate-180');
+    async function loadUserData() {
+      if (!currentUser) return;
+      const { data, error } = await supabaseClient
+        .from('user_profiles')
+        .select('state_data')
+        .eq('id', currentUser.id)
+        .single();
+      if (data && data.state_data) {
+        Object.assign(state, data.state_data);
       } else {
-        content.classList.remove('expanded');
-        chevron.classList.remove('rotate-180');
+        seedHistoricalSalesData();
       }
+      initMonthPickers();
     }
 
-    function handleHeroUpload(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          state.heroImageUrl = evt.target.result;
-          renderHero();
-          saveUserData();
-        };
-        reader.readAsDataURL(file);
-      }
+    function initMonthPickers() {
+      const picker1 = document.getElementById('income-month-picker');
+      const picker2 = document.getElementById('daily-expense-month-picker');
+      if (picker1) picker1.value = state.activeMonth;
+      if (picker2) picker2.value = state.expenseActiveMonth;
     }
 
-    function ensureMonthStructure(mKey) {
+    // MODAL CONTROL
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+    // RENDER ROUTINES
+    function renderApp() {
+      ensureMonthState(state.activeMonth);
+      ensureMonthState(state.expenseActiveMonth);
+      renderDashboard();
+      renderIncomeTab();
+      renderBudgetTab();
+      renderDailyExpensesTab();
+      renderInvestmentTab();
+      renderAppearichTab();
+      renderAccountsTab();
+      renderLoansTab();
+      renderProgressTab();
+      saveUserData();
+    }
+
+    function ensureMonthState(mKey) {
       if (!state.monthlyData[mKey]) {
         state.monthlyData[mKey] = {
           incomes: [],
@@ -1416,111 +1295,72 @@
       }
     }
 
-    function handleMonthChange(e) {
-      state.activeMonth = e.target.value || getCurrentMonthKey();
-      ensureMonthStructure(state.activeMonth);
-      renderAll();
-    }
-    function handleExpenseMonthChange(e) {
-      state.expenseActiveMonth = e.target.value || getCurrentMonthKey();
-      ensureMonthStructure(state.expenseActiveMonth);
-      renderAll();
-    }
+    // 1. DASHBOARD
+    function renderDashboard() {
+      const activeData = state.monthlyData[state.activeMonth] || { incomes: [], sales: [] };
+      const incomeTotal = activeData.incomes.reduce((s, i) => s + Number(i.amount), 0);
+      const salesTotal = activeData.sales.reduce((s, x) => s + Number(x.paidAmount), 0);
+      const grossIncome = incomeTotal + salesTotal;
+      const godTotal = grossIncome * 0.10;
+      const liquidTotal = Object.values(state.accounts).reduce((a, b) => a + Number(b), 0);
 
-    function calculateMonthSummary(mKey) {
-      ensureMonthStructure(mKey);
-      const mData = state.monthlyData[mKey];
-      const incomeTotal = mData.incomes.reduce((acc, curr) => acc + Number(curr.amount || 0), 0);
-      const salesReceived = mData.sales.reduce((acc, curr) => acc + Number(curr.paidAmount || 0), 0);
-      const grossPool = incomeTotal + salesReceived;
-      const godAmount = grossPool * 0.10;
-      const remainingPool = grossPool * 0.90;
+      const budgetPool = grossIncome * 0.90;
+      const totalBudgetAllocated = state.categories.reduce((s, c) => s + Number(c.amount), 0);
+      const remainingBudgetPool = budgetPool - totalBudgetAllocated;
 
-      let totalExpenses = mData.expenses.reduce((acc, curr) => acc + Number(curr.amount || 0), 0);
-
-      const salesProfit = mData.sales.reduce((acc, curr) => {
-        const cost = Number(curr.buyingPrice || 0) * Number(curr.quantity || 1);
-        const paid = Number(curr.paidAmount || 0);
-        return acc + (paid - cost);
-      }, 0);
-
-      return {
-        incomeTotal,
-        salesReceived,
-        grossPool,
-        godAmount,
-        remainingPool,
-        totalExpenses,
-        salesProfit
-      };
+      document.getElementById('dash-total-income').innerText = grossIncome.toLocaleString() + ' Sh';
+      document.getElementById('dash-god-amount').innerText = godTotal.toLocaleString() + ' Sh';
+      document.getElementById('dash-total-money').innerText = liquidTotal.toLocaleString() + ' Sh';
+      document.getElementById('dash-remaining-budget').innerText = remainingBudgetPool.toLocaleString() + ' Sh';
+      document.getElementById('hero-bg-img').style.backgroundImage = `url('${state.heroImageUrl}')`;
     }
 
-    // MAIN RENDER ENGINE
-    function renderAll() {
-      renderHero();
-      renderDashboard();
-      renderIncome();
-      renderBudget();
-      renderDailyExpenses();
-      renderInvestment();
-      renderAppearich();
-      renderAccounts();
-      renderLoans();
-      renderProgress();
-    }
-
-    function renderHero() {
-      const name = state.userName || (currentUser ? (currentUser.user_metadata?.full_name || currentUser.email) : 'User');
-      document.getElementById('welcome-greeting').innerText = `Welcome, ${name}`;
-      if (state.heroImageUrl) {
-        document.getElementById('hero-bg-img').style.backgroundImage = `url('${state.heroImageUrl}')`;
+    function handleHeroUpload(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          state.heroImageUrl = evt.target.result;
+          renderApp();
+        };
+        reader.readAsDataURL(file);
       }
     }
 
-    function renderDashboard() {
-      const summary = calculateMonthSummary(state.activeMonth);
-      document.getElementById('dash-total-income').innerText = formatMoney(summary.grossPool);
-      document.getElementById('dash-god-amount').innerText = formatMoney(summary.godAmount);
-      
-      const totalMoney = Object.values(state.accounts).reduce((a, b) => Number(a) + Number(b), 0);
-      document.getElementById('dash-total-money').innerText = formatMoney(totalMoney);
-      
-      const remainingBudget = summary.remainingPool - summary.totalExpenses;
-      document.getElementById('dash-remaining-budget').innerText = formatMoney(remainingBudget);
+    // 2. INCOME & GOD
+    function handleMonthChange(e) {
+      state.activeMonth = e.target.value;
+      renderApp();
     }
 
-    function renderIncome() {
-      ensureMonthStructure(state.activeMonth);
-      document.getElementById('income-month-picker').value = state.activeMonth;
-      const summary = calculateMonthSummary(state.activeMonth);
-      document.getElementById('income-god-total').innerText = formatMoney(summary.godAmount);
-      document.getElementById('income-month-label').innerText = `Month: ${state.activeMonth}`;
+    function renderIncomeTab() {
+      const activeData = state.monthlyData[state.activeMonth] || { incomes: [], sales: [] };
+      const incomeTotal = activeData.incomes.reduce((s, i) => s + Number(i.amount), 0);
+      const salesTotal = activeData.sales.reduce((s, x) => s + Number(x.paidAmount), 0);
+      const grossIncome = incomeTotal + salesTotal;
+      const godTotal = grossIncome * 0.10;
+
+      document.getElementById('income-god-total').innerText = godTotal.toLocaleString() + ' Sh';
+      document.getElementById('income-month-label').innerText = `Active Month: ${state.activeMonth}`;
 
       const container = document.getElementById('income-list-container');
       container.innerHTML = '';
-      const list = state.monthlyData[state.activeMonth].incomes;
 
-      if (list.length === 0) {
-        container.innerHTML = `<p class="text-xs text-brand-muted col-span-full py-4">No income records added for ${state.activeMonth}. Click "+ Add Income" above.</p>`;
+      if (activeData.incomes.length === 0) {
+        container.innerHTML = `<div class="col-span-full p-6 text-center text-xs text-brand-muted bg-gray-50 rounded-2xl border border-gray-100">No income streams added for ${state.activeMonth}. Click "+ Add Income" above.</div>`;
         return;
       }
 
-      list.forEach((item, index) => {
+      activeData.incomes.forEach((inc, idx) => {
         const card = document.createElement('div');
-        card.className = "p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-3";
+        card.className = 'p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex justify-between items-center';
         card.innerHTML = `
-          <div class="flex justify-between items-start">
-            <div>
-              <h4 class="font-bold text-sm text-brand-black">${item.name}</h4>
-              <p class="text-[10px] text-brand-muted font-bold uppercase">Source Record</p>
-            </div>
-            <button onclick="removeIncome(${index})" class="text-gray-300 hover:text-red-500 font-bold text-sm">&times;</button>
+          <div>
+            <p class="font-bold text-sm text-brand-black">${inc.name}</p>
+            <p class="text-xs text-brand-muted">Amount: ${Number(inc.amount).toLocaleString()} Sh</p>
+            <p class="text-[11px] font-bold text-brand-gold mt-1">GOD (10%): ${(inc.amount * 0.1).toLocaleString()} Sh</p>
           </div>
-          <p class="font-display text-2xl font-bold text-brand-black">${formatMoney(item.amount)}</p>
-          <div class="pt-2 border-t border-gray-100 flex justify-between items-center text-[11px]">
-            <span class="text-brand-muted">Auto GOD Tithe (10%)</span>
-            <span class="font-bold text-brand-gold">${formatMoney(item.amount * 0.10)}</span>
-          </div>
+          <button onclick="deleteIncome('${inc.id}')" class="text-xs text-red-500 hover:text-red-700 font-bold">Delete</button>
         `;
         container.appendChild(card);
       });
@@ -1530,98 +1370,137 @@
       e.preventDefault();
       const name = document.getElementById('income-name-input').value;
       const amount = Number(document.getElementById('income-amount-input').value);
-      ensureMonthStructure(state.activeMonth);
-      state.monthlyData[state.activeMonth].incomes.push({ name, amount });
+      ensureMonthState(state.activeMonth);
+      state.monthlyData[state.activeMonth].incomes.push({ id: 'inc-' + Date.now(), name, amount });
       closeModal('addIncomeModal');
-      document.getElementById('income-name-input').value = '';
-      document.getElementById('income-amount-input').value = '';
-      saveUserData();
-      renderAll();
+      e.target.reset();
+      renderApp();
     }
 
-    function removeIncome(index) {
-      ensureMonthStructure(state.activeMonth);
-      state.monthlyData[state.activeMonth].incomes.splice(index, 1);
-      saveUserData();
-      renderAll();
+    function deleteIncome(id) {
+      const activeData = state.monthlyData[state.activeMonth];
+      if (activeData) {
+        activeData.incomes = activeData.incomes.filter(i => i.id !== id);
+        renderApp();
+      }
     }
 
-    function renderBudget() {
-      const summary = calculateMonthSummary(state.activeMonth);
-      const pool = summary.remainingPool;
-      document.getElementById('budget-pool-total').innerText = formatMoney(pool);
+    // 3. BUDGET
+    function renderBudgetTab() {
+      const activeData = state.monthlyData[state.activeMonth] || { incomes: [], sales: [] };
+      const incomeTotal = activeData.incomes.reduce((s, i) => s + Number(i.amount), 0);
+      const salesTotal = activeData.sales.reduce((s, x) => s + Number(x.paidAmount), 0);
+      const gross = incomeTotal + salesTotal;
+      const budgetPool = gross * 0.90;
 
-      let totalTargetAllocated = state.categories.reduce((acc, cat) => acc + Number(cat.amount || 0), 0);
-      let pct = pool > 0 ? Math.min(100, Math.round((totalTargetAllocated / pool) * 100)) : 0;
+      document.getElementById('budget-pool-total').innerText = budgetPool.toLocaleString() + ' Sh';
+
+      const totalAllocated = state.categories.reduce((s, c) => s + Number(c.amount), 0);
+      const pct = budgetPool > 0 ? Math.min(100, Math.round((totalAllocated / budgetPool) * 100)) : 0;
 
       document.getElementById('budget-allocated-percent').innerText = `${pct}% Allocated`;
       document.getElementById('budget-allocated-bar').style.width = `${pct}%`;
 
-      // Render Utilities Accordion Subcategories
-      const utilsSubContainer = document.getElementById('utilities-subcategories-list');
-      utilsSubContainer.innerHTML = '';
-      const activeData = state.monthlyData[state.activeMonth];
-      let totalUtilsSpent = 0;
+      // Utilities category updates
+      const utilCat = state.categories.find(c => c.id === 'cat-utilities');
+      if (utilCat) {
+        document.getElementById('cat-amount-cat-utilities').value = utilCat.amount || '';
+        const utilPct = budgetPool > 0 ? Math.round((utilCat.amount / budgetPool) * 100) : 0;
+        document.getElementById('utilities-percent-badge').innerText = `${utilPct}%`;
+      }
 
-      state.utilitiesSub.forEach(sub => {
-        const spent = activeData.utilitiesSubSpent[sub.name] || 0;
-        totalUtilsSpent += spent;
-        const row = document.createElement('div');
-        row.className = "flex items-center justify-between p-3 rounded-xl bg-white border border-gray-100 text-xs";
-        row.innerHTML = `
-          <span class="font-bold text-brand-black">${sub.name}</span>
-          <span class="font-semibold text-brand-muted">Spent: <strong class="text-brand-black">${formatMoney(spent)}</strong></span>
-        `;
-        utilsSubContainer.appendChild(row);
+      // Calculate Utilities spent from daily expenses
+      const expMonthData = state.monthlyData[state.expenseActiveMonth] || { expenses: [] };
+      const utilSubKeys = ['Internet', 'Umeme', 'Taka', 'Transport'];
+      let totalUtilSpent = 0;
+      const subSpentMap = { Internet: 0, Umeme: 0, Taka: 0, Transport: 0 };
+
+      expMonthData.expenses.forEach(ex => {
+        if (utilSubKeys.includes(ex.category)) {
+          subSpentMap[ex.category] += Number(ex.amount);
+          totalUtilSpent += Number(ex.amount);
+        }
       });
 
-      const utilsCat = state.categories.find(c => c.id === 'cat-utilities');
-      const utilsTarget = utilsCat ? Number(utilsCat.amount || 0) : 0;
-      document.getElementById('cat-amount-cat-utilities').value = utilsTarget || '';
-      document.getElementById('utilities-spent-summary').innerText = `Spent: ${formatMoney(totalUtilsSpent)}`;
-      const utilsRem = utilsTarget - totalUtilsSpent;
-      document.getElementById('utilities-remaining-summary').innerText = `Remaining: ${formatMoney(utilsRem)}`;
-      document.getElementById('utilities-remaining-summary').className = utilsRem < 0 ? "font-bold text-red-600" : "font-bold text-emerald-600";
+      const utilTarget = utilCat ? Number(utilCat.amount) : 0;
+      document.getElementById('utilities-spent-summary').innerText = `Spent: ${totalUtilSpent.toLocaleString()} Sh`;
+      document.getElementById('utilities-remaining-summary').innerText = `Remaining: ${(utilTarget - totalUtilSpent).toLocaleString()} Sh`;
 
-      // Render Primary Categories
-      const mainCatContainer = document.getElementById('main-categories-list');
-      mainCatContainer.innerHTML = '';
+      // Render Subcategories
+      const subContainer = document.getElementById('utilities-subcategories-list');
+      subContainer.innerHTML = '';
+      utilSubKeys.forEach(subName => {
+        const spent = subSpentMap[subName] || 0;
+        const row = document.createElement('div');
+        row.className = 'flex justify-between items-center text-xs p-3 rounded-xl bg-white border border-gray-200';
+        row.innerHTML = `
+          <span class="font-bold text-brand-black">${subName}</span>
+          <span class="text-brand-muted">Spent: <strong class="text-brand-black">${spent.toLocaleString()} Sh</strong></span>
+        `;
+        subContainer.appendChild(row);
+      });
+
+      // Render Main Dynamic Categories (Investment, Expenses, Other, custom)
+      const mainCatList = document.getElementById('main-categories-list');
+      mainCatList.innerHTML = '';
 
       state.categories.filter(c => c.id !== 'cat-utilities').forEach(cat => {
-        let spent = activeData.categorySpent[cat.name] || 0;
-        const target = Number(cat.amount || 0);
-        const remaining = target - spent;
+        let spent = 0;
+        if (cat.name === 'Expenses') {
+          spent = expMonthData.expenses.filter(e => e.category === 'Expenses').reduce((s, x) => s + Number(x.amount), 0);
+        } else if (cat.name === 'Other') {
+          spent = expMonthData.expenses.filter(e => e.category === 'Other').reduce((s, x) => s + Number(x.amount), 0);
+        } else {
+          spent = expMonthData.expenses.filter(e => e.category === cat.name).reduce((s, x) => s + Number(x.amount), 0);
+        }
+
+        const catPct = budgetPool > 0 ? Math.round((cat.amount / budgetPool) * 100) : 0;
+        const remaining = Number(cat.amount) - spent;
 
         const card = document.createElement('div');
-        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4";
+        card.className = 'rounded-3xl bg-white border border-gray-100 shadow-premium p-6 flex flex-col justify-between space-y-4';
         card.innerHTML = `
           <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center font-bold text-brand-black text-xs uppercase">
-                ${cat.name.slice(0, 2)}
+              <div class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center font-bold text-xs uppercase">${cat.name.substring(0, 2)}</div>
+              <div>
+                <h4 class="font-bold text-base text-brand-black">${cat.name.toUpperCase()}</h4>
+                <span class="text-[11px] text-brand-muted">${catPct}% of Budget Pool</span>
               </div>
-              <h4 class="font-bold text-base text-brand-black uppercase">${cat.name}</h4>
             </div>
+            ${!['cat-investment', 'cat-expenses', 'cat-other'].includes(cat.id) ? `<button onclick="deleteCategory('${cat.id}')" class="text-xs text-red-500 font-bold hover:underline">Delete</button>` : ''}
           </div>
           <div>
-            <label class="block text-xs font-bold text-brand-muted uppercase mb-1">Target Budget Amount (Sh)</label>
-            <input type="number" value="${target || ''}" oninput="handleCategoryAmountInput('${cat.id}', this.value)" placeholder="Set target" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm font-bold text-brand-black">
+            <label class="block text-xs font-bold text-brand-muted uppercase mb-1">Target Amount (Sh)</label>
+            <input type="number" value="${cat.amount || ''}" oninput="handleCategoryAmountInput('${cat.id}', this.value)" placeholder="Enter target" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm font-bold text-brand-black">
           </div>
           <div class="flex justify-between text-xs pt-2 border-t border-gray-100">
-            <span class="text-brand-muted">Spent: ${formatMoney(spent)}</span>
-            <span class="${remaining < 0 ? 'font-bold text-red-600' : 'font-bold text-emerald-600'}">Remaining: ${formatMoney(remaining)}</span>
+            <span class="text-brand-muted">Spent: ${spent.toLocaleString()} Sh</span>
+            <span class="font-bold ${remaining >= 0 ? 'text-emerald-600' : 'text-red-600'}">Rem: ${remaining.toLocaleString()} Sh</span>
           </div>
         `;
-        mainCatContainer.appendChild(card);
+        mainCatList.appendChild(card);
       });
+    }
+
+    function toggleUtilitiesAccordion() {
+      state.utilitiesExpanded = !state.utilitiesExpanded;
+      const acc = document.getElementById('utilities-accordion');
+      const chev = document.getElementById('utilities-chevron');
+      if (state.utilitiesExpanded) {
+        acc.classList.add('expanded');
+        chev.style.transform = 'rotate(180deg)';
+      } else {
+        acc.classList.remove('expanded');
+        chev.style.transform = 'rotate(0deg)';
+      }
     }
 
     function handleCategoryAmountInput(catId, val) {
       const cat = state.categories.find(c => c.id === catId);
       if (cat) {
-        cat.amount = Number(val || 0);
-        saveUserData();
-        renderBudget();
+        cat.amount = Number(val) || 0;
+        renderApp();
       }
     }
 
@@ -1629,75 +1508,82 @@
       e.preventDefault();
       const name = document.getElementById('cat-name-input').value;
       const amount = Number(document.getElementById('cat-amount-input').value);
-      const newId = 'cat-' + Date.now();
-      state.categories.push({ id: newId, name, amount, isExpandable: false });
+      state.categories.push({ id: 'cat-' + Date.now(), name, amount, isExpandable: false });
       closeModal('addCategoryModal');
-      document.getElementById('cat-name-input').value = '';
-      document.getElementById('cat-amount-input').value = '';
-      saveUserData();
-      renderAll();
+      e.target.reset();
+      renderApp();
     }
 
-    function renderDailyExpenses() {
-      ensureMonthStructure(state.expenseActiveMonth);
-      document.getElementById('daily-expense-month-picker').value = state.expenseActiveMonth;
+    function deleteCategory(catId) {
+      state.categories = state.categories.filter(c => c.id !== catId);
+      renderApp();
+    }
+
+    // 3.5 DAILY EXPENSES
+    function handleExpenseMonthChange(e) {
+      state.expenseActiveMonth = e.target.value;
+      renderApp();
+    }
+
+    function renderDailyExpensesTab() {
       document.getElementById('daily-expense-month-label').innerText = `Month: ${state.expenseActiveMonth}`;
+      const expMonthData = state.monthlyData[state.expenseActiveMonth] || { expenses: [] };
 
-      const activeData = state.monthlyData[state.expenseActiveMonth];
-
-      // Render Comparison Cards
-      const grid = document.getElementById('category-budget-comparison-grid');
-      grid.innerHTML = '';
+      // Category breakdown comparison
+      const compGrid = document.getElementById('category-budget-comparison-grid');
+      compGrid.innerHTML = '';
 
       state.categories.forEach(cat => {
         let spent = 0;
         if (cat.id === 'cat-utilities') {
-          spent = Object.values(activeData.utilitiesSubSpent).reduce((a, b) => a + b, 0);
+          const utilKeys = ['Internet', 'Umeme', 'Taka', 'Transport'];
+          spent = expMonthData.expenses.filter(e => utilKeys.includes(e.category)).reduce((s, x) => s + Number(x.amount), 0);
         } else {
-          spent = activeData.categorySpent[cat.name] || 0;
+          spent = expMonthData.expenses.filter(e => e.category === cat.name).reduce((s, x) => s + Number(x.amount), 0);
         }
-        const budget = Number(cat.amount || 0);
-        const rem = budget - spent;
+        const target = Number(cat.amount);
+        const diff = target - spent;
+        const pctSpent = target > 0 ? Math.min(100, Math.round((spent / target) * 100)) : 0;
 
         const card = document.createElement('div');
-        card.className = "p-4 rounded-2xl bg-white border border-gray-100 shadow-sm flex flex-col justify-between space-y-2";
+        card.className = 'p-4 rounded-2xl bg-white border border-gray-100 shadow-sm space-y-2';
         card.innerHTML = `
           <div class="flex justify-between items-center">
             <span class="font-bold text-xs uppercase text-brand-black">${cat.name}</span>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${rem < 0 ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-emerald-600'}">
-              ${rem < 0 ? 'Over Budget' : 'Within Budget'}
-            </span>
+            <span class="text-[10px] font-bold ${diff >= 0 ? 'text-emerald-600' : 'text-red-500'}">${diff >= 0 ? 'Within Budget' : 'Over Budget'}</span>
           </div>
-          <div class="flex justify-between items-baseline pt-1">
-            <span class="text-xs text-brand-muted">Spent: <strong class="text-brand-black">${formatMoney(spent)}</strong></span>
-            <span class="text-xs text-brand-muted">Budget: <strong class="text-brand-black">${formatMoney(budget)}</strong></span>
+          <div class="flex justify-between text-xs">
+            <span class="text-brand-muted">Target: ${target.toLocaleString()} Sh</span>
+            <span class="font-bold">Spent: ${spent.toLocaleString()} Sh</span>
+          </div>
+          <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+            <div class="h-full ${diff >= 0 ? 'bg-brand-black' : 'bg-red-500'}" style="width: ${pctSpent}%"></div>
           </div>
         `;
-        grid.appendChild(card);
+        compGrid.appendChild(card);
       });
 
-      // Render Table Logs
-      const tbody = document.getElementById('daily-expense-table-body');
-      tbody.innerHTML = '';
-      const list = activeData.expenses;
-      document.getElementById('daily-expense-log-count').innerText = `${list.length} Expenses Recorded`;
+      // Expense Log Table
+      const tableBody = document.getElementById('daily-expense-table-body');
+      tableBody.innerHTML = '';
+      document.getElementById('daily-expense-log-count').innerText = `${expMonthData.expenses.length} Records`;
 
-      if (list.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-brand-muted">No expenses recorded for this month.</td></tr>`;
+      if (expMonthData.expenses.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-gray-400">No expenses recorded for this month.</td></tr>`;
         return;
       }
 
-      list.forEach((tx) => {
+      expMonthData.expenses.slice().reverse().forEach(ex => {
         const tr = document.createElement('tr');
-        tr.className = "hover:bg-gray-50/50 transition";
+        tr.className = 'hover:bg-gray-50/50 transition';
         tr.innerHTML = `
-          <td class="py-3 text-brand-muted">${tx.date}</td>
-          <td class="py-3 font-bold text-brand-black">${tx.name}</td>
-          <td class="py-3"><span class="px-2 py-0.5 rounded-md bg-gray-100 text-brand-black font-semibold text-[10px]">${tx.category}</span></td>
-          <td class="py-3 text-brand-muted">${tx.account}</td>
-          <td class="py-3 text-right font-bold text-red-600">-${formatMoney(tx.amount)}</td>
+          <td class="py-3 font-semibold text-brand-black">${ex.date}</td>
+          <td class="py-3 text-brand-black">${ex.name}</td>
+          <td class="py-3"><span class="px-2 py-0.5 rounded-md bg-gray-100 font-bold text-[10px]">${ex.category}</span></td>
+          <td class="py-3 font-medium text-brand-muted">${ex.account}</td>
+          <td class="py-3 text-right font-bold text-red-600">-${Number(ex.amount).toLocaleString()} Sh</td>
         `;
-        tbody.appendChild(tr);
+        tableBody.appendChild(tr);
       });
     }
 
@@ -1707,492 +1593,600 @@
       const category = document.getElementById('tx-category').value;
       const account = document.getElementById('tx-account').value;
       const amount = Number(document.getElementById('tx-amount').value);
-      const date = document.getElementById('tx-date').value || new Date().toISOString().split('T')[0];
+      const date = document.getElementById('tx-date').value;
 
-      const mKey = date.slice(0, 7);
-      ensureMonthStructure(mKey);
+      const mKey = date ? date.substring(0, 7) : state.expenseActiveMonth;
+      ensureMonthState(mKey);
 
-      // Check account balance
-      if ((state.accounts[account] || 0) < amount) {
-        alert("Insufficient balance in selected account!");
-        return;
+      // Deduct from liquid account
+      if (state.accounts[account] !== undefined) {
+        state.accounts[account] -= amount;
       }
 
-      state.accounts[account] -= amount;
-
-      const txObj = { id: Date.now(), name, category, account, amount, date };
-      state.monthlyData[mKey].expenses.push(txObj);
-
-      // Deduct/Track Category Spent
-      if (['Internet', 'Umeme', 'Taka', 'Transport'].includes(category)) {
-        state.monthlyData[mKey].utilitiesSubSpent[category] = (state.monthlyData[mKey].utilitiesSubSpent[category] || 0) + amount;
-      } else {
-        state.monthlyData[mKey].categorySpent[category] = (state.monthlyData[mKey].categorySpent[category] || 0) + amount;
-      }
-
+      state.monthlyData[mKey].expenses.push({ id: 'tx-' + Date.now(), name, category, account, amount, date });
       closeModal('addTransactionModal');
-      document.getElementById('tx-name').value = '';
-      document.getElementById('tx-amount').value = '';
-      saveUserData();
-      renderAll();
+      e.target.reset();
+      renderApp();
     }
 
-    function renderInvestment() {
-      const totalInv = state.investment.totalInvested || 0;
-      const currVal = state.investment.currentValue || 0;
-      const gain = currVal - totalInv;
-      const pct = totalInv > 0 ? ((gain / totalInv) * 100).toFixed(2) : '0.00';
+    // 4. INVESTMENT
+    function renderInvestmentTab() {
+      const inv = state.investment;
+      const gain = inv.currentValue - inv.totalInvested;
+      const returnPct = inv.totalInvested > 0 ? ((gain / inv.totalInvested) * 100).toFixed(2) : '0.00';
 
-      document.getElementById('inv-total-invested').innerText = formatMoney(totalInv);
-      document.getElementById('inv-current-value').innerText = formatMoney(currVal);
-      document.getElementById('inv-gain-loss').innerText = (gain >= 0 ? '+' : '') + formatMoney(gain);
-      document.getElementById('inv-gain-loss').className = `font-display text-3xl font-extrabold ${gain >= 0 ? 'text-emerald-600' : 'text-red-600'} mt-1`;
-      document.getElementById('inv-percentage-return').innerText = `${gain >= 0 ? '+' : ''}${pct}%`;
-      document.getElementById('inv-percentage-return').className = `font-display text-3xl font-extrabold ${gain >= 0 ? 'text-emerald-600' : 'text-red-600'} mt-1`;
+      document.getElementById('inv-total-invested').innerText = inv.totalInvested.toLocaleString() + ' Sh';
+      document.getElementById('inv-current-value').innerText = inv.currentValue.toLocaleString() + ' Sh';
+      
+      const gainElem = document.getElementById('inv-gain-loss');
+      gainElem.innerText = (gain >= 0 ? '+' : '') + gain.toLocaleString() + ' Sh';
+      gainElem.className = `font-display text-3xl font-extrabold mt-1 ${gain >= 0 ? 'text-emerald-600' : 'text-red-600'}`;
 
-      const historyContainer = document.getElementById('investment-history-list');
-      historyContainer.innerHTML = '';
+      const pctElem = document.getElementById('inv-percentage-return');
+      pctElem.innerText = (gain >= 0 ? '+' : '') + returnPct + '%';
+      pctElem.className = `font-display text-3xl font-extrabold mt-1 ${gain >= 0 ? 'text-emerald-600' : 'text-red-600'}`;
 
-      if (state.investment.history.length === 0) {
-        historyContainer.innerHTML = `<p class="text-xs text-brand-muted col-span-full">No investment actions recorded yet.</p>`;
+      const histContainer = document.getElementById('investment-history-list');
+      histContainer.innerHTML = '';
+
+      if (inv.history.length === 0) {
+        histContainer.innerHTML = `<div class="col-span-full p-4 text-center text-xs text-brand-muted">No investment records logged.</div>`;
         return;
       }
 
-      state.investment.history.slice().reverse().forEach(item => {
+      inv.history.slice().reverse().forEach(h => {
         const card = document.createElement('div');
-        card.className = "p-4 rounded-2xl bg-gray-50 border border-gray-100 space-y-1 text-xs";
+        card.className = 'p-4 rounded-2xl bg-gray-50 border border-gray-100 space-y-1';
         card.innerHTML = `
-          <div class="flex justify-between font-bold text-brand-black">
-            <span>${item.type}</span>
-            <span>${item.date}</span>
+          <div class="flex justify-between items-center text-xs font-bold">
+            <span class="text-brand-black">${h.type}</span>
+            <span class="text-brand-muted">${h.date}</span>
           </div>
-          <p class="text-brand-muted">${item.description}</p>
+          <p class="text-sm font-extrabold text-brand-black">${Number(h.amount).toLocaleString()} Sh</p>
         `;
-        historyContainer.appendChild(card);
+        histContainer.appendChild(card);
       });
     }
 
     function handleAddInvestmentCapital(e) {
       e.preventDefault();
-      const amt = Number(document.getElementById('inv-add-amount').value);
-      state.investment.totalInvested += amt;
-      state.investment.currentValue += amt;
+      const amount = Number(document.getElementById('inv-add-amount').value);
+      state.investment.totalInvested += amount;
+      state.investment.currentValue += amount;
       state.investment.history.push({
-        type: 'CAPITAL ADDITION',
-        date: new Date().toISOString().split('T')[0],
-        description: `Added capital of ${formatMoney(amt)}`
+        type: 'Capital Addition',
+        amount,
+        date: new Date().toISOString().split('T')[0]
       });
       closeModal('addInvestmentModal');
-      document.getElementById('inv-add-amount').value = '';
-      saveUserData();
-      renderAll();
+      e.target.reset();
+      renderApp();
     }
 
     function handleUpdateInvestmentValue(e) {
       e.preventDefault();
-      const val = Number(document.getElementById('inv-update-value').value);
-      state.investment.currentValue = val;
+      const newVal = Number(document.getElementById('inv-update-value').value);
+      state.investment.currentValue = newVal;
       state.investment.history.push({
-        type: 'VALUATION UPDATE',
-        date: new Date().toISOString().split('T')[0],
-        description: `Updated valuation to ${formatMoney(val)}`
+        type: 'Valuation Update',
+        amount: newVal,
+        date: new Date().toISOString().split('T')[0]
       });
       closeModal('updateInvestmentModal');
-      document.getElementById('inv-update-value').value = '';
-      saveUserData();
-      renderAll();
+      e.target.reset();
+      renderApp();
     }
 
-    function renderAppearich() {
-      // Render Business Options Tabs Bar
-      const typesBar = document.getElementById('business-types-bar');
-      typesBar.innerHTML = '';
-      state.businessTypes.forEach(bType => {
+    // 5. APPEARICH BUSINESS & EXCEL IMPORT
+    function renderAppearichTab() {
+      // Business Type Tabs Bar
+      const bBar = document.getElementById('business-types-bar');
+      bBar.innerHTML = '';
+      state.businessTypes.forEach(bName => {
         const btn = document.createElement('button');
-        btn.className = `px-4 py-2 rounded-xl text-xs font-bold transition flex-shrink-0 ${state.activeBusinessType === bType ? 'bg-brand-black text-white' : 'bg-gray-100 text-brand-muted hover:text-brand-black'}`;
-        btn.innerText = bType;
+        btn.className = `px-4 py-2 rounded-xl text-xs font-bold transition flex-shrink-0 ${state.activeBusinessType === bName ? 'bg-brand-black text-white shadow-sm' : 'bg-gray-100 text-brand-muted hover:text-brand-black'}`;
+        btn.innerText = bName;
         btn.onclick = () => {
-          state.activeBusinessType = bType;
-          renderAppearich();
+          state.activeBusinessType = bName;
+          renderApp();
         };
-        typesBar.appendChild(btn);
+        bBar.appendChild(btn);
       });
 
       document.getElementById('active-business-view-label').innerText = `Active Business View: ${state.activeBusinessType}`;
 
-      // Calculate Metrics Across Monthly Sales Data
-      const now = new Date();
-      const todayStr = now.toISOString().split('T')[0];
-      const currentMonthStr = getCurrentMonthKey();
-
-      let todaySalesReceived = 0;
-      let todayProfit = 0;
-      let monthRevenue = 0;
-      let totalOutstanding = 0;
-      let totalProfitAllTime = 0;
-
-      // Filtered Sales List for Period View
-      let allSales = [];
-
-      Object.keys(state.monthlyData).forEach(mKey => {
-        const salesList = state.monthlyData[mKey].sales || [];
-        salesList.forEach(sale => {
-          if (sale.businessType === state.activeBusinessType) {
-            allSales.push(sale);
-            const totalVal = Number(sale.sellingPrice || 0) * Number(sale.quantity || 1);
-            const paid = Number(sale.paidAmount || 0);
-            const cost = Number(sale.buyingPrice || 0) * Number(sale.quantity || 1);
-            const unpaid = totalVal - paid;
-            const profit = paid - cost;
-
-            if (sale.date === todayStr) {
-              todaySalesReceived += paid;
-              todayProfit += profit;
-            }
-            if (mKey === currentMonthStr) {
-              monthRevenue += paid;
-            }
-            if (unpaid > 0) {
-              totalOutstanding += unpaid;
-            }
-            totalProfitAllTime += profit;
-          }
-        });
-      });
-
-      document.getElementById('app-today-sales').innerText = formatMoney(todaySalesReceived);
-      document.getElementById('app-today-profit').innerText = formatMoney(todayProfit);
-      document.getElementById('app-month-revenue').innerText = formatMoney(monthRevenue);
-      document.getElementById('app-total-outstanding').innerText = formatMoney(totalOutstanding);
-      document.getElementById('app-total-profit').innerText = formatMoney(totalProfitAllTime);
-
-      // Period Calculation (Day, Week, Month, Year)
-      let filteredByPeriod = allSales.filter(s => {
-        if (state.appearichPeriod === 'day') return s.date === todayStr;
-        if (state.appearichPeriod === 'month') return s.date?.startsWith(currentMonthStr);
-        if (state.appearichPeriod === 'year') return s.date?.startsWith(now.getFullYear().toString());
-        if (state.appearichPeriod === 'week') {
-          const sDate = new Date(s.date);
-          const diffDays = (now - sDate) / (1000 * 3600 * 24);
-          return diffDays >= 0 && diffDays <= 7;
-        }
-        return true;
-      });
-
-      let periodSold = filteredByPeriod.reduce((acc, s) => acc + Number(s.quantity || 1), 0);
-      let periodRevenue = filteredByPeriod.reduce((acc, s) => acc + Number(s.paidAmount || 0), 0);
-      let periodCost = filteredByPeriod.reduce((acc, s) => acc + (Number(s.buyingPrice || 0) * Number(s.quantity || 1)), 0);
-      let periodMargin = periodRevenue > 0 ? (((periodRevenue - periodCost) / periodRevenue) * 100).toFixed(1) : 0;
-
-      document.getElementById('app-period-sold').innerText = periodSold;
-      document.getElementById('app-period-revenue').innerText = formatMoney(periodRevenue);
-      document.getElementById('app-period-cost').innerText = formatMoney(periodCost);
-      document.getElementById('app-period-margin').innerText = `${periodMargin}%`;
-
-      // Sales Log Table
-      const tableBody = document.getElementById('appearich-sales-table');
-      tableBody.innerHTML = '';
-
-      if (allSales.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="9" class="py-4 text-center text-brand-muted">No sales records found for ${state.activeBusinessType}.</td></tr>`;
-        return;
-      }
-
-      allSales.sort((a, b) => new Date(b.date) - new Date(a.date)).forEach(s => {
-        const totalVal = Number(s.sellingPrice || 0) * Number(s.quantity || 1);
-        const paid = Number(s.paidAmount || 0);
-        const unpaid = totalVal - paid;
-
-        const tr = document.createElement('tr');
-        tr.className = "hover:bg-gray-50/50 transition border-b border-gray-100";
-        tr.innerHTML = `
-          <td class="py-3 text-brand-muted">${s.date}</td>
-          <td class="py-3 font-semibold text-brand-black">${s.businessType}</td>
-          <td class="py-3 font-bold text-brand-black">${s.product} (x${s.quantity})</td>
-          <td class="py-3 text-brand-black">${s.customer}</td>
-          <td class="py-3 font-bold text-brand-black">${formatMoney(totalVal)}</td>
-          <td class="py-3 font-bold text-emerald-600">${formatMoney(paid)}</td>
-          <td class="py-3 font-bold ${unpaid > 0 ? 'text-red-600' : 'text-brand-muted'}">${formatMoney(unpaid)}</td>
-          <td class="py-3">
-            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${unpaid === 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}">
-              ${unpaid === 0 ? 'FULL' : 'PARTIAL'}
-            </span>
-          </td>
-          <td class="py-3">
-            <button onclick="openEditSaleModal('${s.id}')" class="px-2.5 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-brand-black font-bold text-[10px]">
-              Payment
-            </button>
-          </td>
-        `;
-        tableBody.appendChild(tr);
-      });
-
-      // Update Select Options inside Add Sale Modal
-      const saleBusSelect = document.getElementById('sale-business-type');
-      saleBusSelect.innerHTML = '';
+      // Populate Business Options dropdown in Add Sale Modal
+      const bSelect = document.getElementById('sale-business-type');
+      bSelect.innerHTML = '';
       state.businessTypes.forEach(b => {
         const opt = document.createElement('option');
         opt.value = b;
         opt.innerText = b;
-        saleBusSelect.appendChild(opt);
+        if (b === state.activeBusinessType) opt.selected = true;
+        bSelect.appendChild(opt);
+      });
+
+      // Aggregate all sales records across months for active business type
+      let allSales = [];
+      Object.keys(state.monthlyData).forEach(mKey => {
+        const sales = state.monthlyData[mKey].sales || [];
+        sales.forEach(s => {
+          if (s.businessType === state.activeBusinessType) {
+            allSales.push(s);
+          }
+        });
+      });
+
+      // Sort chronological strictly by dates recorded (Oldest first for log / filtered period math)
+      allSales.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      const todayStr = new Date().toISOString().split('T')[0];
+      const todaySales = allSales.filter(s => s.date === todayStr);
+
+      const todayReceived = todaySales.reduce((acc, s) => acc + Number(s.paidAmount), 0);
+      const todayProfit = todaySales.reduce((acc, s) => acc + Number(s.profit), 0);
+
+      const monthSales = allSales.filter(s => s.date && s.date.startsWith(state.activeMonth));
+      const monthRevenue = monthSales.reduce((acc, s) => acc + Number(s.paidAmount), 0);
+
+      const totalOutstanding = allSales.reduce((acc, s) => acc + (Number(s.totalValue) - Number(s.paidAmount)), 0);
+      const totalProfit = allSales.reduce((acc, s) => acc + Number(s.profit), 0);
+
+      document.getElementById('app-today-sales').innerText = todayReceived.toLocaleString() + ' Sh';
+      document.getElementById('app-today-profit').innerText = todayProfit.toLocaleString() + ' Sh';
+      document.getElementById('app-month-revenue').innerText = monthRevenue.toLocaleString() + ' Sh';
+      document.getElementById('app-total-outstanding').innerText = totalOutstanding.toLocaleString() + ' Sh';
+      document.getElementById('app-total-profit').innerText = totalProfit.toLocaleString() + ' Sh';
+
+      // Period stats calculation
+      let filteredPeriodSales = [];
+      const now = new Date();
+      if (state.appearichPeriod === 'day') {
+        filteredPeriodSales = allSales.filter(s => s.date === todayStr);
+      } else if (state.appearichPeriod === 'week') {
+        const weekAgo = new Date();
+        weekAgo.setDate(now.getDate() - 7);
+        filteredPeriodSales = allSales.filter(s => new Date(s.date) >= weekAgo);
+      } else if (state.appearichPeriod === 'month') {
+        filteredPeriodSales = monthSales;
+      } else if (state.appearichPeriod === 'year') {
+        const yrStr = String(now.getFullYear());
+        filteredPeriodSales = allSales.filter(s => s.date && s.date.startsWith(yrStr));
+      }
+
+      const pSold = filteredPeriodSales.reduce((acc, s) => acc + Number(s.qty || 1), 0);
+      const pRev = filteredPeriodSales.reduce((acc, s) => acc + Number(s.totalValue), 0);
+      const pCost = filteredPeriodSales.reduce((acc, s) => acc + (Number(s.buyPrice) * Number(s.qty || 1)), 0);
+      const pMargin = pRev > 0 ? (((pRev - pCost) / pRev) * 100).toFixed(1) : '0';
+
+      document.getElementById('app-period-sold').innerText = pSold.toLocaleString();
+      document.getElementById('app-period-revenue').innerText = pRev.toLocaleString() + ' Sh';
+      document.getElementById('app-period-cost').innerText = pCost.toLocaleString() + ' Sh';
+      document.getElementById('app-period-margin').innerText = pMargin + '%';
+
+      // Render Sales Table (Displaying Exact Dates in Chronological Order)
+      const tbody = document.getElementById('appearich-sales-table');
+      tbody.innerHTML = '';
+
+      if (allSales.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" class="p-4 text-center text-gray-400">No sales transactions logged for ${state.activeBusinessType}.</td></tr>`;
+        return;
+      }
+
+      allSales.forEach(s => {
+        const unpaid = Number(s.totalValue) - Number(s.paidAmount);
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-gray-50/50 transition';
+        tr.innerHTML = `
+          <td class="py-3 font-bold text-brand-black whitespace-nowrap">${s.date}</td>
+          <td class="py-3 text-brand-black"><span class="px-2 py-0.5 rounded bg-gray-100 text-[10px] font-bold">${s.businessType}</span></td>
+          <td class="py-3 font-semibold text-brand-black">${s.product}</td>
+          <td class="py-3 text-brand-muted">${s.customer}</td>
+          <td class="py-3 font-bold text-brand-black">${Number(s.totalValue).toLocaleString()} Sh</td>
+          <td class="py-3 text-emerald-600 font-bold">${Number(s.paidAmount).toLocaleString()} Sh</td>
+          <td class="py-3 ${unpaid > 0 ? 'text-red-600 font-bold' : 'text-gray-400'}">${unpaid.toLocaleString()} Sh</td>
+          <td class="py-3">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold ${s.paymentStatus === 'FULL' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}">
+              ${s.paymentStatus}
+            </span>
+          </td>
+          <td class="py-3">
+            <button onclick="openUpdateSaleModal('${s.id}')" class="text-xs font-bold text-brand-black hover:underline">Update</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
       });
     }
 
-    function switchAppearichPeriod(p) {
-      state.appearichPeriod = p;
-      document.querySelectorAll('.app-period-btn').forEach(btn => {
-        btn.classList.remove('bg-brand-black', 'text-white', 'active');
-        btn.classList.add('bg-gray-100', 'text-brand-muted');
+    function switchAppearichPeriod(period) {
+      state.appearichPeriod = period;
+      document.querySelectorAll('.app-period-btn').forEach(b => {
+        b.classList.remove('active', 'bg-brand-black', 'text-white');
+        b.classList.add('bg-gray-100', 'text-brand-muted');
       });
-      const activeBtn = document.getElementById(`app-period-${p}`);
+      const activeBtn = document.getElementById(`app-period-${period}`);
       if (activeBtn) {
-        activeBtn.classList.add('bg-brand-black', 'text-white', 'active');
         activeBtn.classList.remove('bg-gray-100', 'text-brand-muted');
+        activeBtn.classList.add('active', 'bg-brand-black', 'text-white');
       }
-      renderAppearich();
+      renderAppearichTab();
     }
 
     function toggleSalePartialInput() {
-      const st = document.getElementById('sale-payment-status').value;
-      const container = document.getElementById('sale-partial-container');
-      if (st === 'PARTIAL') {
-        container.classList.remove('hidden');
-      } else {
-        container.classList.add('hidden');
-      }
+      const status = document.getElementById('sale-payment-status').value;
+      const partialBox = document.getElementById('sale-partial-container');
+      if (status === 'PARTIAL') partialBox.classList.remove('hidden');
+      else partialBox.classList.add('hidden');
     }
 
     function handleAddSale(e) {
       e.preventDefault();
-      const businessType = document.getElementById('sale-business-type').value;
-      const date = document.getElementById('sale-date').value || new Date().toISOString().split('T')[0];
-      const quantity = Number(document.getElementById('sale-qty').value || 1);
+      const bType = document.getElementById('sale-business-type').value;
+      const date = document.getElementById('sale-date').value;
+      const qty = Number(document.getElementById('sale-qty').value);
       const product = document.getElementById('sale-product').value;
       const customer = document.getElementById('sale-customer').value;
-      const buyingPrice = Number(document.getElementById('sale-buy-price').value);
-      const sellingPrice = Number(document.getElementById('sale-sell-price').value);
+      const buyPrice = Number(document.getElementById('sale-buy-price').value);
+      const sellPrice = Number(document.getElementById('sale-sell-price').value);
       const status = document.getElementById('sale-payment-status').value;
 
-      const totalVal = sellingPrice * quantity;
-      let paidAmount = totalVal;
+      const totalValue = sellPrice * qty;
+      let paidAmount = totalValue;
       if (status === 'PARTIAL') {
-        paidAmount = Number(document.getElementById('sale-paid-amount').value || 0);
+        paidAmount = Number(document.getElementById('sale-paid-amount').value) || 0;
       }
 
-      const mKey = date.slice(0, 7);
-      ensureMonthStructure(mKey);
+      const profit = paidAmount - (buyPrice * qty);
+      const mKey = date ? date.substring(0, 7) : state.activeMonth;
+      ensureMonthState(mKey);
 
-      const saleObj = {
-        id: 'sale_' + Date.now(),
-        businessType,
+      state.monthlyData[mKey].sales.push({
+        id: 'sale-' + Date.now(),
+        businessType: bType,
         date,
-        quantity,
         product,
         customer,
-        buyingPrice,
-        sellingPrice,
-        status,
-        paidAmount
-      };
+        qty,
+        buyPrice,
+        sellPrice,
+        totalValue,
+        paidAmount,
+        paymentStatus: status,
+        profit
+      });
 
-      state.monthlyData[mKey].sales.push(saleObj);
       closeModal('addSaleModal');
-      saveUserData();
-      renderAll();
+      e.target.reset();
+      renderApp();
     }
 
     function handleAddBusinessOption(e) {
       e.preventDefault();
-      const bName = document.getElementById('new-business-name-input').value.trim();
-      if (bName && !state.businessTypes.includes(bName)) {
-        state.businessTypes.push(bName);
-        state.activeBusinessType = bName;
+      const name = document.getElementById('new-business-name-input').value.trim();
+      if (name && !state.businessTypes.includes(name)) {
+        state.businessTypes.push(name);
+        state.activeBusinessType = name;
       }
       closeModal('addBusinessModal');
-      document.getElementById('new-business-name-input').value = '';
-      saveUserData();
-      renderAll();
+      e.target.reset();
+      renderApp();
     }
 
-    function openEditSaleModal(saleId) {
+    function openUpdateSaleModal(saleId) {
       let foundSale = null;
-      Object.keys(state.monthlyData).forEach(m => {
-        const s = state.monthlyData[m].sales.find(x => x.id === saleId);
+      Object.keys(state.monthlyData).forEach(mKey => {
+        const s = state.monthlyData[mKey].sales.find(x => x.id === saleId);
         if (s) foundSale = s;
       });
       if (!foundSale) return;
 
-      document.getElementById('edit-sale-id').value = foundSale.id;
-      document.getElementById('edit-sale-status').value = foundSale.status;
+      document.getElementById('edit-sale-id').value = saleId;
+      document.getElementById('edit-sale-status').value = foundSale.paymentStatus;
       document.getElementById('edit-sale-paid-amount').value = foundSale.paidAmount;
-
       toggleEditSalePartialInput();
       openModal('updateSalePaymentModal');
     }
 
     function toggleEditSalePartialInput() {
-      const st = document.getElementById('edit-sale-status').value;
+      const status = document.getElementById('edit-sale-status').value;
       const container = document.getElementById('edit-sale-paid-container');
-      if (st === 'PARTIAL') {
-        container.classList.remove('hidden');
-      } else {
-        container.classList.remove('hidden'); // allow view
-      }
+      if (status === 'FULL') container.classList.add('hidden');
+      else container.classList.remove('hidden');
     }
 
     function handleUpdateSalePayment(e) {
       e.preventDefault();
       const saleId = document.getElementById('edit-sale-id').value;
       const newStatus = document.getElementById('edit-sale-status').value;
-      const newPaid = Number(document.getElementById('edit-sale-paid-amount').value);
 
-      Object.keys(state.monthlyData).forEach(m => {
-        const s = state.monthlyData[m].sales.find(x => x.id === saleId);
+      Object.keys(state.monthlyData).forEach(mKey => {
+        const s = state.monthlyData[mKey].sales.find(x => x.id === saleId);
         if (s) {
-          s.status = newStatus;
-          s.paidAmount = newPaid;
+          s.paymentStatus = newStatus;
+          if (newStatus === 'FULL') {
+            s.paidAmount = s.totalValue;
+          } else {
+            s.paidAmount = Number(document.getElementById('edit-sale-paid-amount').value);
+          }
+          s.profit = s.paidAmount - (s.buyPrice * s.qty);
         }
       });
 
       closeModal('updateSalePaymentModal');
-      saveUserData();
-      renderAll();
+      renderApp();
     }
 
-    function renderAccounts() {
+    // EXCEL IMPORT ENGINE - PRESERVES EXACT DATES AND YEARS AS SOURCE OF TRUTH
+    function previewExcelFile(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const data = new Uint8Array(evt.target.result);
+        const workbook = XLSX.read(data, { type: 'array', cellDates: true });
+        const firstSheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[firstSheetName];
+        const rawJson = XLSX.utils.sheet_to_json(worksheet, { header: 1, raw: false });
+
+        if (rawJson.length <= 1) {
+          alert('Excel file is empty or has no data rows.');
+          return;
+        }
+
+        pendingExcelRecords = [];
+        const header = rawJson[0].map(h => String(h).toLowerCase().trim());
+        
+        // Header index map
+        const dateIdx = header.findIndex(h => h.includes('date'));
+        const nameIdx = header.findIndex(h => h.includes('perfume') || h.includes('product') || h.includes('item'));
+        const mlIdx = header.findIndex(h => h.includes('ml'));
+        const qtyIdx = header.findIndex(h => h.includes('qty') || h.includes('quantity'));
+        const amountIdx = header.findIndex(h => h.includes('amount') || h.includes('buy') || h.includes('cost'));
+        const saleIdx = header.findIndex(h => h.includes('sale') || h.includes('sell') || h.includes('price'));
+        const statusIdx = header.findIndex(h => h.includes('status'));
+        const profitIdx = header.findIndex(h => h.includes('profit'));
+        const customerIdx = header.findIndex(h => h.includes('customer') || h.includes('client') || h.includes('buyer'));
+
+        for (let i = 1; i < rawJson.length; i++) {
+          const row = rawJson[i];
+          if (!row || row.length === 0 || !row[dateIdx]) continue;
+
+          let rawDateVal = String(row[dateIdx]).trim();
+          let parsedDateStr = '';
+
+          // Preserve exact original date and original year from Excel file
+          if (rawDateVal.includes('/')) {
+            const parts = rawDateVal.split('/');
+            if (parts.length === 3) {
+              const day = parts[0].padStart(2, '0');
+              const month = parts[1].padStart(2, '0');
+              let year = parts[2].trim();
+              if (year.length === 2) year = '20' + year;
+              parsedDateStr = `${year}-${month}-${day}`;
+            }
+          } else if (rawDateVal.includes('-')) {
+            const parts = rawDateVal.split('-');
+            if (parts.length === 3) {
+              if (parts[0].length === 4) {
+                parsedDateStr = rawDateVal;
+              } else {
+                const day = parts[0].padStart(2, '0');
+                const month = parts[1].padStart(2, '0');
+                let year = parts[2].trim();
+                if (year.length === 2) year = '20' + year;
+                parsedDateStr = `${year}-${month}-${day}`;
+              }
+            }
+          }
+
+          if (!parsedDateStr || isNaN(new Date(parsedDateStr).getTime())) {
+            parsedDateStr = new Date().toISOString().split('T')[0];
+          }
+
+          const perfume = nameIdx !== -1 ? (row[nameIdx] || 'Perfume') : 'Perfume';
+          const ml = mlIdx !== -1 ? (row[mlIdx] || '30') : '30';
+          const qty = qtyIdx !== -1 ? (Number(row[qtyIdx]) || 1) : 1;
+          const amount = amountIdx !== -1 ? (Number(String(row[amountIdx]).replace(/[^0-9.]/g, '')) || 0) : 15000;
+          const sale = saleIdx !== -1 ? (Number(String(row[saleIdx]).replace(/[^0-9.]/g, '')) || 0) : 25000;
+          const status = statusIdx !== -1 ? (String(row[statusIdx]).toUpperCase().includes('SOLD') ? 'FULL' : 'PARTIAL') : 'FULL';
+          const profit = profitIdx !== -1 ? (Number(String(row[profitIdx]).replace(/[^0-9.]/g, '')) || (sale - amount)) : (sale - amount);
+          const customer = customerIdx !== -1 ? (row[customerIdx] || 'Excel Import') : 'Excel Import';
+
+          pendingExcelRecords.push({
+            date: parsedDateStr,
+            product: `${perfume} (${ml}ml)`,
+            qty,
+            buyPrice: amount,
+            sellPrice: sale / qty,
+            totalValue: sale,
+            paidAmount: status === 'FULL' ? sale : (sale - profit),
+            paymentStatus: status,
+            profit,
+            customer
+          });
+        }
+
+        // Strict Chronological Sort from oldest to newest by date preserved from Excel
+        pendingExcelRecords.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        // Render Preview Table
+        const previewBody = document.getElementById('excel-preview-body');
+        previewBody.innerHTML = '';
+        document.getElementById('preview-count').innerText = pendingExcelRecords.length;
+
+        pendingExcelRecords.forEach(rec => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td class="p-2 font-bold">${rec.date}</td>
+            <td class="p-2">${rec.product}</td>
+            <td class="p-2">${rec.qty}</td>
+            <td class="p-2">${rec.buyPrice.toLocaleString()}</td>
+            <td class="p-2">${rec.totalValue.toLocaleString()}</td>
+            <td class="p-2">${rec.paidAmount.toLocaleString()}</td>
+            <td class="p-2"><span class="px-1.5 py-0.5 rounded bg-gray-100 text-[9px] font-bold">${rec.paymentStatus}</span></td>
+            <td class="p-2 font-bold text-emerald-600">${rec.profit.toLocaleString()}</td>
+            <td class="p-2">${rec.customer}</td>
+            <td class="p-2 text-gray-400">Exact Date Kept</td>
+          `;
+          previewBody.appendChild(tr);
+        });
+
+        document.getElementById('excel-preview-container').classList.remove('hidden');
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    function confirmExcelImport() {
+      if (pendingExcelRecords.length === 0) return;
+
+      pendingExcelRecords.forEach((rec, idx) => {
+        const mKey = rec.date.substring(0, 7);
+        ensureMonthState(mKey);
+
+        state.monthlyData[mKey].sales.push({
+          id: 'ex-' + Date.now() + '-' + idx,
+          businessType: state.activeBusinessType,
+          date: rec.date,
+          product: rec.product,
+          customer: rec.customer,
+          qty: rec.qty,
+          buyPrice: rec.buyPrice,
+          sellPrice: rec.sellPrice,
+          totalValue: rec.totalValue,
+          paidAmount: rec.paidAmount,
+          paymentStatus: rec.paymentStatus,
+          profit: rec.profit
+        });
+      });
+
+      alert(`Successfully imported ${pendingExcelRecords.length} records into ${state.activeBusinessType} while preserving original dates!`);
+      pendingExcelRecords = [];
+      closeModal('importExcelModal');
+      renderApp();
+    }
+
+    // 6. ACCOUNTS
+    function renderAccountsTab() {
+      const liquidTotal = Object.values(state.accounts).reduce((a, b) => a + Number(b), 0);
+      document.getElementById('accounts-total-money').innerText = liquidTotal.toLocaleString() + ' Sh';
+
       const grid = document.getElementById('account-cards-grid');
       grid.innerHTML = '';
 
-      let total = 0;
       Object.keys(state.accounts).forEach(accName => {
-        const bal = state.accounts[accName] || 0;
-        total += Number(bal);
-
+        const bal = state.accounts[accName];
         const card = document.createElement('div');
-        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4";
+        card.className = 'p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4';
         card.innerHTML = `
           <div class="flex items-center justify-between">
-            <span class="font-extrabold text-sm text-brand-black tracking-wider uppercase">${accName}</span>
-            <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center font-bold text-xs text-brand-black">
-              ${accName.slice(0, 2)}
-            </div>
+            <span class="px-3 py-1 rounded-xl bg-gray-100 font-extrabold text-xs text-brand-black uppercase">${accName}</span>
+            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
           </div>
           <div>
-            <span class="text-xs font-bold text-brand-muted uppercase">Balance</span>
-            <p class="font-display text-2xl font-bold text-brand-black mt-1">${formatMoney(bal)}</p>
+            <span class="text-xs text-brand-muted font-bold uppercase tracking-wider">Current Balance</span>
+            <p class="font-display text-3xl font-extrabold text-brand-black mt-1">${bal.toLocaleString()} Sh</p>
           </div>
         `;
         grid.appendChild(card);
       });
-
-      document.getElementById('accounts-total-money').innerText = formatMoney(total);
     }
 
     function handleTransfer(e) {
       e.preventDefault();
       const from = document.getElementById('tr-from').value;
       const to = document.getElementById('tr-to').value;
-      const amt = Number(document.getElementById('tr-amount').value);
+      const amount = Number(document.getElementById('tr-amount').value);
 
       if (from === to) {
-        alert("Please select two different accounts!");
-        return;
-      }
-      if ((state.accounts[from] || 0) < amt) {
-        alert(`Insufficient funds in ${from}!`);
+        alert('Source and destination accounts must be different.');
         return;
       }
 
-      state.accounts[from] -= amt;
-      state.accounts[to] = (state.accounts[to] || 0) + amt;
+      if (state.accounts[from] < amount) {
+        alert(`Insufficient balance in ${from}.`);
+        return;
+      }
+
+      state.accounts[from] -= amount;
+      state.accounts[to] += amount;
 
       closeModal('transferModal');
-      document.getElementById('tr-amount').value = '';
-      saveUserData();
-      renderAll();
+      e.target.reset();
+      renderApp();
     }
 
     function handleAddMoneyAccount(e) {
       e.preventDefault();
-      const acc = document.getElementById('am-account').value;
-      const amt = Number(document.getElementById('am-amount').value);
+      const account = document.getElementById('am-account').value;
+      const amount = Number(document.getElementById('am-amount').value);
 
-      state.accounts[acc] = (state.accounts[acc] || 0) + amt;
-
+      state.accounts[account] += amount;
       closeModal('addMoneyModal');
-      document.getElementById('am-amount').value = '';
-      saveUserData();
-      renderAll();
+      e.target.reset();
+      renderApp();
     }
 
-    function renderLoans() {
+    // 7. LOANS MANAGEMENT
+    function renderLoansTab() {
+      const totalOwed = state.loans.reduce((s, l) => s + (Number(l.amount) - Number(l.paid)), 0);
+      document.getElementById('loan-total-owed').innerText = totalOwed.toLocaleString() + ' Sh';
+
       const container = document.getElementById('loan-cards-list');
       container.innerHTML = '';
 
-      let totalOwed = 0;
       if (state.loans.length === 0) {
-        container.innerHTML = `<p class="text-xs text-brand-muted col-span-full py-4">No loan records registered yet.</p>`;
-        document.getElementById('loan-total-owed').innerText = formatMoney(0);
+        container.innerHTML = `<div class="col-span-full p-6 text-center text-xs text-brand-muted bg-gray-50 rounded-2xl border border-gray-100">No loan records tracked. Click "+ Record Loan" to add one.</div>`;
         return;
       }
 
-      state.loans.forEach((loan) => {
-        const rem = loan.amount - loan.paid;
-        totalOwed += rem;
-
+      state.loans.forEach(loan => {
+        const remaining = Number(loan.amount) - Number(loan.paid);
         const card = document.createElement('div');
-        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4";
+        card.className = 'p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4';
         card.innerHTML = `
           <div class="flex justify-between items-start">
             <div>
               <h4 class="font-bold text-base text-brand-black">${loan.borrower}</h4>
-              <p class="text-[10px] font-bold text-brand-muted uppercase">${loan.date} ${loan.note ? '• ' + loan.note : ''}</p>
+              <p class="text-xs text-brand-muted">Borrowed on: ${loan.date}</p>
             </div>
-            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${rem <= 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-yellow-50 text-yellow-700'}">
-              ${rem <= 0 ? 'CLEARED' : 'PENDING'}
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold ${remaining <= 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-yellow-100 text-yellow-800'}">
+              ${remaining <= 0 ? 'PAID OFF' : 'ACTIVE'}
             </span>
           </div>
-          <div class="grid grid-cols-2 gap-2 text-xs border-y border-gray-100 py-3">
-            <div><span class="text-brand-muted">Borrowed:</span> <strong class="text-brand-black block">${formatMoney(loan.amount)}</strong></div>
-            <div><span class="text-brand-muted">Paid So Far:</span> <strong class="text-emerald-600 block">${formatMoney(loan.paid)}</strong></div>
+          <div class="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-gray-100">
+            <div><span class="text-brand-muted">Total Loan</span><p class="font-bold text-brand-black">${Number(loan.amount).toLocaleString()} Sh</p></div>
+            <div><span class="text-brand-muted">Remaining</span><p class="font-bold text-red-600">${remaining.toLocaleString()} Sh</p></div>
           </div>
-          <div class="flex items-center justify-between pt-1">
-            <div>
-              <span class="text-[10px] font-bold text-brand-muted uppercase">Remaining Owed</span>
-              <p class="font-display font-bold text-lg ${rem > 0 ? 'text-red-600' : 'text-emerald-600'}">${formatMoney(rem)}</p>
-            </div>
-            <button onclick="openUpdateLoanModal('${loan.id}')" class="px-3 py-1.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-brand-black font-bold text-xs">
-              Update
-            </button>
+          ${loan.note ? `<p class="text-[11px] text-gray-500 bg-gray-50 p-2 rounded-xl">Note: ${loan.note}</p>` : ''}
+          <div class="flex justify-between items-center pt-2">
+            <button onclick="openUpdateLoanModal('${loan.id}')" class="text-xs font-bold text-brand-black hover:underline">Update Payment</button>
+            <button onclick="deleteLoan('${loan.id}')" class="text-xs font-bold text-red-500 hover:underline">Delete</button>
           </div>
         `;
         container.appendChild(card);
       });
-
-      document.getElementById('loan-total-owed').innerText = formatMoney(totalOwed);
     }
 
     function handleAddLoan(e) {
       e.preventDefault();
       const borrower = document.getElementById('loan-borrower').value;
       const amount = Number(document.getElementById('loan-amount').value);
-      const date = document.getElementById('loan-date').value || new Date().toISOString().split('T')[0];
-      const paid = Number(document.getElementById('loan-paid').value || 0);
+      const date = document.getElementById('loan-date').value;
+      const paid = Number(document.getElementById('loan-paid').value) || 0;
       const note = document.getElementById('loan-note').value;
 
-      state.loans.push({ id: 'loan_' + Date.now(), borrower, amount, date, paid, note });
-
+      state.loans.push({ id: 'loan-' + Date.now(), borrower, amount, date, paid, note });
       closeModal('addLoanModal');
-      document.getElementById('loan-borrower').value = '';
-      document.getElementById('loan-amount').value = '';
-      saveUserData();
-      renderAll();
+      e.target.reset();
+      renderApp();
     }
 
     function openUpdateLoanModal(loanId) {
       const loan = state.loans.find(l => l.id === loanId);
       if (!loan) return;
-      document.getElementById('edit-loan-id').value = loan.id;
+
+      document.getElementById('edit-loan-id').value = loanId;
       document.getElementById('edit-loan-paid').value = loan.paid;
       openModal('updateLoanModal');
     }
@@ -2203,174 +2197,102 @@
       const newPaid = Number(document.getElementById('edit-loan-paid').value);
 
       const loan = state.loans.find(l => l.id === loanId);
-      if (loan) {
-        loan.paid = newPaid;
-      }
+      if (loan) loan.paid = newPaid;
 
       closeModal('updateLoanModal');
-      saveUserData();
-      renderAll();
+      renderApp();
     }
 
-    function renderProgress() {
+    function deleteLoan(loanId) {
+      state.loans = state.loans.filter(l => l.id !== loanId);
+      renderApp();
+    }
+
+    // 8. PROGRESS
+    function renderProgressTab() {
       let combinedProfit = 0;
+      const monthlySummary = {};
+
+      Object.keys(state.monthlyData).forEach(mKey => {
+        const sales = state.monthlyData[mKey].sales || [];
+        const monthProfit = sales.reduce((s, x) => s + Number(x.profit), 0);
+        monthlySummary[mKey] = monthProfit;
+        combinedProfit += monthProfit;
+      });
+
+      const activeMonthProfit = monthlySummary[state.activeMonth] || 0;
+
+      document.getElementById('progress-overall-profit').innerText = combinedProfit.toLocaleString() + ' Sh';
+      document.getElementById('progress-active-month-profit').innerText = activeMonthProfit.toLocaleString() + ' Sh';
+      document.getElementById('progress-active-month-name').innerText = `Active Month: ${state.activeMonth}`;
+
       const grid = document.getElementById('progress-monthly-grid');
       grid.innerHTML = '';
 
-      Object.keys(state.monthlyData).sort().reverse().forEach(mKey => {
-        const summary = calculateMonthSummary(mKey);
-        combinedProfit += summary.salesProfit;
+      const sortedMonths = Object.keys(monthlySummary).sort();
+      if (sortedMonths.length === 0) {
+        grid.innerHTML = `<div class="col-span-full p-4 text-center text-xs text-brand-muted">No monthly profit logs available.</div>`;
+        return;
+      }
 
-        if (mKey === state.activeMonth) {
-          document.getElementById('progress-active-month-profit').innerText = formatMoney(summary.salesProfit);
-          document.getElementById('progress-active-month-name').innerText = `Active Month (${mKey}) Net Sales Profit`;
-        }
-
+      sortedMonths.forEach(mKey => {
+        const prof = monthlySummary[mKey];
         const card = document.createElement('div');
-        card.className = "p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-3";
+        card.className = 'p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex justify-between items-center';
         card.innerHTML = `
-          <div class="flex justify-between items-center border-b border-gray-100 pb-2">
-            <span class="font-bold text-sm text-brand-black">${mKey}</span>
-            <span class="text-[10px] font-bold text-emerald-600 uppercase bg-emerald-50 px-2 py-0.5 rounded-full">History</span>
+          <div>
+            <span class="text-xs font-bold text-brand-muted uppercase">${mKey}</span>
+            <p class="font-display text-2xl font-extrabold ${prof >= 0 ? 'text-emerald-600' : 'text-red-600'} mt-1">${prof.toLocaleString()} Sh</p>
           </div>
-          <div class="space-y-1">
-            <div class="flex justify-between text-xs"><span class="text-brand-muted">Income Pool:</span><span class="font-bold">${formatMoney(summary.grossPool)}</span></div>
-            <div class="flex justify-between text-xs"><span class="text-brand-muted">Expenses:</span><span class="font-bold text-red-600">-${formatMoney(summary.totalExpenses)}</span></div>
-            <div class="flex justify-between text-xs pt-2 border-t border-gray-100"><span class="font-bold text-brand-black">Net Sales Profit:</span><span class="font-bold text-emerald-600">${formatMoney(summary.salesProfit)}</span></div>
-          </div>
+          <span class="px-2.5 py-1 rounded-full bg-gray-100 text-brand-black text-[10px] font-bold">Month Log</span>
         `;
         grid.appendChild(card);
       });
-
-      document.getElementById('progress-overall-profit').innerText = formatMoney(combinedProfit);
     }
 
-    // EXCEL IMPORT PARSER & PREVIEW
-    function previewExcelFile(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        const data = new Uint8Array(evt.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
-        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-        const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
-
-        pendingExcelRecords = [];
-        const tbody = document.getElementById('excel-preview-body');
-        tbody.innerHTML = '';
-
-        let currentYear = '2025';
-
-        for (let i = 1; i < jsonData.length; i++) {
-          const row = jsonData[i];
-          if (!row || row.length === 0) continue;
-
-          let monthCol = String(row[0] || '').trim();
-          if (monthCol.includes('2026')) {
-            currentYear = '2026';
-          }
-
-          const perfume = row[1];
-          const ml = row[2];
-          const qty = row[3];
-          const amount = row[4];
-          const sale = row[5];
-          const status = row[6];
-          const profit = row[7];
-          const customer = row[8];
-          const expected = row[9];
-
-          if (!perfume && !amount && !sale) continue;
-
-          let monthNum = '05';
-          const lowerM = monthCol.toLowerCase();
-          if (lowerM.includes('may')) monthNum = '05';
-          else if (lowerM.includes('june')) monthNum = '06';
-          else if (lowerM.includes('july')) monthNum = '07';
-          else if (lowerM.includes('august')) monthNum = '08';
-          else if (lowerM.includes('october')) monthNum = '10';
-          else if (lowerM.includes('november')) monthNum = '11';
-          else if (lowerM.includes('december')) monthNum = '12';
-          else if (lowerM.includes('january')) monthNum = '01';
-          else if (lowerM.includes('february')) monthNum = '02';
-          else if (lowerM.includes('march')) monthNum = '03';
-          else if (lowerM.includes('april')) monthNum = '04';
-
-          const formattedMonthKey = `${currentYear}-${monthNum}`;
-
-          const rec = {
-            monthKey: formattedMonthKey,
-            perfume: perfume || 'Perfume Item',
-            ml: ml || '',
-            quantity: Number(qty) || 1,
-            buyingPrice: Number(amount) || 0,
-            sellingPrice: Number(sale) || 0,
-            status: String(status || 'SOLD').toUpperCase(),
-            profit: Number(profit) || 0,
-            customer: customer || '',
-            expected: expected || ''
-          };
-
-          pendingExcelRecords.push(rec);
-
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td class="p-2 text-brand-muted">${rec.monthKey}</td>
-            <td class="p-2 font-bold">${rec.perfume}</td>
-            <td class="p-2">${rec.ml}</td>
-            <td class="p-2">${rec.quantity}</td>
-            <td class="p-2">${rec.buyingPrice}</td>
-            <td class="p-2">${rec.sellingPrice}</td>
-            <td class="p-2"><span class="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-600 font-bold">${rec.status}</span></td>
-            <td class="p-2 text-emerald-600 font-bold">${rec.profit}</td>
-            <td class="p-2">${rec.customer}</td>
-            <td class="p-2 text-brand-muted">${rec.expected}</td>
-          `;
-          tbody.appendChild(tr);
-        }
-
-        document.getElementById('preview-count').innerText = pendingExcelRecords.length;
-        document.getElementById('excel-preview-container').classList.remove('hidden');
-      };
-      reader.readAsArrayBuffer(file);
-    }
-
-    function confirmExcelImport() {
-      if (!pendingExcelRecords || pendingExcelRecords.length === 0) return;
-
-      if (!state.businessTypes.includes('Perfume')) {
-        state.businessTypes.push('Perfume');
-      }
-
-      pendingExcelRecords.forEach((rec, idx) => {
-        const mKey = rec.monthKey;
-        ensureMonthStructure(mKey);
-
-        const saleObj = {
-          id: 'excel_import_' + mKey + '_' + idx + '_' + Date.now(),
-          businessType: 'Perfume',
-          date: `${mKey}-01`,
-          product: rec.perfume + (rec.ml ? ` (${rec.ml}ml)` : ''),
-          customer: rec.customer,
-          quantity: rec.quantity,
-          buyingPrice: rec.buyingPrice,
-          sellingPrice: rec.sellingPrice,
-          status: 'FULL',
-          paidAmount: rec.sellingPrice
-        };
-
-        state.monthlyData[mKey].sales.push(saleObj);
+    // TAB NAVIGATION SWITCHER
+    function switchTab(tabId) {
+      state.currentTab = tabId;
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-tab').forEach(el => {
+        el.classList.remove('bg-brand-black', 'text-white', 'shadow-sm');
+        el.classList.add('text-brand-muted');
       });
 
-      closeModal('importExcelModal');
-      document.getElementById('excel-file-input').value = '';
-      document.getElementById('excel-preview-container').classList.add('hidden');
-      saveUserData();
-      renderAll();
-      alert(`Successfully imported ${pendingExcelRecords.length} historical perfume sales!`);
+      const targetTab = document.getElementById(`tab-${tabId}`);
+      if (targetTab) targetTab.classList.remove('hidden');
+
+      const targetNav = document.getElementById(`nav-${tabId}`);
+      if (targetNav) {
+        targetNav.classList.remove('text-brand-muted');
+        targetNav.classList.add('bg-brand-black', 'text-white', 'shadow-sm');
+      }
+
+      renderApp();
     }
+
+    // INITIALIZATION ON LOAD
+    window.addEventListener('DOMContentLoaded', async () => {
+      setTimeout(() => {
+        const splash = document.getElementById('splash-screen');
+        splash.style.opacity = '0';
+        splash.style.transition = 'opacity 0.5s ease';
+        setTimeout(() => splash.remove(), 500);
+      }, 1200);
+
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (session && session.user) {
+        currentUser = session.user;
+        state.userName = currentUser.user_metadata?.full_name || currentUser.email.split('@')[0];
+        document.getElementById('welcome-greeting').innerText = `Welcome, ${state.userName}`;
+        document.getElementById('auth-container').classList.add('hidden');
+        document.getElementById('app-wrapper').classList.remove('hidden');
+        await loadUserData();
+        renderApp();
+      } else {
+        document.getElementById('auth-container').classList.remove('hidden');
+      }
+    });
   </script>
 </body>
 </html>
