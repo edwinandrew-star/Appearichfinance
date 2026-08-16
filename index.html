@@ -99,12 +99,10 @@
   </style>
 </head>
 <body class="bg-brand-bg min-h-screen pb-28 text-brand-black">
-
   <!-- 2. SPLASH SCREEN -->
   <div id="splash-screen" class="fixed inset-0 z-50 bg-white flex items-center justify-center">
     <img src="images/appearich-logo.png" alt="Appearich Logo" class="max-w-[200px] max-h-[200px] object-contain animate-pop-in">
   </div>
-
   <!-- 3. SIGN IN / SIGN UP AREA -->
   <div id="auth-container" class="fixed inset-0 z-40 bg-white hidden flex-col items-center justify-center p-6 overflow-y-auto">
     <div class="w-full max-w-sm space-y-8 bg-white">
@@ -114,8 +112,11 @@
         <h2 class="animate-sentence-2 font-display text-3xl font-bold tracking-tight text-brand-gold">Build Your Business.</h2>
         <h2 class="animate-sentence-3 font-display text-3xl font-bold tracking-tight text-brand-black">See Your Growth.</h2>
       </div>
-
       <form id="auth-form" onsubmit="handleAuth(event)" class="space-y-4 pt-4">
+        <div id="auth-name-field" class="hidden">
+          <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-1">Full Name</label>
+          <input type="text" id="auth-name" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-brand-black bg-white">
+        </div>
         <div>
           <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-1">Email</label>
           <input type="email" id="auth-email" required class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-brand-black bg-white">
@@ -124,10 +125,13 @@
           <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-1">Password</label>
           <input type="password" id="auth-password" required class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-brand-black bg-white">
         </div>
+        <div id="auth-confirm-password-field" class="hidden">
+          <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-1">Confirm Password</label>
+          <input type="password" id="auth-confirm-password" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-brand-black bg-white">
+        </div>
         <p id="auth-error" class="text-xs text-red-500 hidden"></p>
         <button type="submit" id="auth-submit-btn" class="w-full bg-brand-black text-white font-bold py-3.5 rounded-xl hover:bg-gray-800 transition text-sm shadow-sm">Sign In</button>
       </form>
-
       <div class="text-center pt-2">
         <button id="auth-toggle-btn" onclick="toggleAuthMode()" class="text-xs font-semibold text-brand-muted hover:text-brand-black transition">
           Need an account? Sign Up
@@ -135,18 +139,13 @@
       </div>
     </div>
   </div>
-
   <!-- MAIN APP WRAPPER -->
   <div id="app-wrapper" class="hidden">
     <!-- TOP APP HEADER -->
     <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-gray-100 px-4 lg:px-8 py-4">
       <div class="max-w-6xl mx-auto flex justify-between items-center">
         <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-2xl bg-brand-black flex items-center justify-center text-brand-gold shadow-gold-glow">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-          </div>
+          <img src="images/appearich-logo1.png" alt="Appearich Logo" class="h-10 w-auto object-contain">
           <div>
             <h1 class="font-display font-bold text-xl tracking-tight text-brand-black">APPEARICH</h1>
             <p class="text-[10px] font-bold tracking-widest text-brand-gold uppercase">Track Your Money. Build Your Business. See Your Growth.</p>
@@ -165,7 +164,6 @@
         </div>
       </div>
     </header>
-
     <!-- MAIN CONTAINER -->
     <main class="max-w-6xl mx-auto px-4 lg:px-8 pt-6 space-y-8">
       
@@ -180,7 +178,7 @@
               <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
               <span>APPEARICH FINANCE</span>
             </div>
-            <h2 class="font-display font-extrabold text-3xl lg:text-4xl tracking-tight">Build. Track. Grow.</h2>
+            <h2 id="home-welcome-message" class="font-display font-extrabold text-3xl lg:text-4xl tracking-tight">Build. Track. Grow.</h2>
             <p class="text-xs lg:text-sm text-gray-300">Your complete wealth ecosystem at a glance. Intelligent automated 10% GOD allocation and robust multi-account management.</p>
           </div>
           <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto items-stretch sm:items-center">
@@ -237,7 +235,6 @@
           <span>Progress</span>
         </button>
       </div>
-
       <!-- ==================== TAB 1: HOME DASHBOARD ==================== -->
       <div id="tab-dashboard" class="tab-content space-y-8">
         
@@ -291,7 +288,6 @@
             </div>
           </div>
         </div>
-
         <!-- REORGANIZED GRID QUICK ACTIONS BAR -->
         <div class="p-5 rounded-3xl bg-brand-surface border border-gray-200 shadow-sm space-y-3">
           <div class="flex items-center justify-between">
@@ -366,7 +362,6 @@
           </div>
         </div>
       </div>
-
       <!-- ==================== TAB 2: INCOME & GOD ==================== -->
       <div id="tab-income" class="tab-content hidden space-y-8">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -414,7 +409,6 @@
           <div id="income-list-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
       </div>
-
       <!-- ==================== TAB 3: BUDGET ==================== -->
       <div id="tab-budget" class="tab-content hidden space-y-8">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -486,7 +480,6 @@
           </div>
         </div>
       </div>
-
       <!-- ==================== TAB 3.5: DAILY EXPENSES ==================== -->
       <div id="tab-daily-expenses" class="tab-content hidden space-y-8">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -532,7 +525,6 @@
           </div>
         </div>
       </div>
-
       <!-- ==================== TAB 4: INVESTMENT ==================== -->
       <div id="tab-investment" class="tab-content hidden space-y-8">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -573,7 +565,6 @@
           <div id="investment-history-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </div>
       </div>
-
       <!-- ==================== TAB 5: APPEARICH BUSINESS ==================== -->
       <div id="tab-appearich" class="tab-content hidden space-y-8">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -657,7 +648,6 @@
           </div>
         </div>
       </div>
-
       <!-- ==================== TAB 6: ACCOUNTS ==================== -->
       <div id="tab-accounts" class="tab-content hidden space-y-8">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -684,7 +674,6 @@
         </div>
         <div id="account-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
       </div>
-
       <!-- ==================== TAB 7: LOANS MANAGEMENT ==================== -->
       <div id="tab-loans" class="tab-content hidden space-y-8">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -709,7 +698,6 @@
           <div id="loan-cards-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
       </div>
-
       <!-- ==================== TAB 8: PROGRESS ==================== -->
       <div id="tab-progress" class="tab-content hidden space-y-8">
         <div>
@@ -742,7 +730,6 @@
         </div>
       </div>
     </main>
-
     <!-- SIMPLE BOTTOM NAVIGATION -->
     <nav class="fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-t border-gray-200 px-4 py-2.5">
       <div class="max-w-md mx-auto flex items-center justify-between">
@@ -768,7 +755,6 @@
       </div>
     </nav>
   </div>
-
   <!-- ==================== MODALS ==================== -->
   <div id="addIncomeModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
@@ -789,7 +775,6 @@
       </form>
     </div>
   </div>
-
   <div id="addSaleModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-lg w-full space-y-4 shadow-2xl border border-gray-100 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
@@ -826,7 +811,6 @@
       </form>
     </div>
   </div>
-
   <div id="addBusinessModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
@@ -842,7 +826,6 @@
       </form>
     </div>
   </div>
-
   <div id="updateSalePaymentModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
@@ -866,7 +849,6 @@
       </form>
     </div>
   </div>
-
   <div id="addLoanModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
@@ -885,7 +867,6 @@
       </form>
     </div>
   </div>
-
   <div id="updateLoanModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
@@ -902,7 +883,6 @@
       </form>
     </div>
   </div>
-
   <div id="addTransactionModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
@@ -942,7 +922,6 @@
       </form>
     </div>
   </div>
-
   <div id="transferModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
@@ -969,7 +948,6 @@
       </form>
     </div>
   </div>
-
   <div id="addMoneyModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
@@ -988,7 +966,6 @@
       </form>
     </div>
   </div>
-
   <div id="addInvestmentModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
@@ -1001,7 +978,6 @@
       </form>
     </div>
   </div>
-
   <div id="updateInvestmentModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
@@ -1014,7 +990,6 @@
       </form>
     </div>
   </div>
-
   <div id="addCategoryModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
@@ -1028,24 +1003,20 @@
       </form>
     </div>
   </div>
-
   <!-- JAVASCRIPT ENGINE & SUPABASE PERSISTENCE -->
   <script>
     // 5. SUPABASE CONFIGURATION
     const SUPABASE_URL = 'https://zudqubbglwphfxaviqsg.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1ZHF1YmJnbHdwaGZ4YXZpcXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0NjcyNTUsImV4cCI6MjA5ODA0MzI1NX0.7pRbRqz9-5gN8SG_ALn5ecHOWQofykPvhbrE2HQROCE';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
     let authMode = 'login'; // 'login' or 'signup'
     let currentUser = null;
-
     function getCurrentMonthKey() {
       const now = new Date();
       const year = now.getFullYear();
       const month = String(now.getMonth() + 1).padStart(2, '0');
       return `${year}-${month}`;
     }
-
     const state = {
       activeMonth: getCurrentMonthKey(),
       expenseActiveMonth: getCurrentMonthKey(),
@@ -1084,7 +1055,6 @@
       appearichPeriod: 'day',
       utilitiesExpanded: false
     };
-
     // SUPABASE DATA SYNC ENGINE
     async function loadUserData() {
       if (!currentUser) return;
@@ -1094,12 +1064,10 @@
           .select('state')
           .eq('user_id', currentUser.id)
           .maybeSingle();
-
         if (error) {
           console.error("Error fetching user data:", error);
           return;
         }
-
         if (data && data.state) {
           Object.assign(state, data.state);
         }
@@ -1107,7 +1075,6 @@
         console.error("Failed to load user state:", err);
       }
     }
-
     async function saveUserData() {
       if (!currentUser) return;
       try {
@@ -1119,7 +1086,6 @@
         const { error } = await supabaseClient
           .from('user_data')
           .upsert(payload, { onConflict: 'user_id' });
-
         if (error) {
           console.error("Error saving user data:", error);
         }
@@ -1127,38 +1093,59 @@
         console.error("Failed to save state to Supabase:", err);
       }
     }
-
     // AUTH FUNCTIONS
     function toggleAuthMode() {
       authMode = authMode === 'login' ? 'signup' : 'login';
       const btn = document.getElementById('auth-submit-btn');
       const toggle = document.getElementById('auth-toggle-btn');
       const err = document.getElementById('auth-error');
+      const nameField = document.getElementById('auth-name-field');
+      const confirmPasswordField = document.getElementById('auth-confirm-password-field');
+      const nameInput = document.getElementById('auth-name');
+      const confirmPasswordInput = document.getElementById('auth-confirm-password');
       err.classList.add('hidden');
       
       if (authMode === 'signup') {
         btn.innerText = 'Sign Up';
         toggle.innerText = 'Already have an account? Sign In';
+        nameField.classList.remove('hidden');
+        confirmPasswordField.classList.remove('hidden');
+        nameInput.required = true;
+        confirmPasswordInput.required = true;
       } else {
         btn.innerText = 'Sign In';
         toggle.innerText = 'Need an account? Sign Up';
+        nameField.classList.add('hidden');
+        confirmPasswordField.classList.add('hidden');
+        nameInput.required = false;
+        confirmPasswordInput.required = false;
       }
     }
-
     async function handleAuth(e) {
       e.preventDefault();
       const email = document.getElementById('auth-email').value;
       const password = document.getElementById('auth-password').value;
       const errElem = document.getElementById('auth-error');
       errElem.classList.add('hidden');
-
       let res;
       if (authMode === 'signup') {
-        res = await supabaseClient.auth.signUp({ email, password });
+        const name = document.getElementById('auth-name').value;
+        const confirmPassword = document.getElementById('auth-confirm-password').value;
+        if (password !== confirmPassword) {
+          errElem.innerText = 'Passwords do not match.';
+          errElem.classList.remove('hidden');
+          return;
+        }
+        res = await supabaseClient.auth.signUp({
+          email,
+          password,
+          options: {
+            data: { full_name: name }
+          }
+        });
       } else {
         res = await supabaseClient.auth.signInWithPassword({ email, password });
       }
-
       if (res.error) {
         errElem.innerText = res.error.message;
         errElem.classList.remove('hidden');
@@ -1170,25 +1157,21 @@
         renderAll();
       }
     }
-
     async function handleLogout() {
       await supabaseClient.auth.signOut();
       currentUser = null;
       document.getElementById('app-wrapper').classList.add('hidden');
       document.getElementById('auth-container').classList.remove('hidden');
     }
-
     // INITIALIZATION & SPLASH TIMING
     window.addEventListener('DOMContentLoaded', () => {
       // PWA Service Worker Registration
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed:', err));
       }
-
       setTimeout(async () => {
         const splash = document.getElementById('splash-screen');
         splash.classList.add('hidden');
-
         const { data: { session } } = await supabaseClient.auth.getSession();
         if (session && session.user) {
           currentUser = session.user;
@@ -1200,7 +1183,6 @@
         }
       }, 1200);
     });
-
     function ensureMonthExists(monthKey) {
       if (!state.monthlyData[monthKey]) {
         state.monthlyData[monthKey] = {
@@ -1212,11 +1194,9 @@
         };
       }
     }
-
     function formatSh(amount) {
       return new Intl.NumberFormat('en-US').format(Math.round(amount || 0)) + ' Sh';
     }
-
     function calculateMonthMetrics(monthKey) {
       ensureMonthExists(monthKey);
       const data = state.monthlyData[monthKey];
@@ -1257,7 +1237,6 @@
         remainingBudget
       };
     }
-
     function getCalculations() {
       const activeCalc = calculateMonthMetrics(state.activeMonth);
       let overallProfit = 0;
@@ -1281,52 +1260,48 @@
         totalLoanOwed
       };
     }
-
     function renderAll() {
       const calc = getCalculations();
       const heroBg = document.getElementById('hero-bg-img');
       if (heroBg) heroBg.style.backgroundImage = `url('${state.heroImageUrl}')`;
       
+      const welcomeMsg = document.getElementById('home-welcome-message');
+      if (welcomeMsg) {
+        const userName = currentUser?.user_metadata?.full_name || currentUser?.user_metadata?.name || currentUser?.email || 'User';
+        welcomeMsg.innerText = `Welcome, ${userName}`;
+      }
+
       document.getElementById('dash-total-income').innerText = formatSh(calc.totalIncome);
       document.getElementById('dash-god-amount').innerText = formatSh(calc.godTithe);
       document.getElementById('dash-total-money').innerText = formatSh(calc.totalLiquidMoney);
       document.getElementById('dash-remaining-budget').innerText = formatSh(calc.remainingBudget);
-
       document.getElementById('income-god-total').innerText = formatSh(calc.godTithe);
       document.getElementById('income-month-picker').value = state.activeMonth;
       document.getElementById('income-month-label').innerText = `Active Month: ${state.activeMonth}`;
       renderIncomeCards();
-
       document.getElementById('budget-pool-total').innerText = formatSh(calc.availableBudget);
       renderBudgetCategoryList(calc.availableBudget);
-
       document.getElementById('daily-expense-month-picker').value = state.expenseActiveMonth;
       document.getElementById('daily-expense-month-label').innerText = `Month: ${state.expenseActiveMonth}`;
       renderDailyExpensesSection();
-
       document.getElementById('inv-total-invested').innerText = formatSh(state.investment.totalInvested);
       document.getElementById('inv-current-value').innerText = formatSh(state.investment.currentValue);
       document.getElementById('inv-gain-loss').innerText = (calc.invGainLoss >= 0 ? '+' : '') + formatSh(calc.invGainLoss);
       document.getElementById('inv-percentage-return').innerText = (calc.invReturnPercent >= 0 ? '+' : '') + calc.invReturnPercent.toFixed(2) + '%';
       renderInvestmentHistoryList();
-
       renderBusinessTypesBar();
       renderBusinessDropdown();
       document.getElementById('active-business-view-label').innerText = `Active Business View: ${state.activeBusinessType}`;
       renderAppearichDashboard(calc);
-
       document.getElementById('loan-total-owed').innerText = formatSh(calc.totalLoanOwed);
       renderLoansList();
-
       document.getElementById('accounts-total-money').innerText = formatSh(calc.totalLiquidMoney);
       renderAccountCards();
-
       document.getElementById('progress-overall-profit').innerText = formatSh(calc.overallProfit);
       document.getElementById('progress-active-month-profit').innerText = formatSh(calc.salesProfit);
       document.getElementById('progress-active-month-name').innerText = `Profit for ${state.activeMonth}`;
       renderProgressMonthlyGrid(calc.monthlyProfits);
     }
-
     function renderIncomeCards() {
       const container = document.getElementById('income-list-container');
       container.innerHTML = '';
@@ -1363,7 +1338,6 @@
         container.appendChild(card);
       });
     }
-
     function handleCategoryAmountInput(categoryId, val) {
       const amt = parseFloat(val) || 0;
       const cat = state.categories.find(c => c.id === categoryId);
@@ -1375,738 +1349,4 @@
       renderBudgetCategoryList(calc.availableBudget);
       renderDailyExpensesSection();
     }
-
     function renderBudgetCategoryList(availablePool) {
-      const monthData = state.monthlyData[state.activeMonth];
-      const totalTargeted = state.categories.reduce((sum, c) => sum + (c.amount || 0), 0);
-      
-      const utilCat = state.categories.find(c => c.id === 'cat-utilities');
-      const utilAmount = utilCat ? utilCat.amount || 0 : 0;
-      const utilPercent = availablePool > 0 ? (utilAmount / availablePool) * 100 : 0;
-      const utilPercentBadge = document.getElementById('utilities-percent-badge');
-      if (utilPercentBadge) utilPercentBadge.innerText = utilPercent.toFixed(1) + '%';
-      
-      let utilsSpentTotal = 0;
-      if (monthData && monthData.utilitiesSubSpent) {
-        Object.values(monthData.utilitiesSubSpent).forEach(v => utilsSpentTotal += v);
-      }
-      const utilSpentSummary = document.getElementById('utilities-spent-summary');
-      if (utilSpentSummary) utilSpentSummary.innerText = `Spent: ${formatSh(utilsSpentTotal)}`;
-      const utilRemSummary = document.getElementById('utilities-remaining-summary');
-      if (utilRemSummary) {
-        const rem = utilAmount - utilsSpentTotal;
-        utilRemSummary.innerText = `Remaining: ${formatSh(rem)}`;
-        utilRemSummary.className = rem < 0 ? 'font-bold text-red-500' : 'font-bold text-emerald-600';
-      }
-
-      const subContainer = document.getElementById('utilities-subcategories-list');
-      if (subContainer) {
-        subContainer.innerHTML = '';
-        state.utilitiesSub.forEach(sub => {
-          const subSpent = monthData && monthData.utilitiesSubSpent ? (monthData.utilitiesSubSpent[sub.name] || 0) : 0;
-          const subItem = document.createElement('div');
-          subItem.className = 'flex items-center justify-between p-3 rounded-xl bg-white border border-gray-100 text-xs';
-          subItem.innerHTML = `
-            <span class="font-bold text-brand-black">${sub.name}</span>
-            <span class="text-brand-muted font-semibold">Spent: ${formatSh(subSpent)}</span>
-          `;
-          subContainer.appendChild(subItem);
-        });
-      }
-
-      const mainContainer = document.getElementById('main-categories-list');
-      if (mainContainer) {
-        mainContainer.innerHTML = '';
-        state.categories.filter(c => !c.isExpandable).forEach(cat => {
-          const catAmount = cat.amount || 0;
-          const catPercent = availablePool > 0 ? (catAmount / availablePool) * 100 : 0;
-          let spent = 0;
-          if (monthData && monthData.categorySpent) {
-            spent = monthData.categorySpent[cat.name] || 0;
-          }
-          const remaining = catAmount - spent;
-          const card = document.createElement('div');
-          card.className = "rounded-3xl bg-white border border-gray-100 shadow-premium p-6 flex flex-col justify-between space-y-4";
-          card.innerHTML = `
-            <div class="flex items-center justify-between">
-              <div>
-                <div class="flex items-center space-x-2">
-                  <h4 class="font-bold text-base text-brand-black uppercase">${cat.name}</h4>
-                  <span class="px-2.5 py-0.5 rounded-full bg-gray-100 text-brand-black text-[11px] font-bold">${catPercent.toFixed(1)}%</span>
-                </div>
-              </div>
-            </div>
-            <div class="space-y-3">
-              <div>
-                <label class="block text-xs font-bold text-brand-muted uppercase mb-1">Target Amount (Sh)</label>
-                <input type="number" id="cat-amount-${cat.id}" value="${cat.amount || ''}" oninput="handleCategoryAmountInput('${cat.id}', this.value)" placeholder="Enter amount" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm font-bold text-brand-black">
-              </div>
-              <div class="flex justify-between text-xs pt-2 border-t border-gray-100">
-                <span class="text-brand-muted">Spent: ${formatSh(spent)}</span>
-                <span class="font-bold ${remaining < 0 ? 'text-red-500' : 'text-emerald-600'}">Remaining: ${formatSh(remaining)}</span>
-              </div>
-            </div>
-          `;
-          mainContainer.appendChild(card);
-        });
-      }
-
-      const allocatedPercent = availablePool > 0 ? Math.min(100, (totalTargeted / availablePool) * 100) : 0;
-      const barElem = document.getElementById('budget-allocated-bar');
-      if (barElem) barElem.style.width = allocatedPercent + '%';
-      const percentElem = document.getElementById('budget-allocated-percent');
-      if (percentElem) percentElem.innerText = allocatedPercent.toFixed(1) + '%';
-    }
-
-    function toggleUtilitiesAccordion() {
-      state.utilitiesExpanded = !state.utilitiesExpanded;
-      const accordion = document.getElementById('utilities-accordion');
-      const chevron = document.getElementById('utilities-chevron');
-      if (state.utilitiesExpanded) {
-        accordion.classList.add('expanded');
-        chevron.classList.add('rotate-180');
-      } else {
-        accordion.classList.remove('expanded');
-        chevron.classList.remove('rotate-180');
-      }
-    }
-
-    function switchTab(tabId) {
-      state.currentTab = tabId;
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      const activeTab = document.getElementById(`tab-${tabId}`);
-      if (activeTab) activeTab.classList.remove('hidden');
-
-      document.querySelectorAll('.nav-tab').forEach(el => {
-        el.classList.remove('bg-brand-black', 'text-white', 'shadow-sm', 'active');
-        el.classList.add('text-brand-muted');
-      });
-      const activeNav = document.getElementById(`nav-${tabId}`);
-      if (activeNav) {
-        activeNav.classList.add('bg-brand-black', 'text-white', 'shadow-sm', 'active');
-        activeNav.classList.remove('text-brand-muted');
-      }
-
-      document.querySelectorAll('.bnav-btn').forEach(el => {
-        el.classList.remove('text-brand-black');
-        el.classList.add('text-brand-muted');
-      });
-      const activeBnav = document.getElementById(`bnav-${tabId}`);
-      if (activeBnav) {
-        activeBnav.classList.add('text-brand-black');
-        activeBnav.classList.remove('text-brand-muted');
-      }
-    }
-
-    function openModal(id) { document.getElementById(id)?.classList.remove('hidden'); }
-    function closeModal(id) { document.getElementById(id)?.classList.add('hidden'); }
-
-    function handleMonthChange(e) {
-      state.activeMonth = e.target.value;
-      ensureMonthExists(state.activeMonth);
-      saveUserData();
-      renderAll();
-    }
-
-    function handleExpenseMonthChange(e) {
-      state.expenseActiveMonth = e.target.value;
-      ensureMonthExists(state.expenseActiveMonth);
-      saveUserData();
-      renderAll();
-    }
-
-    function handleHeroUpload(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          state.heroImageUrl = evt.target.result;
-          saveUserData();
-          renderAll();
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-
-    function handleAddIncome(e) {
-      e.preventDefault();
-      const name = document.getElementById('income-name-input').value;
-      const amount = parseFloat(document.getElementById('income-amount-input').value) || 0;
-
-      ensureMonthExists(state.activeMonth);
-      state.monthlyData[state.activeMonth].incomes.push({ id: Date.now(), name, amount });
-      saveUserData();
-      closeModal('addIncomeModal');
-      e.target.reset();
-      renderAll();
-    }
-
-    function renderDailyExpensesSection() {
-      const monthData = state.monthlyData[state.expenseActiveMonth];
-      const tbody = document.getElementById('daily-expense-table-body');
-      const countLabel = document.getElementById('daily-expense-log-count');
-      const grid = document.getElementById('category-budget-comparison-grid');
-
-      if (!monthData) return;
-
-      if (tbody) {
-        tbody.innerHTML = '';
-        const expenses = monthData.expenses || [];
-        countLabel.innerText = `${expenses.length} Expenses Recorded`;
-
-        if (expenses.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-brand-muted text-xs">No expenses recorded for this month yet.</td></tr>`;
-        } else {
-          expenses.forEach(exp => {
-            const tr = document.createElement('tr');
-            tr.className = 'border-b border-gray-100 hover:bg-gray-50/50 transition';
-            tr.innerHTML = `
-              <td class="py-3 font-semibold text-brand-black">${exp.date}</td>
-              <td class="py-3 text-brand-black">${exp.name}</td>
-              <td class="py-3"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-[10px] font-bold text-brand-black">${exp.category}</span></td>
-              <td class="py-3 text-brand-muted">${exp.account}</td>
-              <td class="py-3 text-right font-bold text-brand-black">${formatSh(exp.amount)}</td>
-            `;
-            tbody.appendChild(tr);
-          });
-        }
-      }
-
-      if (grid) {
-        grid.innerHTML = '';
-        const categories = [
-          { name: 'Internet', type: 'util' },
-          { name: 'Umeme', type: 'util' },
-          { name: 'Taka', type: 'util' },
-          { name: 'Transport', type: 'util' },
-          { name: 'Expenses', type: 'main' },
-          { name: 'Other', type: 'main' }
-        ];
-
-        categories.forEach(cat => {
-          let spent = 0;
-          if (cat.type === 'util') {
-            spent = monthData.utilitiesSubSpent[cat.name] || 0;
-          } else {
-            spent = monthData.categorySpent[cat.name] || 0;
-          }
-
-          const card = document.createElement('div');
-          card.className = "p-4 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between";
-          card.innerHTML = `
-            <div class="flex justify-between items-center">
-              <span class="text-xs font-bold text-brand-black uppercase">${cat.name}</span>
-              <span class="text-[10px] text-brand-muted uppercase font-semibold">${cat.type === 'util' ? 'Utility' : 'Primary'}</span>
-            </div>
-            <div class="mt-3">
-              <p class="text-[10px] text-brand-muted">Spent This Month</p>
-              <p class="font-display text-xl font-bold text-brand-black">${formatSh(spent)}</p>
-            </div>
-          `;
-          grid.appendChild(card);
-        });
-      }
-    }
-
-    function handleAddTransaction(e) {
-      e.preventDefault();
-      const name = document.getElementById('tx-name').value;
-      const category = document.getElementById('tx-category').value;
-      const account = document.getElementById('tx-account').value;
-      const amount = parseFloat(document.getElementById('tx-amount').value) || 0;
-      const date = document.getElementById('tx-date').value;
-
-      const txMonth = date ? date.slice(0, 7) : state.activeMonth;
-      ensureMonthExists(txMonth);
-      const mData = state.monthlyData[txMonth];
-
-      mData.expenses.push({ id: Date.now(), name, category, account, amount, date });
-
-      if (['Internet', 'Umeme', 'Taka', 'Transport'].includes(category)) {
-        mData.utilitiesSubSpent[category] = (mData.utilitiesSubSpent[category] || 0) + amount;
-      } else {
-        mData.categorySpent[category] = (mData.categorySpent[category] || 0) + amount;
-      }
-
-      state.accounts[account] = (state.accounts[account] || 0) - amount;
-
-      saveUserData();
-      closeModal('addTransactionModal');
-      e.target.reset();
-      renderAll();
-    }
-
-    function renderInvestmentHistoryList() {
-      const container = document.getElementById('investment-history-list');
-      if (!container) return;
-      container.innerHTML = '';
-
-      if (state.investment.history.length === 0) {
-        container.innerHTML = `<div class="col-span-full text-center py-6 text-brand-muted text-xs">No valuation history recorded yet.</div>`;
-        return;
-      }
-
-      state.investment.history.forEach(item => {
-        const card = document.createElement('div');
-        card.className = "p-4 rounded-2xl bg-brand-surface border border-gray-100 flex justify-between items-center";
-        card.innerHTML = `
-          <div>
-            <p class="text-[10px] font-bold uppercase text-brand-muted">${item.date}</p>
-            <p class="text-xs font-bold text-brand-black">${item.type}</p>
-          </div>
-          <p class="font-display text-sm font-bold text-brand-black">${formatSh(item.value)}</p>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function handleAddInvestmentCapital(e) {
-      e.preventDefault();
-      const amt = parseFloat(document.getElementById('inv-add-amount').value) || 0;
-      state.investment.totalInvested += amt;
-      state.investment.currentValue += amt;
-      state.investment.history.unshift({
-        date: new Date().toISOString().split('T')[0],
-        type: 'Capital Added',
-        value: amt
-      });
-      saveUserData();
-      closeModal('addInvestmentModal');
-      e.target.reset();
-      renderAll();
-    }
-
-    function handleUpdateInvestmentValue(e) {
-      e.preventDefault();
-      const val = parseFloat(document.getElementById('inv-update-value').value) || 0;
-      state.investment.currentValue = val;
-      state.investment.history.unshift({
-        date: new Date().toISOString().split('T')[0],
-        type: 'Valuation Update',
-        value: val
-      });
-      saveUserData();
-      closeModal('updateInvestmentModal');
-      e.target.reset();
-      renderAll();
-    }
-
-    function renderBusinessTypesBar() {
-      const container = document.getElementById('business-types-bar');
-      if (!container) return;
-      container.innerHTML = '';
-
-      state.businessTypes.forEach(b => {
-        const active = state.activeBusinessType === b;
-        const btn = document.createElement('button');
-        btn.className = `px-4 py-2 rounded-xl text-xs font-bold transition flex-shrink-0 ${active ? 'bg-brand-black text-white' : 'bg-gray-100 text-brand-muted hover:text-brand-black'}`;
-        btn.innerText = b;
-        btn.onclick = () => {
-          state.activeBusinessType = b;
-          renderAll();
-        };
-        container.appendChild(btn);
-      });
-    }
-
-    function renderBusinessDropdown() {
-      const select = document.getElementById('sale-business-type');
-      if (!select) return;
-      select.innerHTML = '';
-      state.businessTypes.forEach(b => {
-        const opt = document.createElement('option');
-        opt.value = b;
-        opt.innerText = b;
-        select.appendChild(opt);
-      });
-    }
-
-    function handleAddBusinessOption(e) {
-      e.preventDefault();
-      const name = document.getElementById('new-business-name-input').value;
-      if (name && !state.businessTypes.includes(name)) {
-        state.businessTypes.push(name);
-        state.activeBusinessType = name;
-        saveUserData();
-      }
-      closeModal('addBusinessModal');
-      e.target.reset();
-      renderAll();
-    }
-
-    function toggleSalePartialInput() {
-      const val = document.getElementById('sale-payment-status').value;
-      const container = document.getElementById('sale-partial-container');
-      if (val === 'PARTIAL') {
-        container.classList.remove('hidden');
-      } else {
-        container.classList.add('hidden');
-      }
-    }
-
-    function toggleEditSalePartialInput() {
-      const val = document.getElementById('edit-sale-status').value;
-      const container = document.getElementById('edit-sale-paid-container');
-      if (val === 'PARTIAL') {
-        container.classList.remove('hidden');
-      } else {
-        container.classList.add('hidden');
-      }
-    }
-
-    function handleAddSale(e) {
-      e.preventDefault();
-      const bType = document.getElementById('sale-business-type').value;
-      const date = document.getElementById('sale-date').value;
-      const qty = parseInt(document.getElementById('sale-qty').value) || 1;
-      const product = document.getElementById('sale-product').value;
-      const customer = document.getElementById('sale-customer').value;
-      const buyPrice = parseFloat(document.getElementById('sale-buy-price').value) || 0;
-      const sellPrice = parseFloat(document.getElementById('sale-sell-price').value) || 0;
-      const status = document.getElementById('sale-payment-status').value;
-      const paid = status === 'FULL' ? (sellPrice * qty) : (parseFloat(document.getElementById('sale-paid-amount').value) || 0);
-
-      const saleMonth = date ? date.slice(0, 7) : state.activeMonth;
-      ensureMonthExists(saleMonth);
-
-      state.monthlyData[saleMonth].sales.push({
-        id: Date.now(),
-        businessType: bType,
-        date,
-        qty,
-        product,
-        customer,
-        buyPrice,
-        sellPrice,
-        paymentStatus: status,
-        amountPaid: paid
-      });
-
-      saveUserData();
-      closeModal('addSaleModal');
-      e.target.reset();
-      document.getElementById('sale-partial-container').classList.add('hidden');
-      renderAll();
-    }
-
-    function switchAppearichPeriod(period) {
-      state.appearichPeriod = period;
-      document.querySelectorAll('.app-period-btn').forEach(btn => {
-        btn.classList.remove('bg-brand-black', 'text-white', 'active');
-        btn.classList.add('bg-gray-100', 'text-brand-muted');
-      });
-      const activeBtn = document.getElementById(`app-period-${period}`);
-      if (activeBtn) {
-        activeBtn.classList.add('bg-brand-black', 'text-white', 'active');
-        activeBtn.classList.remove('bg-gray-100', 'text-brand-muted');
-      }
-      renderAll();
-    }
-
-    function renderAppearichDashboard(calc) {
-      const table = document.getElementById('appearich-sales-table');
-      if (!table) return;
-      table.innerHTML = '';
-
-      let allSales = [];
-      Object.keys(state.monthlyData).forEach(mKey => {
-        allSales = allSales.concat(state.monthlyData[mKey].sales || []);
-      });
-
-      const filtered = allSales.filter(s => s.businessType === state.activeBusinessType);
-
-      let todayReceived = 0;
-      let todayProfit = 0;
-      let monthRev = 0;
-      let totalOut = 0;
-      let totalProf = 0;
-
-      const todayStr = new Date().toISOString().split('T')[0];
-      const curMonthStr = getCurrentMonthKey();
-
-      filtered.forEach(s => {
-        const totalVal = s.sellPrice * s.qty;
-        const totalCost = s.buyPrice * s.qty;
-        const paid = s.paymentStatus === 'FULL' ? totalVal : (s.amountPaid || 0);
-        const profit = paid - totalCost;
-        const unpaid = totalVal - paid;
-
-        if (s.date === todayStr) {
-          todayReceived += paid;
-          todayProfit += profit;
-        }
-        if (s.date && s.date.startsWith(curMonthStr)) {
-          monthRev += totalVal;
-        }
-        totalOut += unpaid;
-        totalProf += profit;
-
-        const tr = document.createElement('tr');
-        tr.className = "border-b border-gray-100 hover:bg-gray-50/50 transition";
-        tr.innerHTML = `
-          <td class="py-3 font-semibold text-brand-black">${s.date}</td>
-          <td class="py-3 text-brand-muted">${s.businessType}</td>
-          <td class="py-3 text-brand-black font-bold">${s.product} (x${s.qty})</td>
-          <td class="py-3 text-brand-black">${s.customer}</td>
-          <td class="py-3 font-bold text-brand-black">${formatSh(totalVal)}</td>
-          <td class="py-3 font-bold text-emerald-600">${formatSh(paid)}</td>
-          <td class="py-3 font-bold ${unpaid > 0 ? 'text-red-500' : 'text-brand-muted'}">${formatSh(unpaid)}</td>
-          <td class="py-3"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${s.paymentStatus === 'FULL' ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-500'}">${s.paymentStatus}</span></td>
-          <td class="py-3"><button onclick="openUpdateSaleModal(${s.id})" class="px-2.5 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-brand-black font-bold text-[10px]">Update</button></td>
-        `;
-        table.appendChild(tr);
-      });
-
-      document.getElementById('app-today-sales').innerText = formatSh(todayReceived);
-      document.getElementById('app-today-profit').innerText = formatSh(todayProfit);
-      document.getElementById('app-month-revenue').innerText = formatSh(monthRev);
-      document.getElementById('app-total-outstanding').innerText = formatSh(totalOut);
-      document.getElementById('app-total-profit').innerText = formatSh(totalProf);
-
-      // Period Aggregation Logic
-      let periodSold = 0;
-      let periodRev = 0;
-      let periodCost = 0;
-
-      const now = new Date();
-      filtered.forEach(s => {
-        if (!s.date) return;
-        const sDate = new Date(s.date);
-        let inPeriod = false;
-
-        if (state.appearichPeriod === 'day') {
-          inPeriod = s.date === todayStr;
-        } else if (state.appearichPeriod === 'week') {
-          const diffDays = (now - sDate) / (1000 * 3600 * 24);
-          inPeriod = diffDays >= 0 && diffDays <= 7;
-        } else if (state.appearichPeriod === 'month') {
-          inPeriod = s.date.startsWith(curMonthStr);
-        } else if (state.appearichPeriod === 'year') {
-          inPeriod = sDate.getFullYear() === now.getFullYear();
-        }
-
-        if (inPeriod) {
-          periodSold += s.qty;
-          periodRev += (s.sellPrice * s.qty);
-          periodCost += (s.buyPrice * s.qty);
-        }
-      });
-
-      const periodMargin = periodRev > 0 ? ((periodRev - periodCost) / periodRev) * 100 : 0;
-
-      document.getElementById('app-period-sold').innerText = periodSold;
-      document.getElementById('app-period-revenue').innerText = formatSh(periodRev);
-      document.getElementById('app-period-cost').innerText = formatSh(periodCost);
-      document.getElementById('app-period-margin').innerText = periodMargin.toFixed(1) + '%';
-    }
-
-    function openUpdateSaleModal(saleId) {
-      let foundSale = null;
-      Object.keys(state.monthlyData).forEach(m => {
-        const s = state.monthlyData[m].sales.find(x => x.id === saleId);
-        if (s) foundSale = s;
-      });
-
-      if (foundSale) {
-        document.getElementById('edit-sale-id').value = foundSale.id;
-        document.getElementById('edit-sale-status').value = foundSale.paymentStatus;
-        document.getElementById('edit-sale-paid-amount').value = foundSale.amountPaid || 0;
-        toggleEditSalePartialInput();
-        openModal('updateSalePaymentModal');
-      }
-    }
-
-    function handleUpdateSalePayment(e) {
-      e.preventDefault();
-      const saleId = parseInt(document.getElementById('edit-sale-id').value);
-      const status = document.getElementById('edit-sale-status').value;
-      const paid = parseFloat(document.getElementById('edit-sale-paid-amount').value) || 0;
-
-      Object.keys(state.monthlyData).forEach(m => {
-        const s = state.monthlyData[m].sales.find(x => x.id === saleId);
-        if (s) {
-          s.paymentStatus = status;
-          s.amountPaid = status === 'FULL' ? (s.sellPrice * s.qty) : paid;
-        }
-      });
-
-      saveUserData();
-      closeModal('updateSalePaymentModal');
-      renderAll();
-    }
-
-    function renderLoansList() {
-      const container = document.getElementById('loan-cards-list');
-      if (!container) return;
-      container.innerHTML = '';
-
-      if (state.loans.length === 0) {
-        container.innerHTML = `<div class="col-span-full text-center py-8 text-brand-muted text-xs">No active loans recorded.</div>`;
-        return;
-      }
-
-      state.loans.forEach(loan => {
-        const balance = loan.amount - loan.paid;
-        const card = document.createElement('div');
-        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4";
-        card.innerHTML = `
-          <div class="flex justify-between items-center">
-            <h4 class="font-bold text-base text-brand-black">${loan.borrower}</h4>
-            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${balance <= 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-yellow-50 text-yellow-700'}">${balance <= 0 ? 'CLEARED' : 'ACTIVE'}</span>
-          </div>
-          <div class="space-y-1">
-            <p class="text-xs text-brand-muted">Borrowed: ${formatSh(loan.amount)} | Paid: ${formatSh(loan.paid)}</p>
-            <p class="text-[10px] text-brand-muted">Date: ${loan.date} ${loan.note ? '• ' + loan.note : ''}</p>
-          </div>
-          <div class="pt-3 border-t border-gray-100 flex items-center justify-between">
-            <div>
-              <span class="text-[10px] uppercase text-brand-muted font-bold">Remaining Balance</span>
-              <p class="font-display font-extrabold text-xl text-brand-black">${formatSh(balance)}</p>
-            </div>
-            <button onclick="openUpdateLoanModal(${loan.id})" class="px-3 py-1.5 rounded-xl bg-brand-black text-white text-xs font-bold hover:bg-gray-800 transition">Update</button>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function handleAddLoan(e) {
-      e.preventDefault();
-      const borrower = document.getElementById('loan-borrower').value;
-      const amount = parseFloat(document.getElementById('loan-amount').value) || 0;
-      const date = document.getElementById('loan-date').value;
-      const paid = parseFloat(document.getElementById('loan-paid').value) || 0;
-      const note = document.getElementById('loan-note').value;
-
-      state.loans.push({ id: Date.now(), borrower, amount, date, paid, note });
-      saveUserData();
-      closeModal('addLoanModal');
-      e.target.reset();
-      renderAll();
-    }
-
-    function openUpdateLoanModal(loanId) {
-      const loan = state.loans.find(l => l.id === loanId);
-      if (loan) {
-        document.getElementById('edit-loan-id').value = loan.id;
-        document.getElementById('edit-loan-paid').value = loan.paid;
-        openModal('updateLoanModal');
-      }
-    }
-
-    function handleUpdateLoan(e) {
-      e.preventDefault();
-      const id = parseInt(document.getElementById('edit-loan-id').value);
-      const paid = parseFloat(document.getElementById('edit-loan-paid').value) || 0;
-
-      const loan = state.loans.find(l => l.id === id);
-      if (loan) {
-        loan.paid = paid;
-        saveUserData();
-      }
-      closeModal('updateLoanModal');
-      renderAll();
-    }
-
-    function renderAccountCards() {
-      const container = document.getElementById('account-cards-grid');
-      if (!container) return;
-      container.innerHTML = '';
-
-      Object.keys(state.accounts).forEach(accName => {
-        const bal = state.accounts[accName] || 0;
-        const card = document.createElement('div');
-        card.className = "p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4";
-        card.innerHTML = `
-          <div class="flex justify-between items-center">
-            <span class="text-xs font-bold uppercase tracking-wider text-brand-black">${accName}</span>
-            <div class="w-8 h-8 rounded-xl bg-gray-50 flex items-center justify-center text-brand-black">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-            </div>
-          </div>
-          <div>
-            <p class="text-[10px] text-brand-muted uppercase font-semibold">Available Balance</p>
-            <p class="font-display font-extrabold text-2xl text-brand-black mt-0.5">${formatSh(bal)}</p>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function handleTransfer(e) {
-      e.preventDefault();
-      const from = document.getElementById('tr-from').value;
-      const to = document.getElementById('tr-to').value;
-      const amount = parseFloat(document.getElementById('tr-amount').value) || 0;
-
-      if (from !== to && amount > 0) {
-        state.accounts[from] = (state.accounts[from] || 0) - amount;
-        state.accounts[to] = (state.accounts[to] || 0) + amount;
-        saveUserData();
-      }
-
-      closeModal('transferModal');
-      e.target.reset();
-      renderAll();
-    }
-
-    function handleAddMoneyAccount(e) {
-      e.preventDefault();
-      const acc = document.getElementById('am-account').value;
-      const amount = parseFloat(document.getElementById('am-amount').value) || 0;
-
-      state.accounts[acc] = (state.accounts[acc] || 0) + amount;
-      saveUserData();
-      closeModal('addMoneyModal');
-      e.target.reset();
-      renderAll();
-    }
-
-    function handleAddCategory(e) {
-      e.preventDefault();
-      const name = document.getElementById('cat-name-input').value;
-      const amount = parseFloat(document.getElementById('cat-amount-input').value) || 0;
-
-      if (name) {
-        state.categories.push({
-          id: `cat-${Date.now()}`,
-          name,
-          amount,
-          isExpandable: false
-        });
-        saveUserData();
-      }
-
-      closeModal('addCategoryModal');
-      e.target.reset();
-      renderAll();
-    }
-
-    function renderProgressMonthlyGrid(monthlyProfits) {
-      const container = document.getElementById('progress-monthly-grid');
-      if (!container) return;
-      container.innerHTML = '';
-
-      const keys = Object.keys(monthlyProfits);
-      if (keys.length === 0) {
-        container.innerHTML = `<div class="col-span-full text-center py-6 text-brand-muted text-xs">No historical data recorded yet.</div>`;
-        return;
-      }
-
-      keys.forEach(mKey => {
-        const profit = monthlyProfits[mKey];
-        const card = document.createElement('div');
-        card.className = "p-5 rounded-2xl bg-brand-surface border border-gray-100 flex justify-between items-center";
-        card.innerHTML = `
-          <div>
-            <span class="text-xs font-bold text-brand-black">${mKey}</span>
-            <p class="text-[10px] text-brand-muted">Recorded Net Profit</p>
-          </div>
-          <p class="font-display font-extrabold text-lg ${profit >= 0 ? 'text-emerald-600' : 'text-red-500'}">${formatSh(profit)}</p>
-        `;
-        container.appendChild(card);
-      });
-    }
-  </script>
-</body>
-</html>
