@@ -590,6 +590,18 @@
           </div>
         </div>
         <div id="business-types-bar" class="flex items-center space-x-2 border-b border-gray-100 pb-3 overflow-x-auto no-scrollbar"></div>
+        
+        <!-- PROFIT STARTING POINT CONTROL BAR -->
+        <div class="p-4 rounded-2xl bg-brand-surface border border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="flex items-center space-x-3 w-full sm:w-auto">
+            <span class="text-xs font-bold uppercase tracking-wider text-brand-black flex-shrink-0">Profit starts from Sale #</span>
+            <input type="number" id="profit-start-sale-input" onchange="handleProfitStartChange(this.value)" min="1" placeholder="e.g. 150" class="w-28 px-3 py-1.5 rounded-xl border border-gray-300 text-sm font-bold text-brand-black focus:outline-none focus:border-brand-black bg-white">
+          </div>
+          <div class="text-xs text-brand-muted text-right">
+            <span>Calculated from Sale #<strong id="profit-start-sale-display" class="text-brand-black">1</strong> onward</span>
+          </div>
+        </div>
+
         <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
           <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium">
             <p class="text-xs font-semibold text-brand-muted">TODAY'S RECEIVED</p>
@@ -629,32 +641,36 @@
             <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100"><p class="text-[10px] text-brand-muted uppercase font-bold">Products Sold</p><p id="app-period-sold" class="font-display font-bold text-xl text-brand-black mt-1">0</p></div>
             <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100"><p class="text-[10px] text-brand-muted uppercase font-bold">Total Revenue</p><p id="app-period-revenue" class="font-display font-bold text-xl text-brand-black mt-1">0 Sh</p></div>
             <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100"><p class="text-[10px] text-brand-muted uppercase font-bold">Buying Cost</p><p id="app-period-cost" class="font-display font-bold text-xl text-brand-black mt-1">0 Sh</p></div>
-            <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100"><p class="text-[10px] text-brand-muted uppercase font-bold">Profit Margin</p><p id="app-period-margin" class="font-display font-bold text-xl text-emerald-600 mt-1">0%</p></div>
+            <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100"><p class="text-[10px] text-brand-muted uppercase font-bold">Profit Margin</p><p id="app-period-margin" class="font-display font-bold text-emerald-600 mt-1">0%</p></div>
           </div>
         </div>
         <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-100 pb-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-4">
             <h3 class="font-bold text-base text-brand-black">Sales Transactions Log</h3>
             <div class="flex items-center space-x-2">
-              <label for="profit-start-select" class="text-xs font-bold text-brand-muted uppercase whitespace-nowrap">Profit Calculation Start Point:</label>
-              <select id="profit-start-select" onchange="handleProfitStartChange(this.value)" class="px-2 py-1 rounded-lg border border-gray-200 text-xs font-semibold bg-white text-brand-black focus:outline-none focus:border-brand-black">
-                <option value="ALL">Include All Sales</option>
-              </select>
+              <button onclick="handleBulkDeleteSales()" id="bulk-delete-btn" class="hidden bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-xl text-xs font-bold transition">
+                Delete Selected (<span id="selected-sales-count">0</span>)
+              </button>
             </div>
           </div>
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
               <thead>
                 <tr class="border-b border-gray-100 text-brand-muted font-semibold uppercase">
+                  <th class="pb-3 px-2">
+                    <input type="checkbox" id="select-all-sales" onchange="toggleSelectAllSales(this.checked)" class="rounded border-gray-300">
+                  </th>
+                  <th class="pb-3">Sale #</th>
                   <th class="pb-3">Date</th>
                   <th class="pb-3">Business</th>
                   <th class="pb-3">Product</th>
+                  <th class="pb-3">Qty</th>
+                  <th class="pb-3">Cost Price</th>
+                  <th class="pb-3">Selling Price</th>
                   <th class="pb-3">Customer</th>
-                  <th class="pb-3">Total Value</th>
-                  <th class="pb-3">Amount Paid</th>
-                  <th class="pb-3">Unpaid Balance</th>
+                  <th class="pb-3">Profit</th>
                   <th class="pb-3">Status</th>
-                  <th class="pb-3">Action</th>
+                  <th class="pb-3 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody id="appearich-sales-table" class="divide-y divide-gray-100 font-medium"></tbody>
@@ -792,11 +808,10 @@
   <div id="addSaleModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-lg w-full space-y-4 shadow-2xl border border-gray-100 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 id="sale-modal-title" class="font-bold text-lg text-brand-black">Record Sale</h3>
+        <h3 class="font-bold text-lg text-brand-black">Record Sale</h3>
         <button onclick="closeModal('addSaleModal')" class="text-gray-400 hover:text-black">&times;</button>
       </div>
       <form onsubmit="handleAddSale(event)" class="space-y-4">
-        <input type="hidden" id="sale-edit-id" value="">
         <div>
           <label class="block text-xs font-bold uppercase mb-1">Business / Sales Type</label>
           <select id="sale-business-type" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white font-medium"></select>
@@ -822,10 +837,50 @@
           <label class="block text-xs font-bold uppercase mb-1 text-red-600">Amount Paid So Far (Sh)</label>
           <input id="sale-paid-amount" type="number" placeholder="Enter amount paid" class="w-full px-3 py-2 rounded-xl border border-red-300 text-sm">
         </div>
-        <button type="submit" id="sale-modal-submit-btn" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Record Sale</button>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Record Sale</button>
       </form>
     </div>
   </div>
+
+  <!-- EDIT SALE MODAL -->
+  <div id="editSaleModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-lg w-full space-y-4 shadow-2xl border border-gray-100 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-lg text-brand-black">Edit Sale <span id="edit-sale-num-header" class="text-brand-gold">#000</span></h3>
+        <button onclick="closeModal('editSaleModal')" class="text-gray-400 hover:text-black">&times;</button>
+      </div>
+      <form onsubmit="handleSaveEditedSale(event)" class="space-y-4">
+        <input type="hidden" id="full-edit-sale-id">
+        <div>
+          <label class="block text-xs font-bold uppercase mb-1">Business / Sales Type</label>
+          <select id="full-edit-sale-business-type" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white font-medium"></select>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-bold uppercase mb-1">Date</label><input id="full-edit-sale-date" type="date" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+          <div><label class="block text-xs font-bold uppercase mb-1">Quantity</label><input id="full-edit-sale-qty" type="number" value="1" min="1" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        </div>
+        <div><label class="block text-xs font-bold uppercase mb-1">Product Name / Perfume</label><input id="full-edit-sale-product" type="text" required placeholder="Item Name" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        <div><label class="block text-xs font-bold uppercase mb-1">Customer / Details</label><input id="full-edit-sale-customer" type="text" required placeholder="Customer Details" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-bold uppercase mb-1">Cost Price (Sh)</label><input id="full-edit-sale-buy-price" type="number" required placeholder="35000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+          <div><label class="block text-xs font-bold uppercase mb-1">Selling Price (Sh)</label><input id="full-edit-sale-sell-price" type="number" required placeholder="55000" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase mb-1">Payment Status</label>
+          <select id="full-edit-sale-payment-status" onchange="toggleFullEditSalePartialInput()" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white font-medium">
+            <option value="FULL">Full Payment</option>
+            <option value="PARTIAL">Partial Payment</option>
+          </select>
+        </div>
+        <div id="full-edit-sale-partial-container">
+          <label class="block text-xs font-bold uppercase mb-1">Amount Paid So Far (Sh)</label>
+          <input id="full-edit-sale-paid-amount" type="number" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm">
+        </div>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Save Transaction Changes</button>
+      </form>
+    </div>
+  </div>
+
   <div id="addBusinessModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
@@ -1113,138 +1168,28 @@
         'LIPA NAMBA': 0,
         'CASH': 0
       },
-      investments: {
+      investment: {
         totalInvested: 0,
         currentValue: 0,
         history: []
       },
-      businesses: ['Appearich Main', 'Perfumes'],
-      activeBusiness: 'Appearich Main',
-      profitStartSaleId: 'ALL',
-      appearichPeriod: 'day',
+      businessTypes: ['Appearich Main', 'Perfumes', 'Clothing'],
+      activeBusinessType: 'Appearich Main',
+      activePeriod: 'day',
+      nextSaleSeq: 1,
+      profitStartSaleNum: 1,
+      allSalesList: [],
+      selectedSaleIds: new Set(),
       loans: []
     };
-    // INIT APP
-    window.addEventListener('DOMContentLoaded', async () => {
-      setTimeout(() => {
-        const splash = document.getElementById('splash-screen');
-        if (splash) splash.classList.add('hidden');
-      }, 1200);
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      if (session && session.user) {
-        currentUser = session.user;
-        await loadUserData();
-        showApp();
-      } else {
-        showAuth();
-      }
-    });
-    function showAuth() {
-      document.getElementById('auth-container').classList.remove('hidden');
-      document.getElementById('auth-container').classList.add('flex');
-      document.getElementById('app-wrapper').classList.add('hidden');
-    }
-    function showApp() {
-      document.getElementById('auth-container').classList.add('hidden');
-      document.getElementById('auth-container').classList.remove('flex');
-      document.getElementById('app-wrapper').classList.remove('hidden');
-      initPickers();
-      renderAll();
-    }
-    function toggleAuthMode() {
-      authMode = authMode === 'login' ? 'signup' : 'login';
-      const submitBtn = document.getElementById('auth-submit-btn');
-      const toggleBtn = document.getElementById('auth-toggle-btn');
-      const nameField = document.getElementById('name-field-container');
-      const confirmField = document.getElementById('confirm-password-container');
-      if (authMode === 'signup') {
-        submitBtn.innerText = 'Create Account';
-        toggleBtn.innerText = 'Already have an account? Sign In';
-        nameField.classList.remove('hidden');
-        confirmField.classList.remove('hidden');
-      } else {
-        submitBtn.innerText = 'Sign In';
-        toggleBtn.innerText = 'Need an account? Sign Up';
-        nameField.classList.add('hidden');
-        confirmField.classList.add('hidden');
-      }
-    }
-    async function handleAuth(e) {
-      e.preventDefault();
-      const email = document.getElementById('auth-email').value;
-      const password = document.getElementById('auth-password').value;
-      const errorEl = document.getElementById('auth-error');
-      errorEl.classList.add('hidden');
-      try {
-        if (authMode === 'signup') {
-          const name = document.getElementById('auth-name').value;
-          const confirm = document.getElementById('auth-confirm-password').value;
-          if (password !== confirm) {
-            errorEl.innerText = 'Passwords do not match';
-            errorEl.classList.remove('hidden');
-            return;
-          }
-          const { data, error } = await supabaseClient.auth.signUp({
-            email,
-            password,
-            options: { data: { full_name: name } }
-          });
-          if (error) throw error;
-          state.userName = name || 'User';
-          currentUser = data.user;
-          await saveUserData();
-        } else {
-          const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-          if (error) throw error;
-          currentUser = data.user;
-          await loadUserData();
-        }
-        showApp();
-      } catch (err) {
-        errorEl.innerText = err.message || 'Authentication failed';
-        errorEl.classList.remove('hidden');
-      }
-    }
-    async function handleLogout() {
-      await supabaseClient.auth.signOut();
-      currentUser = null;
-      showAuth();
-    }
-    async function loadUserData() {
-      if (!currentUser) return;
-      try {
-        const { data, error } = await supabaseClient
-          .from('user_profiles')
-          .select('state')
-          .eq('user_id', currentUser.id)
-          .single();
-        if (data && data.state) {
-          Object.assign(state, data.state);
-        } else {
-          state.userName = currentUser.user_metadata?.full_name || currentUser.email.split('@')[0];
-        }
-      } catch (err) {
-        console.warn('No profile found, using defaults.');
-        state.userName = currentUser.user_metadata?.full_name || currentUser.email.split('@')[0];
-      }
-    }
-    async function saveUserData() {
-      if (!currentUser) return;
-      try {
-        await supabaseClient
-          .from('user_profiles')
-          .upsert({ user_id: currentUser.id, state, updated_at: new Date() });
-      } catch (err) {
-        console.error('Error saving user data:', err);
-      }
+
+    // Format numbers cleanly
+    function formatMoney(amount) {
+      return (Number(amount) || 0).toLocaleString('en-US') + ' Sh';
     }
 
-    // UTILS
-    function formatShilling(val) {
-      const num = Number(val) || 0;
-      return num.toLocaleString('en-US') + ' Sh';
-    }
-    function getMonthData(monthKey) {
+    // Helper: Ensure monthly structure
+    function ensureMonthExists(monthKey) {
       if (!state.monthlyData[monthKey]) {
         state.monthlyData[monthKey] = {
           incomes: [],
@@ -1254,34 +1199,334 @@
           utilitiesSubSpent: { 'Internet': 0, 'Umeme': 0, 'Taka': 0, 'Transport': 0 }
         };
       }
-      return state.monthlyData[monthKey];
-    }
-    function getAllSalesSorted() {
-      let allSales = [];
-      Object.keys(state.monthlyData).forEach(mk => {
-        if (state.monthlyData[mk] && state.monthlyData[mk].sales) {
-          allSales = allSales.concat(state.monthlyData[mk].sales);
-        }
-      });
-      allSales.sort((a, b) => new Date(b.date) - new Date(a.date));
-      return allSales;
-    }
-    function sortMonthSales(monthKey) {
-      const mData = getMonthData(monthKey);
-      if (mData && mData.sales) {
-        mData.sales.sort((a, b) => new Date(b.date) - new Date(a.date));
-      }
-    }
-    function initPickers() {
-      const incPicker = document.getElementById('income-month-picker');
-      if (incPicker) incPicker.value = state.activeMonth;
-      const expPicker = document.getElementById('daily-expense-month-picker');
-      if (expPicker) expPicker.value = state.expenseActiveMonth;
     }
 
-    // RENDERERS
-    function renderAll() {
-      renderHeaderAndHero();
+    // SUPABASE DATA PERSISTENCE
+    async function loadUserData() {
+      if (!currentUser) return;
+      try {
+        const { data, error } = await supabaseClient
+          .from('user_profiles')
+          .select('state_data')
+          .eq('user_id', currentUser.id)
+          .single();
+
+        if (error && error.code !== 'PGRST116') {
+          console.error("Error loading user data:", error);
+        }
+
+        if (data && data.state_data) {
+          const loaded = data.state_data;
+          state.userName = loaded.userName || state.userName;
+          state.heroImageUrl = loaded.heroImageUrl || state.heroImageUrl;
+          state.categories = loaded.categories || state.categories;
+          state.accounts = loaded.accounts || state.accounts;
+          state.investment = loaded.investment || state.investment;
+          state.businessTypes = loaded.businessTypes || state.businessTypes;
+          state.activeBusinessType = loaded.activeBusinessType || state.activeBusinessType;
+          state.nextSaleSeq = loaded.nextSaleSeq || 1;
+          state.profitStartSaleNum = loaded.profitStartSaleNum || 1;
+          state.allSalesList = loaded.allSalesList || [];
+          state.loans = loaded.loans || [];
+
+          if (loaded.monthlyData) {
+            state.monthlyData = loaded.monthlyData;
+          }
+        }
+
+        // Migrate historical sales into centralized allSalesList if needed
+        if ((!state.allSalesList || state.allSalesList.length === 0) && state.monthlyData) {
+          state.allSalesList = [];
+          let maxSeq = 0;
+          Object.keys(state.monthlyData).forEach(mKey => {
+            const mSales = state.monthlyData[mKey].sales || [];
+            mSales.forEach(s => {
+              const saleNum = s.saleNum || s.salesNum || 0;
+              if (saleNum > maxSeq) maxSeq = saleNum;
+              state.allSalesList.push({
+                id: s.id || 'sale_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7),
+                saleNum: saleNum || 0,
+                saleNumFormatted: s.saleNumFormatted || ('Sale #' + String(saleNum || 0).padStart(3, '0')),
+                date: s.date || mKey + '-01',
+                businessType: s.businessType || 'Appearich Main',
+                productName: s.productName || s.product || 'Product',
+                qty: Number(s.qty) || 1,
+                costPrice: Number(s.buyPrice || s.costPrice) || 0,
+                sellPrice: Number(s.sellPrice) || 0,
+                customer: s.customer || 'Customer',
+                status: s.status || 'FULL',
+                paidAmount: Number(s.paidAmount) || 0,
+                profit: Number(s.profit) || 0
+              });
+            });
+          });
+          if (state.allSalesList.length > 0) {
+            if (maxSeq > 0) state.nextSaleSeq = maxSeq + 1;
+            else {
+              state.allSalesList.sort((a,b) => new Date(a.date) - new Date(b.date));
+              state.allSalesList.forEach((s, idx) => {
+                s.saleNum = idx + 1;
+                s.saleNumFormatted = 'Sale #' + String(idx + 1).padStart(3, '0');
+              });
+              state.nextSaleSeq = state.allSalesList.length + 1;
+            }
+          }
+        }
+
+        // Ensure every sale in allSalesList has required fields
+        state.allSalesList.forEach(s => {
+          if (!s.saleNum) s.saleNum = 0;
+          if (!s.saleNumFormatted) s.saleNumFormatted = 'Sale #' + String(s.saleNum).padStart(3, '0');
+          if (s.costPrice === undefined && s.buyPrice !== undefined) s.costPrice = Number(s.buyPrice);
+          s.costPrice = Number(s.costPrice) || 0;
+          s.sellPrice = Number(s.sellPrice) || 0;
+          s.qty = Number(s.qty) || 1;
+          s.profit = (s.sellPrice - s.costPrice) * s.qty;
+        });
+
+      } catch (err) {
+        console.error("Load state exception:", err);
+      }
+      sortAllSalesChronologically();
+      syncSalesToMonthlyData();
+      validateProfitStartingPoint();
+      renderAllViews();
+    }
+
+    async function saveUserData() {
+      if (!currentUser) return;
+      try {
+        const payload = {
+          userName: state.userName,
+          heroImageUrl: state.heroImageUrl,
+          categories: state.categories,
+          accounts: state.accounts,
+          investment: state.investment,
+          businessTypes: state.businessTypes,
+          activeBusinessType: state.activeBusinessType,
+          nextSaleSeq: state.nextSaleSeq,
+          profitStartSaleNum: state.profitStartSaleNum,
+          allSalesList: state.allSalesList,
+          monthlyData: state.monthlyData,
+          loans: state.loans
+        };
+
+        await supabaseClient
+          .from('user_profiles')
+          .upsert({ user_id: currentUser.id, state_data: payload, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
+      } catch (err) {
+        console.error("Save state exception:", err);
+      }
+    }
+
+    // AUTOMATIC CHRONOLOGICAL ORDERING (Newest -> Oldest by Sale Date)
+    function sortAllSalesChronologically() {
+      state.allSalesList.sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        if (dateB - dateA !== 0) return dateB - dateA;
+        return (b.saleNum || 0) - (a.saleNum || 0);
+      });
+    }
+
+    // Keep monthlyData synced with allSalesList
+    function syncSalesToMonthlyData() {
+      Object.keys(state.monthlyData).forEach(m => {
+        state.monthlyData[m].sales = [];
+      });
+      state.allSalesList.forEach(s => {
+        const mKey = s.date.substring(0, 7);
+        ensureMonthExists(mKey);
+        state.monthlyData[mKey].sales.push(s);
+      });
+    }
+
+    // Validate profit starting point after deletion or edits
+    function validateProfitStartingPoint() {
+      if (!state.allSalesList || state.allSalesList.length === 0) {
+        state.profitStartSaleNum = 1;
+        return;
+      }
+      const exists = state.allSalesList.some(s => s.saleNum === Number(state.profitStartSaleNum));
+      if (!exists) {
+        // Find next valid sale number equal or higher, or fallback to smallest existing
+        const validSales = state.allSalesList.map(s => s.saleNum).sort((a, b) => a - b);
+        const nextValid = validSales.find(num => num > Number(state.profitStartSaleNum)) || validSales[0];
+        const oldVal = state.profitStartSaleNum;
+        state.profitStartSaleNum = nextValid;
+        alert(`Sale #${String(oldVal).padStart(3, '0')} was deleted or not found. Profit starting point auto-adjusted to Sale #${String(nextValid).padStart(3, '0')}.`);
+      }
+    }
+
+    // Change profit starting point control
+    function handleProfitStartChange(val) {
+      const num = parseInt(val, 10);
+      if (isNaN(num) || num < 1) return;
+      state.profitStartSaleNum = num;
+      validateProfitStartingPoint();
+      saveUserData();
+      renderAllViews();
+    }
+
+    // Calculate profit included from selected starting sale onward
+    function calculateTotalProfitFromStartingPoint() {
+      const startNum = Number(state.profitStartSaleNum) || 1;
+      return state.allSalesList.reduce((sum, s) => {
+        if ((s.saleNum || 0) >= startNum) {
+          return sum + (Number(s.profit) || 0);
+        }
+        return sum;
+      }, 0);
+    }
+
+    // AUTHENTICATION LOGIC
+    function toggleAuthMode() {
+      authMode = authMode === 'login' ? 'signup' : 'login';
+      const nameField = document.getElementById('name-field-container');
+      const confirmField = document.getElementById('confirm-password-container');
+      const submitBtn = document.getElementById('auth-submit-btn');
+      const toggleBtn = document.getElementById('auth-toggle-btn');
+      const errEl = document.getElementById('auth-error');
+      errEl.classList.add('hidden');
+
+      if (authMode === 'signup') {
+        nameField.classList.remove('hidden');
+        confirmField.classList.remove('hidden');
+        submitBtn.textContent = 'Create Account';
+        toggleBtn.textContent = 'Already have an account? Sign In';
+      } else {
+        nameField.classList.add('hidden');
+        confirmField.classList.add('hidden');
+        submitBtn.textContent = 'Sign In';
+        toggleBtn.textContent = 'Need an account? Sign Up';
+      }
+    }
+
+    async function handleAuth(e) {
+      e.preventDefault();
+      const email = document.getElementById('auth-email').value;
+      const password = document.getElementById('auth-password').value;
+      const errEl = document.getElementById('auth-error');
+      errEl.classList.add('hidden');
+
+      if (authMode === 'signup') {
+        const name = document.getElementById('auth-name').value;
+        const confirm = document.getElementById('auth-confirm-password').value;
+        if (password !== confirm) {
+          errEl.textContent = 'Passwords do not match.';
+          errEl.classList.remove('hidden');
+          return;
+        }
+        const { data, error } = await supabaseClient.auth.signUp({
+          email,
+          password,
+          options: { data: { full_name: name } }
+        });
+        if (error) {
+          errEl.textContent = error.message;
+          errEl.classList.remove('hidden');
+          return;
+        }
+        currentUser = data.user;
+        state.userName = name || email.split('@')[0];
+      } else {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) {
+          errEl.textContent = error.message;
+          errEl.classList.remove('hidden');
+          return;
+        }
+        currentUser = data.user;
+        state.userName = currentUser.user_metadata?.full_name || email.split('@')[0];
+      }
+
+      document.getElementById('auth-container').classList.add('hidden');
+      document.getElementById('app-wrapper').classList.remove('hidden');
+      await loadUserData();
+    }
+
+    async function handleLogout() {
+      await supabaseClient.auth.signOut();
+      currentUser = null;
+      document.getElementById('app-wrapper').classList.add('hidden');
+      document.getElementById('auth-container').classList.remove('hidden');
+    }
+
+    // INITIALIZATION
+    window.addEventListener('DOMContentLoaded', async () => {
+      setTimeout(() => {
+        document.getElementById('splash-screen').style.display = 'none';
+      }, 1000);
+
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (session) {
+        currentUser = session.user;
+        state.userName = currentUser.user_metadata?.full_name || currentUser.email.split('@')[0];
+        document.getElementById('auth-container').classList.add('hidden');
+        document.getElementById('app-wrapper').classList.remove('hidden');
+        await loadUserData();
+      } else {
+        document.getElementById('auth-container').classList.remove('hidden');
+      }
+
+      document.getElementById('income-month-picker').value = state.activeMonth;
+      document.getElementById('daily-expense-month-picker').value = state.expenseActiveMonth;
+    });
+
+    // UI TAB SWITCHING
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.getElementById('tab-' + tabId).classList.remove('hidden');
+
+      document.querySelectorAll('.nav-tab').forEach(btn => {
+        btn.classList.remove('bg-brand-black', 'text-white', 'shadow-sm', 'active');
+        btn.classList.add('text-brand-muted');
+      });
+      const activeNav = document.getElementById('nav-' + tabId);
+      if (activeNav) {
+        activeNav.classList.add('bg-brand-black', 'text-white', 'shadow-sm', 'active');
+        activeNav.classList.remove('text-brand-muted');
+      }
+
+      document.querySelectorAll('.bnav-btn').forEach(btn => {
+        btn.classList.remove('text-brand-black');
+        btn.classList.add('text-brand-muted');
+      });
+      const activeBnav = document.getElementById('bnav-' + tabId);
+      if (activeBnav) {
+        activeBnav.classList.add('text-brand-black');
+        activeBnav.classList.remove('text-brand-muted');
+      }
+
+      renderAllViews();
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+      if (id === 'addSaleModal' || id === 'editSaleModal') populateBusinessDropdowns();
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function handleHeroUpload(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          state.heroImageUrl = evt.target.result;
+          document.getElementById('hero-bg-img').style.backgroundImage = `url('${state.heroImageUrl}')`;
+          saveUserData();
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // RENDER ALL VIEWS
+    function renderAllViews() {
+      document.getElementById('welcome-greeting').textContent = `Welcome, ${state.userName || 'User'}`;
+      document.getElementById('hero-bg-img').style.backgroundImage = `url('${state.heroImageUrl}')`;
+
       renderHomeDashboard();
       renderIncomeTab();
       renderBudgetTab();
@@ -1293,739 +1538,279 @@
       renderProgressTab();
     }
 
-    function renderHeaderAndHero() {
-      const greeting = document.getElementById('welcome-greeting');
-      if (greeting) greeting.innerText = `Welcome, ${state.userName || 'User'}`;
-      const bgImg = document.getElementById('hero-bg-img');
-      if (bgImg && state.heroImageUrl) {
-        bgImg.style.backgroundImage = `url('${state.heroImageUrl}')`;
-      }
-    }
-
     function renderHomeDashboard() {
-      const mData = getMonthData(state.activeMonth);
-      const totalIncome = mData.incomes.reduce((acc, i) => acc + (Number(i.amount) || 0), 0);
-      const godAmount = totalIncome * 0.10;
-      const totalLiquid = Object.values(state.accounts).reduce((acc, a) => acc + (Number(a) || 0), 0);
-      
-      const allocatedTarget = state.categories.reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
-      const pool = totalIncome * 0.90;
-      const remainingBudget = pool - allocatedTarget;
+      ensureMonthExists(state.activeMonth);
+      const mData = state.monthlyData[state.activeMonth];
+      const totalInc = (mData.incomes || []).reduce((sum, i) => sum + Number(i.amount), 0);
+      const godAmt = totalInc * 0.10;
 
-      document.getElementById('dash-total-income').innerText = formatShilling(totalIncome);
-      document.getElementById('dash-god-amount').innerText = formatShilling(godAmount);
-      document.getElementById('dash-total-money').innerText = formatShilling(totalLiquid);
-      document.getElementById('dash-remaining-budget').innerText = formatShilling(remainingBudget);
+      document.getElementById('dash-total-income').textContent = formatMoney(totalInc);
+      document.getElementById('dash-god-amount').textContent = formatMoney(godAmt);
+
+      const totalLiquid = Object.values(state.accounts).reduce((sum, a) => sum + Number(a), 0);
+      document.getElementById('dash-total-money').textContent = formatMoney(totalLiquid);
+
+      const allocatedTargets = state.categories.reduce((sum, c) => sum + Number(c.amount), 0);
+      const pool90 = totalInc * 0.90;
+      const remainingPool = pool90 - allocatedTargets;
+      document.getElementById('dash-remaining-budget').textContent = formatMoney(remainingPool);
     }
 
+    function handleMonthChange(e) {
+      state.activeMonth = e.target.value;
+      ensureMonthExists(state.activeMonth);
+      renderAllViews();
+    }
+
+    function handleExpenseMonthChange(e) {
+      state.expenseActiveMonth = e.target.value;
+      ensureMonthExists(state.expenseActiveMonth);
+      renderDailyExpensesTab();
+    }
+
+    // INCOME TAB
     function renderIncomeTab() {
-      const mData = getMonthData(state.activeMonth);
-      const totalIncome = mData.incomes.reduce((acc, i) => acc + (Number(i.amount) || 0), 0);
-      const godTotal = totalIncome * 0.10;
+      ensureMonthExists(state.activeMonth);
+      const mData = state.monthlyData[state.activeMonth];
+      const totalInc = (mData.incomes || []).reduce((sum, i) => sum + Number(i.amount), 0);
+      const godTotal = totalInc * 0.10;
 
-      document.getElementById('income-god-total').innerText = formatShilling(godTotal);
-      document.getElementById('income-month-label').innerText = `Active Month: ${state.activeMonth}`;
+      document.getElementById('income-god-total').textContent = formatMoney(godTotal);
+      document.getElementById('income-month-label').textContent = `Month: ${state.activeMonth}`;
 
-      const container = document.getElementById('income-list-container');
-      if (!container) return;
-      container.innerHTML = '';
+      const listContainer = document.getElementById('income-list-container');
+      listContainer.innerHTML = '';
 
-      if (mData.incomes.length === 0) {
-        container.innerHTML = `<div class="col-span-full p-8 text-center text-brand-muted bg-white rounded-3xl border border-gray-100">No income records saved for this month yet.</div>`;
+      if (!mData.incomes || mData.incomes.length === 0) {
+        listContainer.innerHTML = '<p class="text-xs text-brand-muted col-span-3">No income recorded for this month.</p>';
         return;
       }
 
-      mData.incomes.forEach((inc, idx) => {
+      mData.incomes.forEach(inc => {
         const card = document.createElement('div');
         card.className = 'p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex items-center justify-between';
         card.innerHTML = `
           <div>
             <p class="font-bold text-sm text-brand-black">${inc.name}</p>
-            <p class="text-xs text-brand-muted">10% GOD: ${formatShilling(inc.amount * 0.10)}</p>
+            <p class="text-xs text-brand-muted mt-0.5">God Tithe (10%): <span class="text-brand-gold font-bold">${formatMoney(inc.amount * 0.10)}</span></p>
           </div>
           <div class="text-right">
-            <p class="font-display font-bold text-base text-brand-black">${formatShilling(inc.amount)}</p>
-            <button onclick="deleteIncome(${idx})" class="text-[10px] text-red-500 font-semibold hover:underline">Delete</button>
+            <p class="font-display font-bold text-lg text-brand-black">${formatMoney(inc.amount)}</p>
+            <button onclick="deleteIncome('${inc.id}')" class="text-[10px] font-bold text-red-500 hover:underline mt-1">Delete</button>
           </div>
         `;
-        container.appendChild(card);
+        listContainer.appendChild(card);
       });
-    }
-
-    function renderBudgetTab() {
-      const mData = getMonthData(state.activeMonth);
-      const totalIncome = mData.incomes.reduce((acc, i) => acc + (Number(i.amount) || 0), 0);
-      const pool = totalIncome * 0.90;
-      document.getElementById('budget-pool-total').innerText = formatShilling(pool);
-
-      const totalAllocated = state.categories.reduce((acc, c) => acc + (Number(c.amount) || 0), 0);
-      const percent = pool > 0 ? Math.min(100, Math.round((totalAllocated / pool) * 100)) : 0;
-
-      document.getElementById('budget-allocated-percent').innerText = `${percent}%`;
-      document.getElementById('budget-allocated-bar').style.width = `${percent}%`;
-
-      const utilCat = state.categories.find(c => c.id === 'cat-utilities');
-      if (utilCat) {
-        const el = document.getElementById('cat-amount-cat-utilities');
-        if (el && document.activeElement !== el) el.value = utilCat.amount || '';
-        
-        const uSpent = Object.values(mData.utilitiesSubSpent || {}).reduce((acc, s) => acc + (Number(s) || 0), 0);
-        const uRem = (utilCat.amount || 0) - uSpent;
-        document.getElementById('utilities-spent-summary').innerText = `Spent: ${formatShilling(uSpent)}`;
-        const remEl = document.getElementById('utilities-remaining-summary');
-        remEl.innerText = `Remaining: ${formatShilling(uRem)}`;
-        remEl.className = uRem < 0 ? 'font-bold text-red-600' : 'font-bold text-emerald-600';
-        
-        const utilPct = pool > 0 ? Math.round(((utilCat.amount || 0) / pool) * 100) : 0;
-        document.getElementById('utilities-percent-badge').innerText = `${utilPct}%`;
-      }
-
-      const subList = document.getElementById('utilities-subcategories-list');
-      if (subList) {
-        subList.innerHTML = '';
-        ['Internet', 'Umeme', 'Taka', 'Transport'].forEach(sub => {
-          const sSpent = mData.utilitiesSubSpent?.[sub] || 0;
-          const subRow = document.createElement('div');
-          subRow.className = 'flex items-center justify-between text-xs bg-white p-3 rounded-xl border border-gray-100';
-          subRow.innerHTML = `<span class="font-bold text-brand-black">${sub}</span><span class="text-brand-muted">Spent: ${formatShilling(sSpent)}</span>`;
-          subList.appendChild(subRow);
-        });
-      }
-
-      const mainList = document.getElementById('main-categories-list');
-      if (mainList) {
-        mainList.innerHTML = '';
-        state.categories.filter(c => c.id !== 'cat-utilities').forEach(cat => {
-          const card = document.createElement('div');
-          card.className = 'p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-3 flex flex-col justify-between';
-          
-          let spent = 0;
-          if (cat.name.toLowerCase().includes('expense')) {
-            spent = mData.categorySpent?.['Expenses'] || 0;
-          } else {
-            spent = mData.categorySpent?.[cat.name] || 0;
-          }
-          const rem = (cat.amount || 0) - spent;
-          const catPct = pool > 0 ? Math.round(((cat.amount || 0) / pool) * 100) : 0;
-
-          card.innerHTML = `
-            <div class="flex items-center justify-between">
-              <h4 class="font-bold text-base text-brand-black">${cat.name.toUpperCase()}</h4>
-              <span class="px-2.5 py-0.5 rounded-full bg-gray-100 text-brand-black text-[11px] font-bold">${catPct}%</span>
-            </div>
-            <div>
-              <label class="block text-xs font-bold text-brand-muted uppercase mb-1">Target Amount (Sh)</label>
-              <input type="number" value="${cat.amount || ''}" oninput="handleCategoryAmountInput('${cat.id}', this.value)" placeholder="Enter amount" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm font-bold text-brand-black">
-            </div>
-            <div class="flex justify-between text-xs pt-2 border-t border-gray-100">
-              <span class="text-brand-muted">Spent: ${formatShilling(spent)}</span>
-              <span class="${rem < 0 ? 'font-bold text-red-600' : 'font-bold text-emerald-600'}">Remaining: ${formatShilling(rem)}</span>
-            </div>
-          `;
-          mainList.appendChild(card);
-        });
-      }
-    }
-
-    function renderDailyExpensesTab() {
-      const mData = getMonthData(state.expenseActiveMonth);
-      document.getElementById('daily-expense-month-label').innerText = `Selected Month: ${state.expenseActiveMonth}`;
-      
-      const compGrid = document.getElementById('category-budget-comparison-grid');
-      if (compGrid) {
-        compGrid.innerHTML = '';
-        state.categories.forEach(cat => {
-          let spent = 0;
-          if (cat.id === 'cat-utilities') {
-            spent = Object.values(mData.utilitiesSubSpent || {}).reduce((acc, s) => acc + (Number(s) || 0), 0);
-          } else if (cat.name.toLowerCase().includes('expense')) {
-            spent = mData.categorySpent?.['Expenses'] || 0;
-          } else {
-            spent = mData.categorySpent?.[cat.name] || 0;
-          }
-          const target = cat.amount || 0;
-          const diff = target - spent;
-
-          const item = document.createElement('div');
-          item.className = 'p-4 rounded-2xl bg-white border border-gray-100 shadow-sm space-y-1';
-          item.innerHTML = `
-            <div class="flex justify-between text-xs font-bold">
-              <span class="text-brand-black">${cat.name}</span>
-              <span class="${diff < 0 ? 'text-red-500' : 'text-emerald-600'}">${diff < 0 ? 'Over Budget' : 'Under Budget'}</span>
-            </div>
-            <p class="text-xs text-brand-muted">Target: ${formatShilling(target)} | Spent: ${formatShilling(spent)}</p>
-          `;
-          compGrid.appendChild(item);
-        });
-      }
-
-      const tbody = document.getElementById('daily-expense-table-body');
-      const countEl = document.getElementById('daily-expense-log-count');
-      if (tbody) {
-        tbody.innerHTML = '';
-        if (countEl) countEl.innerText = `${mData.expenses.length} Expenses Recorded`;
-
-        mData.expenses.slice().reverse().forEach(ex => {
-          const tr = document.createElement('tr');
-          tr.className = 'hover:bg-gray-50';
-          tr.innerHTML = `
-            <td class="py-3">${ex.date}</td>
-            <td class="py-3 font-bold text-brand-black">${ex.name}</td>
-            <td class="py-3"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-[10px] font-bold">${ex.category}</span></td>
-            <td class="py-3 text-brand-muted">${ex.account}</td>
-            <td class="py-3 text-right font-bold text-brand-black">${formatShilling(ex.amount)}</td>
-          `;
-          tbody.appendChild(tr);
-        });
-      }
-    }
-
-    function renderInvestmentTab() {
-      const inv = state.investments;
-      const gain = inv.currentValue - inv.totalInvested;
-      const pct = inv.totalInvested > 0 ? ((gain / inv.totalInvested) * 100).toFixed(2) : '0.00';
-
-      document.getElementById('inv-total-invested').innerText = formatShilling(inv.totalInvested);
-      document.getElementById('inv-current-value').innerText = formatShilling(inv.currentValue);
-      
-      const gainEl = document.getElementById('inv-gain-loss');
-      gainEl.innerText = `${gain >= 0 ? '+' : ''}${formatShilling(gain)}`;
-      gainEl.className = gain >= 0 ? 'font-display text-3xl font-extrabold text-emerald-600 mt-1' : 'font-display text-3xl font-extrabold text-red-600 mt-1';
-
-      const pctEl = document.getElementById('inv-percentage-return');
-      pctEl.innerText = `${gain >= 0 ? '+' : ''}${pct}%`;
-      pctEl.className = gain >= 0 ? 'font-display text-3xl font-extrabold text-emerald-600 mt-1' : 'font-display text-3xl font-extrabold text-red-600 mt-1';
-
-      const list = document.getElementById('investment-history-list');
-      if (list) {
-        list.innerHTML = '';
-        if (inv.history.length === 0) {
-          list.innerHTML = `<p class="col-span-full text-xs text-brand-muted">No investment history logs available.</p>`;
-          return;
-        }
-        inv.history.slice().reverse().forEach(h => {
-          const item = document.createElement('div');
-          item.className = 'p-4 rounded-2xl bg-brand-surface border border-gray-100 text-xs space-y-1';
-          item.innerHTML = `
-            <div class="flex justify-between font-bold">
-              <span>${h.type}</span>
-              <span class="text-brand-muted">${h.date}</span>
-            </div>
-            <p class="font-display font-bold text-brand-black text-sm">${formatShilling(h.amount)}</p>
-          `;
-          list.appendChild(item);
-        });
-      }
-    }
-
-    function renderAppearichTab() {
-      const bar = document.getElementById('business-types-bar');
-      if (bar) {
-        bar.innerHTML = '';
-        state.businesses.forEach(b => {
-          const btn = document.createElement('button');
-          btn.className = `px-4 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 ${state.activeBusiness === b ? 'bg-brand-black text-white' : 'bg-gray-100 text-brand-muted hover:text-black'}`;
-          btn.innerText = b;
-          btn.onclick = () => { state.activeBusiness = b; renderAppearichTab(); };
-          bar.appendChild(btn);
-        });
-      }
-      document.getElementById('active-business-view-label').innerText = `Active Business View: ${state.activeBusiness}`;
-
-      const allSales = getAllSalesSorted();
-      const filteredByBus = allSales.filter(s => s.business === state.activeBusiness);
-
-      // Profit starting point logic
-      let profitEligibleSales = filteredByBus;
-      if (state.profitStartSaleId && state.profitStartSaleId !== 'ALL') {
-        const startIndex = filteredByBus.findIndex(s => s.id === state.profitStartSaleId);
-        if (startIndex !== -1) {
-          // Since filteredByBus is sorted descending, sales from startIndex down to 0 are newer/equal to start point
-          profitEligibleSales = filteredByBus.slice(0, startIndex + 1);
-        }
-      }
-
-      const todayStr = new Date().toISOString().split('T')[0];
-      const currentMonthKey = getCurrentMonthKey();
-
-      const todaySales = profitEligibleSales.filter(s => s.date === todayStr);
-      const todayReceived = todaySales.reduce((acc, s) => acc + (Number(s.paidAmount) || 0), 0);
-      const todayProfit = todaySales.reduce((acc, s) => acc + (Number(s.profit) || 0), 0);
-
-      const monthSales = profitEligibleSales.filter(s => s.date && s.date.startsWith(currentMonthKey));
-      const monthRevenue = monthSales.reduce((acc, s) => acc + (Number(s.sellPrice * s.qty) || 0), 0);
-
-      // Outstanding total for active business (historical overview)
-      const totalOutstanding = filteredByBus.reduce((acc, s) => acc + (Number(s.unpaid) || 0), 0);
-      const totalProfit = profitEligibleSales.reduce((acc, s) => acc + (Number(s.profit) || 0), 0);
-
-      document.getElementById('app-today-sales').innerText = formatShilling(todayReceived);
-      document.getElementById('app-today-profit').innerText = formatShilling(todayProfit);
-      document.getElementById('app-month-revenue').innerText = formatShilling(monthRevenue);
-      document.getElementById('app-total-outstanding').innerText = formatShilling(totalOutstanding);
-      document.getElementById('app-total-profit').innerText = formatShilling(totalProfit);
-
-      // Period analysis
-      let periodSales = profitEligibleSales;
-      if (state.appearichPeriod === 'day') {
-        periodSales = profitEligibleSales.filter(s => s.date === todayStr);
-      } else if (state.appearichPeriod === 'month') {
-        periodSales = profitEligibleSales.filter(s => s.date && s.date.startsWith(currentMonthKey));
-      } else if (state.appearichPeriod === 'year') {
-        const yr = new Date().getFullYear().toString();
-        periodSales = profitEligibleSales.filter(s => s.date && s.date.startsWith(yr));
-      }
-
-      const pSold = periodSales.reduce((acc, s) => acc + (Number(s.qty) || 0), 0);
-      const pRev = periodSales.reduce((acc, s) => acc + (Number(s.sellPrice * s.qty) || 0), 0);
-      const pCost = periodSales.reduce((acc, s) => acc + (Number(s.buyPrice * s.qty) || 0), 0);
-      const pProfit = pRev - pCost;
-      const pMargin = pRev > 0 ? ((pProfit / pRev) * 100).toFixed(1) : '0';
-
-      document.getElementById('app-period-sold').innerText = pSold;
-      document.getElementById('app-period-revenue').innerText = formatShilling(pRev);
-      document.getElementById('app-period-cost').innerText = formatShilling(pCost);
-      document.getElementById('app-period-margin').innerText = `${pMargin}%`;
-
-      // Update profit start select dropdown
-      const selectEl = document.getElementById('profit-start-select');
-      if (selectEl) {
-        selectEl.innerHTML = `<option value="ALL">Include All Sales</option>`;
-        // Display in chronological order for starting point choice (oldest to newest)
-        const chronological = filteredByBus.slice().reverse();
-        chronological.forEach((s, idx) => {
-          const opt = document.createElement('option');
-          opt.value = s.id;
-          opt.innerText = `Sale #${chronological.length - idx}: ${s.date} - ${s.product} (${formatShilling(s.profit)} profit)`;
-          if (state.profitStartSaleId === s.id) opt.selected = true;
-          selectEl.appendChild(opt);
-        });
-        if (state.profitStartSaleId === 'ALL') selectEl.value = 'ALL';
-      }
-
-      // Sales Transactions Log table
-      const tbody = document.getElementById('appearich-sales-table');
-      if (tbody) {
-        tbody.innerHTML = '';
-        if (filteredByBus.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="9" class="py-6 text-center text-brand-muted">No sales records recorded for this business yet.</td></tr>`;
-          return;
-        }
-
-        filteredByBus.forEach(s => {
-          const tr = document.createElement('tr');
-          tr.className = 'hover:bg-gray-50';
-          const isExcluded = profitEligibleSales.indexOf(s) === -1;
-          
-          tr.innerHTML = `
-            <td class="py-3">${s.date} ${isExcluded ? '<span class="text-[9px] text-gray-400 font-normal">(Historical)</span>' : ''}</td>
-            <td class="py-3 text-brand-muted">${s.business}</td>
-            <td class="py-3 font-bold text-brand-black">${s.product} (x${s.qty})</td>
-            <td class="py-3 text-brand-muted">${s.customer}</td>
-            <td class="py-3 font-bold text-brand-black">${formatShilling(s.sellPrice * s.qty)}</td>
-            <td class="py-3 text-emerald-600 font-bold">${formatShilling(s.paidAmount)}</td>
-            <td class="py-3 text-red-500 font-bold">${formatShilling(s.unpaid)}</td>
-            <td class="py-3">
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${s.status === 'FULL' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}">
-                ${s.status}
-              </span>
-            </td>
-            <td class="py-3 space-x-1">
-              <button onclick="openEditSaleModal('${s.id}')" class="px-2 py-1 rounded bg-gray-100 text-brand-black hover:bg-gray-200 text-[10px] font-bold">Edit</button>
-              <button onclick="openUpdateSalePaymentModal('${s.id}')" class="px-2 py-1 rounded bg-brand-black text-white hover:bg-gray-800 text-[10px] font-bold">Payment</button>
-            </td>
-          `;
-          tbody.appendChild(tr);
-        });
-      }
-    }
-
-    function renderAccountsTab() {
-      const totalLiquid = Object.values(state.accounts).reduce((acc, a) => acc + (Number(a) || 0), 0);
-      document.getElementById('accounts-total-money').innerText = formatShilling(totalLiquid);
-
-      const grid = document.getElementById('account-cards-grid');
-      if (grid) {
-        grid.innerHTML = '';
-        Object.keys(state.accounts).forEach(accName => {
-          const card = document.createElement('div');
-          card.className = 'p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4';
-          card.innerHTML = `
-            <div class="flex items-center justify-between">
-              <span class="font-bold text-base text-brand-black">${accName}</span>
-              <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
-            </div>
-            <div>
-              <p class="text-xs text-brand-muted uppercase font-bold">Current Balance</p>
-              <p class="font-display text-2xl font-bold text-brand-black mt-1">${formatShilling(state.accounts[accName])}</p>
-            </div>
-          `;
-          grid.appendChild(card);
-        });
-      }
-    }
-
-    function renderLoansTab() {
-      const totalOwed = state.loans.reduce((acc, l) => acc + (Number(l.amount - l.paid) || 0), 0);
-      document.getElementById('loan-total-owed').innerText = formatShilling(totalOwed);
-
-      const list = document.getElementById('loan-cards-list');
-      if (list) {
-        list.innerHTML = '';
-        if (state.loans.length === 0) {
-          list.innerHTML = `<div class="col-span-full p-8 text-center text-brand-muted bg-white rounded-3xl border border-gray-100">No active loans recorded.</div>`;
-          return;
-        }
-
-        state.loans.forEach(loan => {
-          const rem = loan.amount - loan.paid;
-          const card = document.createElement('div');
-          card.className = 'p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-3';
-          card.innerHTML = `
-            <div class="flex items-center justify-between border-b border-gray-100 pb-2">
-              <h4 class="font-bold text-base text-brand-black">${loan.borrower}</h4>
-              <span class="text-xs text-brand-muted">${loan.date}</span>
-            </div>
-            <div class="space-y-1 text-xs">
-              <p class="flex justify-between"><span class="text-brand-muted">Borrowed:</span> <span class="font-bold">${formatShilling(loan.amount)}</span></p>
-              <p class="flex justify-between"><span class="text-brand-muted">Paid So Far:</span> <span class="font-bold text-emerald-600">${formatShilling(loan.paid)}</span></p>
-              <p class="flex justify-between border-t border-gray-100 pt-1"><span class="text-brand-muted">Remaining Balance:</span> <span class="font-bold text-red-600">${formatShilling(rem)}</span></p>
-            </div>
-            ${loan.note ? `<p class="text-[11px] text-brand-muted italic bg-gray-50 p-2 rounded-xl">${loan.note}</p>` : ''}
-            <button onclick="openUpdateLoanModal('${loan.id}')" class="w-full mt-2 bg-brand-black text-white py-2 rounded-xl text-xs font-bold hover:bg-gray-800 transition">Update Repayment</button>
-          `;
-          list.appendChild(card);
-        });
-      }
-    }
-
-    function renderProgressTab() {
-      const allSales = getAllSalesSorted();
-      
-      // Filter sales by profit start selection if set
-      let eligibleSales = allSales;
-      if (state.profitStartSaleId && state.profitStartSaleId !== 'ALL') {
-        const startIndex = allSales.findIndex(s => s.id === state.profitStartSaleId);
-        if (startIndex !== -1) {
-          eligibleSales = allSales.slice(0, startIndex + 1);
-        }
-      }
-
-      const combinedProfit = eligibleSales.reduce((acc, s) => acc + (Number(s.profit) || 0), 0);
-
-      const activeMonthData = getMonthData(state.activeMonth);
-      const activeMonthSales = eligibleSales.filter(s => s.date && s.date.startsWith(state.activeMonth));
-      const activeMonthProfit = activeMonthSales.reduce((acc, s) => acc + (Number(s.profit) || 0), 0);
-
-      document.getElementById('progress-overall-profit').innerText = formatShilling(combinedProfit);
-      document.getElementById('progress-active-month-profit').innerText = formatShilling(activeMonthProfit);
-      document.getElementById('progress-active-month-name').innerText = `Active Month (${state.activeMonth}) Profit`;
-
-      const grid = document.getElementById('progress-monthly-grid');
-      if (grid) {
-        grid.innerHTML = '';
-        const monthKeys = Object.keys(state.monthlyData).sort().reverse();
-        monthKeys.forEach(mKey => {
-          const mSales = eligibleSales.filter(s => s.date && s.date.startsWith(mKey));
-          const mProf = mSales.reduce((acc, s) => acc + (Number(s.profit) || 0), 0);
-
-          const card = document.createElement('div');
-          card.className = 'p-5 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-between';
-          card.innerHTML = `
-            <div>
-              <p class="font-bold text-sm text-brand-black">${mKey}</p>
-              <p class="text-xs text-brand-muted">${mSales.length} Sales Included</p>
-            </div>
-            <p class="font-display font-bold text-base text-emerald-600">${formatShilling(mProf)}</p>
-          `;
-          grid.appendChild(card);
-        });
-      }
-    }
-
-    // HANDLERS & MODAL ACTIONS
-    function switchTab(tabName) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('.nav-tab').forEach(el => {
-        el.classList.remove('bg-brand-black', 'text-white', 'shadow-sm', 'active');
-        el.classList.add('text-brand-muted');
-      });
-
-      const content = document.getElementById(`tab-${tabName}`);
-      if (content) content.classList.remove('hidden');
-
-      const navBtn = document.getElementById(`nav-${tabName}`);
-      if (navBtn) {
-        navBtn.classList.remove('text-brand-muted');
-        navBtn.classList.add('bg-brand-black', 'text-white', 'shadow-sm', 'active');
-      }
-    }
-
-    function switchAppearichPeriod(period) {
-      state.appearichPeriod = period;
-      document.querySelectorAll('.app-period-btn').forEach(b => {
-        b.className = 'app-period-btn px-4 py-1.5 rounded-lg text-xs font-bold bg-gray-100 text-brand-muted hover:text-brand-black';
-      });
-      const activeBtn = document.getElementById(`app-period-${period}`);
-      if (activeBtn) activeBtn.className = 'app-period-btn active px-4 py-1.5 rounded-lg text-xs font-bold bg-brand-black text-white';
-      renderAppearichTab();
-    }
-
-    function openModal(id) {
-      const m = document.getElementById(id);
-      if (m) m.classList.remove('hidden');
-      if (id === 'addSaleModal' && !document.getElementById('sale-edit-id').value) {
-        document.getElementById('sale-modal-title').innerText = 'Record Sale';
-        document.getElementById('sale-modal-submit-btn').innerText = 'Record Sale';
-        populateBusinessDropdown();
-        document.getElementById('sale-date').value = new Date().toISOString().split('T')[0];
-      }
-    }
-
-    function closeModal(id) {
-      const m = document.getElementById(id);
-      if (m) m.classList.add('hidden');
-      if (id === 'addSaleModal') {
-        document.getElementById('sale-edit-id').value = '';
-      }
-    }
-
-    function populateBusinessDropdown(selectedValue) {
-      const sel = document.getElementById('sale-business-type');
-      if (!sel) return;
-      sel.innerHTML = '';
-      state.businesses.forEach(b => {
-        const opt = document.createElement('option');
-        opt.value = b;
-        opt.innerText = b;
-        if (selectedValue && selectedValue === b) opt.selected = true;
-        sel.appendChild(opt);
-      });
-    }
-
-    function handleMonthChange(e) {
-      state.activeMonth = e.target.value;
-      renderAll();
-      saveUserData();
-    }
-
-    function handleExpenseMonthChange(e) {
-      state.expenseActiveMonth = e.target.value;
-      renderDailyExpensesTab();
-      saveUserData();
-    }
-
-    function handleHeroUpload(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          state.heroImageUrl = evt.target.result;
-          renderHeaderAndHero();
-          saveUserData();
-        };
-        reader.readAsDataURL(file);
-      }
     }
 
     function handleAddIncome(e) {
       e.preventDefault();
       const name = document.getElementById('income-name-input').value;
-      const amount = Number(document.getElementById('income-amount-input').value) || 0;
+      const amount = Number(document.getElementById('income-amount-input').value);
+      if (!name || isNaN(amount)) return;
 
-      const mData = getMonthData(state.activeMonth);
-      mData.incomes.push({ id: 'inc_' + Date.now(), name, amount });
+      ensureMonthExists(state.activeMonth);
+      state.monthlyData[state.activeMonth].incomes.push({
+        id: 'inc_' + Date.now(),
+        name,
+        amount
+      });
 
       closeModal('addIncomeModal');
-      e.target.reset();
-      renderAll();
+      document.getElementById('income-name-input').value = '';
+      document.getElementById('income-amount-input').value = '';
       saveUserData();
+      renderAllViews();
     }
 
-    function deleteIncome(idx) {
-      const mData = getMonthData(state.activeMonth);
-      mData.incomes.splice(idx, 1);
-      renderAll();
+    function deleteIncome(id) {
+      ensureMonthExists(state.activeMonth);
+      state.monthlyData[state.activeMonth].incomes = state.monthlyData[state.activeMonth].incomes.filter(i => i.id !== id);
       saveUserData();
+      renderAllViews();
     }
 
-    function toggleSalePartialInput() {
-      const status = document.getElementById('sale-payment-status').value;
-      const container = document.getElementById('sale-partial-container');
-      if (status === 'PARTIAL') {
-        container.classList.remove('hidden');
-      } else {
-        container.classList.add('hidden');
+    // BUDGET TAB
+    function renderBudgetTab() {
+      ensureMonthExists(state.activeMonth);
+      const mData = state.monthlyData[state.activeMonth];
+      const totalInc = (mData.incomes || []).reduce((sum, i) => sum + Number(i.amount), 0);
+      const pool90 = totalInc * 0.90;
+
+      document.getElementById('budget-pool-total').textContent = formatMoney(pool90);
+
+      const allocatedAmt = state.categories.reduce((sum, c) => sum + Number(c.amount), 0);
+      const percent = pool90 > 0 ? Math.min(100, Math.round((allocatedAmt / pool90) * 100)) : 0;
+
+      document.getElementById('budget-allocated-percent').textContent = `${percent}%`;
+      document.getElementById('budget-allocated-bar').style.width = `${percent}%`;
+
+      const utilsCat = state.categories.find(c => c.id === 'cat-utilities') || { amount: 0 };
+      const utilsTarget = Number(utilsCat.amount) || 0;
+      const utilsSpent = Object.values(mData.utilitiesSubSpent || {}).reduce((s, a) => s + Number(a), 0);
+      const utilsRem = utilsTarget - utilsSpent;
+      const utilsPct = pool90 > 0 ? Math.round((utilsTarget / pool90) * 100) : 0;
+
+      document.getElementById('cat-amount-cat-utilities').value = utilsTarget || '';
+      document.getElementById('utilities-percent-badge').textContent = `${utilsPct}%`;
+      document.getElementById('utilities-spent-summary').textContent = `Spent: ${formatMoney(utilsSpent)}`;
+      document.getElementById('utilities-remaining-summary').textContent = `Remaining: ${formatMoney(utilsRem)}`;
+
+      const subList = document.getElementById('utilities-subcategories-list');
+      subList.innerHTML = '';
+      const subs = ['Internet', 'Umeme', 'Taka', 'Transport'];
+      subs.forEach(s => {
+        const sp = mData.utilitiesSubSpent ? (mData.utilitiesSubSpent[s] || 0) : 0;
+        const div = document.createElement('div');
+        div.className = 'flex items-center justify-between p-3 rounded-xl bg-white border border-gray-100 text-xs';
+        div.innerHTML = `<span class="font-bold text-brand-black">${s}</span><span class="text-brand-muted">Spent: <strong class="text-brand-black">${formatMoney(sp)}</strong></span>`;
+        subList.appendChild(div);
+      });
+
+      const mainList = document.getElementById('main-categories-list');
+      mainList.innerHTML = '';
+
+      state.categories.filter(c => c.id !== 'cat-utilities').forEach(cat => {
+        const cTarget = Number(cat.amount) || 0;
+        const cPct = pool90 > 0 ? Math.round((cTarget / pool90) * 100) : 0;
+        const cSpent = cat.name === 'Expenses' ? (mData.categorySpent['Expenses'] || 0) : (mData.categorySpent[cat.name] || 0);
+        const cRem = cTarget - cSpent;
+
+        const card = document.createElement('div');
+        card.className = 'rounded-3xl bg-white border border-gray-100 shadow-premium p-6 space-y-4 flex flex-col justify-between';
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between">
+              <h4 class="font-bold text-base text-brand-black uppercase">${cat.name}</h4>
+              <span class="px-2.5 py-0.5 rounded-full bg-gray-100 text-brand-black text-[11px] font-bold">${cPct}%</span>
+            </div>
+            <p class="text-xs text-brand-muted mt-1">Allocated budget stream</p>
+          </div>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs font-bold text-brand-muted uppercase mb-1">Target Amount (Sh)</label>
+              <input type="number" value="${cTarget || ''}" oninput="handleCategoryAmountInput('${cat.id}', this.value)" placeholder="Enter amount" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm font-bold text-brand-black">
+            </div>
+            <div class="flex justify-between text-xs pt-2 border-t border-gray-100">
+              <span class="text-brand-muted">Spent: ${formatMoney(cSpent)}</span>
+              <span class="font-bold text-emerald-600">Remaining: ${formatMoney(cRem)}</span>
+            </div>
+          </div>
+        `;
+        mainList.appendChild(card);
+      });
+    }
+
+    function toggleUtilitiesAccordion() {
+      const acc = document.getElementById('utilities-accordion');
+      const chev = document.getElementById('utilities-chevron');
+      acc.classList.toggle('expanded');
+      chev.classList.toggle('rotate-180');
+    }
+
+    function handleCategoryAmountInput(catId, val) {
+      const cat = state.categories.find(c => c.id === catId);
+      if (cat) {
+        cat.amount = Number(val) || 0;
+        saveUserData();
+        renderHomeDashboard();
+        renderBudgetTab();
       }
     }
 
-    function toggleEditSalePartialInput() {
-      const status = document.getElementById('edit-sale-status').value;
-      const container = document.getElementById('edit-sale-paid-container');
-      if (status === 'PARTIAL') {
-        container.classList.remove('hidden');
-      } else {
-        container.classList.add('hidden');
-      }
-    }
-
-    function openEditSaleModal(saleId) {
-      const allSales = getAllSalesSorted();
-      const sale = allSales.find(s => s.id === saleId);
-      if (!sale) return;
-
-      document.getElementById('sale-edit-id').value = sale.id;
-      document.getElementById('sale-modal-title').innerText = 'Edit Sale';
-      document.getElementById('sale-modal-submit-btn').innerText = 'Save Sale Changes';
-
-      populateBusinessDropdown(sale.business);
-      document.getElementById('sale-date').value = sale.date;
-      document.getElementById('sale-qty').value = sale.qty;
-      document.getElementById('sale-product').value = sale.product;
-      document.getElementById('sale-customer').value = sale.customer;
-      document.getElementById('sale-buy-price').value = sale.buyPrice;
-      document.getElementById('sale-sell-price').value = sale.sellPrice;
-      document.getElementById('sale-payment-status').value = sale.status;
-
-      if (sale.status === 'PARTIAL') {
-        document.getElementById('sale-partial-container').classList.remove('hidden');
-        document.getElementById('sale-paid-amount').value = sale.paidAmount;
-      } else {
-        document.getElementById('sale-partial-container').classList.add('hidden');
-        document.getElementById('sale-paid-amount').value = '';
-      }
-
-      openModal('addSaleModal');
-    }
-
-    function handleAddSale(e) {
+    function handleAddCategory(e) {
       e.preventDefault();
-      const editId = document.getElementById('sale-edit-id').value;
-      const business = document.getElementById('sale-business-type').value;
-      const date = document.getElementById('sale-date').value;
-      const qty = Number(document.getElementById('sale-qty').value) || 1;
-      const product = document.getElementById('sale-product').value;
-      const customer = document.getElementById('sale-customer').value;
-      const buyPrice = Number(document.getElementById('sale-buy-price').value) || 0;
-      const sellPrice = Number(document.getElementById('sale-sell-price').value) || 0;
-      const status = document.getElementById('sale-payment-status').value;
-      
-      const totalVal = sellPrice * qty;
-      let paidAmount = totalVal;
-      if (status === 'PARTIAL') {
-        paidAmount = Number(document.getElementById('sale-paid-amount').value) || 0;
-      }
-      const unpaid = Math.max(0, totalVal - paidAmount);
-      const profit = (sellPrice - buyPrice) * qty;
+      const name = document.getElementById('cat-name-input').value;
+      const amount = Number(document.getElementById('cat-amount-input').value);
+      if (!name) return;
 
-      const targetMonthKey = date.substring(0, 7);
+      state.categories.push({
+        id: 'cat_' + Date.now(),
+        name,
+        amount: amount || 0,
+        isExpandable: false
+      });
 
-      if (editId) {
-        // Edit existing sale - prevent duplicate transactions or double counting
-        let found = false;
-        Object.keys(state.monthlyData).forEach(mk => {
-          const mData = state.monthlyData[mk];
-          if (mData && mData.sales) {
-            const idx = mData.sales.findIndex(s => s.id === editId);
-            if (idx !== -1) {
-              found = true;
-              if (mk === targetMonthKey) {
-                // Same month update
-                mData.sales[idx] = { id: editId, business, date, qty, product, customer, buyPrice, sellPrice, status, paidAmount, unpaid, profit };
-              } else {
-                // Date changed to a different month
-                mData.sales.splice(idx, 1);
-                const targetMData = getMonthData(targetMonthKey);
-                targetMData.sales.push({ id: editId, business, date, qty, product, customer, buyPrice, sellPrice, status, paidAmount, unpaid, profit });
-              }
-            }
-          }
-        });
-      } else {
-        // New Sale Record
-        const targetMData = getMonthData(targetMonthKey);
-        targetMData.sales.push({
-          id: 'sale_' + Date.now(),
-          business,
-          date,
-          qty,
-          product,
-          customer,
-          buyPrice,
-          sellPrice,
-          status,
-          paidAmount,
-          unpaid,
-          profit
-        });
-      }
-
-      // Re-sort target month sales immediately
-      sortMonthSales(targetMonthKey);
-
-      closeModal('addSaleModal');
-      e.target.reset();
-      document.getElementById('sale-edit-id').value = '';
-      renderAll();
+      closeModal('addCategoryModal');
+      document.getElementById('cat-name-input').value = '';
+      document.getElementById('cat-amount-input').value = '';
       saveUserData();
+      renderAllViews();
     }
 
-    function handleProfitStartChange(val) {
-      state.profitStartSaleId = val;
-      renderAppearichTab();
-      renderProgressTab();
-      saveUserData();
-    }
+    // DAILY EXPENSES TAB
+    function renderDailyExpensesTab() {
+      ensureMonthExists(state.expenseActiveMonth);
+      const mData = state.monthlyData[state.expenseActiveMonth];
+      document.getElementById('daily-expense-month-label').textContent = `Month: ${state.expenseActiveMonth}`;
 
-    function handleAddBusinessOption(e) {
-      e.preventDefault();
-      const bName = document.getElementById('new-business-name-input').value.trim();
-      if (bName && !state.businesses.includes(bName)) {
-        state.businesses.push(bName);
-        state.activeBusiness = bName;
-      }
-      closeModal('addBusinessModal');
-      e.target.reset();
-      renderAppearichTab();
-      saveUserData();
-    }
+      const comparisonGrid = document.getElementById('category-budget-comparison-grid');
+      comparisonGrid.innerHTML = '';
 
-    function openUpdateSalePaymentModal(saleId) {
-      const allSales = getAllSalesSorted();
-      const sale = allSales.find(s => s.id === saleId);
-      if (!sale) return;
-
-      document.getElementById('edit-sale-id').value = sale.id;
-      document.getElementById('edit-sale-status').value = sale.status;
-      document.getElementById('edit-sale-paid-amount').value = sale.paidAmount;
-
-      toggleEditSalePartialInput();
-      openModal('updateSalePaymentModal');
-    }
-
-    function handleUpdateSalePayment(e) {
-      e.preventDefault();
-      const saleId = document.getElementById('edit-sale-id').value;
-      const status = document.getElementById('edit-sale-status').value;
-      const paid = Number(document.getElementById('edit-sale-paid-amount').value) || 0;
-
-      const allSales = getAllSalesSorted();
-      const sale = allSales.find(s => s.id === saleId);
-      if (sale) {
-        sale.status = status;
-        const totalVal = sale.sellPrice * sale.qty;
-        if (status === 'FULL') {
-          sale.paidAmount = totalVal;
-          sale.unpaid = 0;
+      const cats = ['Internet', 'Umeme', 'Taka', 'Transport', 'Expenses', 'Other'];
+      cats.forEach(c => {
+        let target = 0;
+        if (['Internet', 'Umeme', 'Taka', 'Transport'].includes(c)) {
+          const uCat = state.categories.find(cat => cat.id === 'cat-utilities');
+          target = uCat ? (uCat.amount / 4) : 0;
+        } else if (c === 'Expenses') {
+          const eCat = state.categories.find(cat => cat.name === 'Expenses Target' || cat.name === 'Expenses');
+          target = eCat ? eCat.amount : 0;
         } else {
-          sale.paidAmount = paid;
-          sale.unpaid = Math.max(0, totalVal - paid);
+          const oCat = state.categories.find(cat => cat.name === 'Other');
+          target = oCat ? oCat.amount : 0;
         }
+
+        let spent = 0;
+        if (['Internet', 'Umeme', 'Taka', 'Transport'].includes(c)) {
+          spent = mData.utilitiesSubSpent ? (mData.utilitiesSubSpent[c] || 0) : 0;
+        } else {
+          spent = mData.categorySpent ? (mData.categorySpent[c] || 0) : 0;
+        }
+
+        const rem = target - spent;
+        const pct = target > 0 ? Math.min(100, Math.round((spent / target) * 100)) : 0;
+
+        const card = document.createElement('div');
+        card.className = 'p-4 rounded-2xl bg-white border border-gray-100 shadow-premium space-y-2';
+        card.innerHTML = `
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-xs text-brand-black uppercase">${c}</span>
+            <span class="text-[10px] font-bold text-brand-muted">${pct}% used</span>
+          </div>
+          <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+            <div class="h-full bg-brand-black" style="width: ${pct}%"></div>
+          </div>
+          <div class="flex justify-between text-[11px] text-brand-muted pt-1">
+            <span>Spent: <strong>${formatMoney(spent)}</strong></span>
+            <span>Target: <strong>${formatMoney(target)}</strong></span>
+          </div>
+        `;
+        comparisonGrid.appendChild(card);
+      });
+
+      const tableBody = document.getElementById('daily-expense-table-body');
+      tableBody.innerHTML = '';
+      const expList = mData.expenses || [];
+      document.getElementById('daily-expense-log-count').textContent = `${expList.length} Expenses Recorded`;
+
+      if (expList.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-brand-muted">No expenses recorded for this month.</td></tr>';
+        return;
       }
 
-      closeModal('updateSalePaymentModal');
-      renderAll();
-      saveUserData();
+      expList.forEach(ex => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-gray-50';
+        tr.innerHTML = `
+          <td class="py-3">${ex.date}</td>
+          <td class="py-3 font-bold text-brand-black">${ex.name}</td>
+          <td class="py-3"><span class="px-2 py-0.5 rounded-full bg-gray-100 font-semibold">${ex.category}</span></td>
+          <td class="py-3">${ex.account}</td>
+          <td class="py-3 text-right font-bold text-brand-black">${formatMoney(ex.amount)}</td>
+        `;
+        tableBody.appendChild(tr);
+      });
     }
 
     function handleAddTransaction(e) {
@@ -2033,166 +1818,438 @@
       const name = document.getElementById('tx-name').value;
       const category = document.getElementById('tx-category').value;
       const account = document.getElementById('tx-account').value;
-      const amount = Number(document.getElementById('tx-amount').value) || 0;
+      const amount = Number(document.getElementById('tx-amount').value);
       const date = document.getElementById('tx-date').value;
 
-      const mKey = date.substring(0, 7);
-      const mData = getMonthData(mKey);
+      if (!name || isNaN(amount) || !date) return;
 
-      mData.expenses.push({ id: 'tx_' + Date.now(), name, category, account, amount, date });
+      const mKey = date.substring(0, 7);
+      ensureMonthExists(mKey);
+
+      state.monthlyData[mKey].expenses.push({
+        id: 'exp_' + Date.now(),
+        name,
+        category,
+        account,
+        amount,
+        date
+      });
 
       if (['Internet', 'Umeme', 'Taka', 'Transport'].includes(category)) {
-        mData.utilitiesSubSpent[category] = (mData.utilitiesSubSpent[category] || 0) + amount;
+        state.monthlyData[mKey].utilitiesSubSpent[category] = (state.monthlyData[mKey].utilitiesSubSpent[category] || 0) + amount;
       } else {
-        mData.categorySpent[category] = (mData.categorySpent[category] || 0) + amount;
+        state.monthlyData[mKey].categorySpent[category] = (state.monthlyData[mKey].categorySpent[category] || 0) + amount;
       }
 
       if (state.accounts[account] !== undefined) {
-        state.accounts[account] -= amount;
+        state.accounts[account] = Math.max(0, state.accounts[account] - amount);
       }
 
       closeModal('addTransactionModal');
-      e.target.reset();
-      renderAll();
+      document.getElementById('tx-name').value = '';
+      document.getElementById('tx-amount').value = '';
       saveUserData();
+      renderAllViews();
     }
 
-    function handleTransfer(e) {
-      e.preventDefault();
-      const from = document.getElementById('tr-from').value;
-      const to = document.getElementById('tr-to').value;
-      const amount = Number(document.getElementById('tr-amount').value) || 0;
+    // INVESTMENT TAB
+    function renderInvestmentTab() {
+      const inv = state.investment;
+      document.getElementById('inv-total-invested').textContent = formatMoney(inv.totalInvested);
+      document.getElementById('inv-current-value').textContent = formatMoney(inv.currentValue);
 
-      if (from !== to && state.accounts[from] !== undefined && state.accounts[to] !== undefined) {
-        state.accounts[from] -= amount;
-        state.accounts[to] += amount;
+      const gain = inv.currentValue - inv.totalInvested;
+      const returnPct = inv.totalInvested > 0 ? ((gain / inv.totalInvested) * 100).toFixed(2) : '0.00';
+
+      const gainEl = document.getElementById('inv-gain-loss');
+      gainEl.textContent = (gain >= 0 ? '+' : '') + formatMoney(gain);
+      gainEl.className = `font-display text-3xl font-extrabold mt-1 ${gain >= 0 ? 'text-emerald-600' : 'text-red-500'}`;
+
+      const pctEl = document.getElementById('inv-percentage-return');
+      pctEl.textContent = (gain >= 0 ? '+' : '') + `${returnPct}%`;
+      pctEl.className = `font-display text-3xl font-extrabold mt-1 ${gain >= 0 ? 'text-emerald-600' : 'text-red-500'}`;
+
+      const logList = document.getElementById('investment-history-list');
+      logList.innerHTML = '';
+
+      if (!inv.history || inv.history.length === 0) {
+        logList.innerHTML = '<p class="text-xs text-brand-muted col-span-3">No investment activity logged yet.</p>';
+        return;
       }
 
-      closeModal('transferModal');
-      e.target.reset();
-      renderAccountsTab();
-      renderHomeDashboard();
-      saveUserData();
-    }
-
-    function handleAddMoneyAccount(e) {
-      e.preventDefault();
-      const account = document.getElementById('am-account').value;
-      const amount = Number(document.getElementById('am-amount').value) || 0;
-
-      if (state.accounts[account] !== undefined) {
-        state.accounts[account] += amount;
-      }
-
-      closeModal('addMoneyModal');
-      e.target.reset();
-      renderAccountsTab();
-      renderHomeDashboard();
-      saveUserData();
+      inv.history.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'p-4 rounded-2xl bg-white border border-gray-100 shadow-premium flex justify-between items-center';
+        card.innerHTML = `
+          <div>
+            <p class="font-bold text-xs text-brand-black uppercase">${item.type}</p>
+            <p class="text-[10px] text-brand-muted">${item.date}</p>
+          </div>
+          <p class="font-display font-bold text-sm text-brand-black">${formatMoney(item.amount)}</p>
+        `;
+        logList.appendChild(card);
+      });
     }
 
     function handleAddInvestmentCapital(e) {
       e.preventDefault();
-      const amount = Number(document.getElementById('inv-add-amount').value) || 0;
-      const dateStr = new Date().toISOString().split('T')[0];
+      const amt = Number(document.getElementById('inv-add-amount').value);
+      if (isNaN(amt) || amt <= 0) return;
 
-      state.investments.totalInvested += amount;
-      state.investments.currentValue += amount;
-      state.investments.history.push({ type: 'Capital Addition', amount, date: dateStr });
+      state.investment.totalInvested += amt;
+      state.investment.currentValue += amt;
+      state.investment.history.push({
+        id: 'inv_' + Date.now(),
+        type: 'Capital Added',
+        amount: amt,
+        date: new Date().toISOString().split('T')[0]
+      });
 
       closeModal('addInvestmentModal');
-      e.target.reset();
-      renderInvestmentTab();
+      document.getElementById('inv-add-amount').value = '';
       saveUserData();
+      renderInvestmentTab();
     }
 
     function handleUpdateInvestmentValue(e) {
       e.preventDefault();
-      const val = Number(document.getElementById('inv-update-value').value) || 0;
-      const dateStr = new Date().toISOString().split('T')[0];
+      const val = Number(document.getElementById('inv-update-value').value);
+      if (isNaN(val)) return;
 
-      state.investments.currentValue = val;
-      state.investments.history.push({ type: 'Valuation Update', amount: val, date: dateStr });
+      state.investment.currentValue = val;
+      state.investment.history.push({
+        id: 'inv_' + Date.now(),
+        type: 'Valuation Update',
+        amount: val,
+        date: new Date().toISOString().split('T')[0]
+      });
 
       closeModal('updateInvestmentModal');
-      e.target.reset();
+      document.getElementById('inv-update-value').value = '';
+      saveUserData();
       renderInvestmentTab();
-      saveUserData();
     }
 
-    function handleAddCategory(e) {
-      e.preventDefault();
-      const name = document.getElementById('cat-name-input').value;
-      const amount = Number(document.getElementById('cat-amount-input').value) || 0;
+    // APPEARICH TAB & SALES LOG
+    function populateBusinessDropdowns() {
+      const select1 = document.getElementById('sale-business-type');
+      const select2 = document.getElementById('full-edit-sale-business-type');
+      if (select1) {
+        select1.innerHTML = state.businessTypes.map(b => `<option value="${b}">${b}</option>`).join('');
+      }
+      if (select2) {
+        select2.innerHTML = state.businessTypes.map(b => `<option value="${b}">${b}</option>`).join('');
+      }
+    }
 
-      const id = 'cat-' + name.toLowerCase().replace(/\s+/g, '-');
-      if (!state.categories.find(c => c.id === id)) {
-        state.categories.push({ id, name, amount, isExpandable: false });
+    function renderAppearichTab() {
+      populateBusinessDropdowns();
+
+      // Render business filter tabs
+      const bar = document.getElementById('business-types-bar');
+      bar.innerHTML = state.businessTypes.map(b => `
+        <button onclick="setAppearichBusinessFilter('${b}')" class="px-4 py-1.5 rounded-xl text-xs font-bold transition flex-shrink-0 ${state.activeBusinessType === b ? 'bg-brand-black text-white' : 'bg-gray-100 text-brand-muted hover:text-brand-black'}">
+          ${b}
+        </button>
+      `).join('');
+
+      document.getElementById('active-business-view-label').textContent = `Active Business View: ${state.activeBusinessType}`;
+      document.getElementById('profit-start-sale-input').value = state.profitStartSaleNum;
+      document.getElementById('profit-start-sale-display').textContent = state.profitStartSaleNum;
+
+      // Filter sales for active business
+      const activeSales = state.allSalesList.filter(s => s.businessType === state.activeBusinessType);
+
+      const todayStr = new Date().toISOString().split('T')[0];
+      const todaySalesList = activeSales.filter(s => s.date === todayStr);
+      const todayReceived = todaySalesList.reduce((sum, s) => sum + Number(s.paidAmount), 0);
+      const todayProfit = todaySalesList.reduce((sum, s) => sum + Number(s.profit), 0);
+
+      const thisMonthStr = getCurrentMonthKey();
+      const monthSalesList = activeSales.filter(s => s.date.startsWith(thisMonthStr));
+      const monthRevenue = monthSalesList.reduce((sum, s) => sum + (Number(s.sellPrice) * Number(s.qty)), 0);
+
+      const totalOutstanding = activeSales.reduce((sum, s) => {
+        const totalVal = Number(s.sellPrice) * Number(s.qty);
+        return sum + Math.max(0, totalVal - Number(s.paidAmount));
+      }, 0);
+
+      const totalProfitCalculated = calculateTotalProfitFromStartingPoint();
+
+      document.getElementById('app-today-sales').textContent = formatMoney(todayReceived);
+      document.getElementById('app-today-profit').textContent = formatMoney(todayProfit);
+      document.getElementById('app-month-revenue').textContent = formatMoney(monthRevenue);
+      document.getElementById('app-total-outstanding').textContent = formatMoney(totalOutstanding);
+      document.getElementById('app-total-profit').textContent = formatMoney(totalProfitCalculated);
+
+      // Period stats logic
+      const now = new Date();
+      let filteredPeriodSales = activeSales;
+      if (state.activePeriod === 'day') {
+        filteredPeriodSales = activeSales.filter(s => s.date === todayStr);
+      } else if (state.activePeriod === 'week') {
+        const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        filteredPeriodSales = activeSales.filter(s => new Date(s.date) >= oneWeekAgo);
+      } else if (state.activePeriod === 'month') {
+        filteredPeriodSales = activeSales.filter(s => s.date.startsWith(thisMonthStr));
+      } else if (state.activePeriod === 'year') {
+        const yearStr = String(now.getFullYear());
+        filteredPeriodSales = activeSales.filter(s => s.date.startsWith(yearStr));
       }
 
-      closeModal('addCategoryModal');
-      e.target.reset();
-      renderBudgetTab();
-      saveUserData();
+      const pSold = filteredPeriodSales.reduce((sum, s) => sum + Number(s.qty), 0);
+      const pRev = filteredPeriodSales.reduce((sum, s) => sum + (Number(s.sellPrice) * Number(s.qty)), 0);
+      const pCost = filteredPeriodSales.reduce((sum, s) => sum + (Number(s.costPrice) * Number(s.qty)), 0);
+      const pProfit = pRev - pCost;
+      const pMargin = pRev > 0 ? ((pProfit / pRev) * 100).toFixed(1) : '0';
+
+      document.getElementById('app-period-sold').textContent = pSold;
+      document.getElementById('app-period-revenue').textContent = formatMoney(pRev);
+      document.getElementById('app-period-cost').textContent = formatMoney(pCost);
+      document.getElementById('app-period-margin').textContent = `${pMargin}%`;
+
+      // Render Sales Transactions Log Table (NEWEST -> OLDEST automatically)
+      const tableBody = document.getElementById('appearich-sales-table');
+      tableBody.innerHTML = '';
+
+      if (state.allSalesList.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="12" class="py-6 text-center text-brand-muted">No sales history recorded yet.</td></tr>';
+        return;
+      }
+
+      state.allSalesList.forEach(s => {
+        const totalVal = Number(s.sellPrice) * Number(s.qty);
+        const costVal = Number(s.costPrice) * Number(s.qty);
+        const isExcluded = (s.saleNum || 0) < Number(state.profitStartSaleNum);
+        const isChecked = state.selectedSaleIds.has(s.id);
+
+        const tr = document.createElement('tr');
+        tr.className = `hover:bg-gray-50/80 transition ${isExcluded ? 'opacity-60 bg-gray-50/50' : ''}`;
+        tr.innerHTML = `
+          <td class="py-3 px-2">
+            <input type="checkbox" onchange="toggleSelectSale('${s.id}', this.checked)" ${isChecked ? 'checked' : ''} class="rounded border-gray-300">
+          </td>
+          <td class="py-3 font-bold text-brand-black">
+            <span class="px-2 py-0.5 rounded-md bg-gray-100 text-brand-black">${s.saleNumFormatted || ('Sale #' + String(s.saleNum).padStart(3, '0'))}</span>
+          </td>
+          <td class="py-3 text-xs whitespace-nowrap">${s.date}</td>
+          <td class="py-3"><span class="px-2 py-0.5 rounded-full bg-gray-100 font-bold text-[10px] uppercase">${s.businessType}</span></td>
+          <td class="py-3 font-bold text-brand-black">${s.productName}</td>
+          <td class="py-3 text-center font-bold">${s.qty}</td>
+          <td class="py-3">${formatMoney(costVal)}</td>
+          <td class="py-3 font-bold text-brand-black">${formatMoney(totalVal)}</td>
+          <td class="py-3 text-brand-muted">${s.customer}</td>
+          <td class="py-3 font-bold ${s.profit >= 0 ? 'text-emerald-600' : 'text-red-500'}">
+            ${formatMoney(s.profit)}
+            ${isExcluded ? '<span class="block text-[9px] text-gray-400 font-normal">(Excluded)</span>' : ''}
+          </td>
+          <td class="py-3">
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${s.status === 'FULL' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-red-50 text-red-700 border border-red-200'}">
+              ${s.status}
+            </span>
+          </td>
+          <td class="py-3 text-right whitespace-nowrap space-x-2">
+            <button onclick="openFullEditSaleModal('${s.id}')" class="text-xs font-bold text-brand-black hover:underline">Edit</button>
+            <button onclick="handleDeleteSingleSale('${s.id}')" class="text-xs font-bold text-red-600 hover:underline">Delete</button>
+          </td>
+        `;
+        tableBody.appendChild(tr);
+      });
+
+      updateBulkDeleteButton();
     }
 
-    function handleCategoryAmountInput(catId, val) {
-      const cat = state.categories.find(c => c.id === catId);
-      if (cat) {
-        cat.amount = Number(val) || 0;
-        renderBudgetTab();
-        renderHomeDashboard();
+    function setAppearichBusinessFilter(b) {
+      state.activeBusinessType = b;
+      saveUserData();
+      renderAppearichTab();
+    }
+
+    function switchAppearichPeriod(period) {
+      state.activePeriod = period;
+      document.querySelectorAll('.app-period-btn').forEach(btn => {
+        btn.classList.remove('bg-brand-black', 'text-white', 'active');
+        btn.classList.add('bg-gray-100', 'text-brand-muted');
+      });
+      const activeBtn = document.getElementById('app-period-' + period);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-brand-black', 'text-white', 'active');
+        activeBtn.classList.remove('bg-gray-100', 'text-brand-muted');
+      }
+      renderAppearichTab();
+    }
+
+    function toggleSalePartialInput() {
+      const status = document.getElementById('sale-payment-status').value;
+      const container = document.getElementById('sale-partial-container');
+      if (status === 'PARTIAL') container.classList.remove('hidden');
+      else container.classList.add('hidden');
+    }
+
+    function toggleFullEditSalePartialInput() {
+      const status = document.getElementById('full-edit-sale-payment-status').value;
+      const container = document.getElementById('full-edit-sale-partial-container');
+      if (status === 'PARTIAL') container.classList.remove('hidden');
+      else container.classList.add('hidden');
+    }
+
+    function handleAddSale(e) {
+      e.preventDefault();
+      const bType = document.getElementById('sale-business-type').value;
+      const date = document.getElementById('sale-date').value;
+      const qty = Number(document.getElementById('sale-qty').value) || 1;
+      const product = document.getElementById('sale-product').value;
+      const customer = document.getElementById('sale-customer').value;
+      const buyPrice = Number(document.getElementById('sale-buy-price').value) || 0;
+      const sellPrice = Number(document.getElementById('sale-sell-price').value) || 0;
+      const status = document.getElementById('sale-payment-status').value;
+      let paid = status === 'FULL' ? (sellPrice * qty) : (Number(document.getElementById('sale-paid-amount').value) || 0);
+
+      const currentSeq = state.nextSaleSeq++;
+      const saleObj = {
+        id: 'sale_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
+        saleNum: currentSeq,
+        saleNumFormatted: 'Sale #' + String(currentSeq).padStart(3, '0'),
+        date,
+        businessType: bType,
+        productName: product,
+        qty,
+        costPrice: buyPrice,
+        sellPrice,
+        customer,
+        status,
+        paidAmount: paid,
+        profit: (sellPrice - buyPrice) * qty
+      };
+
+      state.allSalesList.push(saleObj);
+      sortAllSalesChronologically();
+      syncSalesToMonthlyData();
+
+      closeModal('addSaleModal');
+      saveUserData();
+      renderAllViews();
+    }
+
+    // FULLY EDITABLE SALES HISTORY
+    function openFullEditSaleModal(saleId) {
+      const s = state.allSalesList.find(x => x.id === saleId);
+      if (!s) return;
+
+      populateBusinessDropdowns();
+      document.getElementById('full-edit-sale-id').value = s.id;
+      document.getElementById('edit-sale-num-header').textContent = s.saleNumFormatted || ('Sale #' + String(s.saleNum).padStart(3, '0'));
+      document.getElementById('full-edit-sale-business-type').value = s.businessType || state.businessTypes[0];
+      document.getElementById('full-edit-sale-date').value = s.date;
+      document.getElementById('full-edit-sale-qty').value = s.qty;
+      document.getElementById('full-edit-sale-product').value = s.productName;
+      document.getElementById('full-edit-sale-customer').value = s.customer;
+      document.getElementById('full-edit-sale-buy-price').value = s.costPrice;
+      document.getElementById('full-edit-sale-sell-price').value = s.sellPrice;
+      document.getElementById('full-edit-sale-payment-status').value = s.status;
+      document.getElementById('full-edit-sale-paid-amount').value = s.paidAmount;
+
+      toggleFullEditSalePartialInput();
+      openModal('editSaleModal');
+    }
+
+    function handleSaveEditedSale(e) {
+      e.preventDefault();
+      const saleId = document.getElementById('full-edit-sale-id').value;
+      const s = state.allSalesList.find(x => x.id === saleId);
+      if (!s) return;
+
+      s.businessType = document.getElementById('full-edit-sale-business-type').value;
+      s.date = document.getElementById('full-edit-sale-date').value;
+      s.qty = Number(document.getElementById('full-edit-sale-qty').value) || 1;
+      s.productName = document.getElementById('full-edit-sale-product').value;
+      s.customer = document.getElementById('full-edit-sale-customer').value;
+      s.costPrice = Number(document.getElementById('full-edit-sale-buy-price').value) || 0;
+      s.sellPrice = Number(document.getElementById('full-edit-sale-sell-price').value) || 0;
+      s.status = document.getElementById('full-edit-sale-payment-status').value;
+      s.paidAmount = s.status === 'FULL' ? (s.sellPrice * s.qty) : (Number(document.getElementById('full-edit-sale-paid-amount').value) || 0);
+      s.profit = (s.sellPrice - s.costPrice) * s.qty;
+
+      sortAllSalesChronologically();
+      syncSalesToMonthlyData();
+
+      closeModal('editSaleModal');
+      saveUserData();
+      renderAllViews();
+    }
+
+    // DELETE A SINGLE SALE WITH CONFIRMATION
+    function handleDeleteSingleSale(saleId) {
+      const s = state.allSalesList.find(x => x.id === saleId);
+      if (!s) return;
+
+      const numStr = s.saleNumFormatted || ('Sale #' + String(s.saleNum).padStart(3, '0'));
+      if (confirm(`Are you sure you want to delete ${numStr}? This action cannot be undone.`)) {
+        state.allSalesList = state.allSalesList.filter(x => x.id !== saleId);
+        state.selectedSaleIds.delete(saleId);
+
+        syncSalesToMonthlyData();
+        validateProfitStartingPoint();
         saveUserData();
+        renderAllViews();
       }
     }
 
-    function toggleUtilitiesAccordion() {
-      const acc = document.getElementById('utilities-accordion');
-      const chev = document.getElementById('utilities-chevron');
-      if (acc) {
-        acc.classList.toggle('expanded');
-        if (chev) chev.classList.toggle('rotate-180');
+    // BULK DELETE MULTIPLE SALES
+    function toggleSelectSale(id, isChecked) {
+      if (isChecked) state.selectedSaleIds.add(id);
+      else state.selectedSaleIds.delete(id);
+      updateBulkDeleteButton();
+    }
+
+    function toggleSelectAllSales(isChecked) {
+      if (isChecked) {
+        state.allSalesList.forEach(s => state.selectedSaleIds.add(s.id));
+      } else {
+        state.selectedSaleIds.clear();
+      }
+      renderAppearichTab();
+    }
+
+    function updateBulkDeleteButton() {
+      const btn = document.getElementById('bulk-delete-btn');
+      const countEl = document.getElementById('selected-sales-count');
+      const count = state.selectedSaleIds.size;
+      countEl.textContent = count;
+      if (count > 0) btn.classList.remove('hidden');
+      else btn.classList.add('hidden');
+    }
+
+    function handleBulkDeleteSales() {
+      const count = state.selectedSaleIds.size;
+      if (count === 0) return;
+
+      if (confirm(`Are you sure you want to delete ${count} selected sales? This action cannot be undone.`)) {
+        state.allSalesList = state.allSalesList.filter(s => !state.selectedSaleIds.has(s.id));
+        state.selectedSaleIds.clear();
+
+        syncSalesToMonthlyData();
+        validateProfitStartingPoint();
+        saveUserData();
+        renderAllViews();
       }
     }
 
-    function handleAddLoan(e) {
+    function handleAddBusinessOption(e) {
       e.preventDefault();
-      const borrower = document.getElementById('loan-borrower').value;
-      const amount = Number(document.getElementById('loan-amount').value) || 0;
-      const date = document.getElementById('loan-date').value;
-      const paid = Number(document.getElementById('loan-paid').value) || 0;
-      const note = document.getElementById('loan-note').value;
-
-      state.loans.push({ id: 'loan_' + Date.now(), borrower, amount, date, paid, note });
-
-      closeModal('addLoanModal');
-      e.target.reset();
-      renderLoansTab();
+      const name = document.getElementById('new-business-name-input').value.trim();
+      if (!name) return;
+      if (!state.businessTypes.includes(name)) {
+        state.businessTypes.push(name);
+      }
+      state.activeBusinessType = name;
+      closeModal('addBusinessModal');
+      document.getElementById('new-business-name-input').value = '';
       saveUserData();
+      renderAllViews();
     }
 
-    function openUpdateLoanModal(id) {
-      const loan = state.loans.find(l => l.id === id);
-      if (!loan) return;
-      document.getElementById('edit-loan-id').value = loan.id;
-      document.getElementById('edit-loan-paid').value = loan.paid;
-      openModal('updateLoanModal');
-    }
-
-    function handleUpdateLoan(e) {
-      e.preventDefault();
-      const id = document.getElementById('edit-loan-id').value;
-      const paid = Number(document.getElementById('edit-loan-paid').value) || 0;
-
-      const loan = state.loans.find(l => l.id === id);
-      if (loan) loan.paid = paid;
-
-      closeModal('updateLoanModal');
-      renderLoansTab();
-      saveUserData();
-    }
-
-    // EXCEL IMPORT ENGINE
+    // EXCEL IMPORT WITH PERMANENT SALES NUMBERS
     function previewExcelFile(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -2203,74 +2260,29 @@
         const workbook = XLSX.read(data, { type: 'array' });
         const firstSheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[firstSheetName];
-        const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        const rawJson = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-        pendingExcelRecords = [];
-        if (json.length < 2) return;
+        pendingExcelRecords = parseExcelSalesData(rawJson);
+        const previewBody = document.getElementById('excel-preview-body');
+        previewBody.innerHTML = '';
+        document.getElementById('preview-count').textContent = pendingExcelRecords.length;
 
-        const headers = json[0].map(h => String(h || '').trim().toLowerCase());
-        
-        for (let i = 1; i < json.length; i++) {
-          const row = json[i];
-          if (!row || row.length === 0) continue;
-
-          let dateStr = String(row[0] || '').trim();
-          let product = String(row[1] || 'Perfume').trim();
-          let qty = Number(row[3]) || 1;
-          let sellPrice = Number(row[5]) || Number(row[4]) || 0;
-          let paidAmount = Number(row[5]) || 0;
-          let status = String(row[6] || 'FULL').toUpperCase().includes('PARTIAL') ? 'PARTIAL' : 'FULL';
-          let profit = Number(row[7]) || 0;
-          let customer = String(row[8] || 'Client').trim();
-
-          let parsedDate = new Date().toISOString().split('T')[0];
-          if (dateStr) {
-            const parts = dateStr.split(/[\s\-\/]+/);
-            if (parts.length >= 2) {
-              const day = String(parts[0]).padStart(2, '0');
-              const mon = MONTH_MAP[parts[1].toLowerCase()] || '01';
-              const yr = parts[2] ? (parts[2].length === 2 ? '20' + parts[2] : parts[2]) : new Date().getFullYear();
-              parsedDate = `${yr}-${mon}-${day}`;
-            }
-          }
-
-          const buyPrice = sellPrice > profit ? (sellPrice - profit) : 0;
-          const unpaid = status === 'FULL' ? 0 : Math.max(0, (sellPrice * qty) - paidAmount);
-
-          pendingExcelRecords.push({
-            id: 'ex_' + Date.now() + '_' + i,
-            business: state.activeBusiness,
-            date: parsedDate,
-            qty,
-            product,
-            customer,
-            buyPrice,
-            sellPrice,
-            status,
-            paidAmount: status === 'FULL' ? sellPrice * qty : paidAmount,
-            unpaid,
-            profit
-          });
-        }
-
-        document.getElementById('preview-count').innerText = pendingExcelRecords.length;
-        const tbody = document.getElementById('excel-preview-body');
-        tbody.innerHTML = '';
-        pendingExcelRecords.slice(0, 10).forEach(r => {
+        pendingExcelRecords.slice(0, 15).forEach(r => {
           const tr = document.createElement('tr');
+          tr.className = 'hover:bg-gray-50';
           tr.innerHTML = `
             <td class="p-2">${r.date}</td>
-            <td class="p-2 font-bold">${r.product}</td>
-            <td class="p-2">-</td>
+            <td class="p-2 font-bold">${r.productName}</td>
+            <td class="p-2">${r.ml || '-'}</td>
             <td class="p-2">${r.qty}</td>
-            <td class="p-2">${r.sellPrice}</td>
-            <td class="p-2">${r.sellPrice * r.qty}</td>
-            <td class="p-2">${r.status}</td>
-            <td class="p-2 font-bold text-emerald-600">${r.profit}</td>
+            <td class="p-2">${formatMoney(r.sellPrice * r.qty)}</td>
+            <td class="p-2">${formatMoney(r.paidAmount)}</td>
+            <td class="p-2"><span class="px-1.5 py-0.5 rounded text-[9px] ${r.status === 'FULL' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}">${r.status}</span></td>
+            <td class="p-2 text-emerald-600 font-bold">${formatMoney(r.profit)}</td>
             <td class="p-2">${r.customer}</td>
-            <td class="p-2">${r.sellPrice * r.qty}</td>
+            <td class="p-2">${formatMoney(r.costPrice * r.qty)}</td>
           `;
-          tbody.appendChild(tr);
+          previewBody.appendChild(tr);
         });
 
         document.getElementById('excel-preview-container').classList.remove('hidden');
@@ -2278,22 +2290,314 @@
       reader.readAsArrayBuffer(file);
     }
 
-    function confirmExcelImport() {
-      if (pendingExcelRecords.length === 0) return;
+    function parseExcelSalesData(rows) {
+      if (!rows || rows.length < 2) return [];
 
-      pendingExcelRecords.forEach(rec => {
-        const mKey = rec.date.substring(0, 7);
-        const mData = getMonthData(mKey);
-        mData.sales.push(rec);
-        sortMonthSales(mKey);
+      let headersIdx = 0;
+      for (let i = 0; i < Math.min(10, rows.length); i++) {
+        const rStr = rows[i].map(x => String(x).toLowerCase()).join(' ');
+        if (rStr.includes('date') || rStr.includes('perfume') || rStr.includes('amount') || rStr.includes('sale')) {
+          headersIdx = i;
+          break;
+        }
+      }
+
+      const headers = rows[headersIdx].map(x => String(x).toLowerCase().trim());
+      const findCol = (keys) => headers.findIndex(h => keys.some(k => h.includes(k)));
+
+      const dateCol = findCol(['date', 's/n']);
+      const nameCol = findCol(['perfume', 'product', 'item']);
+      const mlCol = findCol(['ml']);
+      const qtyCol = findCol(['qty', 'quantity']);
+      const amountCol = findCol(['amount']);
+      const saleCol = findCol(['sale', 'paid', 'received']);
+      const statusCol = findCol(['status']);
+      const profitCol = findCol(['profit']);
+      const customerCol = findCol(['customer', 'details', 'name']);
+      const costCol = findCol(['expected', 'buying', 'cost']);
+
+      const records = [];
+      let currentYear = '2025';
+
+      for (let i = headersIdx + 1; i < rows.length; i++) {
+        const row = rows[i];
+        if (!row || row.length === 0) continue;
+
+        const rawName = nameCol >= 0 ? String(row[nameCol] || '').trim() : '';
+        if (!rawName) continue;
+
+        let rawDate = dateCol >= 0 ? String(row[dateCol] || '').trim() : '';
+        let parsedDate = '2025-05-01';
+
+        if (rawDate) {
+          if (rawDate.match(/\d{4}-\d{2}-\d{2}/)) {
+            parsedDate = rawDate;
+          } else {
+            const parts = rawDate.split(/[\s\/\-]+/);
+            if (parts.length >= 2) {
+              let day = parseInt(parts[0], 10) || 1;
+              let monthStr = parts[1].toLowerCase();
+              let mNum = MONTH_MAP[monthStr] || '05';
+              if (parts[2] && parts[2].length === 4) currentYear = parts[2];
+              parsedDate = `${currentYear}-${mNum}-${String(day).padStart(2, '0')}`;
+            }
+          }
+        }
+
+        const qty = qtyCol >= 0 ? (Number(row[qtyCol]) || 1) : 1;
+        const totalAmount = amountCol >= 0 ? (Number(row[amountCol]) || 0) : 0;
+        const totalPaid = saleCol >= 0 ? (Number(row[saleCol]) || totalAmount) : totalAmount;
+        const totalProfit = profitCol >= 0 ? (Number(row[profitCol]) || 0) : 0;
+        const totalCost = costCol >= 0 ? (Number(row[costCol]) || (totalAmount - totalProfit)) : (totalAmount - totalProfit);
+
+        const unitSell = qty > 0 ? (totalAmount / qty) : totalAmount;
+        const unitCost = qty > 0 ? (totalCost / qty) : totalCost;
+
+        let status = 'FULL';
+        if (statusCol >= 0) {
+          const stStr = String(row[statusCol] || '').toUpperCase();
+          if (stStr.includes('PARTIAL') || stStr.includes('UNPAID')) status = 'PARTIAL';
+        } else if (totalPaid < totalAmount) {
+          status = 'PARTIAL';
+        }
+
+        records.push({
+          date: parsedDate,
+          productName: rawName,
+          ml: mlCol >= 0 ? String(row[mlCol] || '') : '',
+          qty,
+          costPrice: unitCost,
+          sellPrice: unitSell,
+          paidAmount: totalPaid,
+          status,
+          profit: totalProfit || ((unitSell - unitCost) * qty),
+          customer: customerCol >= 0 ? String(row[customerCol] || 'Excel Import') : 'Excel Import'
+        });
+      }
+
+      return records;
+    }
+
+    function confirmExcelImport() {
+      if (!pendingExcelRecords || pendingExcelRecords.length === 0) return;
+
+      // Assign stable incrementing Sales Numbers to imported records
+      pendingExcelRecords.forEach(r => {
+        const currentSeq = state.nextSaleSeq++;
+        state.allSalesList.push({
+          id: 'sale_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
+          saleNum: currentSeq,
+          saleNumFormatted: 'Sale #' + String(currentSeq).padStart(3, '0'),
+          date: r.date,
+          businessType: 'Appearich Main',
+          productName: r.productName,
+          qty: r.qty,
+          costPrice: r.costPrice,
+          sellPrice: r.sellPrice,
+          customer: r.customer,
+          status: r.status,
+          paidAmount: r.paidAmount,
+          profit: r.profit
+        });
       });
 
-      pendingExcelRecords = [];
+      sortAllSalesChronologically();
+      syncSalesToMonthlyData();
+
       closeModal('importExcelModal');
+      pendingExcelRecords = [];
       document.getElementById('excel-file-input').value = '';
       document.getElementById('excel-preview-container').classList.add('hidden');
-      renderAll();
+
       saveUserData();
+      renderAllViews();
+      alert('Excel sales successfully imported and permanently attached to your account!');
+    }
+
+    // ACCOUNTS TAB
+    function renderAccountsTab() {
+      const totalLiquid = Object.values(state.accounts).reduce((sum, a) => sum + Number(a), 0);
+      document.getElementById('accounts-total-money').textContent = formatMoney(totalLiquid);
+
+      const grid = document.getElementById('account-cards-grid');
+      grid.innerHTML = '';
+
+      Object.keys(state.accounts).forEach(acc => {
+        const bal = state.accounts[acc];
+        const card = document.createElement('div');
+        card.className = 'p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4';
+        card.innerHTML = `
+          <div class="flex justify-between items-center">
+            <span class="text-xs font-bold uppercase tracking-wider text-brand-muted">${acc}</span>
+            <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center font-bold text-xs text-brand-black">${acc.charAt(0)}</div>
+          </div>
+          <div>
+            <p class="text-xs text-brand-muted">Balance</p>
+            <p class="font-display text-2xl font-extrabold text-brand-black mt-0.5">${formatMoney(bal)}</p>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function handleTransfer(e) {
+      e.preventDefault();
+      const from = document.getElementById('tr-from').value;
+      const to = document.getElementById('tr-to').value;
+      const amt = Number(document.getElementById('tr-amount').value);
+
+      if (from === to || isNaN(amt) || amt <= 0) return;
+      if ((state.accounts[from] || 0) < amt) {
+        alert('Insufficient balance in source account.');
+        return;
+      }
+
+      state.accounts[from] -= amt;
+      state.accounts[to] = (state.accounts[to] || 0) + amt;
+
+      closeModal('transferModal');
+      document.getElementById('tr-amount').value = '';
+      saveUserData();
+      renderAccountsTab();
+      renderHomeDashboard();
+    }
+
+    function handleAddMoneyAccount(e) {
+      e.preventDefault();
+      const acc = document.getElementById('am-account').value;
+      const amt = Number(document.getElementById('am-amount').value);
+      if (isNaN(amt) || amt <= 0) return;
+
+      state.accounts[acc] = (state.accounts[acc] || 0) + amt;
+
+      closeModal('addMoneyModal');
+      document.getElementById('am-amount').value = '';
+      saveUserData();
+      renderAccountsTab();
+      renderHomeDashboard();
+    }
+
+    // LOANS TAB
+    function renderLoansTab() {
+      const list = state.loans || [];
+      const totalOwed = list.reduce((sum, l) => sum + Math.max(0, Number(l.amount) - Number(l.paid)), 0);
+      document.getElementById('loan-total-owed').textContent = formatMoney(totalOwed);
+
+      const grid = document.getElementById('loan-cards-list');
+      grid.innerHTML = '';
+
+      if (list.length === 0) {
+        grid.innerHTML = '<p class="text-xs text-brand-muted col-span-3">No active loans recorded.</p>';
+        return;
+      }
+
+      list.forEach(l => {
+        const rem = Math.max(0, l.amount - l.paid);
+        const card = document.createElement('div');
+        card.className = 'p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4 flex flex-col justify-between';
+        card.innerHTML = `
+          <div>
+            <div class="flex justify-between items-center">
+              <h4 class="font-bold text-base text-brand-black">${l.borrower}</h4>
+              <span class="text-[10px] text-brand-muted">${l.date}</span>
+            </div>
+            <p class="text-xs text-brand-muted mt-1">${l.note || 'No note'}</p>
+          </div>
+          <div class="space-y-2 border-t border-gray-100 pt-3">
+            <div class="flex justify-between text-xs"><span>Borrowed:</span> <strong>${formatMoney(l.amount)}</strong></div>
+            <div class="flex justify-between text-xs"><span>Paid So Far:</span> <strong class="text-emerald-600">${formatMoney(l.paid)}</strong></div>
+            <div class="flex justify-between text-xs font-bold pt-1 border-t border-gray-50"><span>Remaining Owed:</span> <strong class="text-red-600">${formatMoney(rem)}</strong></div>
+            <button onclick="openUpdateLoanModal('${l.id}')" class="w-full mt-2 bg-gray-100 hover:bg-gray-200 text-brand-black font-bold py-2 rounded-xl text-xs transition">Update Repayment</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function handleAddLoan(e) {
+      e.preventDefault();
+      const borrower = document.getElementById('loan-borrower').value;
+      const amount = Number(document.getElementById('loan-amount').value);
+      const date = document.getElementById('loan-date').value;
+      const paid = Number(document.getElementById('loan-paid').value) || 0;
+      const note = document.getElementById('loan-note').value;
+
+      if (!borrower || isNaN(amount) || !date) return;
+
+      state.loans.push({
+        id: 'loan_' + Date.now(),
+        borrower,
+        amount,
+        date,
+        paid,
+        note
+      });
+
+      closeModal('addLoanModal');
+      document.getElementById('loan-borrower').value = '';
+      document.getElementById('loan-amount').value = '';
+      document.getElementById('loan-note').value = '';
+      saveUserData();
+      renderLoansTab();
+    }
+
+    function openUpdateLoanModal(loanId) {
+      const l = state.loans.find(x => x.id === loanId);
+      if (!l) return;
+      document.getElementById('edit-loan-id').value = l.id;
+      document.getElementById('edit-loan-paid').value = l.paid;
+      openModal('updateLoanModal');
+    }
+
+    function handleUpdateLoan(e) {
+      e.preventDefault();
+      const id = document.getElementById('edit-loan-id').value;
+      const paid = Number(document.getElementById('edit-loan-paid').value);
+      const l = state.loans.find(x => x.id === id);
+      if (l && !isNaN(paid)) {
+        l.paid = paid;
+        saveUserData();
+        closeModal('updateLoanModal');
+        renderLoansTab();
+      }
+    }
+
+    // PROGRESS TAB
+    function renderProgressTab() {
+      const totalProfitCalculated = calculateTotalProfitFromStartingPoint();
+      document.getElementById('progress-overall-profit').textContent = formatMoney(totalProfitCalculated);
+
+      ensureMonthExists(state.activeMonth);
+      const activeSales = state.allSalesList.filter(s => s.date.startsWith(state.activeMonth) && (s.saleNum || 0) >= Number(state.profitStartSaleNum));
+      const activeProfit = activeSales.reduce((sum, s) => sum + Number(s.profit), 0);
+
+      document.getElementById('progress-active-month-profit').textContent = formatMoney(activeProfit);
+      document.getElementById('progress-active-month-name').textContent = `Month: ${state.activeMonth}`;
+
+      const grid = document.getElementById('progress-monthly-grid');
+      grid.innerHTML = '';
+
+      const months = Object.keys(state.monthlyData).sort().reverse();
+      if (months.length === 0) {
+        grid.innerHTML = '<p class="text-xs text-brand-muted col-span-3">No monthly records found.</p>';
+        return;
+      }
+
+      months.forEach(m => {
+        const mSales = state.allSalesList.filter(s => s.date.startsWith(m) && (s.saleNum || 0) >= Number(state.profitStartSaleNum));
+        const mProf = mSales.reduce((sum, s) => sum + Number(s.profit), 0);
+
+        const card = document.createElement('div');
+        card.className = 'p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex justify-between items-center';
+        card.innerHTML = `
+          <div>
+            <p class="font-bold text-sm text-brand-black">${m}</p>
+            <p class="text-[10px] text-brand-muted">${mSales.length} Applicable Sales</p>
+          </div>
+          <p class="font-display font-bold text-lg text-emerald-600">${formatMoney(mProf)}</p>
+        `;
+        grid.appendChild(card);
+      });
     }
   </script>
 </body>
