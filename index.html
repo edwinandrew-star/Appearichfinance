@@ -228,7 +228,7 @@
           <span>Accounts</span>
         </button>
         <button id="nav-loans" onclick="switchTab('loans')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0 z" /></svg>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
           <span>Loans</span>
         </button>
         <button id="nav-progress" onclick="switchTab('progress')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
@@ -634,7 +634,7 @@
               </div>
               <div>
                 <h3 class="font-bold text-base text-brand-black">Transaction History → Sales</h3>
-                <p class="text-[11px] text-brand-muted">Chronological order from newest to oldest</p>
+                <p class="text-[11px] text-brand-muted">Excel imported/recorded order (displayed reversed: last to first)</p>
               </div>
             </div>
             <div class="flex items-center space-x-2">
@@ -1146,6 +1146,7 @@
               <thead class="bg-gray-50 text-brand-muted font-bold border-b border-gray-100">
                 <tr>
                   <th class="p-2">Date</th>
+                  <th class="p-2">Business</th>
                   <th class="p-2">Product</th>
                   <th class="p-2">Qty</th>
                   <th class="p-2">Buy Price</th>
@@ -1157,7 +1158,7 @@
               <tbody id="excel-preview-body" class="divide-y divide-gray-100"></tbody>
             </table>
           </div>
-          <button onclick="confirmExcelImport()" id="confirm-import-btn" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-700 transition text-sm">Confirm & Import into Transaction Sales Log</button>
+          <button onclick="confirmExcelImport()" id="confirm-import-btn" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-700 transition text-sm">Confirm & Import Sales Log</button>
         </div>
       </div>
     </div>
@@ -1167,7 +1168,6 @@
     const SUPABASE_URL = 'https://zudqubbglwphfxaviqsg.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1ZHF1YmJnbHdwaGZ4YXZpcXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0NjcyNTUsImV4cCI6MjA5ODA0MzI1NX0.7pRbRqz9-5gN8SG_ALn5ecHOWQofykPvhbrE2HQROCE';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    
     // SYSTEM STATE
     let state = {
       incomeEntries: [],
@@ -1205,7 +1205,7 @@
       profitStartId: null
     };
 
-    let parsedExcelRows = [];
+    let tempExcelRows = [];
 
     // INITIALIZATION & EVENT LISTENERS
     window.addEventListener('DOMContentLoaded', () => {
@@ -1213,68 +1213,55 @@
         document.getElementById('splash-screen').classList.add('hidden');
         document.getElementById('app-wrapper').classList.remove('hidden');
         initializeMonthPickers();
-        loadFromStorage();
+        loadDataFromSupabase();
       }, 800);
     });
 
     function initializeMonthPickers() {
       const currentMonth = new Date().toISOString().slice(0, 7);
-      const pickers = ['income-month-picker', 'daily-expense-month-picker', 'growth-month-picker'];
-      pickers.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.value = currentMonth;
-      });
+      document.getElementById('income-month-picker').value = currentMonth;
+      document.getElementById('daily-expense-month-picker').value = currentMonth;
+      document.getElementById('growth-month-picker').value = currentMonth;
     }
 
     // MODAL CONTROL
     function openModal(id) {
-      const modal = document.getElementById(id);
-      if (modal) modal.classList.remove('hidden');
-      if (id === 'addSaleModal' || id === 'editSaleModal') {
-        populateBusinessDropdowns();
+      document.getElementById(id).classList.remove('hidden');
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+      if (id === 'importExcelModal') {
+        document.getElementById('excel-file-input').value = '';
+        document.getElementById('excel-preview-container').classList.add('hidden');
+        tempExcelRows = [];
       }
     }
 
-    function closeModal(id) {
-      const modal = document.getElementById(id);
-      if (modal) modal.classList.add('hidden');
-    }
-
-    function switchTab(tabId) {
+    // NAVIGATION
+    function switchTab(tabKey) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      const activeTab = document.getElementById('tab-' + tabId);
-      if (activeTab) activeTab.classList.remove('hidden');
-
       document.querySelectorAll('.nav-tab').forEach(el => {
-        el.classList.remove('active', 'bg-brand-black', 'text-white', 'shadow-sm');
+        el.classList.remove('active', 'bg-brand-black', 'text-white');
         el.classList.add('text-brand-muted');
       });
-      const navBtn = document.getElementById('nav-' + tabId);
-      if (navBtn) {
-        navBtn.classList.add('active', 'bg-brand-black', 'text-white', 'shadow-sm');
-        navBtn.classList.remove('text-brand-muted');
-      }
-      renderAll();
-    }
+      document.querySelectorAll('.bnav-btn').forEach(el => {
+        el.classList.remove('text-brand-black');
+        el.classList.add('text-brand-muted');
+      });
 
-    // STORAGE & PERSISTENCE
-    function loadFromStorage() {
-      try {
-        const saved = localStorage.getItem('appearich_state');
-        if (saved) {
-          state = JSON.parse(saved);
-        }
-      } catch (e) {
-        console.error('Failed to load storage', e);
-      }
-      renderAll();
-    }
+      const tabEl = document.getElementById(`tab-${tabKey}`);
+      if (tabEl) tabEl.classList.remove('hidden');
 
-    function saveToStorage() {
-      try {
-        localStorage.setItem('appearich_state', JSON.stringify(state));
-      } catch (e) {
-        console.error('Failed to save storage', e);
+      const navEl = document.getElementById(`nav-${tabKey}`);
+      if (navEl) {
+        navEl.classList.add('active', 'bg-brand-black', 'text-white');
+        navEl.classList.remove('text-brand-muted');
+      }
+
+      const bnavEl = document.getElementById(`bnav-${tabKey}`);
+      if (bnavEl) {
+        bnavEl.classList.add('text-brand-black');
+        bnavEl.classList.remove('text-brand-muted');
       }
     }
 
@@ -1282,6 +1269,7 @@
     function previewExcelFile(event) {
       const file = event.target.files[0];
       if (!file) return;
+
       const reader = new FileReader();
       reader.onload = function(e) {
         try {
@@ -1289,47 +1277,58 @@
           const workbook = XLSX.read(data, { type: 'array' });
           const firstSheetName = workbook.SheetNames[0];
           const worksheet = workbook.Sheets[firstSheetName];
-          const rawJson = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
-          
-          parsedExcelRows = rawJson.map(row => {
-            // Map common excel column names flexibly
-            const dateVal = row.Date || row.date || row.DATA || new Date().toISOString().slice(0,10);
-            const productVal = row.Product || row.product || row.Item || row.DESCRIPTION || 'Imported Product';
-            const qtyVal = Number(row.Qty || row.Quantity || row.QTY || 1);
-            const buyVal = Number(row.BuyPrice || row.BuyingPrice || row.Buy || row.COST || 0);
-            const sellVal = Number(row.SellPrice || row.SellingPrice || row.Sell || row.PRICE || 0);
-            const customerVal = row.Customer || row.Client || row.BUYER || 'Walk-in';
-            const statusVal = (row.Status || row.PaymentStatus || 'FULL').toString().toUpperCase().includes('PART') ? 'PARTIAL' : 'FULL';
-            const businessVal = row.Business || row.BusinessType || state.appearichBusinesses[0] || 'Appearich Main';
-            const paidVal = statusVal === 'PARTIAL' ? Number(row.Paid || row.AmountPaid || 0) : (qtyVal * sellVal);
+          const jsonRows = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+
+          tempExcelRows = jsonRows.map((row, idx) => {
+            // Flexible matching for Excel column keys
+            const dateVal = row['Date'] || row['date'] || row['DATE'] || new Date().toISOString().slice(0, 10);
+            const businessVal = row['Business'] || row['business'] || row['BUSINESS'] || row['Type'] || state.activeAppearichBusiness || 'Appearich Main';
+            const productVal = row['Product'] || row['product'] || row['PRODUCT'] || row['Item'] || 'Imported Product';
+            const qtyVal = Number(row['Qty'] || row['qty'] || row['Quantity'] || row['QUANTITY'] || 1);
+            const buyVal = Number(row['Buy Price'] || row['buy_price'] || row['Buying Price'] || row['buy'] || 0);
+            const sellVal = Number(row['Sell Price'] || row['sell_price'] || row['Selling Price'] || row['sell'] || 0);
+            const customerVal = row['Customer'] || row['customer'] || row['CUSTOMER'] || 'Valued Customer';
+            const statusVal = (row['Status'] || row['status'] || 'FULL').toString().toUpperCase() === 'PARTIAL' ? 'PARTIAL' : 'FULL';
+            const paidVal = statusVal === 'PARTIAL' ? Number(row['Paid'] || row['paid'] || row['Amount Paid'] || 0) : (qtyVal * sellVal);
+
+            // Add new business type automatically if not present
+            if (!state.appearichBusinesses.includes(businessVal)) {
+              state.appearichBusinesses.push(businessVal);
+            }
 
             return {
-              id: 'imp_' + Math.random().toString(36.substring(2, 9)),
-              date: typeof dateVal === 'number' ? new Date((dateVal - (25567 + 2)) * 86400 * 1000).toISOString().slice(0,10) : String(dateVal).slice(0,10),
-              business: String(businessVal),
-              product: String(productVal),
+              id: 'imp_' + Date.now() + '_' + idx,
+              date: parseExcelDate(dateVal),
+              business: businessVal,
+              product: productVal,
               qty: qtyVal,
               buyPrice: buyVal,
               sellPrice: sellVal,
-              customer: String(customerVal),
-              paymentStatus: statusVal,
+              customer: customerVal,
+              status: statusVal,
               paidAmount: paidVal
             };
           });
 
-          document.getElementById('preview-count').innerText = parsedExcelRows.length;
-          const tbody = document.getElementById('excel-preview-body');
-          tbody.innerHTML = parsedExcelRows.slice(0, 15).map(r => `
-            <tr>
-              <td class="p-2">${r.date}</td>
-              <td class="p-2">${r.product}</td>
-              <td class="p-2">${r.qty}</td>
-              <td class="p-2">${r.buyPrice.toLocaleString()}</td>
-              <td class="p-2">${r.sellPrice.toLocaleString()}</td>
-              <td class="p-2">${r.customer}</td>
-              <td class="p-2 font-bold">${r.paymentStatus}</td>
-            </tr>
-          `).join('');
+          const previewBody = document.getElementById('excel-preview-body');
+          previewBody.innerHTML = '';
+          document.getElementById('preview-count').innerText = tempExcelRows.length;
+
+          // Display preview matching exact order
+          tempExcelRows.forEach(r => {
+            previewBody.innerHTML += `
+              <tr class="border-b border-gray-100">
+                <td class="p-2">${r.date}</td>
+                <td class="p-2">${r.business}</td>
+                <td class="p-2">${r.product}</td>
+                <td class="p-2">${r.qty}</td>
+                <td class="p-2">${r.buyPrice.toLocaleString()}</td>
+                <td class="p-2">${r.sellPrice.toLocaleString()}</td>
+                <td class="p-2">${r.customer}</td>
+                <td class="p-2 font-bold ${r.status === 'PARTIAL' ? 'text-red-500' : 'text-emerald-600'}">${r.status}</td>
+              </tr>
+            `;
+          });
 
           document.getElementById('excel-preview-container').classList.remove('hidden');
         } catch (err) {
@@ -1339,657 +1338,754 @@
       reader.readAsArrayBuffer(file);
     }
 
-    function confirmExcelImport() {
-      if (!parsedExcelRows || parsedExcelRows.length === 0) return;
+    function parseExcelDate(val) {
+      if (!val) return new Date().toISOString().slice(0, 10);
+      if (typeof val === 'number') {
+        const utc_days = Math.floor(val - 25569);
+        const utc_value = utc_days * 86400;
+        const date_info = new Date(utc_value * 1000);
+        return date_info.toISOString().slice(0, 10);
+      }
+      const parsed = Date.parse(val);
+      if (!isNaN(parsed)) {
+        return new Date(parsed).toISOString().slice(0, 10);
+      }
+      return val.toString();
+    }
+
+    async function confirmExcelImport() {
+      if (!tempExcelRows.length) return;
+      // Append imported rows maintaining Excel sequence
+      state.appearichSales = [...state.appearichSales, ...tempExcelRows];
+      await saveDataToSupabase();
+      closeModal('importExcelModal');
+      renderAll();
+    }
+
+    // SUPABASE PERSISTENCE ENGINE
+    async function loadDataFromSupabase() {
+      try {
+        const { data, error } = await supabaseClient.from('appearich_command_center').select('*').single();
+        if (data && data.payload) {
+          state = { ...state, ...data.payload };
+        }
+      } catch (err) {
+        console.log('No existing state found or loaded fresh.');
+      }
+      renderAll();
+    }
+
+    async function saveDataToSupabase() {
+      try {
+        await supabaseClient.from('appearich_command_center').upsert({ id: 1, payload: state });
+      } catch (err) {
+        console.error('Error saving data:', err);
+      }
+    }
+
+    // RENDER ENGINE
+    function renderAll() {
+      renderDashboard();
+      renderIncomeTab();
+      renderBudgetTab();
+      renderDailyExpensesTab();
+      renderInvestmentTab();
+      renderAppearichTab();
+      renderAccountsTab();
+      renderLoansTab();
+      renderProgressTab();
+    }
+
+    function renderDashboard() {
+      const totalInc = state.incomeEntries.reduce((acc, curr) => acc + Number(curr.amount), 0);
+      const godAmt = totalInc * 0.10;
+      const totalMon = Object.values(state.accounts).reduce((acc, curr) => acc + Number(curr), 0);
       
-      // Reverse order per instructions: Last row in Excel appears first in Transaction Sales Log, first row appears last.
-      const reversedRows = [...parsedExcelRows].reverse();
-      
-      // Ensure businesses exist
-      reversedRows.forEach(row => {
-        if (!state.appearichBusinesses.includes(row.business)) {
-          state.appearichBusinesses.push(row.business);
+      document.getElementById('dash-total-income').innerText = totalInc.toLocaleString() + ' Sh';
+      document.getElementById('dash-god-amount').innerText = godAmt.toLocaleString() + ' Sh';
+      document.getElementById('dash-total-money').innerText = totalMon.toLocaleString() + ' Sh';
+      document.getElementById('dash-remaining-budget').innerText = (totalMon - godAmt).toLocaleString() + ' Sh';
+    }
+
+    function renderIncomeTab() {
+      const activeMonth = document.getElementById('income-month-picker').value || state.selectedIncomeMonth;
+      state.selectedIncomeMonth = activeMonth;
+      document.getElementById('income-month-label').innerText = activeMonth;
+
+      const filtered = state.incomeEntries.filter(i => i.date && i.date.startsWith(activeMonth));
+      const totalInc = filtered.reduce((acc, curr) => acc + Number(curr.amount), 0);
+      document.getElementById('income-god-total').innerText = (totalInc * 0.10).toLocaleString() + ' Sh';
+
+      const container = document.getElementById('income-list-container');
+      container.innerHTML = '';
+      if (filtered.length === 0) {
+        container.innerHTML = `<p class="text-xs text-brand-muted col-span-full">No income records found for ${activeMonth}.</p>`;
+        return;
+      }
+
+      filtered.forEach(item => {
+        container.innerHTML += `
+          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-3">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-xs font-bold text-brand-muted">${item.date}</p>
+                <h4 class="font-bold text-base text-brand-black mt-1">${item.name}</h4>
+              </div>
+              <div class="flex space-x-1">
+                <button onclick="editIncome('${item.id}')" class="p-1.5 text-gray-400 hover:text-black"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button>
+                <button onclick="deleteIncome('${item.id}')" class="p-1.5 text-red-400 hover:text-red-600"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+              </div>
+            </div>
+            <div class="pt-3 border-t border-gray-100 flex justify-between items-center">
+              <span class="text-xs text-brand-muted">Amount:</span>
+              <span class="font-display font-bold text-brand-black text-lg">${Number(item.amount).toLocaleString()} Sh</span>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function renderBudgetTab() {
+      const totalInc = state.incomeEntries.reduce((acc, curr) => acc + Number(curr.amount), 0);
+      const pool = totalInc * 0.90;
+      document.getElementById('budget-pool-total').innerText = pool.toLocaleString() + ' Sh';
+
+      let totalAllocated = 0;
+      Object.keys(state.budgetCategories).forEach(key => {
+        totalAllocated += Number(state.budgetCategories[key].amount || 0);
+      });
+
+      const percent = pool > 0 ? Math.min(100, Math.round((totalAllocated / pool) * 100)) : 0;
+      document.getElementById('budget-allocated-percent').innerText = percent + '%';
+      document.getElementById('budget-allocated-bar').style.width = percent + '%';
+
+      const util = state.budgetCategories['cat-utilities'];
+      if (util) {
+        document.getElementById('cat-amount-cat-utilities').value = util.amount || '';
+        const utilSpent = state.dailyExpenses.filter(d => ['Internet','Umeme','Taka','Transport'].includes(d.category)).reduce((a,c)=>a+Number(c.amount),0);
+        document.getElementById('utilities-spent-summary').innerText = 'Spent: ' + utilSpent.toLocaleString() + ' Sh';
+        document.getElementById('utilities-remaining-summary').innerText = 'Remaining: ' + (util.amount - utilSpent).toLocaleString() + ' Sh';
+        document.getElementById('utilities-percent-badge').innerText = pool > 0 ? Math.round((util.amount / pool)*100) + '%' : '0%';
+      }
+
+      // Subcategories
+      const subList = document.getElementById('utilities-subcategories-list');
+      subList.innerHTML = '';
+      Object.keys(state.utilitySubcategories).forEach(subKey => {
+        const sub = state.utilitySubcategories[subKey];
+        const spent = state.dailyExpenses.filter(d => d.category.toLowerCase() === sub.name.toLowerCase()).reduce((a,c)=>a+Number(c.amount),0);
+        subList.innerHTML += `
+          <div class="flex items-center justify-between p-3 bg-white rounded-xl border border-gray-100">
+            <div>
+              <p class="text-xs font-bold text-brand-black">${sub.name}</p>
+              <p class="text-[10px] text-brand-muted">Spent: ${spent.toLocaleString()} Sh</p>
+            </div>
+            <input type="number" value="${sub.target || ''}" onchange="updateSubcategoryTarget('${subKey}', this.value)" placeholder="Target" class="w-28 px-2 py-1 rounded-lg border border-gray-200 text-xs font-bold text-right">
+          </div>
+        `;
+      });
+    }
+
+    function renderDailyExpensesTab() {
+      const activeMonth = document.getElementById('daily-expense-month-picker').value || state.selectedExpenseMonth;
+      state.selectedExpenseMonth = activeMonth;
+      document.getElementById('daily-expense-month-label').innerText = activeMonth;
+
+      const filtered = state.dailyExpenses.filter(d => d.date && d.date.startsWith(activeMonth));
+      document.getElementById('daily-expense-log-count').innerText = filtered.length + ' Expenses Recorded';
+
+      const tbody = document.getElementById('daily-expense-table-body');
+      tbody.innerHTML = '';
+      filtered.forEach(tx => {
+        tbody.innerHTML += `
+          <tr class="border-b border-gray-100">
+            <td class="py-3">${tx.date}</td>
+            <td class="py-3 font-bold text-brand-black">${tx.name}</td>
+            <td class="py-3">${tx.category}</td>
+            <td class="py-3">${tx.account}</td>
+            <td class="py-3 text-right font-bold text-red-600">-${Number(tx.amount).toLocaleString()} Sh</td>
+            <td class="py-3 text-right space-x-1">
+              <button onclick="editTransaction('${tx.id}')" class="text-gray-400 hover:text-black">Edit</button>
+              <button onclick="deleteTransaction('${tx.id}')" class="text-red-400 hover:text-red-600">Delete</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function renderInvestmentTab() {
+      const totalInv = state.investments.reduce((a,c)=>a+Number(c.amount),0);
+      const currVal = Number(state.investmentValuation || totalInv);
+      const gain = currVal - totalInv;
+      const ret = totalInv > 0 ? (gain / totalInv) * 100 : 0;
+
+      document.getElementById('inv-total-invested').innerText = totalInv.toLocaleString() + ' Sh';
+      document.getElementById('inv-current-value').innerText = currVal.toLocaleString() + ' Sh';
+      document.getElementById('inv-gain-loss').innerText = (gain >= 0 ? '+' : '') + gain.toLocaleString() + ' Sh';
+      document.getElementById('inv-percentage-return').innerText = (ret >= 0 ? '+' : '') + ret.toFixed(2) + '%';
+
+      const historyList = document.getElementById('investment-history-list');
+      historyList.innerHTML = '';
+      state.investments.forEach(inv => {
+        historyList.innerHTML += `
+          <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100 flex justify-between items-center">
+            <div>
+              <p class="text-xs font-bold text-brand-muted">${inv.date}</p>
+              <p class="font-bold text-brand-black mt-0.5">Capital Added</p>
+            </div>
+            <div class="text-right">
+              <p class="font-bold text-brand-black">${Number(inv.amount).toLocaleString()} Sh</p>
+              <button onclick="deleteInvestment('${inv.id}')" class="text-[10px] text-red-500 hover:underline">Delete</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function renderAppearichTab() {
+      // Business selector buttons
+      const bar = document.getElementById('business-types-bar');
+      bar.innerHTML = '';
+      state.appearichBusinesses.forEach(b => {
+        const isActive = state.activeAppearichBusiness === b;
+        bar.innerHTML += `
+          <button onclick="switchAppearichBusiness('${b}')" class="px-4 py-2 rounded-xl text-xs font-bold flex-shrink-0 transition ${isActive ? 'bg-brand-black text-white shadow-sm' : 'bg-gray-100 text-brand-muted hover:text-brand-black'}">${b}</button>
+        `;
+      });
+
+      document.getElementById('active-business-view-label').innerText = 'Active Business View: ' + state.activeAppearichBusiness;
+
+      const filteredSales = state.appearichSales.filter(s => state.activeAppearichBusiness === 'Appearich Main' || s.business === state.activeAppearichBusiness);
+
+      // Calculations
+      let totalRev = 0, totalProfit = 0, totalOut = 0;
+      filteredSales.forEach(s => {
+        const rev = Number(s.qty) * Number(s.sellPrice);
+        const cost = Number(s.qty) * Number(s.buyPrice);
+        const profit = rev - cost;
+        totalRev += Number(s.paidAmount || rev);
+        totalProfit += profit;
+        if (s.status === 'PARTIAL') {
+          totalOut += (rev - Number(s.paidAmount || 0));
         }
       });
 
-      // Prepend/insert into appearichSales
-      state.appearichSales.unshift(...reversedRows);
-      saveToStorage();
-      closeModal('importExcelModal');
-      renderAll();
-      alert(`Successfully imported ${parsedExcelRows.length} sales records into the Transaction Sales Log!`);
-      parsedExcelRows = [];
-      document.getElementById('excel-file-input').value = '';
-      document.getElementById('excel-preview-container').classList.add('hidden');
-    }
+      document.getElementById('app-month-revenue').innerText = totalRev.toLocaleString() + ' Sh';
+      document.getElementById('app-total-outstanding').innerText = totalOut.toLocaleString() + ' Sh';
+      document.getElementById('app-total-profit').innerText = totalProfit.toLocaleString() + ' Sh';
 
-    // BUSINESS & SALES CRUD
-    function populateBusinessDropdowns() {
-      const selects = ['sale-business-type', 'edit-sale-business-type'];
-      selects.forEach(id => {
-        const sel = document.getElementById(id);
-        if (!sel) return;
-        sel.innerHTML = state.appearichBusinesses.map(b => `<option value="${b}">${b}</option>`).join('');
+      // Dropdown for profit start point
+      const profitSelect = document.getElementById('profit-start-select');
+      profitSelect.innerHTML = `<option value="">-- Count all sales --</option>`;
+      filteredSales.forEach(s => {
+        const sel = state.profitStartId === s.id ? 'selected' : '';
+        profitSelect.innerHTML += `<option value="${s.id}" ${sel}>${s.date} - ${s.product} (${s.customer})</option>`;
+      });
+
+      // RENDER REVERSED DISPLAY ORDER IN TRANSACTION SALES LOG (Last row in Excel appears first, first appears last)
+      const tableBody = document.getElementById('appearich-sales-table');
+      tableBody.innerHTML = '';
+      
+      const reversedSales = [...filteredSales].reverse();
+
+      reversedSales.forEach(s => {
+        const rev = Number(s.qty) * Number(s.sellPrice);
+        const profit = rev - (Number(s.qty) * Number(s.buyPrice));
+        tableBody.innerHTML += `
+          <tr class="border-b border-gray-100 hover:bg-gray-50/50">
+            <td class="py-3"><input type="checkbox" class="sale-checkbox" value="${s.id}" onchange="updateSelectedSalesCount()"></td>
+            <td class="py-3">${s.date}</td>
+            <td class="py-3 font-semibold">${s.business}</td>
+            <td class="py-3 font-bold text-brand-black">${s.product} (${s.qty})</td>
+            <td class="py-3">${s.customer}</td>
+            <td class="py-3 font-bold">${rev.toLocaleString()} Sh</td>
+            <td class="py-3">${Number(s.paidAmount || 0).toLocaleString()} Sh</td>
+            <td class="py-3 font-bold text-emerald-600">+${profit.toLocaleString()} Sh</td>
+            <td class="py-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${s.status === 'PARTIAL' ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-emerald-600'}">${s.status}</span></td>
+            <td class="py-3 text-right space-x-1">
+              <button onclick="openEditSaleModal('${s.id}')" class="text-gray-500 hover:text-black">Edit</button>
+              <button onclick="deleteSale('${s.id}')" class="text-red-500 hover:text-red-700">Delete</button>
+            </td>
+          </tr>
+        `;
       });
     }
 
-    function handleAddSale(e) {
-      e.preventDefault();
-      const newSale = {
-        id: 'sale_' + Date.now(),
-        business: document.getElementById('sale-business-type').value,
-        date: document.getElementById('sale-date').value,
-        qty: Number(document.getElementById('sale-qty').value),
-        product: document.getElementById('sale-product').value,
-        customer: document.getElementById('sale-customer').value,
-        buyPrice: Number(document.getElementById('sale-buy-price').value),
-        sellPrice: Number(document.getElementById('sale-sell-price').value),
-        paymentStatus: document.getElementById('sale-payment-status').value,
-        paidAmount: document.getElementById('sale-payment-status').value === 'PARTIAL' ? Number(document.getElementById('sale-paid-amount').value) : (Number(document.getElementById('sale-qty').value) * Number(document.getElementById('sale-sell-price').value))
-      };
+    function renderAccountsTab() {
+      let totalMon = 0;
+      const grid = document.getElementById('account-cards-grid');
+      grid.innerHTML = '';
+      Object.keys(state.accounts).forEach(accName => {
+        const amt = Number(state.accounts[accName]);
+        totalMon += amt;
+        grid.innerHTML += `
+          <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4">
+            <div class="flex justify-between items-center">
+              <span class="text-xs font-bold text-brand-muted uppercase">${accName}</span>
+              <div class="w-8 h-8 rounded-xl bg-gray-50 flex items-center justify-center font-bold text-xs">TZ</div>
+            </div>
+            <div>
+              <p class="font-display text-2xl font-bold text-brand-black">${amt.toLocaleString()} Sh</p>
+              <p class="text-[11px] text-emerald-600 mt-1">Liquid Balance</p>
+            </div>
+          </div>
+        `;
+      });
+      document.getElementById('accounts-total-money').innerText = totalMon.toLocaleString() + ' Sh';
+    }
 
-      state.appearichSales.unshift(newSale);
-      saveToStorage();
-      closeModal('addSaleModal');
-      e.target.reset();
+    function renderLoansTab() {
+      let totalOwed = 0;
+      const list = document.getElementById('loan-cards-list');
+      list.innerHTML = '';
+      state.loans.forEach(l => {
+        const remaining = Number(l.amount) - Number(l.paid || 0);
+        totalOwed += remaining;
+        list.innerHTML += `
+          <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-xs font-bold text-brand-muted">${l.date}</p>
+                <h4 class="font-bold text-base text-brand-black mt-1">${l.borrower}</h4>
+              </div>
+              <button onclick="deleteLoan('${l.id}')" class="text-red-400 hover:text-red-600 text-xs">Delete</button>
+            </div>
+            <div class="space-y-1">
+              <p class="text-xs text-brand-muted">Borrowed: <span class="font-bold text-brand-black">${Number(l.amount).toLocaleString()} Sh</span></p>
+              <p class="text-xs text-brand-muted">Paid So Far: <span class="font-bold text-emerald-600">${Number(l.paid || 0).toLocaleString()} Sh</span></p>
+              <p class="text-xs font-semibold text-brand-black pt-2 border-t border-gray-100">Remaining Owed: ${remaining.toLocaleString()} Sh</p>
+            </div>
+            <button onclick="openUpdateLoanModal('${l.id}')" class="w-full py-2 bg-gray-100 hover:bg-gray-200 text-brand-black font-bold rounded-xl text-xs transition">Update Repayment</button>
+          </div>
+        `;
+      });
+      document.getElementById('loan-total-owed').innerText = totalOwed.toLocaleString() + ' Sh';
+    }
+
+    function renderProgressTab() {
+      const activeMonth = document.getElementById('growth-month-picker').value || state.selectedGrowthMonth;
+      state.selectedGrowthMonth = activeMonth;
+      document.getElementById('growth-selected-month-name').innerText = 'Growth recorded in ' + activeMonth;
+
+      let totalGrowthAll = 0;
+      let monthGrowth = 0;
+
+      const entriesBody = document.getElementById('growth-entries-table-body');
+      entriesBody.innerHTML = '';
+      let entryCount = 0;
+
+      // Calculate investment growth
+      const invTotal = state.investments.reduce((a,c)=>a+Number(c.amount),0);
+      const invVal = Number(state.investmentValuation || invTotal);
+      const invGain = invVal - invTotal;
+      if (invGain !== 0) {
+        totalGrowthAll += invGain;
+        monthGrowth += invGain;
+        entryCount++;
+        entriesBody.innerHTML += `
+          <tr class="border-b border-gray-100">
+            <td class="py-3">Portfolio</td>
+            <td class="py-3 font-bold">Investment Gain</td>
+            <td class="py-3">Portfolio Valuation Growth</td>
+            <td class="py-3 text-right font-bold text-emerald-600">+${invGain.toLocaleString()} Sh</td>
+            <td class="py-3 text-right">-</td>
+          </tr>
+        `;
+      }
+
+      // Calculate appearich profit growth
+      state.appearichSales.forEach(s => {
+        const profit = (Number(s.qty) * Number(s.sellPrice)) - (Number(s.qty) * Number(s.buyPrice));
+        totalGrowthAll += profit;
+        if (s.date && s.date.startsWith(activeMonth)) {
+          monthGrowth += profit;
+          entryCount++;
+          entriesBody.innerHTML += `
+            <tr class="border-b border-gray-100">
+              <td class="py-3">${s.date}</td>
+              <td class="py-3 font-bold">Business Sale</td>
+              <td class="py-3">${s.product} (${s.customer})</td>
+              <td class="py-3 text-right font-bold text-emerald-600">+${profit.toLocaleString()} Sh</td>
+              <td class="py-3 text-right">
+                <button onclick="deleteSale('${s.id}')" class="text-red-400 hover:text-red-600">Delete</button>
+              </td>
+            </tr>
+          `;
+        }
+      });
+
+      document.getElementById('growth-latest-total').innerText = totalGrowthAll.toLocaleString() + ' Sh';
+      document.getElementById('growth-selected-month-total').innerText = monthGrowth.toLocaleString() + ' Sh';
+      document.getElementById('growth-log-count').innerText = entryCount + ' Entries';
+
+      const titheGrowth = monthGrowth * 0.10;
+      document.getElementById('tithe-monthly-growth').innerText = monthGrowth.toLocaleString() + ' Sh';
+      document.getElementById('tithe-god-amount').innerText = titheGrowth.toLocaleString() + ' Sh';
+      document.getElementById('tithe-growth-after').innerText = (monthGrowth - titheGrowth).toLocaleString() + ' Sh';
+    }
+
+    // FORM HANDLERS & ACTIONS
+    async function handleAddIncome(event) {
+      event.preventDefault();
+      const id = document.getElementById('edit-income-id').value || 'inc_' + Date.now();
+      const name = document.getElementById('income-name-input').value;
+      const amount = Number(document.getElementById('income-amount-input').value);
+      const date = state.selectedIncomeMonth + '-01';
+
+      const existingIndex = state.incomeEntries.findIndex(i => i.id === id);
+      if (existingIndex >= 0) {
+        state.incomeEntries[existingIndex] = { ...state.incomeEntries[existingIndex], name, amount };
+      } else {
+        state.incomeEntries.push({ id, name, amount, date });
+        state.accounts['CRDB'] = Number(state.accounts['CRDB']) + amount;
+      }
+
+      await saveDataToSupabase();
+      closeModal('addIncomeModal');
       renderAll();
     }
 
-    function editSale(id) {
+    async function handleAddSale(event) {
+      event.preventDefault();
+      const business = document.getElementById('sale-business-type').value;
+      const date = document.getElementById('sale-date').value;
+      const qty = Number(document.getElementById('sale-qty').value);
+      const product = document.getElementById('sale-product').value;
+      const customer = document.getElementById('sale-customer').value;
+      const buyPrice = Number(document.getElementById('sale-buy-price').value);
+      const sellPrice = Number(document.getElementById('sale-sell-price').value);
+      const status = document.getElementById('sale-payment-status').value;
+      const paidAmount = status === 'PARTIAL' ? Number(document.getElementById('sale-paid-amount').value || 0) : (qty * sellPrice);
+
+      const newSale = {
+        id: 'sale_' + Date.now(),
+        business, date, qty, product, customer, buyPrice, sellPrice, status, paidAmount
+      };
+
+      state.appearichSales.push(newSale);
+      state.accounts['CRDB'] = Number(state.accounts['CRDB']) + paidAmount;
+
+      await saveDataToSupabase();
+      closeModal('addSaleModal');
+      renderAll();
+    }
+
+    async function handleAddBusinessOption(event) {
+      event.preventDefault();
+      const bName = document.getElementById('new-business-name-input').value.trim();
+      if (bName && !state.appearichBusinesses.includes(bName)) {
+        state.appearichBusinesses.push(bName);
+        state.activeAppearichBusiness = bName;
+        await saveDataToSupabase();
+      }
+      closeModal('addBusinessModal');
+      renderAll();
+    }
+
+    async function handleAddTransaction(event) {
+      event.preventDefault();
+      const id = document.getElementById('edit-tx-id').value || 'tx_' + Date.now();
+      const name = document.getElementById('tx-name').value;
+      const category = document.getElementById('tx-category').value;
+      const account = document.getElementById('tx-account').value;
+      const amount = Number(document.getElementById('tx-amount').value);
+      const date = document.getElementById('tx-date').value;
+
+      state.dailyExpenses.push({ id, name, category, account, amount, date });
+      if (state.accounts[account] !== undefined) {
+        state.accounts[account] = Math.max(0, Number(state.accounts[account]) - amount);
+      }
+
+      await saveDataToSupabase();
+      closeModal('addTransactionModal');
+      renderAll();
+    }
+
+    async function handleTransfer(event) {
+      event.preventDefault();
+      const from = document.getElementById('tr-from').value;
+      const to = document.getElementById('tr-to').value;
+      const amount = Number(document.getElementById('tr-amount').value);
+
+      if (from === to) {
+        alert('Cannot transfer to the same account.');
+        return;
+      }
+      if (Number(state.accounts[from]) < amount) {
+        alert('Insufficient funds in source account.');
+        return;
+      }
+
+      state.accounts[from] -= amount;
+      state.accounts[to] += amount;
+
+      await saveDataToSupabase();
+      closeModal('transferModal');
+      renderAll();
+    }
+
+    async function handleAddMoneyAccount(event) {
+      event.preventDefault();
+      const acc = document.getElementById('am-account').value;
+      const amt = Number(document.getElementById('am-amount').value);
+      state.accounts[acc] = Number(state.accounts[acc]) + amt;
+      await saveDataToSupabase();
+      closeModal('addMoneyModal');
+      renderAll();
+    }
+
+    async function handleAddInvestmentCapital(event) {
+      event.preventDefault();
+      const amount = Number(document.getElementById('inv-add-amount').value);
+      state.investments.push({ id: 'inv_' + Date.now(), amount, date: new Date().toISOString().slice(0, 10) });
+      state.investmentValuation = Number(state.investmentValuation || 0) + amount;
+      await saveDataToSupabase();
+      closeModal('addInvestmentModal');
+      renderAll();
+    }
+
+    async function handleUpdateInvestmentValue(event) {
+      event.preventDefault();
+      state.investmentValuation = Number(document.getElementById('inv-update-value').value);
+      await saveDataToSupabase();
+      closeModal('updateInvestmentModal');
+      renderAll();
+    }
+
+    async function handleAddLoan(event) {
+      event.preventDefault();
+      const id = document.getElementById('edit-loan-record-id').value || 'loan_' + Date.now();
+      const borrower = document.getElementById('loan-borrower').value;
+      const amount = Number(document.getElementById('loan-amount').value);
+      const date = document.getElementById('loan-date').value;
+      const paid = Number(document.getElementById('loan-paid').value);
+      const note = document.getElementById('loan-note').value;
+
+      state.loans.push({ id, borrower, amount, date, paid, note });
+      await saveDataToSupabase();
+      closeModal('addLoanModal');
+      renderAll();
+    }
+
+    async function handleAddCategory(event) {
+      event.preventDefault();
+      const name = document.getElementById('cat-name-input').value;
+      const amount = Number(document.getElementById('cat-amount-input').value);
+      const key = 'cat_' + Date.now();
+      state.budgetCategories[key] = { name, amount, icon: 'folder' };
+      await saveDataToSupabase();
+      closeModal('addCategoryModal');
+      renderAll();
+    }
+
+    async function deleteSale(id) {
+      state.appearichSales = state.appearichSales.filter(s => s.id !== id);
+      await saveDataToSupabase();
+      renderAll();
+    }
+
+    async function deleteIncome(id) {
+      state.incomeEntries = state.incomeEntries.filter(i => i.id !== id);
+      await saveDataToSupabase();
+      renderAll();
+    }
+
+    async function deleteTransaction(id) {
+      state.dailyExpenses = state.dailyExpenses.filter(d => d.id !== id);
+      await saveDataToSupabase();
+      renderAll();
+    }
+
+    async function deleteInvestment(id) {
+      state.investments = state.investments.filter(i => i.id !== id);
+      await saveDataToSupabase();
+      renderAll();
+    }
+
+    async function deleteLoan(id) {
+      state.loans = state.loans.filter(l => l.id !== id);
+      await saveDataToSupabase();
+      renderAll();
+    }
+
+    function switchAppearichBusiness(b) {
+      state.activeAppearichBusiness = b;
+      renderAppearichTab();
+    }
+
+    function switchAppearichPeriod(period) {
+      document.querySelectorAll('.app-period-btn').forEach(b => {
+        b.classList.remove('active', 'bg-brand-black', 'text-white');
+        b.classList.add('bg-gray-100', 'text-brand-muted');
+      });
+      const btn = document.getElementById(`app-period-${period}`);
+      if (btn) {
+        btn.classList.add('active', 'bg-brand-black', 'text-white');
+        btn.classList.remove('bg-gray-100', 'text-brand-muted');
+      }
+      state.appearichPeriod = period;
+    }
+
+    function handleMonthChange(e) {
+      state.selectedIncomeMonth = e.target.value;
+      renderIncomeTab();
+    }
+
+    function handleExpenseMonthChange(e) {
+      state.selectedExpenseMonth = e.target.value;
+      renderDailyExpensesTab();
+    }
+
+    function handleGrowthMonthChange(e) {
+      state.selectedGrowthMonth = e.target.value;
+      renderProgressTab();
+    }
+
+    function handleProfitStartChange(val) {
+      state.profitStartId = val;
+      saveDataToSupabase();
+      renderAppearichTab();
+    }
+
+    function toggleSalePartialInput() {
+      const status = document.getElementById('sale-payment-status').value;
+      const cont = document.getElementById('sale-partial-container');
+      if (status === 'PARTIAL') cont.classList.remove('hidden');
+      else cont.classList.add('hidden');
+    }
+
+    function toggleEditSaleModalPartialInput() {
+      const status = document.getElementById('edit-sale-payment-status').value;
+      const cont = document.getElementById('edit-sale-modal-partial-container');
+      if (status === 'PARTIAL') cont.classList.remove('hidden');
+      else cont.classList.add('hidden');
+    }
+
+    function openEditSaleModal(id) {
       const sale = state.appearichSales.find(s => s.id === id);
       if (!sale) return;
-      populateBusinessDropdowns();
+
+      const bizSelect = document.getElementById('edit-sale-business-type');
+      bizSelect.innerHTML = '';
+      state.appearichBusinesses.forEach(b => {
+        bizSelect.innerHTML += `<option value="${b}" ${sale.business === b ? 'selected' : ''}>${b}</option>`;
+      });
+
       document.getElementById('edit-sale-record-id').value = sale.id;
-      document.getElementById('edit-sale-business-type').value = sale.business;
       document.getElementById('edit-sale-date').value = sale.date;
       document.getElementById('edit-sale-qty').value = sale.qty;
       document.getElementById('edit-sale-product').value = sale.product;
       document.getElementById('edit-sale-customer').value = sale.customer;
       document.getElementById('edit-sale-buy-price').value = sale.buyPrice;
       document.getElementById('edit-sale-sell-price').value = sale.sellPrice;
-      document.getElementById('edit-sale-payment-status').value = sale.paymentStatus;
-      document.getElementById('edit-sale-modal-paid-amount').value = sale.paidAmount;
+      document.getElementById('edit-sale-payment-status').value = sale.status;
+      document.getElementById('edit-sale-modal-paid-amount').value = sale.paidAmount || 0;
+
       toggleEditSaleModalPartialInput();
       openModal('editSaleModal');
     }
 
-    function handleEditSaleSubmit(e) {
+    async function handleEditSaleSubmit(e) {
       e.preventDefault();
       const id = document.getElementById('edit-sale-record-id').value;
       const index = state.appearichSales.findIndex(s => s.id === id);
-      if (index === -1) return;
+      if (index >= 0) {
+        const status = document.getElementById('edit-sale-payment-status').value;
+        const qty = Number(document.getElementById('edit-sale-qty').value);
+        const sellPrice = Number(document.getElementById('edit-sale-sell-price').value);
 
-      const qty = Number(document.getElementById('edit-sale-qty').value);
-      const sellPrice = Number(document.getElementById('edit-sale-sell-price').value);
-      const status = document.getElementById('edit-sale-payment-status').value;
+        state.appearichSales[index] = {
+          ...state.appearichSales[index],
+          business: document.getElementById('edit-sale-business-type').value,
+          date: document.getElementById('edit-sale-date').value,
+          qty,
+          product: document.getElementById('edit-sale-product').value,
+          customer: document.getElementById('edit-sale-customer').value,
+          buyPrice: Number(document.getElementById('edit-sale-buy-price').value),
+          sellPrice,
+          status,
+          paidAmount: status === 'PARTIAL' ? Number(document.getElementById('edit-sale-modal-paid-amount').value) : (qty * sellPrice)
+        };
 
-      state.appearichSales[index] = {
-        ...state.appearichSales[index],
-        business: document.getElementById('edit-sale-business-type').value,
-        date: document.getElementById('edit-sale-date').value,
-        qty: qty,
-        product: document.getElementById('edit-sale-product').value,
-        customer: document.getElementById('edit-sale-customer').value,
-        buyPrice: Number(document.getElementById('edit-sale-buy-price').value),
-        sellPrice: sellPrice,
-        paymentStatus: status,
-        paidAmount: status === 'PARTIAL' ? Number(document.getElementById('edit-sale-modal-paid-amount').value) : (qty * sellPrice)
-      };
-
-      saveToStorage();
-      closeModal('editSaleModal');
-      renderAll();
-    }
-
-    function deleteSale(id) {
-      if (!confirm('Are you sure you want to permanently delete this transaction?')) return;
-      state.appearichSales = state.appearichSales.filter(s => s.id !== id);
-      saveToStorage();
-      renderAll();
-    }
-
-    function toggleSalePartialInput() {
-      const status = document.getElementById('sale-payment-status').value;
-      const container = document.getElementById('sale-partial-container');
-      if (status === 'PARTIAL') {
-        container.classList.remove('hidden');
-      } else {
-        container.classList.add('hidden');
-      }
-    }
-
-    function toggleEditSaleModalPartialInput() {
-      const status = document.getElementById('edit-sale-payment-status').value;
-      const container = document.getElementById('edit-sale-modal-partial-container');
-      if (status === 'PARTIAL') {
-        container.classList.remove('hidden');
-      } else {
-        container.classList.add('hidden');
+        await saveDataToSupabase();
+        closeModal('editSaleModal');
+        renderAll();
       }
     }
 
     function toggleSelectAllSales(master) {
-      const checkboxes = document.querySelectorAll('.sale-checkbox');
-      checkboxes.forEach(cb => cb.checked = master.checked);
+      document.querySelectorAll('.sale-checkbox').forEach(cb => cb.checked = master.checked);
       updateSelectedSalesCount();
     }
 
     function updateSelectedSalesCount() {
-      const checked = document.querySelectorAll('.sale-checkbox:checked');
-      const countEl = document.getElementById('selected-count');
+      const checkedCount = document.querySelectorAll('.sale-checkbox:checked').length;
       const btn = document.getElementById('bulk-delete-btn');
-      if (countEl) countEl.innerText = checked.length;
-      if (btn) {
-        if (checked.length > 0) btn.classList.remove('hidden');
-        else btn.classList.add('hidden');
-      }
+      document.getElementById('selected-count').innerText = checkedCount;
+      if (checkedCount > 0) btn.classList.remove('hidden');
+      else btn.classList.add('hidden');
     }
 
-    function deleteSelectedSales() {
-      const checked = document.querySelectorAll('.sale-checkbox:checked');
-      if (checked.length === 0) return;
-      if (!confirm(`Permanently delete ${checked.length} selected transaction(s)?`)) return;
-      const idsToDelete = Array.from(checked).map(cb => cb.value);
-      state.appearichSales = state.appearichSales.filter(s => !idsToDelete.includes(s.id));
-      saveToStorage();
+    async function deleteSelectedSales() {
+      const checkedIds = Array.from(document.querySelectorAll('.sale-checkbox:checked')).map(cb => cb.value);
+      if (!checkedIds.length) return;
+      state.appearichSales = state.appearichSales.filter(s => !checkedIds.includes(s.id));
+      await saveDataToSupabase();
       renderAll();
-    }
-
-    function handleAddBusinessOption(e) {
-      e.preventDefault();
-      const name = document.getElementById('new-business-name-input').value.trim();
-      if (name && !state.appearichBusinesses.includes(name)) {
-        state.appearichBusinesses.push(name);
-        saveToStorage();
-      }
-      closeModal('addBusinessModal');
-      e.target.reset();
-      renderAll();
-    }
-
-    function handleAddIncome(e) {
-      e.preventDefault();
-      const name = document.getElementById('income-name-input').value;
-      const amount = Number(document.getElementById('income-amount-input').value);
-      const month = document.getElementById('income-month-picker').value || new Date().toISOString().slice(0, 7);
-      
-      state.incomeEntries.push({
-        id: 'inc_' + Date.now(),
-        name,
-        amount,
-        month,
-        date: new Date().toISOString().slice(0, 10)
-      });
-      saveToStorage();
-      closeModal('addIncomeModal');
-      e.target.reset();
-      renderAll();
-    }
-
-    function deleteIncome(id) {
-      state.incomeEntries = state.incomeEntries.filter(i => i.id !== id);
-      saveToStorage();
-      renderAll();
-    }
-
-    function handleAddTransaction(e) {
-      e.preventDefault();
-      const newTx = {
-        id: 'tx_' + Date.now(),
-        name: document.getElementById('tx-name').value,
-        category: document.getElementById('tx-category').value,
-        account: document.getElementById('tx-account').value,
-        amount: Number(document.getElementById('tx-amount').value),
-        date: document.getElementById('tx-date').value
-      };
-      state.dailyExpenses.unshift(newTx);
-      saveToStorage();
-      closeModal('addTransactionModal');
-      e.target.reset();
-      renderAll();
-    }
-
-    function deleteDailyExpense(id) {
-      state.dailyExpenses = state.dailyExpenses.filter(t => t.id !== id);
-      saveToStorage();
-      renderAll();
-    }
-
-    function handleAddLoan(e) {
-      e.preventDefault();
-      const loan = {
-        id: 'loan_' + Date.now(),
-        borrower: document.getElementById('loan-borrower').value,
-        amount: Number(document.getElementById('loan-amount').value),
-        paid: Number(document.getElementById('loan-paid').value),
-        date: document.getElementById('loan-date').value,
-        note: document.getElementById('loan-note').value
-      };
-      state.loans.unshift(loan);
-      saveToStorage();
-      closeModal('addLoanModal');
-      e.target.reset();
-      renderAll();
-    }
-
-    function deleteLoan(id) {
-      state.loans = state.loans.filter(l => l.id !== id);
-      saveToStorage();
-      renderAll();
-    }
-
-    function handleAddInvestmentCapital(e) {
-      e.preventDefault();
-      const amount = Number(document.getElementById('inv-add-amount').value);
-      state.investments.push({
-        id: 'inv_' + Date.now(),
-        amount,
-        date: new Date().toISOString().slice(0, 10)
-      });
-      state.investmentValuation += amount;
-      saveToStorage();
-      closeModal('addInvestmentModal');
-      e.target.reset();
-      renderAll();
-    }
-
-    function handleUpdateInvestmentValue(e) {
-      e.preventDefault();
-      state.investmentValuation = Number(document.getElementById('inv-update-value').value);
-      saveToStorage();
-      closeModal('updateInvestmentModal');
-      renderAll();
-    }
-
-    function handleAddCategory(e) {
-      e.preventDefault();
-      const name = document.getElementById('cat-name-input').value;
-      const amount = Number(document.getElementById('cat-amount-input').value);
-      const key = 'cat_custom_' + Date.now();
-      state.budgetCategories[key] = { name, amount, icon: 'folder' };
-      saveToStorage();
-      closeModal('addCategoryModal');
-      e.target.reset();
-      renderAll();
-    }
-
-    function handleTransfer(e) {
-      e.preventDefault();
-      const from = document.getElementById('tr-from').value;
-      const to = document.getElementById('tr-to').value;
-      const amount = Number(document.getElementById('tr-amount').value);
-      if (from === to) {
-        alert('Cannot transfer to the same account.');
-        return;
-      }
-      state.accounts[from] = (state.accounts[from] || 0) - amount;
-      state.accounts[to] = (state.accounts[to] || 0) + amount;
-      saveToStorage();
-      closeModal('transferModal');
-      renderAll();
-    }
-
-    function handleAddMoneyAccount(e) {
-      e.preventDefault();
-      const acc = document.getElementById('am-account').value;
-      const amount = Number(document.getElementById('am-amount').value);
-      state.accounts[acc] = (state.accounts[acc] || 0) + amount;
-      saveToStorage();
-      closeModal('addMoneyModal');
-      renderAll();
-    }
-
-    function handleMonthChange(e) {
-      state.selectedIncomeMonth = e.target.value;
-      renderAll();
-    }
-
-    function handleExpenseMonthChange(e) {
-      state.selectedExpenseMonth = e.target.value;
-      renderAll();
-    }
-
-    function handleGrowthMonthChange(e) {
-      state.selectedGrowthMonth = e.target.value;
-      renderAll();
-    }
-
-    function switchAppearichPeriod(period) {
-      state.appearichPeriod = period;
-      document.querySelectorAll('.app-period-btn').forEach(btn => {
-        btn.classList.remove('active', 'bg-brand-black', 'text-white');
-        btn.classList.add('bg-gray-100', 'text-brand-muted');
-      });
-      const activeBtn = document.getElementById('app-period-' + period);
-      if (activeBtn) {
-        activeBtn.classList.add('active', 'bg-brand-black', 'text-white');
-        activeBtn.classList.remove('bg-gray-100', 'text-brand-muted');
-      }
-      renderAppearichMetrics();
-    }
-
-    function handleProfitStartChange(val) {
-      state.profitStartId = val;
-      saveToStorage();
-      renderAll();
-    }
-
-    function toggleAuthMode() {
-      // Placeholder for auth toggle if needed
     }
 
     function handleAuth(e) {
       e.preventDefault();
       document.getElementById('auth-container').classList.add('hidden');
-      document.getElementById('app-wrapper').classList.remove('hidden');
     }
 
     function handleLogout() {
       document.getElementById('auth-container').classList.remove('hidden');
-      document.getElementById('app-wrapper').classList.add('hidden');
     }
 
-    function handleHeroUpload(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        document.getElementById('hero-bg-img').style.backgroundImage = `url('${evt.target.result}')`;
-      };
-      reader.readAsDataURL(file);
-    }
-
+    function toggleAuthMode() {}
+    function handleHeroUpload(e) {}
+    function editCategoryAmount(c) {}
+    function deleteCategoryAmount(c) {}
     function toggleUtilitiesAccordion() {
-      const content = document.getElementById('utilities-accordion');
+      const acc = document.getElementById('utilities-accordion');
       const chevron = document.getElementById('utilities-chevron');
-      if (content) {
-        content.classList.toggle('expanded');
-        if (chevron) chevron.classList.toggle('rotate-180');
+      acc.classList.toggle('expanded');
+      chevron.classList.toggle('rotate-180');
+    }
+    function updateSubcategoryTarget(subKey, val) {
+      state.utilitySubcategories[subKey].target = Number(val);
+      saveDataToSupabase();
+      renderBudgetTab();
+    }
+    function editIncome(id) {
+      const inc = state.incomeEntries.find(i => i.id === id);
+      if (!inc) return;
+      document.getElementById('edit-income-id').value = inc.id;
+      document.getElementById('income-name-input').value = inc.name;
+      document.getElementById('income-amount-input').value = inc.amount;
+      document.getElementById('modal-income-title').innerText = 'Edit Income Source';
+      document.getElementById('modal-income-submit').innerText = 'Save Changes';
+      openModal('addIncomeModal');
+    }
+    function editTransaction(id) {}
+    function openUpdateLoanModal(id) {
+      document.getElementById('edit-loan-id').value = id;
+      const loan = state.loans.find(l => l.id === id);
+      if (loan) document.getElementById('edit-loan-paid').value = loan.paid || 0;
+      openModal('updateLoanModal');
+    }
+    async function handleUpdateLoan(e) {
+      e.preventDefault();
+      const id = document.getElementById('edit-loan-id').value;
+      const paid = Number(document.getElementById('edit-loan-paid').value);
+      const loan = state.loans.find(l => l.id === id);
+      if (loan) {
+        loan.paid = paid;
+        await saveDataToSupabase();
+        closeModal('updateLoanModal');
+        renderAll();
       }
-    }
-
-    function handleCategoryAmountInput(catKey, val) {
-      if (state.budgetCategories[catKey]) {
-        state.budgetCategories[catKey].amount = Number(val);
-        saveToStorage();
-        renderBudget();
-      }
-    }
-
-    function editCategoryAmount(catKey) {
-      const cat = state.budgetCategories[catKey];
-      if (!cat) return;
-      const newVal = prompt(`Update target amount for ${cat.name}:`, cat.amount);
-      if (newVal !== null) {
-        cat.amount = Number(newVal);
-        saveToStorage();
-        renderBudget();
-      }
-    }
-
-    function deleteCategoryAmount(catKey) {
-      if (catKey.startsWith('cat-utilities') || catKey.startsWith('cat-investment') || catKey.startsWith('cat-expenses') || catKey.startsWith('cat-appearich') || catKey.startsWith('cat-other')) {
-        alert('Primary system categories cannot be deleted.');
-        return;
-      }
-      if (confirm('Delete this custom category?')) {
-        delete state.budgetCategories[catKey];
-        saveToStorage();
-        renderBudget();
-      }
-    }
-
-    // MASTER RENDER FUNCTION
-    function renderAll() {
-      renderDashboard();
-      renderIncome();
-      renderBudget();
-      renderDailyExpenses();
-      renderInvestment();
-      renderAppearich();
-      renderAccounts();
-      renderLoans();
-      renderGrowth();
-    }
-
-    function renderDashboard() {
-      const totalInc = state.incomeEntries.reduce((sum, i) => sum + i.amount, 0);
-      const godAmt = totalInc * 0.1;
-      const totalMoney = Object.values(state.accounts).reduce((a, b) => a + b, 0);
-      
-      document.getElementById('dash-total-income').innerText = totalInc.toLocaleString() + ' Sh';
-      document.getElementById('dash-god-amount').innerText = godAmt.toLocaleString() + ' Sh';
-      document.getElementById('dash-total-money').innerText = totalMoney.toLocaleString() + ' Sh';
-      document.getElementById('dash-remaining-budget').innerText = (totalMoney * 0.9).toLocaleString() + ' Sh';
-    }
-
-    function renderIncome() {
-      const month = document.getElementById('income-month-picker').value || state.selectedIncomeMonth;
-      const filtered = state.incomeEntries.filter(i => i.month === month);
-      const totalMonthInc = filtered.reduce((sum, i) => sum + i.amount, 0);
-      const tithe = totalMonthInc * 0.1;
-
-      document.getElementById('income-god-total').innerText = tithe.toLocaleString() + ' Sh';
-      document.getElementById('income-month-label').innerText = month;
-
-      const container = document.getElementById('income-list-container');
-      container.innerHTML = filtered.map(i => `
-        <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-between">
-          <div>
-            <p class="font-bold text-sm text-brand-black">${i.name}</p>
-            <p class="text-xs text-brand-muted mt-0.5">${i.date}</p>
-          </div>
-          <div class="text-right flex items-center space-x-3">
-            <div>
-              <p class="font-bold text-sm text-brand-black">${i.amount.toLocaleString()} Sh</p>
-              <p class="text-[10px] text-brand-gold font-bold">Tithe: ${(i.amount * 0.1).toLocaleString()} Sh</p>
-            </div>
-            <button onclick="deleteIncome('${i.id}')" class="text-red-500 hover:text-red-700 p-1.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function renderBudget() {
-      const totalInc = state.incomeEntries.reduce((sum, i) => sum + i.amount, 0);
-      const pool = totalInc * 0.9;
-      document.getElementById('budget-pool-total').innerText = pool.toLocaleString() + ' Sh';
-
-      let totalAllocated = 0;
-      Object.entries(state.budgetCategories).forEach(([key, cat]) => {
-        totalAllocated += cat.amount;
-        const inputEl = document.getElementById('cat-amount-' + key);
-        if (inputEl && document.activeElement !== inputEl) {
-          inputEl.value = cat.amount;
-        }
-      });
-
-      const percent = pool > 0 ? Math.min(100, Math.round((totalAllocated / pool) * 100)) : 0;
-      document.getElementById('budget-allocated-percent').innerText = percent + '%';
-      document.getElementById('budget-allocated-bar').style.width = percent + '%';
-    }
-
-    function renderDailyExpenses() {
-      const month = document.getElementById('daily-expense-month-picker').value || state.selectedExpenseMonth;
-      const filtered = state.dailyExpenses.filter(t => t.date && t.date.startsWith(month));
-      
-      document.getElementById('daily-expense-log-count').innerText = filtered.length + ' Expenses Recorded';
-      document.getElementById('daily-expense-month-label').innerText = month;
-
-      const tbody = document.getElementById('daily-expense-table-body');
-      tbody.innerHTML = filtered.map(t => `
-        <tr class="hover:bg-gray-50/50">
-          <td class="py-3">${t.date}</td>
-          <td class="py-3 font-bold">${t.name}</td>
-          <td class="py-3"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-[10px] font-bold">${t.category}</span></td>
-          <td class="py-3">${t.account}</td>
-          <td class="py-3 text-right font-bold text-red-600">-${t.amount.toLocaleString()} Sh</td>
-          <td class="py-3 text-right">
-            <button onclick="deleteDailyExpense('${t.id}')" class="text-red-500 hover:text-red-700 font-bold p-1">Delete</button>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    function renderInvestment() {
-      const totalInv = state.investments.reduce((sum, inv) => sum + inv.amount, 0);
-      const curVal = state.investmentValuation;
-      const gain = curVal - totalInv;
-      const returnPct = totalInv > 0 ? (gain / totalInv) * 100 : 0;
-
-      document.getElementById('inv-total-invested').innerText = totalInv.toLocaleString() + ' Sh';
-      document.getElementById('inv-current-value').innerText = curVal.toLocaleString() + ' Sh';
-      document.getElementById('inv-gain-loss').innerText = (gain >= 0 ? '+' : '') + gain.toLocaleString() + ' Sh';
-      document.getElementById('inv-percentage-return').innerText = (returnPct >= 0 ? '+' : '') + returnPct.toFixed(2) + '%';
-
-      const container = document.getElementById('investment-history-list');
-      container.innerHTML = state.investments.map(i => `
-        <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-between">
-          <div>
-            <p class="font-bold text-xs text-brand-black">Capital Addition</p>
-            <p class="text-[10px] text-brand-muted">${i.date}</p>
-          </div>
-          <p class="font-bold text-sm text-brand-black">+${i.amount.toLocaleString()} Sh</p>
-        </div>
-      `).join('');
-    }
-
-    function renderAppearich() {
-      populateBusinessDropdowns();
-      const bar = document.getElementById('business-types-bar');
-      bar.innerHTML = state.appearichBusinesses.map(b => `
-        <button onclick="state.activeAppearichBusiness='${b}'; renderAppearich();" class="px-4 py-2 rounded-xl text-xs font-bold transition flex-shrink-0 ${state.activeAppearichBusiness === b ? 'bg-brand-black text-white' : 'bg-gray-100 text-brand-muted hover:text-brand-black'}">
-          ${b}
-        </button>
-      `).join('');
-
-      document.getElementById('active-business-view-label').innerText = 'Active Business View: ' + state.activeAppearichBusiness;
-      renderAppearichMetrics();
-      renderAppearichSales();
-    }
-
-    function renderAppearichMetrics() {
-      const businessSales = state.appearichSales.filter(s => s.business === state.activeAppearichBusiness);
-      const totalRev = businessSales.reduce((sum, s) => sum + (s.qty * s.sellPrice), 0);
-      const totalCost = businessSales.reduce((sum, s) => sum + (s.qty * s.buyPrice), 0);
-      const totalProfit = totalRev - totalCost;
-      const totalOutstanding = businessSales.reduce((sum, s) => sum + ((s.qty * s.sellPrice) - s.paidAmount), 0);
-
-      document.getElementById('app-today-sales').innerText = totalRev.toLocaleString() + ' Sh';
-      document.getElementById('app-today-profit').innerText = totalProfit.toLocaleString() + ' Sh';
-      document.getElementById('app-month-revenue').innerText = totalRev.toLocaleString() + ' Sh';
-      document.getElementById('app-total-outstanding').innerText = totalOutstanding.toLocaleString() + ' Sh';
-      document.getElementById('app-total-profit').innerText = totalProfit.toLocaleString() + ' Sh';
-
-      document.getElementById('app-period-sold').innerText = businessSales.reduce((sum, s) => sum + s.qty, 0);
-      document.getElementById('app-period-revenue').innerText = totalRev.toLocaleString() + ' Sh';
-      document.getElementById('app-period-cost').innerText = totalCost.toLocaleString() + ' Sh';
-      const margin = totalRev > 0 ? (totalProfit / totalRev) * 100 : 0;
-      document.getElementById('app-period-margin').innerText = margin.toFixed(1) + '%';
-    }
-
-    function renderAppearichSales() {
-      const businessSales = state.appearichSales.filter(s => s.business === state.activeAppearichBusiness);
-      const tbody = document.getElementById('appearich-sales-table');
-      
-      tbody.innerHTML = businessSales.map(s => {
-        const totalVal = s.qty * s.sellPrice;
-        const profit = totalVal - (s.qty * s.buyPrice);
-        return `
-          <tr class="hover:bg-gray-50/50">
-            <td class="py-3"><input type="checkbox" class="sale-checkbox" value="${s.id}" onchange="updateSelectedSalesCount()"></td>
-            <td class="py-3">${s.date}</td>
-            <td class="py-3 font-semibold">${s.business}</td>
-            <td class="py-3 font-bold">${s.product} (${s.qty})</td>
-            <td class="py-3">${s.customer}</td>
-            <td class="py-3 font-semibold">${totalVal.toLocaleString()} Sh</td>
-            <td class="py-3 font-semibold text-emerald-600">${s.paidAmount.toLocaleString()} Sh</td>
-            <td class="py-3 font-bold text-emerald-600">+${profit.toLocaleString()} Sh</td>
-            <td class="py-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${s.paymentStatus === 'FULL' ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}">${s.paymentStatus}</span></td>
-            <td class="py-3 text-right space-x-2">
-              <button onclick="editSale('${s.id}')" class="text-blue-600 hover:text-blue-800 font-bold p-1">Edit</button>
-              <button onclick="deleteSale('${s.id}')" class="text-red-500 hover:text-red-700 font-bold p-1">Delete</button>
-            </td>
-          </tr>
-        `;
-      }).join('');
-
-      const profitSelect = document.getElementById('profit-start-select');
-      if (profitSelect) {
-        profitSelect.innerHTML = '<option value="">-- Count all sales --</option>' + businessSales.map(s => `<option value="${s.id}" ${state.profitStartId === s.id ? 'selected' : ''}>${s.date} - ${s.product} (${s.customer})</option>`).join('');
-      }
-    }
-
-    function renderAccounts() {
-      const totalMoney = Object.values(state.accounts).reduce((a, b) => a + b, 0);
-      document.getElementById('accounts-total-money').innerText = totalMoney.toLocaleString() + ' Sh';
-
-      const grid = document.getElementById('account-cards-grid');
-      grid.innerHTML = Object.entries(state.accounts).map(([name, amt]) => `
-        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold uppercase tracking-wider text-brand-muted">${name}</span>
-            <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center font-bold text-xs">${name[0]}</div>
-          </div>
-          <div class="mt-6">
-            <p class="font-display text-2xl font-bold text-brand-black">${amt.toLocaleString()} Sh</p>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function renderLoans() {
-      const totalOwed = state.loans.reduce((sum, l) => sum + (l.amount - l.paid), 0);
-      document.getElementById('loan-total-owed').innerText = totalOwed.toLocaleString() + ' Sh';
-
-      const list = document.getElementById('loan-cards-list');
-      list.innerHTML = state.loans.map(l => `
-        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
-          <div class="flex justify-between items-start">
-            <div>
-              <p class="font-bold text-base text-brand-black">${l.borrower}</p>
-              <p class="text-xs text-brand-muted">${l.date}</p>
-            </div>
-            <button onclick="deleteLoan('${l.id}')" class="text-red-500 hover:text-red-700 text-xs font-bold">Delete</button>
-          </div>
-          <div class="flex justify-between text-xs pt-2 border-t border-gray-100">
-            <span class="text-brand-muted">Borrowed: ${l.amount.toLocaleString()} Sh</span>
-            <span class="font-bold text-emerald-600">Owed: ${(l.amount - l.paid).toLocaleString()} Sh</span>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function renderGrowth() {
-      const month = document.getElementById('growth-month-picker').value || state.selectedGrowthMonth;
-      document.getElementById('growth-selected-month-name').innerText = 'Growth in ' + month;
-      
-      const totalInvGain = state.investmentValuation - state.investments.reduce((sum, i) => sum + i.amount, 0);
-      const totalBizProfit = state.appearichSales.reduce((sum, s) => sum + ((s.qty * s.sellPrice) - (s.qty * s.buyPrice)), 0);
-      const totalGrowth = Math.max(0, totalInvGain + totalBizProfit);
-
-      document.getElementById('growth-latest-total').innerText = totalGrowth.toLocaleString() + ' Sh';
-      document.getElementById('growth-selected-month-total').innerText = totalGrowth.toLocaleString() + ' Sh';
-      document.getElementById('tithe-monthly-growth').innerText = totalGrowth.toLocaleString() + ' Sh';
-      document.getElementById('tithe-god-amount').innerText = (totalGrowth * 0.1).toLocaleString() + ' Sh';
-      document.getElementById('tithe-growth-after').innerText = (totalGrowth * 0.9).toLocaleString() + ' Sh';
-
-      document.getElementById('growth-log-count').innerText = state.appearichSales.length + ' Entries';
-      const tbody = document.getElementById('growth-entries-table-body');
-      tbody.innerHTML = state.appearichSales.map(s => {
-        const profit = (s.qty * s.sellPrice) - (s.qty * s.buyPrice);
-        return `
-          <tr class="hover:bg-gray-50/50">
-            <td class="py-3">${s.date}</td>
-            <td class="py-3 font-semibold">Business Sale</td>
-            <td class="py-3">${s.product} (${s.customer})</td>
-            <td class="py-3 text-right font-bold text-emerald-600">+${profit.toLocaleString()} Sh</td>
-            <td class="py-3 text-right">
-              <button onclick="deleteSale('${s.id}')" class="text-red-500 hover:text-red-700 font-bold">Delete</button>
-            </td>
-          </tr>
-        `;
-      }).join('');
     }
   </script>
 </body>
