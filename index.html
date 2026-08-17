@@ -761,7 +761,7 @@
           <div>
             <span class="text-xs font-bold text-brand-gold uppercase tracking-wider">NEW PROFIT FROM NOW ON</span>
             <h3 class="font-display font-bold text-xl text-brand-black mt-1">Incoming Profit</h3>
-            <p class="text-xs text-brand-muted mt-1">Record new profit separately from the existing imported sales profit.</p>
+            <p class="text-xs text-brand-muted mt-1">Automatically calculated from new Growth Profit generated after activation; historical profit remains separate.</p>
           </div>
           <div class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-brand-black flex-shrink-0">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 5v14m7-7H5"/></svg>
@@ -771,14 +771,10 @@
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-gray-100 pb-4">
             <div>
               <h3 class="font-bold text-lg text-brand-black">Incoming Profit</h3>
-              <p class="text-xs text-brand-muted mt-1">Only profits entered here from now onward are included.</p>
+              <p class="text-xs text-brand-muted mt-1">Incoming Profit is automatically calculated from eligible new Growth Profit generated after activation. Historical profit is excluded.</p>
             </div>
             <button type="button" onclick="toggleIncomingProfitSection()" class="text-xs font-semibold text-brand-muted hover:text-brand-black">Close</button>
           </div>
-          <form onsubmit="handleIncomingProfit(event)" class="flex flex-col sm:flex-row gap-3">
-            <input id="incoming-profit-amount" type="number" min="0.01" step="0.01" required placeholder="Enter new profit amount (Sh)" class="flex-1 px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-brand-black">
-            <button type="submit" class="px-5 py-3 rounded-xl bg-brand-black text-white font-bold text-sm hover:bg-gray-800 transition">Add Profit</button>
-          </form>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="p-5 rounded-2xl bg-gray-50 border border-gray-100"><p class="text-[10px] text-brand-muted uppercase font-bold">Incoming Profit Total</p><p id="incoming-profit-total" class="font-display font-extrabold text-2xl text-brand-black mt-2">0 Sh</p></div>
             <div class="p-5 rounded-2xl bg-brand-gold/10 border border-brand-gold/30"><p class="text-[10px] text-brand-gold uppercase font-bold">Tithe — 10%</p><p id="incoming-profit-tithe" class="font-display font-extrabold text-2xl text-brand-gold mt-2">0 Sh</p></div>
@@ -3283,6 +3279,8 @@
       profitStartId: null,
       selfLoveByMonth: {},
       incomingProfitEntries: [],
+      incomingProfitActivationAt: null,
+      incomingProfitInvestmentBaseline: 0,
       heroImage: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1600&auto=format&fit=crop'
     };
     // INITIALIZATION & SUPABASE AUTH / PERSISTENCE
@@ -3324,6 +3322,12 @@
         }
 
         if (!Array.isArray(state.incomingProfitEntries)) state.incomingProfitEntries = [];
+        // First login after this feature is introduced establishes the permanent historical boundary.
+        if (!state.incomingProfitActivationAt) {
+          state.incomingProfitActivationAt = new Date().toISOString();
+          state.incomingProfitInvestmentBaseline = getCurrentInvestmentGain();
+          state.incomingProfitEntries = [];
+        }
       const profileName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
         const greeting = document.getElementById('welcome-greeting');
         if (greeting) greeting.innerText = 'Welcome, ' + profileName;
@@ -3339,6 +3343,7 @@
       } finally {
         hydratingState = false;
       }
+      if (currentUser && state.incomingProfitActivationAt) await saveUserState();
     }
 
     async function saveUserState() {
@@ -3608,7 +3613,8 @@
           type: 'Appearich Sales Profit',
           description: `${sale.product} (${sale.business})`,
           amount: profit,
-          month: (sale.date || '').slice(0, 7)
+          month: (sale.date || '').slice(0, 7),
+          createdAt: sale.createdAt
         };
       }).filter(s => s && s.amount > 0);
       const allEntries = [...invEntries, ...salesEntries];
@@ -3663,46 +3669,59 @@
         </tr>
       `).join('');
     }
-    // INCOMING PROFIT — NEW PROFIT ONLY, COMPLETELY SEPARATE FROM THE FIXED 610,000 SH
+    // INCOMING PROFIT — AUTOMATICALLY SOURCED ONLY FROM NEW GROWTH PROFIT AFTER ACTIVATION
+    function getCurrentInvestmentGain() {
+      const totalInvested = state.investments.reduce((sum, i) => sum + (Number(i.amount) || 0), 0);
+      const currentValuation = state.investmentValuation || totalInvested;
+      return Math.max(0, currentValuation - totalInvested);
+    }
+
+    function getIncomingProfitGrowthEntries() {
+      const activationAt = Date.parse(state.incomingProfitActivationAt || '');
+      if (!Number.isFinite(activationAt)) return [];
+
+      // Read Growth Profit from the existing Growth Profit calculation.
+      // No separate profit calculation is created here.
+      const months = new Set(
+        (state.appearichSales || [])
+          .map(sale => (sale.date || '').slice(0, 7))
+          .filter(Boolean)
+      );
+      months.add(new Date().toISOString().slice(0, 7));
+
+      const allGrowthEntries = [];
+      months.forEach(month => {
+        const growth = getGrowthDataForMonth(month);
+        allGrowthEntries.push(...growth.monthEntries);
+      });
+
+      const baselineGain = Math.max(0, Number(state.incomingProfitInvestmentBaseline) || 0);
+
+      return allGrowthEntries.map(entry => {
+        if (entry.type === 'Investment Gain') {
+          const eligibleAmount = Math.max(0, (Number(entry.amount) || 0) - baselineGain);
+          if (eligibleAmount <= 0) return null;
+          return { ...entry, amount: eligibleAmount };
+        }
+
+        const createdAt = Date.parse(entry.createdAt || '');
+        if (!Number.isFinite(createdAt) || createdAt < activationAt) return null;
+
+        return entry;
+      }).filter(entry => entry && (Number(entry.amount) || 0) > 0);
+    }
+
     function toggleIncomingProfitSection() {
       const section = document.getElementById('incoming-profit-section');
       if (!section) return;
       section.classList.toggle('hidden');
       if (!section.classList.contains('hidden')) {
-        const input = document.getElementById('incoming-profit-amount');
-        if (input) input.focus();
         renderIncomingProfit();
       }
     }
 
-    function handleIncomingProfit(e) {
-      e.preventDefault();
-      const input = document.getElementById('incoming-profit-amount');
-      const amount = Number(input?.value);
-      if (!Number.isFinite(amount) || amount <= 0) {
-        alert('Please enter a valid incoming profit amount.');
-        return;
-      }
-      if (!state.incomingProfitEntries) state.incomingProfitEntries = [];
-      state.incomingProfitEntries.push({
-        id: 'incoming-profit-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8),
-        date: new Date().toISOString().slice(0, 10),
-        amount
-      });
-      input.value = '';
-      renderIncomingProfit();
-      saveUserState();
-    }
-
-    function deleteIncomingProfit(id) {
-      if (!confirm('Delete this Incoming Profit record?')) return;
-      state.incomingProfitEntries = (state.incomingProfitEntries || []).filter(entry => entry.id !== id);
-      renderIncomingProfit();
-      saveUserState();
-    }
-
     function renderIncomingProfit() {
-      const entries = Array.isArray(state.incomingProfitEntries) ? state.incomingProfitEntries : [];
+      const entries = getIncomingProfitGrowthEntries();
       const total = entries.reduce((sum, entry) => sum + (Number(entry.amount) || 0), 0);
       const tithe = total * 0.10;
       const selfLove = total * 0.90;
@@ -3712,18 +3731,24 @@
       const countEl = document.getElementById('incoming-profit-count');
       const recordsEl = document.getElementById('incoming-profit-records');
       if (!totalEl) return;
+
       totalEl.innerText = formatSh(total);
       titheEl.innerText = formatSh(tithe);
       selfLoveEl.innerText = formatSh(selfLove);
-      countEl.innerText = `${entries.length} Entries`;
+      countEl.innerText = `${entries.length} Growth Profit Entries`;
+
       if (!entries.length) {
-        recordsEl.innerHTML = '<p class="py-4 text-center text-xs text-brand-muted">No Incoming Profit records yet.</p>';
+        recordsEl.innerHTML = '<p class="py-4 text-center text-xs text-brand-muted">No new Growth Profit has been generated since Incoming Profit activation.</p>';
         return;
       }
+
       recordsEl.innerHTML = entries.slice().reverse().map(entry => `
         <div class="flex items-center justify-between gap-3 p-3 rounded-xl bg-gray-50 border border-gray-100">
-          <div><p class="text-xs font-semibold text-brand-black">${entry.date}</p><p class="text-[10px] text-brand-muted">Incoming Profit</p></div>
-          <div class="flex items-center gap-3"><p class="text-sm font-bold text-emerald-600">+${formatSh(Number(entry.amount) || 0)}</p><button type="button" onclick="deleteIncomingProfit('${entry.id}')" class="text-[10px] font-semibold text-red-500 hover:text-red-700">Delete</button></div>
+          <div>
+            <p class="text-xs font-semibold text-brand-black">${entry.date}</p>
+            <p class="text-[10px] text-brand-muted">${entry.type} — ${entry.description}</p>
+          </div>
+          <p class="text-sm font-bold text-emerald-600">+${formatSh(Number(entry.amount) || 0)}</p>
         </div>`).join('');
     }
 
@@ -3982,7 +4007,8 @@
         buyPrice,
         sellPrice,
         paymentStatus,
-        paidAmount
+        paidAmount,
+        createdAt: new Date().toISOString()
       });
       closeModal('addSaleModal');
       renderAll();
