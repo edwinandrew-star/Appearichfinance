@@ -3513,8 +3513,25 @@
         amount: investmentGain,
         month: new Date().toISOString().slice(0, 7)
       }] : [];
-      // 2. Appearich Sales Profit: Actual sales profit per transaction
+      // 2. Appearich Sales Profit: Actual sales profit per transaction.
+      // The Profit Start Point affects ONLY imported sales. Manually added sales
+      // continue to be included normally.
+      const importedSales = state.appearichSales
+        .filter(sale => String(sale.id || '').startsWith('sale-import-'))
+        .slice()
+        .sort((a, b) => String(a.date || '').localeCompare(String(b.date || '')));
+
+      let importedSalesToCount = importedSales;
+      if (state.profitStartId) {
+        const startIndex = importedSales.findIndex(sale => sale.id === state.profitStartId);
+        if (startIndex >= 0) importedSalesToCount = importedSales.slice(startIndex);
+      }
+      const importedSalesToCountIds = new Set(importedSalesToCount.map(sale => sale.id));
+      const importedSalesIds = new Set(importedSales.map(sale => sale.id));
+
       const salesEntries = state.appearichSales.map(sale => {
+        // Exclude only imported sales that occur before the selected start point.
+        if (importedSalesIds.has(sale.id) && !importedSalesToCountIds.has(sale.id)) return null;
         const profit = sale.profit != null ? (Number(sale.profit) || 0) : Math.max(0, (sale.sellPrice - sale.buyPrice) * sale.qty);
         return {
           id: sale.id,
@@ -3524,7 +3541,7 @@
           amount: profit,
           month: (sale.date || '').slice(0, 7)
         };
-      }).filter(s => s.amount > 0);
+      }).filter(s => s && s.amount > 0);
       const allEntries = [...invEntries, ...salesEntries];
       const monthEntries = allEntries.filter(e => e.month === month);
       const monthlyTotal = monthEntries.reduce((sum, e) => sum + e.amount, 0);
@@ -3906,6 +3923,18 @@
     function renderAppearichSection() {
       populateBusinessDropdown('sale-business-type');
       const tbody = document.getElementById('appearich-sales-table');
+      // Populate the Profit Start Point selector ONLY in the Transaction History → Sales section.
+      const profitStartSelect = document.getElementById('profit-start-select');
+      if (profitStartSelect) {
+        const importedSales = state.appearichSales
+          .filter(sale => String(sale.id || '').startsWith('sale-import-'))
+          .slice()
+          .sort((a, b) => String(a.date || '').localeCompare(String(b.date || '')));
+        const selectedStart = state.profitStartId || '';
+        profitStartSelect.innerHTML = `<option value="">-- Count all imported sales --</option>` +
+          importedSales.map(sale => `<option value="${sale.id}">${sale.date || 'No date'} — ${sale.product || 'Imported sale'}${sale.customer ? ` — ${sale.customer}` : ''}</option>`).join('');
+        profitStartSelect.value = importedSales.some(sale => sale.id === selectedStart) ? selectedStart : '';
+      }
       if (state.appearichSales.length === 0) {
         tbody.innerHTML = `<tr><td colspan="10" class="py-6 text-center text-brand-muted">No Appearich sales recorded yet.</td></tr>`;
         return;
@@ -4222,11 +4251,16 @@
     // EXISTING FUNCTIONALITY STUBS KEPT UNCHANGED
     function deleteSelectedSales() {}
     function toggleSelectAllSales(el) {}
-    function handleProfitStartChange(val) {}
+    function handleProfitStartChange(val) {
+      // This setting controls profit accumulation from IMPORTED sales only.
+      // It does not change the sales records, prices, payments, or other calculations.
+      state.profitStartId = val || null;
+      renderGrowthSection();
+      saveUserState();
+    }
     function switchAppearichPeriod(p) {}
     function editHomeTotalIncome() { const current = getTotalIncome(); const value = prompt("Enter Total Income:", current); if (value !== null) { const parsed = parseFloat(value); if (isNaN(parsed) || parsed < 0) { alert("Please enter a valid amount."); return; } state.manualTotalIncome = parsed; renderAll(); saveUserState(); } }    function deleteHomeTotalIncome() { if (confirm("Delete Total Income amount?")) { state.manualTotalIncome = 0; renderAll(); saveUserState(); } }    let pendingExcelSales = [];    function previewExcelFile(e) { const file=e.target.files?.[0]; if(!file)return; const reader=new FileReader(); reader.onload=function(evt){try{const wb=XLSX.read(new Uint8Array(evt.target.result),{type:"array",cellDates:true}); const rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:""}); pendingExcelSales=rows.map((row,i)=>{const get=(names)=>{const k=Object.keys(row).find(x=>names.includes(String(x).trim().toLowerCase()));return k===undefined?"":row[k]}; const dateVal=get(["date","sale date","transaction date"]); let date=""; if(dateVal instanceof Date&&!isNaN(dateVal))date=dateVal.toISOString().slice(0,10); else if(typeof dateVal==="number"&&XLSX.SSF){const d=XLSX.SSF.parse_date_code(dateVal);date=d?`${d.y}-${String(d.m).padStart(2,"0")}-${String(d.d).padStart(2,"0")}`:"";} else {const d=new Date(String(dateVal));date=isNaN(d)?String(dateVal):d.toISOString().slice(0,10)} const qty=parseInt(get(["qty","quantity"]))||1; const buyPrice=Number(get(["buy price","buying price","cost price","cost"]))||0; const sellPrice=Number(get(["sell price","selling price","sale price","price"]))||0; const paidAmount=Number(get(["paid","paid amount","amount paid"]))||0; const status=String(get(["status","payment status"])).toUpperCase(); return {id:"sale-import-"+Date.now()+"-"+i,date,business:String(get(["business","business type"])||state.activeAppearichBusiness||"Appearich Main"),product:String(get(["product","item","product name"])),qty,customer:String(get(["customer","customer name","client"])),buyPrice,sellPrice,paymentStatus:(status==="PARTIAL"||(paidAmount>0&&paidAmount<sellPrice*qty))?"PARTIAL":"FULL",paidAmount:status==="FULL"?sellPrice*qty:paidAmount};}).filter(s=>s.product||s.sellPrice||s.date); document.getElementById("preview-count").innerText=pendingExcelSales.length; document.getElementById("excel-preview-body").innerHTML=pendingExcelSales.map(s=>`<tr><td class="p-2">${s.date}</td><td class="p-2">${s.product}</td><td class="p-2">${s.qty}</td><td class="p-2">${formatSh(s.buyPrice)}</td><td class="p-2">${formatSh(s.sellPrice)}</td><td class="p-2">${s.customer}</td><td class="p-2">${s.paymentStatus}</td></tr>`).join(""); document.getElementById("excel-preview-container").classList.toggle("hidden",pendingExcelSales.length===0);}catch(err){console.error(err);alert("Unable to read this Excel file.");pendingExcelSales=[];}}; reader.readAsArrayBuffer(file); }
     async function confirmExcelImport() { if(!pendingExcelSales.length){alert("No sales records to import.");return;} state.appearichSales=[...state.appearichSales,...pendingExcelSales].sort((a,b)=>String(b.date||"").localeCompare(String(a.date||""))); renderAll(); await saveUserState(); pendingExcelSales=[]; document.getElementById("excel-file-input").value=""; document.getElementById("excel-preview-container").classList.add("hidden"); document.getElementById("preview-count").innerText="0"; closeModal("importExcelModal"); }
   </script>
 </body>
 </html>
-
