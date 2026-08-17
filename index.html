@@ -251,7 +251,7 @@
                 <svg class="w-4 h-4 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               </div>
               <div class="mt-4">
-                <p id="dash-total-income" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-black">0 Sh</p>
+<div class="flex items-center justify-between gap-2"><p id="dash-total-income" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-black">0 Sh</p><div class="flex items-center space-x-1"><button onclick="editHomeTotalIncome()" title="Edit Total Income" class="p-1.5 text-gray-500 hover:text-black hover:bg-gray-100 rounded-lg transition">Edit</button><button onclick="deleteHomeTotalIncome()" title="Delete Total Income" class="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition">Delete</button></div></div>
               </div>
             </div>
             <div class="p-5 rounded-2xl bg-brand-black text-white shadow-premium relative overflow-hidden flex flex-col justify-between">
@@ -1432,7 +1432,7 @@
       renderIncomeSection();
     }
     function getTotalIncome() {
-      return state.incomeEntries.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+      if (state.manualTotalIncome !== undefined && state.manualTotalIncome !== null) return Number(state.manualTotalIncome) || 0;      return state.incomeEntries.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
     }
     function renderIncomeSection() {
       const monthEntries = state.incomeEntries.filter(i => i.month === state.selectedIncomeMonth);
@@ -1875,7 +1875,7 @@
         tbody.innerHTML = `<tr><td colspan="10" class="py-6 text-center text-brand-muted">No Appearich sales recorded yet.</td></tr>`;
         return;
       }
-      tbody.innerHTML = state.appearichSales.map(sale => {
+      tbody.innerHTML = state.appearichSales.slice().sort((a, b) => String(b.date || "").localeCompare(String(a.date || ""))).map(sale => {
         const totalValue = sale.sellPrice * sale.qty;
         const profit = Math.max(0, (sale.sellPrice - sale.buyPrice) * sale.qty);
         return `
@@ -2189,8 +2189,9 @@
     function toggleSelectAllSales(el) {}
     function handleProfitStartChange(val) {}
     function switchAppearichPeriod(p) {}
-    function previewExcelFile(e) {}
-    function confirmExcelImport() {}
+    function editHomeTotalIncome() { const current = getTotalIncome(); const value = prompt("Enter Total Income:", current); if (value !== null) { const parsed = parseFloat(value); if (isNaN(parsed) || parsed < 0) { alert("Please enter a valid amount."); return; } state.manualTotalIncome = parsed; renderAll(); saveUserState(); } }    function deleteHomeTotalIncome() { if (confirm("Delete Total Income amount?")) { state.manualTotalIncome = 0; renderAll(); saveUserState(); } }    let pendingExcelSales = [];    function previewExcelFile(e) { const file=e.target.files?.[0]; if(!file)return; const reader=new FileReader(); reader.onload=function(evt){try{const wb=XLSX.read(new Uint8Array(evt.target.result),{type:"array",cellDates:true}); const rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:""}); pendingExcelSales=rows.map((row,i)=>{const get=(names)=>{const k=Object.keys(row).find(x=>names.includes(String(x).trim().toLowerCase()));return k===undefined?"":row[k]}; const dateVal=get(["date","sale date","transaction date"]); let date=""; if(dateVal instanceof Date&&!isNaN(dateVal))date=dateVal.toISOString().slice(0,10); else if(typeof dateVal==="number"&&XLSX.SSF){const d=XLSX.SSF.parse_date_code(dateVal);date=d?`${d.y}-${String(d.m).padStart(2,"0")}-${String(d.d).padStart(2,"0")}`:"";} else {const d=new Date(String(dateVal));date=isNaN(d)?String(dateVal):d.toISOString().slice(0,10)} const qty=parseInt(get(["qty","quantity"]))||1; const buyPrice=Number(get(["buy price","buying price","cost price","cost"]))||0; const sellPrice=Number(get(["sell price","selling price","sale price","price"]))||0; const paidAmount=Number(get(["paid","paid amount","amount paid"]))||0; const status=String(get(["status","payment status"])).toUpperCase(); return {id:"sale-import-"+Date.now()+"-"+i,date,business:String(get(["business","business type"])||state.activeAppearichBusiness||"Appearich Main"),product:String(get(["product","item","product name"])),qty,customer:String(get(["customer","customer name","client"])),buyPrice,sellPrice,paymentStatus:(status==="PARTIAL"||(paidAmount>0&&paidAmount<sellPrice*qty))?"PARTIAL":"FULL",paidAmount:status==="FULL"?sellPrice*qty:paidAmount};}).filter(s=>s.product||s.sellPrice||s.date); document.getElementById("preview-count").innerText=pendingExcelSales.length; document.getElementById("excel-preview-body").innerHTML=pendingExcelSales.map(s=>`<tr><td class="p-2">${s.date}</td><td class="p-2">${s.product}</td><td class="p-2">${s.qty}</td><td class="p-2">${formatSh(s.buyPrice)}</td><td class="p-2">${formatSh(s.sellPrice)}</td><td class="p-2">${s.customer}</td><td class="p-2">${s.paymentStatus}</td></tr>`).join(""); document.getElementById("excel-preview-container").classList.toggle("hidden",pendingExcelSales.length===0);}catch(err){console.error(err);alert("Unable to read this Excel file.");pendingExcelSales=[];}}; reader.readAsArrayBuffer(file); }
+    async function confirmExcelImport() { if(!pendingExcelSales.length){alert("No sales records to import.");return;} state.appearichSales=[...state.appearichSales,...pendingExcelSales].sort((a,b)=>String(b.date||"").localeCompare(String(a.date||""))); renderAll(); await saveUserState(); pendingExcelSales=[]; document.getElementById("excel-file-input").value=""; document.getElementById("excel-preview-container").classList.add("hidden"); document.getElementById("preview-count").innerText="0"; closeModal("importExcelModal"); }
   </script>
 </body>
 </html>
+
