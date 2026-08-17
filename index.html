@@ -228,7 +228,7 @@
           <span>Accounts</span>
         </button>
         <button id="nav-loans" onclick="switchTab('loans')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0 z" /></svg>
           <span>Loans</span>
         </button>
         <button id="nav-progress" onclick="switchTab('progress')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
@@ -738,7 +738,6 @@
             <input type="month" id="growth-month-picker" onchange="handleGrowthMonthChange(event)" class="px-3 py-2 rounded-xl border border-gray-200 text-xs font-bold bg-white text-brand-black shadow-sm">
           </div>
         </div>
-
         <!-- GROWTH OVERVIEW CARDS -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="p-8 rounded-3xl bg-brand-black text-white shadow-premium flex flex-col justify-between space-y-4 relative overflow-hidden">
@@ -757,7 +756,6 @@
             <p id="growth-selected-month-name" class="text-xs text-brand-muted font-semibold">Growth in Selected Month</p>
           </div>
         </div>
-
         <!-- 10% TITHE ON GROWTH PANEL -->
         <div class="p-8 rounded-3xl bg-brand-black text-white shadow-premium relative overflow-hidden">
           <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-brand-gold/20 rounded-full blur-3xl"></div>
@@ -790,7 +788,6 @@
             </div>
           </div>
         </div>
-
         <!-- GROWTH BREAKDOWN & HISTORY LOG -->
         <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
           <div class="flex items-center justify-between border-b border-gray-100 pb-4">
@@ -1139,7 +1136,7 @@
       </div>
       <div class="space-y-4">
         <div>
-          <label class="block text-xs font-bold uppercase mb-1 text-brand-muted">Select Sales Excel File (May 2025 - August 2026)</label>
+          <label class="block text-xs font-bold uppercase mb-1 text-brand-muted">Select Sales Excel File</label>
           <input type="file" id="excel-file-input" accept=".xlsx, .xls" onchange="previewExcelFile(event)" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-xs bg-white">
         </div>
         <div id="excel-preview-container" class="hidden space-y-3">
@@ -1160,7 +1157,7 @@
               <tbody id="excel-preview-body" class="divide-y divide-gray-100"></tbody>
             </table>
           </div>
-          <button onclick="confirmExcelImport()" id="confirm-import-btn" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-700 transition text-sm">Confirm & Import into Supabase</button>
+          <button onclick="confirmExcelImport()" id="confirm-import-btn" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-700 transition text-sm">Confirm & Import into Transaction Sales Log</button>
         </div>
       </div>
     </div>
@@ -1170,7 +1167,7 @@
     const SUPABASE_URL = 'https://zudqubbglwphfxaviqsg.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1ZHF1YmJnbHdwaGZ4YXZpcXNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0NjcyNTUsImV4cCI6MjA5ODA0MzI1NX0.7pRbRqz9-5gN8SG_ALn5ecHOWQofykPvhbrE2HQROCE';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+    
     // SYSTEM STATE
     let state = {
       incomeEntries: [],
@@ -1208,565 +1205,202 @@
       profitStartId: null
     };
 
+    let parsedExcelRows = [];
+
     // INITIALIZATION & EVENT LISTENERS
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         document.getElementById('splash-screen').classList.add('hidden');
         document.getElementById('app-wrapper').classList.remove('hidden');
         initializeMonthPickers();
-        renderAll();
+        loadFromStorage();
       }, 800);
     });
 
     function initializeMonthPickers() {
       const currentMonth = new Date().toISOString().slice(0, 7);
-      document.getElementById('income-month-picker').value = currentMonth;
-      document.getElementById('daily-expense-month-picker').value = currentMonth;
-      document.getElementById('growth-month-picker').value = currentMonth;
+      const pickers = ['income-month-picker', 'daily-expense-month-picker', 'growth-month-picker'];
+      pickers.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = currentMonth;
+      });
     }
 
     // MODAL CONTROL
     function openModal(id) {
-      document.getElementById(id).classList.remove('hidden');
+      const modal = document.getElementById(id);
+      if (modal) modal.classList.remove('hidden');
+      if (id === 'addSaleModal' || id === 'editSaleModal') {
+        populateBusinessDropdowns();
+      }
     }
 
     function closeModal(id) {
-      document.getElementById(id).classList.add('hidden');
-      if (id === 'addIncomeModal') {
-        document.getElementById('edit-income-id').value = '';
-        document.getElementById('income-name-input').value = '';
-        document.getElementById('income-amount-input').value = '';
-        document.getElementById('modal-income-title').innerText = 'Add Income Source';
-        document.getElementById('modal-income-submit').innerText = 'Save Income';
-      } else if (id === 'addTransactionModal') {
-        document.getElementById('edit-tx-id').value = '';
-        document.getElementById('tx-name').value = '';
-        document.getElementById('tx-amount').value = '';
-        document.getElementById('modal-tx-title').innerText = 'Add Expense Transaction';
-        document.getElementById('modal-tx-submit').innerText = 'Execute Expense';
-      } else if (id === 'addLoanModal') {
-        document.getElementById('edit-loan-record-id').value = '';
-        document.getElementById('loan-borrower').value = '';
-        document.getElementById('loan-amount').value = '';
-        document.getElementById('loan-paid').value = '0';
-        document.getElementById('loan-note').value = '';
-        document.getElementById('modal-loan-title').innerText = 'Record Loan Given';
-        document.getElementById('modal-loan-submit').innerText = 'Save Loan Record';
-      } else if (id === 'addInvestmentModal') {
-        document.getElementById('edit-investment-id').value = '';
-        document.getElementById('inv-add-amount').value = '';
-        document.getElementById('modal-investment-title').innerText = 'Add Investment Capital';
-        document.getElementById('modal-investment-submit').innerText = 'Add Capital';
-      }
+      const modal = document.getElementById(id);
+      if (modal) modal.classList.add('hidden');
     }
 
-    // NAVIGATION
-    function switchTab(tabKey) {
+    function switchTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      const activeTab = document.getElementById('tab-' + tabId);
+      if (activeTab) activeTab.classList.remove('hidden');
+
       document.querySelectorAll('.nav-tab').forEach(el => {
-        el.classList.remove('active', 'bg-brand-black', 'text-white');
+        el.classList.remove('active', 'bg-brand-black', 'text-white', 'shadow-sm');
         el.classList.add('text-brand-muted');
       });
-      document.querySelectorAll('.bnav-btn').forEach(el => {
-        el.classList.remove('text-brand-black');
-        el.classList.add('text-brand-muted');
-      });
-
-      const tabEl = document.getElementById(`tab-${tabKey}`);
-      if (tabEl) tabEl.classList.remove('hidden');
-
-      const navBtn = document.getElementById(`nav-${tabKey}`);
+      const navBtn = document.getElementById('nav-' + tabId);
       if (navBtn) {
-        navBtn.classList.add('active', 'bg-brand-black', 'text-white');
+        navBtn.classList.add('active', 'bg-brand-black', 'text-white', 'shadow-sm');
         navBtn.classList.remove('text-brand-muted');
       }
-
-      const bnavBtn = document.getElementById(`bnav-${tabKey}`);
-      if (bnavBtn) {
-        bnavBtn.classList.add('text-brand-black');
-        bnavBtn.classList.remove('text-brand-muted');
-      }
+      renderAll();
     }
 
-    // UTILITIES & FORMATTING
-    function formatSh(num) {
-      return (Number(num) || 0).toLocaleString('en-US') + ' Sh';
-    }
-
-    function toggleUtilitiesAccordion() {
-      const accordion = document.getElementById('utilities-accordion');
-      const chevron = document.getElementById('utilities-chevron');
-      accordion.classList.toggle('expanded');
-      chevron.classList.toggle('rotate-180');
-    }
-
-    // 1. TOTAL INCOME SYSTEM
-    function handleAddIncome(e) {
-      e.preventDefault();
-      const id = document.getElementById('edit-income-id').value;
-      const name = document.getElementById('income-name-input').value;
-      const amount = parseFloat(document.getElementById('income-amount-input').value) || 0;
-      const month = state.selectedIncomeMonth;
-
-      if (id) {
-        const index = state.incomeEntries.findIndex(i => i.id === id);
-        if (index !== -1) {
-          state.incomeEntries[index] = { ...state.incomeEntries[index], name, amount };
+    // STORAGE & PERSISTENCE
+    function loadFromStorage() {
+      try {
+        const saved = localStorage.getItem('appearich_state');
+        if (saved) {
+          state = JSON.parse(saved);
         }
-      } else {
-        state.incomeEntries.push({
-          id: 'inc-' + Date.now(),
-          name,
-          amount,
-          month,
-          date: new Date().toISOString().slice(0, 10)
-        });
+      } catch (e) {
+        console.error('Failed to load storage', e);
       }
-
-      closeModal('addIncomeModal');
       renderAll();
     }
 
-    function editIncome(id) {
-      const entry = state.incomeEntries.find(i => i.id === id);
-      if (!entry) return;
-      document.getElementById('edit-income-id').value = entry.id;
-      document.getElementById('income-name-input').value = entry.name;
-      document.getElementById('income-amount-input').value = entry.amount;
-      document.getElementById('modal-income-title').innerText = 'Edit Income Source';
-      document.getElementById('modal-income-submit').innerText = 'Update Income';
-      openModal('addIncomeModal');
-    }
-
-    function deleteIncome(id) {
-      if (confirm('Are you sure you want to delete this income entry?')) {
-        state.incomeEntries = state.incomeEntries.filter(i => i.id !== id);
-        renderAll();
+    function saveToStorage() {
+      try {
+        localStorage.setItem('appearich_state', JSON.stringify(state));
+      } catch (e) {
+        console.error('Failed to save storage', e);
       }
     }
 
-    function handleMonthChange(e) {
-      state.selectedIncomeMonth = e.target.value;
-      renderIncomeSection();
-    }
+    // EXCEL IMPORT ENGINE
+    function previewExcelFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const firstSheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[firstSheetName];
+          const rawJson = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+          
+          parsedExcelRows = rawJson.map(row => {
+            // Map common excel column names flexibly
+            const dateVal = row.Date || row.date || row.DATA || new Date().toISOString().slice(0,10);
+            const productVal = row.Product || row.product || row.Item || row.DESCRIPTION || 'Imported Product';
+            const qtyVal = Number(row.Qty || row.Quantity || row.QTY || 1);
+            const buyVal = Number(row.BuyPrice || row.BuyingPrice || row.Buy || row.COST || 0);
+            const sellVal = Number(row.SellPrice || row.SellingPrice || row.Sell || row.PRICE || 0);
+            const customerVal = row.Customer || row.Client || row.BUYER || 'Walk-in';
+            const statusVal = (row.Status || row.PaymentStatus || 'FULL').toString().toUpperCase().includes('PART') ? 'PARTIAL' : 'FULL';
+            const businessVal = row.Business || row.BusinessType || state.appearichBusinesses[0] || 'Appearich Main';
+            const paidVal = statusVal === 'PARTIAL' ? Number(row.Paid || row.AmountPaid || 0) : (qtyVal * sellVal);
 
-    function getTotalIncome() {
-      return state.incomeEntries.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
-    }
+            return {
+              id: 'imp_' + Math.random().toString(36.substring(2, 9)),
+              date: typeof dateVal === 'number' ? new Date((dateVal - (25567 + 2)) * 86400 * 1000).toISOString().slice(0,10) : String(dateVal).slice(0,10),
+              business: String(businessVal),
+              product: String(productVal),
+              qty: qtyVal,
+              buyPrice: buyVal,
+              sellPrice: sellVal,
+              customer: String(customerVal),
+              paymentStatus: statusVal,
+              paidAmount: paidVal
+            };
+          });
 
-    function renderIncomeSection() {
-      const monthEntries = state.incomeEntries.filter(i => i.month === state.selectedIncomeMonth);
-      const container = document.getElementById('income-list-container');
-      const monthTotal = monthEntries.reduce((sum, i) => sum + i.amount, 0);
+          document.getElementById('preview-count').innerText = parsedExcelRows.length;
+          const tbody = document.getElementById('excel-preview-body');
+          tbody.innerHTML = parsedExcelRows.slice(0, 15).map(r => `
+            <tr>
+              <td class="p-2">${r.date}</td>
+              <td class="p-2">${r.product}</td>
+              <td class="p-2">${r.qty}</td>
+              <td class="p-2">${r.buyPrice.toLocaleString()}</td>
+              <td class="p-2">${r.sellPrice.toLocaleString()}</td>
+              <td class="p-2">${r.customer}</td>
+              <td class="p-2 font-bold">${r.paymentStatus}</td>
+            </tr>
+          `).join('');
 
-      document.getElementById('income-god-total').innerText = formatSh(monthTotal * 0.1);
-      document.getElementById('income-month-label').innerText = 'Month: ' + state.selectedIncomeMonth;
-
-      if (monthEntries.length === 0) {
-        container.innerHTML = `<div class="col-span-full p-6 text-center text-xs text-brand-muted bg-gray-50 rounded-2xl">No income recorded for this month.</div>`;
-        return;
-      }
-
-      container.innerHTML = monthEntries.map(item => `
-        <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex items-center justify-between">
-          <div>
-            <p class="font-bold text-sm text-brand-black">${item.name}</p>
-            <p class="text-xs text-brand-muted mt-0.5">${item.date}</p>
-            <p class="text-xs font-bold text-brand-gold mt-1">10% GOD: ${formatSh(item.amount * 0.1)}</p>
-          </div>
-          <div class="text-right">
-            <p class="font-display font-bold text-lg text-brand-black">${formatSh(item.amount)}</p>
-            <div class="flex items-center justify-end space-x-2 mt-2">
-              <button onclick="editIncome('${item.id}')" class="text-xs text-gray-500 hover:text-black font-semibold">Edit</button>
-              <button onclick="deleteIncome('${item.id}')" class="text-xs text-red-500 hover:text-red-700 font-semibold">Delete</button>
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // 2 & 3 & 4. GROWTH & MONTHLY GROWTH & 10% TITHE ON GROWTH SYSTEM
-    function handleGrowthMonthChange(e) {
-      state.selectedGrowthMonth = e.target.value;
-      renderGrowthSection();
-    }
-
-    function getGrowthDataForMonth(month) {
-      // 1. Investment Growth: Gains from investments
-      const totalInvested = state.investments.reduce((sum, i) => sum + (Number(i.amount) || 0), 0);
-      const currentValuation = state.investmentValuation || totalInvested;
-      const investmentGain = Math.max(0, currentValuation - totalInvested);
-
-      // Distribute investment gain to active growth log if present
-      const invEntries = investmentGain > 0 ? [{
-        id: 'inv-gain-current',
-        date: new Date().toISOString().slice(0, 10),
-        type: 'Investment Gain',
-        description: 'Portfolio valuation growth',
-        amount: investmentGain,
-        month: new Date().toISOString().slice(0, 7)
-      }] : [];
-
-      // 2. Appearich Sales Profit: Actual sales profit per transaction
-      const salesEntries = state.appearichSales.map(sale => {
-        const profit = Math.max(0, (sale.sellPrice - sale.buyPrice) * sale.qty);
-        return {
-          id: sale.id,
-          date: sale.date,
-          type: 'Appearich Sales Profit',
-          description: `${sale.product} (${sale.business})`,
-          amount: profit,
-          month: (sale.date || '').slice(0, 7)
-        };
-      }).filter(s => s.amount > 0);
-
-      const allEntries = [...invEntries, ...salesEntries];
-      const monthEntries = allEntries.filter(e => e.month === month);
-      const monthlyTotal = monthEntries.reduce((sum, e) => sum + e.amount, 0);
-      const overallTotal = allEntries.reduce((sum, e) => sum + e.amount, 0);
-
-      return { monthEntries, monthlyTotal, overallTotal };
-    }
-
-    function renderGrowthSection() {
-      const selectedMonth = state.selectedGrowthMonth;
-      const { monthEntries, monthlyTotal, overallTotal } = getGrowthDataForMonth(selectedMonth);
-
-      document.getElementById('growth-latest-total').innerText = formatSh(overallTotal);
-      document.getElementById('growth-selected-month-total').innerText = formatSh(monthlyTotal);
-      document.getElementById('growth-selected-month-name').innerText = `Growth in ${selectedMonth}`;
-
-      // 10% Tithe Calculation on Monthly Growth
-      const titheAmount = monthlyTotal * 0.10;
-      const growthAfterTithe = monthlyTotal - titheAmount;
-
-      document.getElementById('tithe-monthly-growth').innerText = formatSh(monthlyTotal);
-      document.getElementById('tithe-god-amount').innerText = formatSh(titheAmount);
-      document.getElementById('tithe-growth-after').innerText = formatSh(growthAfterTithe);
-
-      document.getElementById('growth-log-count').innerText = `${monthEntries.length} Entries`;
-
-      const tbody = document.getElementById('growth-entries-table-body');
-      if (monthEntries.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-brand-muted">No growth profit entries recorded for ${selectedMonth}.</td></tr>`;
-        return;
-      }
-
-      tbody.innerHTML = monthEntries.map(entry => `
-        <tr class="hover:bg-gray-50/50 transition">
-          <td class="py-3 font-semibold text-brand-black">${entry.date}</td>
-          <td class="py-3"><span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">${entry.type}</span></td>
-          <td class="py-3 text-brand-muted">${entry.description}</td>
-          <td class="py-3 text-right font-bold text-emerald-600">+${formatSh(entry.amount)}</td>
-          <td class="py-3 text-right space-x-2">
-            ${entry.type.includes('Appearich') ? `
-              <button onclick="editSaleRecord('${entry.id}')" class="text-xs text-gray-500 hover:text-black">Edit</button>
-              <button onclick="deleteSaleRecord('${entry.id}')" class="text-xs text-red-500 hover:text-red-700">Delete</button>
-            ` : `<span class="text-brand-muted text-[10px]">Managed in Invest</span>`}
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    // 5. BUDGET CATEGORY MANAGEMENT (Including Appearich Category)
-    function handleCategoryAmountInput(catKey, value) {
-      const amount = parseFloat(value) || 0;
-      if (state.budgetCategories[catKey]) {
-        state.budgetCategories[catKey].amount = amount;
-      }
-      renderBudgetSection();
-    }
-
-    function editCategoryAmount(catKey) {
-      const cat = state.budgetCategories[catKey];
-      if (!cat) return;
-      const newAmount = prompt(`Enter new target budget amount for ${cat.name}:`, cat.amount);
-      if (newAmount !== null) {
-        const parsed = parseFloat(newAmount) || 0;
-        state.budgetCategories[catKey].amount = parsed;
-        const input = document.getElementById(`cat-amount-${catKey}`);
-        if (input) input.value = parsed || '';
-        renderAll();
-      }
-    }
-
-    function deleteCategoryAmount(catKey) {
-      if (confirm(`Are you sure you want to delete/clear the budget allocation for ${state.budgetCategories[catKey]?.name}?`)) {
-        if (state.budgetCategories[catKey]) {
-          state.budgetCategories[catKey].amount = 0;
+          document.getElementById('excel-preview-container').classList.remove('hidden');
+        } catch (err) {
+          alert('Error reading Excel file: ' + err.message);
         }
-        const input = document.getElementById(`cat-amount-${catKey}`);
-        if (input) input.value = '';
-        renderAll();
-      }
+      };
+      reader.readAsArrayBuffer(file);
     }
 
-    function handleAddCategory(e) {
-      e.preventDefault();
-      const name = document.getElementById('cat-name-input').value.toUpperCase();
-      const amount = parseFloat(document.getElementById('cat-amount-input').value) || 0;
-      const key = 'cat-custom-' + Date.now();
-
-      state.budgetCategories[key] = { name, amount, icon: 'folder' };
-      closeModal('addCategoryModal');
-      renderAll();
-    }
-
-    function renderBudgetSection() {
-      const totalInc = getTotalIncome();
-      const pool90 = totalInc * 0.90;
-
-      document.getElementById('budget-pool-total').innerText = formatSh(pool90);
-
-      const mainList = document.getElementById('main-categories-list');
-      const categoryKeys = Object.keys(state.budgetCategories).filter(k => k !== 'cat-utilities');
-
-      let totalAllocated = (state.budgetCategories['cat-utilities']?.amount || 0);
-      categoryKeys.forEach(k => { totalAllocated += (state.budgetCategories[k]?.amount || 0); });
-
-      const allocatedPercent = pool90 > 0 ? Math.min(100, Math.round((totalAllocated / pool90) * 100)) : 0;
-      document.getElementById('budget-allocated-percent').innerText = `${allocatedPercent}%`;
-      document.getElementById('budget-allocated-bar').style.width = `${allocatedPercent}%`;
-
-      mainList.innerHTML = categoryKeys.map(key => {
-        const cat = state.budgetCategories[key];
-        const spent = state.dailyExpenses
-          .filter(e => e.category?.toLowerCase() === cat.name.toLowerCase())
-          .reduce((sum, e) => sum + e.amount, 0);
-        const remaining = Math.max(0, cat.amount - spent);
-
-        return `
-          <div class="rounded-3xl bg-white border border-gray-100 shadow-premium p-6 flex flex-col justify-between space-y-4">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-2xl bg-gray-100 flex items-center justify-center font-bold text-brand-black text-xs">
-                  ${cat.name.slice(0, 3)}
-                </div>
-                <div>
-                  <h4 class="font-bold text-base text-brand-black">${cat.name}</h4>
-                  <p class="text-xs text-brand-muted">Budget Category</p>
-                </div>
-              </div>
-            </div>
-            <div class="space-y-3">
-              <div class="flex items-center justify-between gap-2">
-                <div class="flex-1">
-                  <label class="block text-xs font-bold text-brand-muted uppercase mb-1">Target Amount (Sh)</label>
-                  <input type="number" id="cat-amount-${key}" value="${cat.amount || ''}" oninput="handleCategoryAmountInput('${key}', this.value)" placeholder="Enter amount" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm font-bold text-brand-black">
-                </div>
-                <div class="flex items-end space-x-1 pb-1">
-                  <button onclick="editCategoryAmount('${key}')" title="Edit Category" class="p-2 text-gray-500 hover:text-black hover:bg-gray-100 rounded-lg transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></button>
-                  <button onclick="deleteCategoryAmount('${key}')" title="Delete Category" class="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
-                </div>
-              </div>
-              <div class="flex justify-between text-xs pt-2 border-t border-gray-100">
-                <span class="text-brand-muted">Spent: ${formatSh(spent)}</span>
-                <span class="font-bold text-emerald-600">Remaining: ${formatSh(remaining)}</span>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    // 6. EDIT AND DELETE FOR EVERY MONETARY ENTRY
-    // Daily Expenses
-    function handleAddTransaction(e) {
-      e.preventDefault();
-      const id = document.getElementById('edit-tx-id').value;
-      const name = document.getElementById('tx-name').value;
-      const category = document.getElementById('tx-category').value;
-      const account = document.getElementById('tx-account').value;
-      const amount = parseFloat(document.getElementById('tx-amount').value) || 0;
-      const date = document.getElementById('tx-date').value;
-
-      if (id) {
-        const index = state.dailyExpenses.findIndex(x => x.id === id);
-        if (index !== -1) {
-          state.dailyExpenses[index] = { ...state.dailyExpenses[index], name, category, account, amount, date };
+    function confirmExcelImport() {
+      if (!parsedExcelRows || parsedExcelRows.length === 0) return;
+      
+      // Reverse order per instructions: Last row in Excel appears first in Transaction Sales Log, first row appears last.
+      const reversedRows = [...parsedExcelRows].reverse();
+      
+      // Ensure businesses exist
+      reversedRows.forEach(row => {
+        if (!state.appearichBusinesses.includes(row.business)) {
+          state.appearichBusinesses.push(row.business);
         }
-      } else {
-        state.dailyExpenses.push({
-          id: 'tx-' + Date.now(),
-          name,
-          category,
-          account,
-          amount,
-          date
-        });
-      }
-
-      closeModal('addTransactionModal');
-      renderAll();
-    }
-
-    function editExpense(id) {
-      const exp = state.dailyExpenses.find(x => x.id === id);
-      if (!exp) return;
-      document.getElementById('edit-tx-id').value = exp.id;
-      document.getElementById('tx-name').value = exp.name;
-      document.getElementById('tx-category').value = exp.category;
-      document.getElementById('tx-account').value = exp.account;
-      document.getElementById('tx-amount').value = exp.amount;
-      document.getElementById('tx-date').value = exp.date;
-      document.getElementById('modal-tx-title').innerText = 'Edit Expense Record';
-      document.getElementById('modal-tx-submit').innerText = 'Update Expense';
-      openModal('addTransactionModal');
-    }
-
-    function deleteExpense(id) {
-      if (confirm('Delete this expense entry completely?')) {
-        state.dailyExpenses = state.dailyExpenses.filter(x => x.id !== id);
-        renderAll();
-      }
-    }
-
-    function handleExpenseMonthChange(e) {
-      state.selectedExpenseMonth = e.target.value;
-      renderDailyExpensesSection();
-    }
-
-    function renderDailyExpensesSection() {
-      const selectedMonth = state.selectedExpenseMonth;
-      const filtered = state.dailyExpenses.filter(x => (x.date || '').slice(0, 7) === selectedMonth);
-
-      document.getElementById('daily-expense-month-label').innerText = `Month: ${selectedMonth}`;
-      document.getElementById('daily-expense-log-count').innerText = `${filtered.length} Expenses Recorded`;
-
-      const tbody = document.getElementById('daily-expense-table-body');
-      if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-brand-muted">No daily expenses recorded for this month.</td></tr>`;
-      } else {
-        tbody.innerHTML = filtered.map(item => `
-          <tr class="hover:bg-gray-50/50 transition">
-            <td class="py-3 font-semibold text-brand-black">${item.date}</td>
-            <td class="py-3 text-brand-black">${item.name}</td>
-            <td class="py-3"><span class="px-2 py-0.5 rounded-md bg-gray-100 font-bold text-[10px] text-brand-black">${item.category}</span></td>
-            <td class="py-3 text-brand-muted">${item.account}</td>
-            <td class="py-3 text-right font-bold text-brand-black">${formatSh(item.amount)}</td>
-            <td class="py-3 text-right space-x-2">
-              <button onclick="editExpense('${item.id}')" class="text-xs text-gray-500 hover:text-black">Edit</button>
-              <button onclick="deleteExpense('${item.id}')" class="text-xs text-red-500 hover:text-red-700">Delete</button>
-            </td>
-          </tr>
-        `).join('');
-      }
-    }
-
-    // Investment Capital & Valuation
-    function handleAddInvestmentCapital(e) {
-      e.preventDefault();
-      const id = document.getElementById('edit-investment-id').value;
-      const amount = parseFloat(document.getElementById('inv-add-amount').value) || 0;
-
-      if (id) {
-        const index = state.investments.findIndex(i => i.id === id);
-        if (index !== -1) {
-          state.investments[index].amount = amount;
-        }
-      } else {
-        state.investments.push({
-          id: 'inv-' + Date.now(),
-          amount,
-          date: new Date().toISOString().slice(0, 10)
-        });
-      }
-
-      closeModal('addInvestmentModal');
-      renderAll();
-    }
-
-    function editInvestment(id) {
-      const inv = state.investments.find(i => i.id === id);
-      if (!inv) return;
-      document.getElementById('edit-investment-id').value = inv.id;
-      document.getElementById('inv-add-amount').value = inv.amount;
-      document.getElementById('modal-investment-title').innerText = 'Edit Investment Capital';
-      document.getElementById('modal-investment-submit').innerText = 'Update Capital';
-      openModal('addInvestmentModal');
-    }
-
-    function deleteInvestment(id) {
-      if (confirm('Delete this investment capital record?')) {
-        state.investments = state.investments.filter(i => i.id !== id);
-        renderAll();
-      }
-    }
-
-    function handleUpdateInvestmentValue(e) {
-      e.preventDefault();
-      const val = parseFloat(document.getElementById('inv-update-value').value) || 0;
-      state.investmentValuation = val;
-      closeModal('updateInvestmentModal');
-      renderAll();
-    }
-
-    function renderInvestmentSection() {
-      const totalInvested = state.investments.reduce((sum, i) => sum + (Number(i.amount) || 0), 0);
-      const currentValuation = state.investmentValuation || totalInvested;
-      const gain = currentValuation - totalInvested;
-      const pct = totalInvested > 0 ? ((gain / totalInvested) * 100).toFixed(2) : '0.00';
-
-      document.getElementById('inv-total-invested').innerText = formatSh(totalInvested);
-      document.getElementById('inv-current-value').innerText = formatSh(currentValuation);
-      document.getElementById('inv-gain-loss').innerText = (gain >= 0 ? '+' : '') + formatSh(gain);
-      document.getElementById('inv-percentage-return').innerText = (gain >= 0 ? '+' : '') + pct + '%';
-
-      const historyList = document.getElementById('investment-history-list');
-      if (state.investments.length === 0) {
-        historyList.innerHTML = `<div class="col-span-full p-6 text-center text-xs text-brand-muted bg-gray-50 rounded-2xl">No investment capital added yet.</div>`;
-        return;
-      }
-
-      historyList.innerHTML = state.investments.map(inv => `
-        <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-between">
-          <div>
-            <p class="text-xs text-brand-muted font-semibold">${inv.date}</p>
-            <p class="font-bold text-base text-brand-black mt-0.5">${formatSh(inv.amount)}</p>
-          </div>
-          <div class="flex space-x-2">
-            <button onclick="editInvestment('${inv.id}')" class="text-xs text-gray-500 hover:text-black font-semibold">Edit</button>
-            <button onclick="deleteInvestment('${inv.id}')" class="text-xs text-red-500 hover:text-red-700 font-semibold">Delete</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // Appearich Sales Records
-    function handleAddSale(e) {
-      e.preventDefault();
-      const business = document.getElementById('sale-business-type').value;
-      const date = document.getElementById('sale-date').value;
-      const qty = parseInt(document.getElementById('sale-qty').value) || 1;
-      const product = document.getElementById('sale-product').value;
-      const customer = document.getElementById('sale-customer').value;
-      const buyPrice = parseFloat(document.getElementById('sale-buy-price').value) || 0;
-      const sellPrice = parseFloat(document.getElementById('sale-sell-price').value) || 0;
-      const paymentStatus = document.getElementById('sale-payment-status').value;
-      const paidAmount = paymentStatus === 'FULL' ? (sellPrice * qty) : (parseFloat(document.getElementById('sale-paid-amount').value) || 0);
-
-      state.appearichSales.unshift({
-        id: 'sale-' + Date.now(),
-        business,
-        date,
-        qty,
-        product,
-        customer,
-        buyPrice,
-        sellPrice,
-        paymentStatus,
-        paidAmount
       });
 
+      // Prepend/insert into appearichSales
+      state.appearichSales.unshift(...reversedRows);
+      saveToStorage();
+      closeModal('importExcelModal');
+      renderAll();
+      alert(`Successfully imported ${parsedExcelRows.length} sales records into the Transaction Sales Log!`);
+      parsedExcelRows = [];
+      document.getElementById('excel-file-input').value = '';
+      document.getElementById('excel-preview-container').classList.add('hidden');
+    }
+
+    // BUSINESS & SALES CRUD
+    function populateBusinessDropdowns() {
+      const selects = ['sale-business-type', 'edit-sale-business-type'];
+      selects.forEach(id => {
+        const sel = document.getElementById(id);
+        if (!sel) return;
+        sel.innerHTML = state.appearichBusinesses.map(b => `<option value="${b}">${b}</option>`).join('');
+      });
+    }
+
+    function handleAddSale(e) {
+      e.preventDefault();
+      const newSale = {
+        id: 'sale_' + Date.now(),
+        business: document.getElementById('sale-business-type').value,
+        date: document.getElementById('sale-date').value,
+        qty: Number(document.getElementById('sale-qty').value),
+        product: document.getElementById('sale-product').value,
+        customer: document.getElementById('sale-customer').value,
+        buyPrice: Number(document.getElementById('sale-buy-price').value),
+        sellPrice: Number(document.getElementById('sale-sell-price').value),
+        paymentStatus: document.getElementById('sale-payment-status').value,
+        paidAmount: document.getElementById('sale-payment-status').value === 'PARTIAL' ? Number(document.getElementById('sale-paid-amount').value) : (Number(document.getElementById('sale-qty').value) * Number(document.getElementById('sale-sell-price').value))
+      };
+
+      state.appearichSales.unshift(newSale);
+      saveToStorage();
       closeModal('addSaleModal');
+      e.target.reset();
       renderAll();
     }
 
-    function editSaleRecord(id) {
+    function editSale(id) {
       const sale = state.appearichSales.find(s => s.id === id);
       if (!sale) return;
-
+      populateBusinessDropdowns();
       document.getElementById('edit-sale-record-id').value = sale.id;
+      document.getElementById('edit-sale-business-type').value = sale.business;
       document.getElementById('edit-sale-date').value = sale.date;
       document.getElementById('edit-sale-qty').value = sale.qty;
       document.getElementById('edit-sale-product').value = sale.product;
@@ -1775,10 +1409,6 @@
       document.getElementById('edit-sale-sell-price').value = sale.sellPrice;
       document.getElementById('edit-sale-payment-status').value = sale.paymentStatus;
       document.getElementById('edit-sale-modal-paid-amount').value = sale.paidAmount;
-
-      populateBusinessDropdown('edit-sale-business-type');
-      document.getElementById('edit-sale-business-type').value = sale.business;
-
       toggleEditSaleModalPartialInput();
       openModal('editSaleModal');
     }
@@ -1789,56 +1419,80 @@
       const index = state.appearichSales.findIndex(s => s.id === id);
       if (index === -1) return;
 
-      const business = document.getElementById('edit-sale-business-type').value;
-      const date = document.getElementById('edit-sale-date').value;
-      const qty = parseInt(document.getElementById('edit-sale-qty').value) || 1;
-      const product = document.getElementById('edit-sale-product').value;
-      const customer = document.getElementById('edit-sale-customer').value;
-      const buyPrice = parseFloat(document.getElementById('edit-sale-buy-price').value) || 0;
-      const sellPrice = parseFloat(document.getElementById('edit-sale-sell-price').value) || 0;
-      const paymentStatus = document.getElementById('edit-sale-payment-status').value;
-      const paidAmount = paymentStatus === 'FULL' ? (sellPrice * qty) : (parseFloat(document.getElementById('edit-sale-modal-paid-amount').value) || 0);
+      const qty = Number(document.getElementById('edit-sale-qty').value);
+      const sellPrice = Number(document.getElementById('edit-sale-sell-price').value);
+      const status = document.getElementById('edit-sale-payment-status').value;
 
       state.appearichSales[index] = {
         ...state.appearichSales[index],
-        business,
-        date,
-        qty,
-        product,
-        customer,
-        buyPrice,
-        sellPrice,
-        paymentStatus,
-        paidAmount
+        business: document.getElementById('edit-sale-business-type').value,
+        date: document.getElementById('edit-sale-date').value,
+        qty: qty,
+        product: document.getElementById('edit-sale-product').value,
+        customer: document.getElementById('edit-sale-customer').value,
+        buyPrice: Number(document.getElementById('edit-sale-buy-price').value),
+        sellPrice: sellPrice,
+        paymentStatus: status,
+        paidAmount: status === 'PARTIAL' ? Number(document.getElementById('edit-sale-modal-paid-amount').value) : (qty * sellPrice)
       };
 
+      saveToStorage();
       closeModal('editSaleModal');
       renderAll();
     }
 
-    function deleteSaleRecord(id) {
-      if (confirm('Delete this sale record completely?')) {
-        state.appearichSales = state.appearichSales.filter(s => s.id !== id);
-        renderAll();
-      }
+    function deleteSale(id) {
+      if (!confirm('Are you sure you want to permanently delete this transaction?')) return;
+      state.appearichSales = state.appearichSales.filter(s => s.id !== id);
+      saveToStorage();
+      renderAll();
     }
 
     function toggleSalePartialInput() {
       const status = document.getElementById('sale-payment-status').value;
       const container = document.getElementById('sale-partial-container');
-      container.classList.toggle('hidden', status !== 'PARTIAL');
+      if (status === 'PARTIAL') {
+        container.classList.remove('hidden');
+      } else {
+        container.classList.add('hidden');
+      }
     }
 
     function toggleEditSaleModalPartialInput() {
       const status = document.getElementById('edit-sale-payment-status').value;
       const container = document.getElementById('edit-sale-modal-partial-container');
-      container.classList.toggle('hidden', status !== 'PARTIAL');
+      if (status === 'PARTIAL') {
+        container.classList.remove('hidden');
+      } else {
+        container.classList.add('hidden');
+      }
     }
 
-    function populateBusinessDropdown(selectId) {
-      const select = document.getElementById(selectId);
-      if (!select) return;
-      select.innerHTML = state.appearichBusinesses.map(b => `<option value="${b}">${b}</option>`).join('');
+    function toggleSelectAllSales(master) {
+      const checkboxes = document.querySelectorAll('.sale-checkbox');
+      checkboxes.forEach(cb => cb.checked = master.checked);
+      updateSelectedSalesCount();
+    }
+
+    function updateSelectedSalesCount() {
+      const checked = document.querySelectorAll('.sale-checkbox:checked');
+      const countEl = document.getElementById('selected-count');
+      const btn = document.getElementById('bulk-delete-btn');
+      if (countEl) countEl.innerText = checked.length;
+      if (btn) {
+        if (checked.length > 0) btn.classList.remove('hidden');
+        else btn.classList.add('hidden');
+      }
+    }
+
+    function deleteSelectedSales() {
+      const checked = document.querySelectorAll('.sale-checkbox:checked');
+      if (checked.length === 0) return;
+      if (!confirm(`Permanently delete ${checked.length} selected transaction(s)?`)) return;
+      const idsToDelete = Array.from(checked).map(cb => cb.value);
+      state.appearichSales = state.appearichSales.filter(s => !idsToDelete.includes(s.id));
+      saveToStorage();
+      renderAll();
     }
 
     function handleAddBusinessOption(e) {
@@ -1846,218 +1500,497 @@
       const name = document.getElementById('new-business-name-input').value.trim();
       if (name && !state.appearichBusinesses.includes(name)) {
         state.appearichBusinesses.push(name);
-        populateBusinessDropdown('sale-business-type');
+        saveToStorage();
       }
       closeModal('addBusinessModal');
-      renderAppearichSection();
-    }
-
-    function renderAppearichSection() {
-      populateBusinessDropdown('sale-business-type');
-
-      const tbody = document.getElementById('appearich-sales-table');
-      if (state.appearichSales.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="10" class="py-6 text-center text-brand-muted">No Appearich sales recorded yet.</td></tr>`;
-        return;
-      }
-
-      tbody.innerHTML = state.appearichSales.map(sale => {
-        const totalValue = sale.sellPrice * sale.qty;
-        const profit = Math.max(0, (sale.sellPrice - sale.buyPrice) * sale.qty);
-        return `
-          <tr class="hover:bg-gray-50/50 transition">
-            <td class="py-3"><input type="checkbox" class="sale-select-check" value="${sale.id}"></td>
-            <td class="py-3 font-semibold text-brand-black">${sale.date}</td>
-            <td class="py-3"><span class="px-2 py-0.5 rounded-md bg-gray-100 font-bold text-[10px]">${sale.business}</span></td>
-            <td class="py-3 font-bold text-brand-black">${sale.product} (${sale.qty})</td>
-            <td class="py-3 text-brand-muted">${sale.customer}</td>
-            <td class="py-3 font-bold text-brand-black">${formatSh(totalValue)}</td>
-            <td class="py-3 font-semibold text-emerald-600">${formatSh(sale.paidAmount)}</td>
-            <td class="py-3 font-bold text-emerald-600">+${formatSh(profit)}</td>
-            <td class="py-3">
-              <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${sale.paymentStatus === 'FULL' ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'}">
-                ${sale.paymentStatus}
-              </span>
-            </td>
-            <td class="py-3 text-right space-x-2">
-              <button onclick="editSaleRecord('${sale.id}')" class="text-xs text-gray-500 hover:text-black">Edit</button>
-              <button onclick="deleteSaleRecord('${sale.id}')" class="text-xs text-red-500 hover:text-red-700">Delete</button>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    // Loans Management
-    function handleAddLoan(e) {
-      e.preventDefault();
-      const id = document.getElementById('edit-loan-record-id').value;
-      const borrower = document.getElementById('loan-borrower').value;
-      const amount = parseFloat(document.getElementById('loan-amount').value) || 0;
-      const date = document.getElementById('loan-date').value;
-      const paid = parseFloat(document.getElementById('loan-paid').value) || 0;
-      const note = document.getElementById('loan-note').value;
-
-      if (id) {
-        const index = state.loans.findIndex(l => l.id === id);
-        if (index !== -1) {
-          state.loans[index] = { ...state.loans[index], borrower, amount, date, paid, note };
-        }
-      } else {
-        state.loans.push({
-          id: 'loan-' + Date.now(),
-          borrower,
-          amount,
-          date,
-          paid,
-          note
-        });
-      }
-
-      closeModal('addLoanModal');
+      e.target.reset();
       renderAll();
     }
 
-    function editLoan(id) {
-      const loan = state.loans.find(l => l.id === id);
-      if (!loan) return;
-      document.getElementById('edit-loan-record-id').value = loan.id;
-      document.getElementById('loan-borrower').value = loan.borrower;
-      document.getElementById('loan-amount').value = loan.amount;
-      document.getElementById('loan-date').value = loan.date;
-      document.getElementById('loan-paid').value = loan.paid;
-      document.getElementById('loan-note').value = loan.note || '';
-      document.getElementById('modal-loan-title').innerText = 'Edit Loan Record';
-      document.getElementById('modal-loan-submit').innerText = 'Update Loan';
-      openModal('addLoanModal');
+    function handleAddIncome(e) {
+      e.preventDefault();
+      const name = document.getElementById('income-name-input').value;
+      const amount = Number(document.getElementById('income-amount-input').value);
+      const month = document.getElementById('income-month-picker').value || new Date().toISOString().slice(0, 7);
+      
+      state.incomeEntries.push({
+        id: 'inc_' + Date.now(),
+        name,
+        amount,
+        month,
+        date: new Date().toISOString().slice(0, 10)
+      });
+      saveToStorage();
+      closeModal('addIncomeModal');
+      e.target.reset();
+      renderAll();
+    }
+
+    function deleteIncome(id) {
+      state.incomeEntries = state.incomeEntries.filter(i => i.id !== id);
+      saveToStorage();
+      renderAll();
+    }
+
+    function handleAddTransaction(e) {
+      e.preventDefault();
+      const newTx = {
+        id: 'tx_' + Date.now(),
+        name: document.getElementById('tx-name').value,
+        category: document.getElementById('tx-category').value,
+        account: document.getElementById('tx-account').value,
+        amount: Number(document.getElementById('tx-amount').value),
+        date: document.getElementById('tx-date').value
+      };
+      state.dailyExpenses.unshift(newTx);
+      saveToStorage();
+      closeModal('addTransactionModal');
+      e.target.reset();
+      renderAll();
+    }
+
+    function deleteDailyExpense(id) {
+      state.dailyExpenses = state.dailyExpenses.filter(t => t.id !== id);
+      saveToStorage();
+      renderAll();
+    }
+
+    function handleAddLoan(e) {
+      e.preventDefault();
+      const loan = {
+        id: 'loan_' + Date.now(),
+        borrower: document.getElementById('loan-borrower').value,
+        amount: Number(document.getElementById('loan-amount').value),
+        paid: Number(document.getElementById('loan-paid').value),
+        date: document.getElementById('loan-date').value,
+        note: document.getElementById('loan-note').value
+      };
+      state.loans.unshift(loan);
+      saveToStorage();
+      closeModal('addLoanModal');
+      e.target.reset();
+      renderAll();
     }
 
     function deleteLoan(id) {
-      if (confirm('Delete this loan record?')) {
-        state.loans = state.loans.filter(l => l.id !== id);
-        renderAll();
-      }
+      state.loans = state.loans.filter(l => l.id !== id);
+      saveToStorage();
+      renderAll();
     }
 
-    function renderLoansSection() {
-      const totalOwed = state.loans.reduce((sum, l) => sum + Math.max(0, l.amount - l.paid), 0);
-      document.getElementById('loan-total-owed').innerText = formatSh(totalOwed);
-
-      const container = document.getElementById('loan-cards-list');
-      if (state.loans.length === 0) {
-        container.innerHTML = `<div class="col-span-full p-6 text-center text-xs text-brand-muted bg-gray-50 rounded-2xl">No loan records active.</div>`;
-        return;
-      }
-
-      container.innerHTML = state.loans.map(loan => {
-        const remaining = Math.max(0, loan.amount - loan.paid);
-        return `
-          <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-3">
-            <div class="flex items-center justify-between">
-              <h4 class="font-bold text-base text-brand-black">${loan.borrower}</h4>
-              <span class="text-xs font-semibold text-brand-muted">${loan.date}</span>
-            </div>
-            <div class="space-y-1 text-xs">
-              <div class="flex justify-between"><span class="text-brand-muted">Borrowed:</span><span class="font-bold text-brand-black">${formatSh(loan.amount)}</span></div>
-              <div class="flex justify-between"><span class="text-brand-muted">Paid Back:</span><span class="font-bold text-emerald-600">${formatSh(loan.paid)}</span></div>
-              <div class="flex justify-between border-t border-gray-100 pt-1"><span class="text-brand-muted font-bold">Outstanding:</span><span class="font-extrabold text-red-600">${formatSh(remaining)}</span></div>
-            </div>
-            <div class="flex items-center justify-between pt-2">
-              <button onclick="editLoan('${loan.id}')" class="text-xs text-gray-500 hover:text-black font-semibold">Edit</button>
-              <button onclick="deleteLoan('${loan.id}')" class="text-xs text-red-500 hover:text-red-700 font-semibold">Delete</button>
-            </div>
-          </div>
-        `;
-      }).join('');
+    function handleAddInvestmentCapital(e) {
+      e.preventDefault();
+      const amount = Number(document.getElementById('inv-add-amount').value);
+      state.investments.push({
+        id: 'inv_' + Date.now(),
+        amount,
+        date: new Date().toISOString().slice(0, 10)
+      });
+      state.investmentValuation += amount;
+      saveToStorage();
+      closeModal('addInvestmentModal');
+      e.target.reset();
+      renderAll();
     }
 
-    // Accounts & Transfers
+    function handleUpdateInvestmentValue(e) {
+      e.preventDefault();
+      state.investmentValuation = Number(document.getElementById('inv-update-value').value);
+      saveToStorage();
+      closeModal('updateInvestmentModal');
+      renderAll();
+    }
+
+    function handleAddCategory(e) {
+      e.preventDefault();
+      const name = document.getElementById('cat-name-input').value;
+      const amount = Number(document.getElementById('cat-amount-input').value);
+      const key = 'cat_custom_' + Date.now();
+      state.budgetCategories[key] = { name, amount, icon: 'folder' };
+      saveToStorage();
+      closeModal('addCategoryModal');
+      e.target.reset();
+      renderAll();
+    }
+
     function handleTransfer(e) {
       e.preventDefault();
       const from = document.getElementById('tr-from').value;
       const to = document.getElementById('tr-to').value;
-      const amount = parseFloat(document.getElementById('tr-amount').value) || 0;
-
+      const amount = Number(document.getElementById('tr-amount').value);
       if (from === to) {
-        alert('Source and destination accounts must be different.');
+        alert('Cannot transfer to the same account.');
         return;
       }
-
       state.accounts[from] = (state.accounts[from] || 0) - amount;
       state.accounts[to] = (state.accounts[to] || 0) + amount;
-
+      saveToStorage();
       closeModal('transferModal');
       renderAll();
     }
 
     function handleAddMoneyAccount(e) {
       e.preventDefault();
-      const account = document.getElementById('am-account').value;
-      const amount = parseFloat(document.getElementById('am-amount').value) || 0;
-
-      state.accounts[account] = (state.accounts[account] || 0) + amount;
-
+      const acc = document.getElementById('am-account').value;
+      const amount = Number(document.getElementById('am-amount').value);
+      state.accounts[acc] = (state.accounts[acc] || 0) + amount;
+      saveToStorage();
       closeModal('addMoneyModal');
       renderAll();
     }
 
-    function renderAccountsSection() {
-      const totalLiquid = Object.values(state.accounts).reduce((sum, val) => sum + (Number(val) || 0), 0);
-      document.getElementById('accounts-total-money').innerText = formatSh(totalLiquid);
+    function handleMonthChange(e) {
+      state.selectedIncomeMonth = e.target.value;
+      renderAll();
+    }
 
-      const grid = document.getElementById('account-cards-grid');
-      grid.innerHTML = Object.keys(state.accounts).map(acc => `
-        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-brand-muted uppercase">${acc}</span>
-            <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+    function handleExpenseMonthChange(e) {
+      state.selectedExpenseMonth = e.target.value;
+      renderAll();
+    }
+
+    function handleGrowthMonthChange(e) {
+      state.selectedGrowthMonth = e.target.value;
+      renderAll();
+    }
+
+    function switchAppearichPeriod(period) {
+      state.appearichPeriod = period;
+      document.querySelectorAll('.app-period-btn').forEach(btn => {
+        btn.classList.remove('active', 'bg-brand-black', 'text-white');
+        btn.classList.add('bg-gray-100', 'text-brand-muted');
+      });
+      const activeBtn = document.getElementById('app-period-' + period);
+      if (activeBtn) {
+        activeBtn.classList.add('active', 'bg-brand-black', 'text-white');
+        activeBtn.classList.remove('bg-gray-100', 'text-brand-muted');
+      }
+      renderAppearichMetrics();
+    }
+
+    function handleProfitStartChange(val) {
+      state.profitStartId = val;
+      saveToStorage();
+      renderAll();
+    }
+
+    function toggleAuthMode() {
+      // Placeholder for auth toggle if needed
+    }
+
+    function handleAuth(e) {
+      e.preventDefault();
+      document.getElementById('auth-container').classList.add('hidden');
+      document.getElementById('app-wrapper').classList.remove('hidden');
+    }
+
+    function handleLogout() {
+      document.getElementById('auth-container').classList.remove('hidden');
+      document.getElementById('app-wrapper').classList.add('hidden');
+    }
+
+    function handleHeroUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        document.getElementById('hero-bg-img').style.backgroundImage = `url('${evt.target.result}')`;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function toggleUtilitiesAccordion() {
+      const content = document.getElementById('utilities-accordion');
+      const chevron = document.getElementById('utilities-chevron');
+      if (content) {
+        content.classList.toggle('expanded');
+        if (chevron) chevron.classList.toggle('rotate-180');
+      }
+    }
+
+    function handleCategoryAmountInput(catKey, val) {
+      if (state.budgetCategories[catKey]) {
+        state.budgetCategories[catKey].amount = Number(val);
+        saveToStorage();
+        renderBudget();
+      }
+    }
+
+    function editCategoryAmount(catKey) {
+      const cat = state.budgetCategories[catKey];
+      if (!cat) return;
+      const newVal = prompt(`Update target amount for ${cat.name}:`, cat.amount);
+      if (newVal !== null) {
+        cat.amount = Number(newVal);
+        saveToStorage();
+        renderBudget();
+      }
+    }
+
+    function deleteCategoryAmount(catKey) {
+      if (catKey.startsWith('cat-utilities') || catKey.startsWith('cat-investment') || catKey.startsWith('cat-expenses') || catKey.startsWith('cat-appearich') || catKey.startsWith('cat-other')) {
+        alert('Primary system categories cannot be deleted.');
+        return;
+      }
+      if (confirm('Delete this custom category?')) {
+        delete state.budgetCategories[catKey];
+        saveToStorage();
+        renderBudget();
+      }
+    }
+
+    // MASTER RENDER FUNCTION
+    function renderAll() {
+      renderDashboard();
+      renderIncome();
+      renderBudget();
+      renderDailyExpenses();
+      renderInvestment();
+      renderAppearich();
+      renderAccounts();
+      renderLoans();
+      renderGrowth();
+    }
+
+    function renderDashboard() {
+      const totalInc = state.incomeEntries.reduce((sum, i) => sum + i.amount, 0);
+      const godAmt = totalInc * 0.1;
+      const totalMoney = Object.values(state.accounts).reduce((a, b) => a + b, 0);
+      
+      document.getElementById('dash-total-income').innerText = totalInc.toLocaleString() + ' Sh';
+      document.getElementById('dash-god-amount').innerText = godAmt.toLocaleString() + ' Sh';
+      document.getElementById('dash-total-money').innerText = totalMoney.toLocaleString() + ' Sh';
+      document.getElementById('dash-remaining-budget').innerText = (totalMoney * 0.9).toLocaleString() + ' Sh';
+    }
+
+    function renderIncome() {
+      const month = document.getElementById('income-month-picker').value || state.selectedIncomeMonth;
+      const filtered = state.incomeEntries.filter(i => i.month === month);
+      const totalMonthInc = filtered.reduce((sum, i) => sum + i.amount, 0);
+      const tithe = totalMonthInc * 0.1;
+
+      document.getElementById('income-god-total').innerText = tithe.toLocaleString() + ' Sh';
+      document.getElementById('income-month-label').innerText = month;
+
+      const container = document.getElementById('income-list-container');
+      container.innerHTML = filtered.map(i => `
+        <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="font-bold text-sm text-brand-black">${i.name}</p>
+            <p class="text-xs text-brand-muted mt-0.5">${i.date}</p>
           </div>
-          <p class="font-display font-extrabold text-2xl text-brand-black">${formatSh(state.accounts[acc])}</p>
+          <div class="text-right flex items-center space-x-3">
+            <div>
+              <p class="font-bold text-sm text-brand-black">${i.amount.toLocaleString()} Sh</p>
+              <p class="text-[10px] text-brand-gold font-bold">Tithe: ${(i.amount * 0.1).toLocaleString()} Sh</p>
+            </div>
+            <button onclick="deleteIncome('${i.id}')" class="text-red-500 hover:text-red-700 p-1.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
+          </div>
         </div>
       `).join('');
     }
 
-    // DASHBOARD OVERVIEW RENDERING
-    function renderDashboard() {
-      const totalIncome = getTotalIncome();
-      const godAmount = totalIncome * 0.10;
-      const totalMoney = Object.values(state.accounts).reduce((sum, v) => sum + (Number(v) || 0), 0);
+    function renderBudget() {
+      const totalInc = state.incomeEntries.reduce((sum, i) => sum + i.amount, 0);
+      const pool = totalInc * 0.9;
+      document.getElementById('budget-pool-total').innerText = pool.toLocaleString() + ' Sh';
 
-      // Remaining Budget = Pool (90%) - Total Daily Expenses
-      const pool90 = totalIncome * 0.90;
-      const totalSpent = state.dailyExpenses.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
-      const remainingBudget = Math.max(0, pool90 - totalSpent);
+      let totalAllocated = 0;
+      Object.entries(state.budgetCategories).forEach(([key, cat]) => {
+        totalAllocated += cat.amount;
+        const inputEl = document.getElementById('cat-amount-' + key);
+        if (inputEl && document.activeElement !== inputEl) {
+          inputEl.value = cat.amount;
+        }
+      });
 
-      document.getElementById('dash-total-income').innerText = formatSh(totalIncome);
-      document.getElementById('dash-god-amount').innerText = formatSh(godAmount);
-      document.getElementById('dash-total-money').innerText = formatSh(totalMoney);
-      document.getElementById('dash-remaining-budget').innerText = formatSh(remainingBudget);
+      const percent = pool > 0 ? Math.min(100, Math.round((totalAllocated / pool) * 100)) : 0;
+      document.getElementById('budget-allocated-percent').innerText = percent + '%';
+      document.getElementById('budget-allocated-bar').style.width = percent + '%';
     }
 
-    // MASTER RENDER
-    function renderAll() {
-      renderDashboard();
-      renderIncomeSection();
-      renderGrowthSection();
-      renderBudgetSection();
-      renderDailyExpensesSection();
-      renderInvestmentSection();
-      renderAppearichSection();
-      renderAccountsSection();
-      renderLoansSection();
+    function renderDailyExpenses() {
+      const month = document.getElementById('daily-expense-month-picker').value || state.selectedExpenseMonth;
+      const filtered = state.dailyExpenses.filter(t => t.date && t.date.startsWith(month));
+      
+      document.getElementById('daily-expense-log-count').innerText = filtered.length + ' Expenses Recorded';
+      document.getElementById('daily-expense-month-label').innerText = month;
+
+      const tbody = document.getElementById('daily-expense-table-body');
+      tbody.innerHTML = filtered.map(t => `
+        <tr class="hover:bg-gray-50/50">
+          <td class="py-3">${t.date}</td>
+          <td class="py-3 font-bold">${t.name}</td>
+          <td class="py-3"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-[10px] font-bold">${t.category}</span></td>
+          <td class="py-3">${t.account}</td>
+          <td class="py-3 text-right font-bold text-red-600">-${t.amount.toLocaleString()} Sh</td>
+          <td class="py-3 text-right">
+            <button onclick="deleteDailyExpense('${t.id}')" class="text-red-500 hover:text-red-700 font-bold p-1">Delete</button>
+          </td>
+        </tr>
+      `).join('');
     }
 
-    // AUTH & STUBS
-    function handleAuth(e) { e.preventDefault(); }
-    function toggleAuthMode() {}
-    function handleLogout() {}
-    function handleHeroUpload(e) {}
-    function deleteSelectedSales() {}
-    function toggleSelectAllSales(el) {}
-    function handleProfitStartChange(val) {}
-    function switchAppearichPeriod(p) {}
-    function previewExcelFile(e) {}
-    function confirmExcelImport() {}
+    function renderInvestment() {
+      const totalInv = state.investments.reduce((sum, inv) => sum + inv.amount, 0);
+      const curVal = state.investmentValuation;
+      const gain = curVal - totalInv;
+      const returnPct = totalInv > 0 ? (gain / totalInv) * 100 : 0;
+
+      document.getElementById('inv-total-invested').innerText = totalInv.toLocaleString() + ' Sh';
+      document.getElementById('inv-current-value').innerText = curVal.toLocaleString() + ' Sh';
+      document.getElementById('inv-gain-loss').innerText = (gain >= 0 ? '+' : '') + gain.toLocaleString() + ' Sh';
+      document.getElementById('inv-percentage-return').innerText = (returnPct >= 0 ? '+' : '') + returnPct.toFixed(2) + '%';
+
+      const container = document.getElementById('investment-history-list');
+      container.innerHTML = state.investments.map(i => `
+        <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-between">
+          <div>
+            <p class="font-bold text-xs text-brand-black">Capital Addition</p>
+            <p class="text-[10px] text-brand-muted">${i.date}</p>
+          </div>
+          <p class="font-bold text-sm text-brand-black">+${i.amount.toLocaleString()} Sh</p>
+        </div>
+      `).join('');
+    }
+
+    function renderAppearich() {
+      populateBusinessDropdowns();
+      const bar = document.getElementById('business-types-bar');
+      bar.innerHTML = state.appearichBusinesses.map(b => `
+        <button onclick="state.activeAppearichBusiness='${b}'; renderAppearich();" class="px-4 py-2 rounded-xl text-xs font-bold transition flex-shrink-0 ${state.activeAppearichBusiness === b ? 'bg-brand-black text-white' : 'bg-gray-100 text-brand-muted hover:text-brand-black'}">
+          ${b}
+        </button>
+      `).join('');
+
+      document.getElementById('active-business-view-label').innerText = 'Active Business View: ' + state.activeAppearichBusiness;
+      renderAppearichMetrics();
+      renderAppearichSales();
+    }
+
+    function renderAppearichMetrics() {
+      const businessSales = state.appearichSales.filter(s => s.business === state.activeAppearichBusiness);
+      const totalRev = businessSales.reduce((sum, s) => sum + (s.qty * s.sellPrice), 0);
+      const totalCost = businessSales.reduce((sum, s) => sum + (s.qty * s.buyPrice), 0);
+      const totalProfit = totalRev - totalCost;
+      const totalOutstanding = businessSales.reduce((sum, s) => sum + ((s.qty * s.sellPrice) - s.paidAmount), 0);
+
+      document.getElementById('app-today-sales').innerText = totalRev.toLocaleString() + ' Sh';
+      document.getElementById('app-today-profit').innerText = totalProfit.toLocaleString() + ' Sh';
+      document.getElementById('app-month-revenue').innerText = totalRev.toLocaleString() + ' Sh';
+      document.getElementById('app-total-outstanding').innerText = totalOutstanding.toLocaleString() + ' Sh';
+      document.getElementById('app-total-profit').innerText = totalProfit.toLocaleString() + ' Sh';
+
+      document.getElementById('app-period-sold').innerText = businessSales.reduce((sum, s) => sum + s.qty, 0);
+      document.getElementById('app-period-revenue').innerText = totalRev.toLocaleString() + ' Sh';
+      document.getElementById('app-period-cost').innerText = totalCost.toLocaleString() + ' Sh';
+      const margin = totalRev > 0 ? (totalProfit / totalRev) * 100 : 0;
+      document.getElementById('app-period-margin').innerText = margin.toFixed(1) + '%';
+    }
+
+    function renderAppearichSales() {
+      const businessSales = state.appearichSales.filter(s => s.business === state.activeAppearichBusiness);
+      const tbody = document.getElementById('appearich-sales-table');
+      
+      tbody.innerHTML = businessSales.map(s => {
+        const totalVal = s.qty * s.sellPrice;
+        const profit = totalVal - (s.qty * s.buyPrice);
+        return `
+          <tr class="hover:bg-gray-50/50">
+            <td class="py-3"><input type="checkbox" class="sale-checkbox" value="${s.id}" onchange="updateSelectedSalesCount()"></td>
+            <td class="py-3">${s.date}</td>
+            <td class="py-3 font-semibold">${s.business}</td>
+            <td class="py-3 font-bold">${s.product} (${s.qty})</td>
+            <td class="py-3">${s.customer}</td>
+            <td class="py-3 font-semibold">${totalVal.toLocaleString()} Sh</td>
+            <td class="py-3 font-semibold text-emerald-600">${s.paidAmount.toLocaleString()} Sh</td>
+            <td class="py-3 font-bold text-emerald-600">+${profit.toLocaleString()} Sh</td>
+            <td class="py-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${s.paymentStatus === 'FULL' ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}">${s.paymentStatus}</span></td>
+            <td class="py-3 text-right space-x-2">
+              <button onclick="editSale('${s.id}')" class="text-blue-600 hover:text-blue-800 font-bold p-1">Edit</button>
+              <button onclick="deleteSale('${s.id}')" class="text-red-500 hover:text-red-700 font-bold p-1">Delete</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      const profitSelect = document.getElementById('profit-start-select');
+      if (profitSelect) {
+        profitSelect.innerHTML = '<option value="">-- Count all sales --</option>' + businessSales.map(s => `<option value="${s.id}" ${state.profitStartId === s.id ? 'selected' : ''}>${s.date} - ${s.product} (${s.customer})</option>`).join('');
+      }
+    }
+
+    function renderAccounts() {
+      const totalMoney = Object.values(state.accounts).reduce((a, b) => a + b, 0);
+      document.getElementById('accounts-total-money').innerText = totalMoney.toLocaleString() + ' Sh';
+
+      const grid = document.getElementById('account-cards-grid');
+      grid.innerHTML = Object.entries(state.accounts).map(([name, amt]) => `
+        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-brand-muted">${name}</span>
+            <div class="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center font-bold text-xs">${name[0]}</div>
+          </div>
+          <div class="mt-6">
+            <p class="font-display text-2xl font-bold text-brand-black">${amt.toLocaleString()} Sh</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderLoans() {
+      const totalOwed = state.loans.reduce((sum, l) => sum + (l.amount - l.paid), 0);
+      document.getElementById('loan-total-owed').innerText = totalOwed.toLocaleString() + ' Sh';
+
+      const list = document.getElementById('loan-cards-list');
+      list.innerHTML = state.loans.map(l => `
+        <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="font-bold text-base text-brand-black">${l.borrower}</p>
+              <p class="text-xs text-brand-muted">${l.date}</p>
+            </div>
+            <button onclick="deleteLoan('${l.id}')" class="text-red-500 hover:text-red-700 text-xs font-bold">Delete</button>
+          </div>
+          <div class="flex justify-between text-xs pt-2 border-t border-gray-100">
+            <span class="text-brand-muted">Borrowed: ${l.amount.toLocaleString()} Sh</span>
+            <span class="font-bold text-emerald-600">Owed: ${(l.amount - l.paid).toLocaleString()} Sh</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderGrowth() {
+      const month = document.getElementById('growth-month-picker').value || state.selectedGrowthMonth;
+      document.getElementById('growth-selected-month-name').innerText = 'Growth in ' + month;
+      
+      const totalInvGain = state.investmentValuation - state.investments.reduce((sum, i) => sum + i.amount, 0);
+      const totalBizProfit = state.appearichSales.reduce((sum, s) => sum + ((s.qty * s.sellPrice) - (s.qty * s.buyPrice)), 0);
+      const totalGrowth = Math.max(0, totalInvGain + totalBizProfit);
+
+      document.getElementById('growth-latest-total').innerText = totalGrowth.toLocaleString() + ' Sh';
+      document.getElementById('growth-selected-month-total').innerText = totalGrowth.toLocaleString() + ' Sh';
+      document.getElementById('tithe-monthly-growth').innerText = totalGrowth.toLocaleString() + ' Sh';
+      document.getElementById('tithe-god-amount').innerText = (totalGrowth * 0.1).toLocaleString() + ' Sh';
+      document.getElementById('tithe-growth-after').innerText = (totalGrowth * 0.9).toLocaleString() + ' Sh';
+
+      document.getElementById('growth-log-count').innerText = state.appearichSales.length + ' Entries';
+      const tbody = document.getElementById('growth-entries-table-body');
+      tbody.innerHTML = state.appearichSales.map(s => {
+        const profit = (s.qty * s.sellPrice) - (s.qty * s.buyPrice);
+        return `
+          <tr class="hover:bg-gray-50/50">
+            <td class="py-3">${s.date}</td>
+            <td class="py-3 font-semibold">Business Sale</td>
+            <td class="py-3">${s.product} (${s.customer})</td>
+            <td class="py-3 text-right font-bold text-emerald-600">+${profit.toLocaleString()} Sh</td>
+            <td class="py-3 text-right">
+              <button onclick="deleteSale('${s.id}')" class="text-red-500 hover:text-red-700 font-bold">Delete</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
   </script>
 </body>
 </html>
