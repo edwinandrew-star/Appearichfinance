@@ -3242,17 +3242,17 @@
             ...saved,
             budgetCategories: { ...state.budgetCategories, ...(saved.budgetCategories || {}) },
             utilitySubcategories: { ...state.utilitySubcategories, ...(saved.utilitySubcategories || {}) },
-          }
-            state.seededSalesVersion = 1;
-            ];
-              ...(state.appearichSales || [])
-              ...INITIAL_APPEARICH_SALES.filter(s => !existingSaleIds.has(s.id)),
-            state.appearichSales = [
-            const existingSaleIds = new Set((state.appearichSales || []).map(s => s.id));
-          if (saved.seededSalesVersion !== 1) {
-          // Seed the provided historical sales exactly once; deletions remain deleted after saving.
-            accounts: { ...state.accounts, ...(saved.accounts || {}) }
           };
+          if (saved.seededSalesVersion !== 1) {
+            // Seed the provided historical sales exactly once; deletions remain deleted after saving.
+            const existingSaleIds = new Set((state.appearichSales || []).map(s => s.id));
+            state.appearichSales = [
+              ...(state.appearichSales || []),
+              ...INITIAL_APPEARICH_SALES.filter(s => !existingSaleIds.has(s.id))
+            ];
+            state.seededSalesVersion = 1;
+          }
+          state.accounts = { ...state.accounts, ...(saved.accounts || {}) };
         }
 
         const profileName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
@@ -3308,16 +3308,24 @@
       document.getElementById('app-wrapper').classList.remove('hidden');
     }
 
-    async function initializeApp() {
-      const { data: { session } } = await supabaseClient.auth.getSession();
 
-      if (session?.user) {
-        showAppScreen();
-        await loadUserState(session.user);
-      } else {
+    async function initializeApp() {
+      try {
+        const sessionResult = await Promise.race([
+          supabaseClient.auth.getSession(),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase session timeout')), 4000))
+        ]);
+        const { data: { session } } = sessionResult;
+        if (session?.user) {
+          showAppScreen();
+          await loadUserState(session.user);
+        } else {
+          showLoginScreen();
+        }
+      } catch (error) {
+        console.error('App startup failed:', error);
         showLoginScreen();
       }
-
       supabaseClient.auth.onAuthStateChange(async (event, session) => {
         if (event === 'SIGNED_OUT') {
           currentUser = null;
@@ -3325,7 +3333,6 @@
           showLoginScreen();
           return;
         }
-
         if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session?.user) {
           if (!currentUser || currentUser.id !== session.user.id) {
             showAppScreen();
@@ -3334,8 +3341,12 @@
         }
       });
     }
-
     window.addEventListener('DOMContentLoaded', initializeApp);
+    // Absolute fallback: Supabase/network issues can never keep the splash visible forever.
+    setTimeout(() => {
+      const splash = document.getElementById('splash-screen');
+      if (splash && !splash.classList.contains('hidden')) showLoginScreen();
+    }, 6000);
     function initializeMonthPickers() {
       const currentMonth = new Date().toISOString().slice(0, 7);
       document.getElementById('income-month-picker').value = currentMonth;
