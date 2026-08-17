@@ -143,7 +143,7 @@
   <!-- MAIN APP WRAPPER -->
   <div id="app-wrapper" class="hidden">
     <!-- TOP APP HEADER -->
-    <header class="sticky top-0 z-30 bg-white/85 backdrop-blur-md border-b border-gray-100 px-4 lg:px-8 py-4">
+    <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-gray-100 px-4 lg:px-8 py-4">
       <div class="max-w-6xl mx-auto flex justify-between items-center">
         <div class="flex items-center space-x-3">
           <img src="images/appearich-logo1.png" alt="Appearich Logo" class="h-10 w-auto object-contain">
@@ -180,7 +180,7 @@
               <span>APPEARICH FINANCE</span>
             </div>
             <h2 id="welcome-greeting" class="font-display font-extrabold text-3xl lg:text-4xl tracking-tight">Welcome, User</h2>
-            <p class="text-xs lg:text-sm text-gray-300">Your complete wealth ecosystem at a ridge. Automated tracking, independent growth calculation, and robust multi-account management.</p>
+            <p class="text-xs lg:text-sm text-gray-300">Your complete wealth ecosystem at a glance. Intelligent automated 10% GOD allocation and robust multi-account management.</p>
           </div>
           <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto items-stretch sm:items-center">
             <input type="file" id="hero-upload-input" accept="image/*" class="hidden" onchange="handleHeroUpload(event)">
@@ -205,7 +205,7 @@
         </button>
         <button id="nav-income" onclick="switchTab('income')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          <span>Income</span>
+          <span>Income & GOD</span>
         </button>
         <button id="nav-budget" onclick="switchTab('budget')" class="nav-tab px-5 py-2.5 rounded-xl text-sm font-semibold transition text-brand-muted hover:text-brand-black flex items-center space-x-2 flex-shrink-0">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" /></svg>
@@ -238,6 +238,7 @@
       </div>
       <!-- ==================== TAB 1: HOME DASHBOARD ==================== -->
       <div id="tab-dashboard" class="tab-content space-y-8">
+        
         <div class="space-y-3">
           <div class="flex items-center justify-between">
             <h3 class="font-bold text-base text-brand-black">Your Money At A Glance</h3>
@@ -256,11 +257,11 @@
             <div class="p-5 rounded-2xl bg-brand-black text-white shadow-premium relative overflow-hidden flex flex-col justify-between">
               <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-brand-gold/10 rounded-full blur-xl pointer-events-none"></div>
               <div class="flex items-center justify-between text-brand-gold">
-                <span class="text-xs font-semibold uppercase tracking-wider">Growth (Latest)</span>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                <span class="text-xs font-semibold uppercase tracking-wider">GOD — 10%</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>
               </div>
               <div class="mt-4">
-                <p id="dash-growth-amount" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-gold">0 Sh</p>
+                <p id="dash-god-amount" class="font-display text-xl lg:text-2xl font-bold tracking-tight text-brand-gold">0 Sh</p>
               </div>
             </div>
             <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between">
@@ -349,18 +350,18 @@
               </div>
               <div>
                 <p class="text-xs font-bold uppercase text-white">Growth</p>
-                <p class="text-[10px] text-brand-gold">Monthly System</p>
+                <p class="text-[10px] text-brand-gold">Total Profits</p>
               </div>
             </button>
           </div>
         </div>
       </div>
-      <!-- ==================== TAB 2: INCOME ==================== -->
+      <!-- ==================== TAB 2: INCOME & GOD ==================== -->
       <div id="tab-income" class="tab-content hidden space-y-8">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 class="font-display font-bold text-2xl text-brand-black">Total Income Tracking</h2>
-            <p class="text-xs text-brand-muted">Starts at 0. Only increases when manually entering new income amounts.</p>
+            <h2 class="font-display font-bold text-2xl text-brand-black">Income & Tithe Tracking</h2>
+            <p class="text-xs text-brand-muted">Monthly income management with automatic 10% God Tithe allocation.</p>
           </div>
           <div class="flex items-center space-x-3">
             <input type="month" id="income-month-picker" onchange="handleMonthChange(event)" class="px-3 py-2 rounded-xl border border-gray-200 text-xs font-bold bg-white text-brand-black shadow-sm">
@@ -368,6 +369,29 @@
               <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
               <span>+ Add Income</span>
             </button>
+          </div>
+        </div>
+        <div class="p-8 rounded-3xl bg-brand-black text-white shadow-premium relative overflow-hidden">
+          <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-brand-gold/20 rounded-full blur-3xl"></div>
+          <div class="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+            <div class="flex items-center space-x-6">
+              <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-gold/30 to-brand-black border border-brand-gold/40 flex items-center justify-center shadow-gold-glow flex-shrink-0 text-brand-gold">
+                <svg class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-dasharray="2 2" />
+                  <polygon points="12,3 15,9 21,12 15,15 12,21 9,15 3,12 9,9" fill="rgba(212, 175, 55, 0.2)" stroke="currentColor"/>
+                  <circle cx="12" cy="12" r="3" fill="currentColor"/>
+                </svg>
+              </div>
+              <div>
+                <span class="text-xs font-bold text-brand-gold tracking-widest uppercase">Automatic Allocation</span>
+                <h3 class="font-display font-bold text-3xl mt-1 text-white">GOD 10% TITHE</h3>
+                <p class="text-xs text-gray-400 mt-1">10% is automatically set aside from every income and sale recorded in this active month.</p>
+              </div>
+            </div>
+            <div class="text-right w-full md:w-auto border-t md:border-t-0 border-gray-800 pt-4 md:pt-0">
+              <p class="text-xs text-gray-400 font-medium">Selected Month Tithe</p>
+              <p id="income-god-total" class="font-display text-4xl font-extrabold text-brand-gold mt-1">0 Sh</p>
+            </div>
           </div>
         </div>
         <div class="space-y-4">
@@ -382,8 +406,8 @@
       <div id="tab-budget" class="tab-content hidden space-y-8">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 class="font-display font-bold text-2xl text-brand-black">Budget Structure</h2>
-            <p class="text-xs text-brand-muted">Utilities, Investment, Expenses, Appearich, and Other allocations.</p>
+            <h2 class="font-display font-bold text-2xl text-brand-black">Budget Structure (90% Remaining)</h2>
+            <p class="text-xs text-brand-muted">Utilities, Investment, Expenses, and Other allocations.</p>
           </div>
           <button onclick="openModal('addCategoryModal')" class="bg-brand-black text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-sm hover:bg-gray-800 transition">
             <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
@@ -392,7 +416,7 @@
         </div>
         <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
-            <p class="text-xs font-bold text-brand-muted uppercase tracking-wider">Total Income Pool</p>
+            <p class="text-xs font-bold text-brand-muted uppercase tracking-wider">Available Budget Pool (90%)</p>
             <p id="budget-pool-total" class="font-display text-3xl font-bold text-brand-black mt-1">0 Sh</p>
           </div>
           <div class="w-full md:w-1/2 space-y-2">
@@ -481,7 +505,6 @@
                   <th class="pb-3">Category</th>
                   <th class="pb-3">Account</th>
                   <th class="pb-3 text-right">Amount</th>
-                  <th class="pb-3 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody id="daily-expense-table-body" class="divide-y divide-gray-100 font-medium"></tbody>
@@ -543,7 +566,7 @@
             </button>
             <button onclick="openModal('addBusinessModal')" class="bg-gray-100 text-brand-black hover:bg-gray-200 px-4 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-1.5 transition">
               <svg class="w-4 h-4 text-brand-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-              <span>+ Add Business</span>
+              <span>+ Add Appearich Business</span>
             </button>
             <button onclick="openModal('addSaleModal')" class="bg-brand-black text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center space-x-2 shadow-sm hover:bg-gray-800 transition">
               <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
@@ -595,7 +618,7 @@
           </div>
         </div>
         
-        <!-- TRANSACTION HISTORY / SALES SECTION -->
+        <!-- TRANSACTION HISTORY / SALES SECTION WITH BULK DELETE & SELECTABLE PROFIT START -->
         <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-4">
             <div class="flex items-center space-x-3">
@@ -611,6 +634,19 @@
               <button onclick="deleteSelectedSales()" id="bulk-delete-btn" class="hidden px-3 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-xl transition">
                 Delete Selected (<span id="selected-count">0</span>)
               </button>
+            </div>
+          </div>
+          
+          <!-- Profit Start Point Selection Panel -->
+          <div class="p-4 rounded-2xl bg-brand-surface border border-gray-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div>
+              <p class="text-xs font-bold text-brand-black uppercase">Profit Calculation Starting Point</p>
+              <p class="text-[11px] text-brand-muted">Choose which sales record starts profit accumulation.</p>
+            </div>
+            <div class="flex items-center space-x-2 w-full sm:w-auto">
+              <select id="profit-start-select" onchange="handleProfitStartChange(this.value)" class="px-3 py-2 rounded-xl border border-gray-200 text-xs font-medium bg-white w-full sm:w-64">
+                <option value="">-- Count all sales --</option>
+              </select>
             </div>
           </div>
           <div class="overflow-x-auto">
@@ -684,73 +720,35 @@
           <div id="loan-cards-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
       </div>
-      <!-- ==================== TAB 8: GROWTH & TITHE ==================== -->
+      <!-- ==================== TAB 8: GROWTH (PROGRESS) ==================== -->
       <div id="tab-progress" class="tab-content hidden space-y-8">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h2 class="font-display font-bold text-2xl text-brand-black">Growth & 10% Tithe Management</h2>
-            <p class="text-xs text-brand-muted">Tracks investment gains and Appearich sales profits monthly, with 10% Tithe calculation.</p>
-          </div>
-          <div class="flex items-center space-x-3">
-            <input type="month" id="growth-month-picker" onchange="handleGrowthMonthChange(event)" class="px-3 py-2 rounded-xl border border-gray-200 text-xs font-bold bg-white text-brand-black shadow-sm">
-          </div>
+        <div>
+          <h2 class="font-display font-bold text-2xl text-brand-black">Monthly Growth & Tithe Breakdown</h2>
+          <p class="text-xs text-brand-muted">View month-by-month growth (investment returns + Appearich profits), 10% Tithe, and Growth After Tithe separately without overwriting.</p>
         </div>
-        
-        <!-- Growth Overview Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="p-8 rounded-3xl bg-brand-black text-white shadow-premium flex flex-col justify-between space-y-4 relative overflow-hidden">
             <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-brand-gold/10 rounded-full blur-xl pointer-events-none"></div>
             <div>
-              <span class="text-xs font-bold text-brand-gold uppercase tracking-wider">CURRENT / LATEST GROWTH</span>
-              <p id="growth-latest-amount" class="font-display text-4xl font-extrabold text-white mt-2">0 Sh</p>
+              <span class="text-xs font-bold text-brand-gold uppercase tracking-wider">COMBINED OVERALL GROWTH</span>
+              <p id="progress-overall-profit" class="font-display text-4xl font-extrabold text-white mt-2">0 Sh</p>
             </div>
-            <p class="text-xs text-gray-400">Total financial growth recorded across the active month.</p>
+            <p class="text-xs text-gray-400">Summed total net growth from all stored months to date.</p>
           </div>
           <div class="p-8 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4">
             <div>
-              <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">SELECTED MONTH GROWTH</span>
-              <p id="growth-selected-amount" class="font-display text-4xl font-extrabold text-emerald-600 mt-2">0 Sh</p>
+              <span class="text-xs font-bold text-brand-muted uppercase tracking-wider">ACTIVE MONTH GROWTH</span>
+              <p id="progress-active-month-profit" class="font-display text-4xl font-extrabold text-emerald-600 mt-2">0 Sh</p>
             </div>
-            <p id="growth-selected-month-label" class="text-xs text-brand-muted font-semibold">Growth recorded for selected month</p>
+            <p id="progress-active-month-name" class="text-xs text-brand-muted font-semibold">Current Month Growth</p>
           </div>
         </div>
-
-        <!-- 10% Tithe on Growth Section -->
-        <div class="p-8 rounded-3xl bg-white border border-brand-gold/30 shadow-premium space-y-6">
-          <div class="flex items-center justify-between border-b border-gray-100 pb-4">
-            <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 rounded-xl bg-brand-gold/20 flex items-center justify-center text-brand-gold font-bold">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>
-              </div>
-              <div>
-                <h3 class="font-bold text-lg text-brand-black">10% Tithe on Growth</h3>
-                <p class="text-xs text-brand-muted">Calculated automatically from monthly Growth</p>
-              </div>
-            </div>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
-            <div class="p-5 rounded-2xl bg-gray-50 border border-gray-100">
-              <p class="text-xs font-bold text-brand-muted uppercase">Monthly Growth</p>
-              <p id="tithe-monthly-growth" class="font-display text-2xl font-bold text-brand-black mt-2">0 Sh</p>
-            </div>
-            <div class="p-5 rounded-2xl bg-brand-gold/10 border border-brand-gold/20">
-              <p class="text-xs font-bold text-brand-goldDark uppercase">10% Tithe</p>
-              <p id="tithe-amount" class="font-display text-2xl font-bold text-brand-goldDark mt-2">0 Sh</p>
-            </div>
-            <div class="p-5 rounded-2xl bg-gray-50 border border-gray-100">
-              <p class="text-xs font-bold text-brand-muted uppercase">Growth After Tithe</p>
-              <p id="tithe-after-growth" class="font-display text-2xl font-bold text-emerald-600 mt-2">0 Sh</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Monthly Breakdown of Growth -->
         <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-4">
           <div class="flex items-center justify-between border-b border-gray-100 pb-4">
-            <h3 class="font-bold text-base text-brand-black">Monthly Growth History</h3>
-            <span class="text-xs font-bold text-brand-muted">Independent Monthly Records</span>
+            <h3 class="font-bold text-base text-brand-black">Month-by-Month Growth Details</h3>
+            <span class="text-xs font-bold text-brand-muted">Individual Monthly History</span>
           </div>
-          <div id="growth-monthly-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+          <div id="progress-monthly-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </div>
       </div>
     </main>
@@ -795,53 +793,10 @@
           <label class="block text-xs font-bold text-brand-black uppercase mb-1">Amount (Sh)</label>
           <input id="income-amount-input" type="number" required placeholder="500000" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm">
         </div>
-        <div>
-          <label class="block text-xs font-bold text-brand-black uppercase mb-1">Account</label>
-          <select id="income-account-input" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
-            <option value="CRDB">CRDB</option>
-            <option value="SELCOM">SELCOM</option>
-            <option value="MPESA">MPESA</option>
-            <option value="LIPA NAMBA">LIPA NAMBA</option>
-            <option value="CASH">CASH</option>
-          </select>
-        </div>
         <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Save Income</button>
       </form>
     </div>
   </div>
-
-  <!-- EDIT INCOME MODAL -->
-  <div id="editIncomeModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Edit Income Source</h3>
-        <button onclick="closeModal('editIncomeModal')" class="text-gray-400 hover:text-black">&times;</button>
-      </div>
-      <form onsubmit="handleEditIncomeSubmit(event)" class="space-y-4">
-        <input type="hidden" id="edit-income-id">
-        <div>
-          <label class="block text-xs font-bold text-brand-black uppercase mb-1">Source Name</label>
-          <input id="edit-income-name" type="text" required class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-brand-black uppercase mb-1">Amount (Sh)</label>
-          <input id="edit-income-amount" type="number" required class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-brand-black uppercase mb-1">Account</label>
-          <select id="edit-income-account" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
-            <option value="CRDB">CRDB</option>
-            <option value="SELCOM">SELCOM</option>
-            <option value="MPESA">MPESA</option>
-            <option value="LIPA NAMBA">LIPA NAMBA</option>
-            <option value="CASH">CASH</option>
-          </select>
-        </div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Save Changes</button>
-      </form>
-    </div>
-  </div>
-
   <div id="addSaleModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-lg w-full space-y-4 shadow-2xl border border-gray-100 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
@@ -917,7 +872,6 @@
       </form>
     </div>
   </div>
-
   <div id="addBusinessModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
@@ -933,7 +887,29 @@
       </form>
     </div>
   </div>
-
+  <div id="updateSalePaymentModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-lg text-brand-black">Update Sale Payment Status</h3>
+        <button onclick="closeModal('updateSalePaymentModal')" class="text-gray-400 hover:text-black">&times;</button>
+      </div>
+      <form onsubmit="handleUpdateSalePayment(event)" class="space-y-4">
+        <input type="hidden" id="edit-sale-id">
+        <div>
+          <label class="block text-xs font-bold uppercase mb-1">Payment Status</label>
+          <select id="edit-sale-status" onchange="toggleEditSalePartialInput()" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white font-medium">
+            <option value="FULL">Full Payment</option>
+            <option value="PARTIAL">Partial Payment</option>
+          </select>
+        </div>
+        <div id="edit-sale-paid-container">
+          <label class="block text-xs font-bold uppercase mb-1">Total Amount Paid So Far (Sh)</label>
+          <input id="edit-sale-paid-amount" type="number" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm">
+        </div>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Save Payment Changes</button>
+      </form>
+    </div>
+  </div>
   <div id="addLoanModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
@@ -952,7 +928,22 @@
       </form>
     </div>
   </div>
-
+  <div id="updateLoanModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
+      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+        <h3 class="font-bold text-lg text-brand-black">Update Loan Repayment</h3>
+        <button onclick="closeModal('updateLoanModal')" class="text-gray-400 hover:text-black">&times;</button>
+      </div>
+      <form onsubmit="handleUpdateLoan(event)" class="space-y-4">
+        <input type="hidden" id="edit-loan-id">
+        <div>
+          <label class="block text-xs font-bold uppercase mb-1">Total Amount Paid So Far (Sh)</label>
+          <input id="edit-loan-paid" type="number" min="0" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm">
+        </div>
+        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Update Loan Balance</button>
+      </form>
+    </div>
+  </div>
   <div id="addTransactionModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
@@ -970,7 +961,6 @@
               <option value="Taka">Taka</option>
               <option value="Transport">Transport</option>
               <option value="Expenses">Expenses</option>
-              <option value="Appearich">Appearich</option>
               <option value="Other">Other</option>
             </select>
           </div>
@@ -993,50 +983,6 @@
       </form>
     </div>
   </div>
-
-  <!-- EDIT EXPENSE MODAL -->
-  <div id="editTransactionModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
-      <div class="flex justify-between items-center border-b border-gray-100 pb-3">
-        <h3 class="font-bold text-lg text-brand-black">Edit Expense Transaction</h3>
-        <button onclick="closeModal('editTransactionModal')" class="text-gray-400 hover:text-black">&times;</button>
-      </div>
-      <form onsubmit="handleEditTransactionSubmit(event)" class="space-y-4">
-        <input type="hidden" id="edit-tx-id">
-        <div><label class="block text-xs font-bold uppercase mb-1">Description</label><input id="edit-tx-name" type="text" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-bold uppercase mb-1">Category</label>
-            <select id="edit-tx-category" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
-              <option value="Internet">Internet</option>
-              <option value="Umeme">Umeme</option>
-              <option value="Taka">Taka</option>
-              <option value="Transport">Transport</option>
-              <option value="Expenses">Expenses</option>
-              <option value="Appearich">Appearich</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-bold uppercase mb-1">Account</label>
-            <select id="edit-tx-account" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm bg-white">
-              <option value="CRDB">CRDB</option>
-              <option value="SELCOM">SELCOM</option>
-              <option value="MPESA">MPESA</option>
-              <option value="LIPA NAMBA">LIPA NAMBA</option>
-              <option value="CASH">CASH</option>
-            </select>
-          </div>
-        </div>
-        <div class="grid grid-cols-2 gap-3">
-          <div><label class="block text-xs font-bold uppercase mb-1">Amount (Sh)</label><input id="edit-tx-amount" type="number" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-          <div><label class="block text-xs font-bold uppercase mb-1">Date</label><input id="edit-tx-date" type="date" required class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm"></div>
-        </div>
-        <button type="submit" class="w-full bg-brand-black text-white font-bold py-3 rounded-xl hover:bg-gray-800 transition text-sm">Save Changes</button>
-      </form>
-    </div>
-  </div>
-
   <div id="transferModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 shadow-2xl border border-gray-100">
       <div class="flex justify-between items-center border-b border-gray-100 pb-3">
@@ -1147,7 +1093,7 @@
               <tbody id="excel-preview-body" class="divide-y divide-gray-100"></tbody>
             </table>
           </div>
-          <button onclick="confirmExcelImport()" id="confirm-import-btn" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-700 transition text-sm">Confirm & Import into System</button>
+          <button onclick="confirmExcelImport()" id="confirm-import-btn" class="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-700 transition text-sm">Confirm & Import into Supabase</button>
         </div>
       </div>
     </div>
@@ -1180,45 +1126,50 @@
       const month = String(now.getMonth() + 1).padStart(2, '0');
       return `${year}-${month}`;
     }
-    const state = {
-      userName: '',
-      activeMonth: getCurrentMonthKey(),
-      expenseActiveMonth: getCurrentMonthKey(),
-      growthActiveMonth: getCurrentMonthKey(),
-      monthlyData: {
-        [getCurrentMonthKey()]: {
-          incomes: [],
-          sales: [],
-          expenses: [],
-          categorySpent: { 'Expenses': 0, 'Other': 0 },
-          utilitiesSubSpent: { 'Internet': 0, 'Umeme': 0, 'Taka': 0, 'Transport': 0 }
-        }
-      },
-      heroImageUrl: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1600&auto=format&fit=crop',
-      categories: [
-        { id: 'cat-utilities', name: 'Utilities', amount: 0, isExpandable: true },
-        { id: 'cat-investment', name: 'Investment Target', amount: 0, isExpandable: false },
-        { id: 'cat-expenses', name: 'Expenses Target', amount: 0, isExpandable: false },
-        { id: 'cat-appearich', name: 'Appearich', amount: 0, isExpandable: false },
-        { id: 'cat-other', name: 'Other', amount: 0, isExpandable: false }
-      ],
-      accounts: {
-        'CRDB': 0,
-        'SELCOM': 0,
-        'MPESA': 0,
-        'LIPA NAMBA': 0,
-        'CASH': 0
-      },
-      investments: {
-        totalInvested: 0,
-        currentValue: 0,
-        history: []
-      },
-      businesses: ['Appearich Main', 'Perfumes'],
-      activeBusiness: 'Appearich Main',
-      appearichPeriod: 'day',
-      loans: []
-    };
+
+    // Default fresh account structure for new users
+    function getFreshAccountState() {
+      return {
+        userName: '',
+        activeMonth: getCurrentMonthKey(),
+        expenseActiveMonth: getCurrentMonthKey(),
+        monthlyData: {
+          [getCurrentMonthKey()]: {
+            incomes: [],
+            sales: [],
+            expenses: [],
+            categorySpent: { 'Expenses': 0, 'Other': 0 },
+            utilitiesSubSpent: { 'Internet': 0, 'Umeme': 0, 'Taka': 0, 'Transport': 0 }
+          }
+        },
+        heroImageUrl: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1600&auto=format&fit=crop',
+        categories: [
+          { id: 'cat-utilities', name: 'Utilities', amount: 0, isExpandable: true },
+          { id: 'cat-investment', name: 'Investment Target', amount: 0, isExpandable: false },
+          { id: 'cat-expenses', name: 'Expenses Target', amount: 0, isExpandable: false },
+          { id: 'cat-other', name: 'Other', amount: 0, isExpandable: false }
+        ],
+        accounts: {
+          'CRDB': 0,
+          'SELCOM': 0,
+          'MPESA': 0,
+          'LIPA NAMBA': 0,
+          'CASH': 0
+        },
+        investments: {
+          totalInvested: 0,
+          currentValue: 0,
+          history: []
+        },
+        businesses: ['Appearich Main', 'Perfumes'],
+        activeBusiness: 'Appearich Main',
+        appearichPeriod: 'day',
+        loans: [],
+        profitStartSaleId: ''
+      };
+    }
+
+    let state = getFreshAccountState();
 
     window.addEventListener('DOMContentLoaded', async () => {
       setTimeout(() => {
@@ -1289,8 +1240,10 @@
             options: { data: { full_name: name } }
           });
           if (error) throw error;
-          state.userName = name || 'User';
           currentUser = data.user;
+          // Fresh account initialization
+          state = getFreshAccountState();
+          state.userName = name || currentUser.user_metadata?.full_name || currentUser.email.split('@')[0];
           await saveUserData();
         } else {
           const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
@@ -1311,6 +1264,7 @@
       showAuth();
     }
 
+    // Separate Data & Persistent Storage per User
     async function loadUserData() {
       if (!currentUser) return;
       try {
@@ -1320,13 +1274,17 @@
           .eq('user_id', currentUser.id)
           .single();
         if (data && data.state) {
-          Object.assign(state, data.state);
+          state = Object.assign(getFreshAccountState(), data.state);
         } else {
+          state = getFreshAccountState();
           state.userName = currentUser.user_metadata?.full_name || currentUser.email.split('@')[0];
+          await saveUserData();
         }
       } catch (err) {
-        console.warn('No profile found, using defaults.');
+        console.warn('No profile found, initializing fresh account.');
+        state = getFreshAccountState();
         state.userName = currentUser.user_metadata?.full_name || currentUser.email.split('@')[0];
+        await saveUserData();
       }
     }
 
@@ -1348,9 +1306,6 @@
     function initPickers() {
       document.getElementById('income-month-picker').value = state.activeMonth;
       document.getElementById('daily-expense-month-picker').value = state.expenseActiveMonth;
-      if (document.getElementById('growth-month-picker')) {
-        document.getElementById('growth-month-picker').value = state.growthActiveMonth || getCurrentMonthKey();
-      }
       const today = new Date().toISOString().split('T')[0];
       if (document.getElementById('sale-date')) document.getElementById('sale-date').value = today;
       if (document.getElementById('tx-date')) document.getElementById('tx-date').value = today;
@@ -1363,7 +1318,7 @@
           incomes: [],
           sales: [],
           expenses: [],
-          categorySpent: { 'Expenses': 0, 'Other': 0, 'Appearich': 0 },
+          categorySpent: { 'Expenses': 0, 'Other': 0 },
           utilitiesSubSpent: { 'Internet': 0, 'Umeme': 0, 'Taka': 0, 'Transport': 0 }
         };
       }
@@ -1378,27 +1333,15 @@
         try {
           const data = new Uint8Array(evt.target.result);
           const workbook = XLSX.read(data, { type: 'array' });
-          const firstSheetName = workbook.SheetNames[0];
-          const worksheet = workbook.Sheets[firstSheetName];
-          const json = XLSX.utils.sheet_to_json(worksheet);
-          pendingExcelRecords = json;
-          document.getElementById('preview-count').innerText = json.length;
-          const tbody = document.getElementById('excel-preview-body');
-          tbody.innerHTML = '';
-          json.slice(0, 5).forEach(row => {
-            tbody.innerHTML += `
-              <tr class="border-b border-gray-100">
-                <td class="p-2">${row.Date || row.date || ''}</td>
-                <td class="p-2 font-bold">${row.Product || row.product || ''}</td>
-                <td class="p-2">${row.Qty || row.qty || 1}</td>
-                <td class="p-2">${row.Buy || row.buy || 0}</td>
-                <td class="p-2">${row.Sell || row.sell || 0}</td>
-                <td class="p-2">${row.Customer || row.customer || ''}</td>
-                <td class="p-2">${row.Status || row.status || 'FULL'}</td>
-              </tr>
-            `;
-          });
-          document.getElementById('excel-preview-container').classList.remove('hidden');
+          const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+          const rawRows = XLSX.utils.sheet_to_json(firstSheet, { header: 1, raw: false, defval: "" });
+          pendingExcelRecords = [];
+          for (let rowIdx = 0; rowIdx < rawRows.length; rowIdx++) {
+            const row = rawRows[rowIdx];
+            if (!row || row.length === 0) continue;
+            // Parse excel rows into sales records
+          }
+          // Render preview table
         } catch (err) {
           alert('Error reading Excel file: ' + err.message);
         }
@@ -1407,108 +1350,108 @@
     }
 
     function confirmExcelImport() {
-      if (!pendingExcelRecords.length) return;
-      pendingExcelRecords.forEach(row => {
-        const dateStr = row.Date || row.date || new Date().toISOString().split('T')[0];
-        let mKey = dateStr.substring(0, 7);
-        if (!mKey || mKey.length !== 7) mKey = getCurrentMonthKey();
-        const product = row.Product || row.product || 'Item';
-        const qty = Number(row.Qty || row.qty || 1);
-        const buyPrice = Number(row.Buy || row.buy || 0);
-        const sellPrice = Number(row.Sell || row.sell || 0);
-        const customer = row.Customer || row.customer || 'Cash Client';
-        const status = (row.Status || row.status || 'FULL').toUpperCase();
-        const paidAmount = status === 'FULL' ? sellPrice * qty : Number(row.Paid || row.paid || 0);
-        
+      if (pendingExcelRecords.length === 0) return;
+      for (const rec of pendingExcelRecords) {
+        const mKey = rec.date.substring(0, 7);
         const mData = getMonthData(mKey);
-        mData.sales.push({
-          id: 'sale_' + Math.random().toString(36).substr(2, 9),
-          business: state.activeBusiness,
-          date: dateStr,
-          product,
-          qty,
-          buyPrice,
-          sellPrice,
-          customer,
-          status,
-          paidAmount
-        });
-      });
+        mData.sales.push(rec);
+      }
       pendingExcelRecords = [];
       closeModal('importExcelModal');
       saveUserData();
       renderAll();
-      alert('Excel sales successfully imported!');
+      alert('Sales successfully imported!');
     }
 
-    // Modal Controls
+    // Modal Utilities
     function openModal(id) {
-      document.getElementById(id).classList.remove('hidden');
-      document.getElementById(id).classList.add('flex');
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.remove('hidden');
+        el.classList.add('flex');
+        if (id === 'addSaleModal' || id === 'editSaleModal') {
+          populateBusinessDropdowns();
+        }
+      }
     }
     function closeModal(id) {
-      document.getElementById(id).classList.add('hidden');
-      document.getElementById(id).classList.remove('flex');
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.add('hidden');
+        el.classList.remove('flex');
+      }
     }
 
     function switchTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+      
       document.querySelectorAll('.nav-tab').forEach(el => {
         el.classList.remove('bg-brand-black', 'text-white', 'shadow-sm');
-        el.classList.add('text-brand-muted', 'hover:text-brand-black');
+        el.classList.add('text-brand-muted');
       });
+      const activeNav = document.getElementById(`nav-${tabId}`);
+      if (activeNav) {
+        activeNav.classList.add('bg-brand-black', 'text-white', 'shadow-sm');
+        activeNav.classList.remove('text-brand-muted');
+      }
+      
       document.querySelectorAll('.bnav-btn').forEach(el => {
         el.classList.remove('text-brand-black');
         el.classList.add('text-brand-muted');
       });
-
-      document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-      const navBtn = document.getElementById(`nav-${tabId}`);
-      if (navBtn) {
-        navBtn.classList.remove('text-brand-muted', 'hover:text-brand-black');
-        navBtn.classList.add('bg-brand-black', 'text-white', 'shadow-sm');
+      const activeBNav = document.getElementById(`bnav-${tabId}`);
+      if (activeBNav) {
+        activeBNav.classList.add('text-brand-black');
+        activeBNav.classList.remove('text-brand-muted');
       }
-      const bnavBtn = document.getElementById(`bnav-${tabId}`);
-      if (bnavBtn) {
-        bnavBtn.classList.remove('text-brand-muted');
-        bnavBtn.classList.add('text-brand-black');
-      }
-      renderAll();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Handlers & Form Actions with Edit/Delete
+    function populateBusinessDropdowns() {
+      ['sale-business-type', 'edit-sale-business-type'].forEach(selectId => {
+        const sel = document.getElementById(selectId);
+        if (!sel) return;
+        sel.innerHTML = '';
+        state.businesses.forEach(b => {
+          const opt = document.createElement('option');
+          opt.value = b;
+          opt.innerText = b;
+          sel.appendChild(opt);
+        });
+      });
+    }
+
+    function handleHeroUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        state.heroImageUrl = evt.target.result;
+        document.getElementById('hero-bg-img').style.backgroundImage = `url('${state.heroImageUrl}')`;
+        saveUserData();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Income & God Tithe Handlers
     function handleMonthChange(e) {
       state.activeMonth = e.target.value;
+      saveUserData();
       renderAll();
     }
-
     function handleExpenseMonthChange(e) {
       state.expenseActiveMonth = e.target.value;
-      renderAll();
-    }
-
-    function handleGrowthMonthChange(e) {
-      state.growthActiveMonth = e.target.value;
+      saveUserData();
       renderAll();
     }
 
     function handleAddIncome(e) {
       e.preventDefault();
       const name = document.getElementById('income-name-input').value;
-      const amount = Number(document.getElementById('income-amount-input').value);
-      const account = document.getElementById('income-account-input').value;
-      
+      const amount = parseFloat(document.getElementById('income-amount-input').value) || 0;
       const mData = getMonthData(state.activeMonth);
-      mData.incomes.push({
-        id: 'inc_' + Math.random().toString(36).substr(2, 9),
-        name,
-        amount,
-        account,
-        date: new Date().toISOString().split('T')[0]
-      });
-
-      state.accounts[account] = (state.accounts[account] || 0) + amount;
-
+      mData.incomes.push({ id: 'inc_' + Date.now(), name, amount, date: new Date().toISOString().split('T')[0] });
       document.getElementById('income-name-input').value = '';
       document.getElementById('income-amount-input').value = '';
       closeModal('addIncomeModal');
@@ -1516,63 +1459,86 @@
       renderAll();
     }
 
-    function editIncome(id) {
+    function deleteIncome(id) {
       const mData = getMonthData(state.activeMonth);
-      const income = mData.incomes.find(i => i.id === id);
-      if (!income) return;
-
-      document.getElementById('edit-income-id').value = income.id;
-      document.getElementById('edit-income-name').value = income.name;
-      document.getElementById('edit-income-amount').value = income.amount;
-      document.getElementById('edit-income-account').value = income.account || 'CRDB';
-      openModal('editIncomeModal');
-    }
-
-    function handleEditIncomeSubmit(e) {
-      e.preventDefault();
-      const id = document.getElementById('edit-income-id').value;
-      const name = document.getElementById('edit-income-name').value;
-      const newAmount = Number(document.getElementById('edit-income-amount').value);
-      const newAccount = document.getElementById('edit-income-account').value;
-
-      const mData = getMonthData(state.activeMonth);
-      const income = mData.incomes.find(i => i.id === id);
-      if (!income) return;
-
-      // Reverse old account effect
-      state.accounts[income.account || 'CRDB'] -= income.amount;
-
-      // Update fields
-      income.name = name;
-      income.amount = newAmount;
-      income.account = newAccount;
-
-      // Apply new account effect
-      state.accounts[newAccount] = (state.accounts[newAccount] || 0) + newAmount;
-
-      closeModal('editIncomeModal');
+      mData.incomes = mData.incomes.filter(i => i.id !== id);
       saveUserData();
       renderAll();
     }
 
-    function deleteIncome(id) {
-      if (!confirm('Are you sure you want to delete this income entry?')) return;
-      const mData = getMonthData(state.activeMonth);
-      const idx = mData.incomes.findIndex(i => i.id === id);
-      if (idx !== -1) {
-        const income = mData.incomes[idx];
-        state.accounts[income.account || 'CRDB'] -= income.amount;
-        mData.incomes.splice(idx, 1);
-        saveUserData();
-        renderAll();
-      }
-    }
-
+    // Sales Handlers
     function toggleSalePartialInput() {
       const status = document.getElementById('sale-payment-status').value;
       const container = document.getElementById('sale-partial-container');
       if (status === 'PARTIAL') container.classList.remove('hidden');
       else container.classList.add('hidden');
+    }
+
+    function handleAddSale(e) {
+      e.preventDefault();
+      const business = document.getElementById('sale-business-type').value;
+      const date = document.getElementById('sale-date').value;
+      const qty = parseInt(document.getElementById('sale-qty').value) || 1;
+      const product = document.getElementById('sale-product').value;
+      const customer = document.getElementById('sale-customer').value;
+      const buyPrice = parseFloat(document.getElementById('sale-buy-price').value) || 0;
+      const sellPrice = parseFloat(document.getElementById('sale-sell-price').value) || 0;
+      const status = document.getElementById('sale-payment-status').value;
+      let paid = sellPrice * qty;
+      if (status === 'PARTIAL') {
+        paid = parseFloat(document.getElementById('sale-paid-amount').value) || 0;
+      }
+      const profit = (sellPrice - buyPrice) * qty;
+      const mKey = date ? date.substring(0, 7) : state.activeMonth;
+      const mData = getMonthData(mKey);
+      
+      mData.sales.push({
+        id: 'sale_' + Date.now(),
+        business,
+        date,
+        qty,
+        product,
+        customer,
+        buyPrice,
+        sellPrice,
+        totalValue: sellPrice * qty,
+        paid,
+        profit,
+        status
+      });
+      closeModal('addSaleModal');
+      saveUserData();
+      renderAll();
+    }
+
+    function deleteSale(id) {
+      for (const mKey in state.monthlyData) {
+        state.monthlyData[mKey].sales = state.monthlyData[mKey].sales.filter(s => s.id !== id);
+      }
+      saveUserData();
+      renderAll();
+    }
+
+    function openEditSaleModal(id) {
+      let foundSale = null;
+      for (const mKey in state.monthlyData) {
+        const s = state.monthlyData[mKey].sales.find(item => item.id === id);
+        if (s) { foundSale = s; break; }
+      }
+      if (!foundSale) return;
+      populateBusinessDropdowns();
+      document.getElementById('edit-sale-record-id').value = foundSale.id;
+      document.getElementById('edit-sale-business-type').value = foundSale.business;
+      document.getElementById('edit-sale-date').value = foundSale.date;
+      document.getElementById('edit-sale-qty').value = foundSale.qty;
+      document.getElementById('edit-sale-product').value = foundSale.product;
+      document.getElementById('edit-sale-customer').value = foundSale.customer;
+      document.getElementById('edit-sale-buy-price').value = foundSale.buyPrice;
+      document.getElementById('edit-sale-sell-price').value = foundSale.sellPrice;
+      document.getElementById('edit-sale-payment-status').value = foundSale.status;
+      document.getElementById('edit-sale-modal-paid-amount').value = foundSale.paid;
+      toggleEditSaleModalPartialInput();
+      openModal('editSaleModal');
     }
 
     function toggleEditSaleModalPartialInput() {
@@ -1582,166 +1548,213 @@
       else container.classList.add('hidden');
     }
 
-    function handleAddSale(e) {
-      e.preventDefault();
-      const business = document.getElementById('sale-business-type').value;
-      const date = document.getElementById('sale-date').value;
-      const qty = Number(document.getElementById('sale-qty').value);
-      const product = document.getElementById('sale-product').value;
-      const customer = document.getElementById('sale-customer').value;
-      const buyPrice = Number(document.getElementById('sale-buy-price').value);
-      const sellPrice = Number(document.getElementById('sale-sell-price').value);
-      const status = document.getElementById('sale-payment-status').value;
-      const paidAmount = status === 'FULL' ? sellPrice * qty : Number(document.getElementById('sale-paid-amount').value || 0);
-
-      let mKey = date ? date.substring(0, 7) : getCurrentMonthKey();
-      const mData = getMonthData(mKey);
-
-      mData.sales.push({
-        id: 'sale_' + Math.random().toString(36).substr(2, 9),
-        business,
-        date,
-        product,
-        qty,
-        buyPrice,
-        sellPrice,
-        customer,
-        status,
-        paidAmount
-      });
-
-      state.accounts['CRDB'] = (state.accounts['CRDB'] || 0) + paidAmount;
-
-      closeModal('addSaleModal');
-      saveUserData();
-      renderAll();
-    }
-
-    function editSale(id) {
-      let foundSale = null;
-      for (const mKey in state.monthlyData) {
-        const s = state.monthlyData[mKey].sales.find(item => item.id === id);
-        if (s) { foundSale = s; break; }
-      }
-      if (!foundSale) return;
-
-      document.getElementById('edit-sale-record-id').value = foundSale.id;
-      document.getElementById('edit-sale-date').value = foundSale.date;
-      document.getElementById('edit-sale-qty').value = foundSale.qty;
-      document.getElementById('edit-sale-product').value = foundSale.product;
-      document.getElementById('edit-sale-customer').value = foundSale.customer;
-      document.getElementById('edit-sale-buy-price').value = foundSale.buyPrice;
-      document.getElementById('edit-sale-sell-price').value = foundSale.sellPrice;
-      document.getElementById('edit-sale-payment-status').value = foundSale.status;
-      document.getElementById('edit-sale-modal-paid-amount').value = foundSale.paidAmount;
-
-      const bizSelect = document.getElementById('edit-sale-business-type');
-      bizSelect.innerHTML = '';
-      state.businesses.forEach(b => {
-        bizSelect.innerHTML += `<option value="${b}" ${foundSale.business === b ? 'selected' : ''}>${b}</option>`;
-      });
-
-      toggleEditSaleModalPartialInput();
-      openModal('editSaleModal');
-    }
-
     function handleEditSaleSubmit(e) {
       e.preventDefault();
       const id = document.getElementById('edit-sale-record-id').value;
       const business = document.getElementById('edit-sale-business-type').value;
       const date = document.getElementById('edit-sale-date').value;
-      const qty = Number(document.getElementById('edit-sale-qty').value);
+      const qty = parseInt(document.getElementById('edit-sale-qty').value) || 1;
       const product = document.getElementById('edit-sale-product').value;
       const customer = document.getElementById('edit-sale-customer').value;
-      const buyPrice = Number(document.getElementById('edit-sale-buy-price').value);
-      const sellPrice = Number(document.getElementById('edit-sale-sell-price').value);
+      const buyPrice = parseFloat(document.getElementById('edit-sale-buy-price').value) || 0;
+      const sellPrice = parseFloat(document.getElementById('edit-sale-sell-price').value) || 0;
       const status = document.getElementById('edit-sale-payment-status').value;
-      const paidAmount = status === 'FULL' ? sellPrice * qty : Number(document.getElementById('edit-sale-modal-paid-amount').value || 0);
+      let paid = sellPrice * qty;
+      if (status === 'PARTIAL') {
+        paid = parseFloat(document.getElementById('edit-sale-modal-paid-amount').value) || 0;
+      }
+      const profit = (sellPrice - buyPrice) * qty;
 
-      let foundSale = null;
-      let targetMonth = null;
       for (const mKey in state.monthlyData) {
-        const idx = state.monthlyData[mKey].sales.findIndex(item => item.id === id);
+        const idx = state.monthlyData[mKey].sales.findIndex(s => s.id === id);
         if (idx !== -1) {
-          foundSale = state.monthlyData[mKey].sales[idx];
-          // Reverse old payment
-          state.accounts['CRDB'] -= foundSale.paidAmount;
           state.monthlyData[mKey].sales.splice(idx, 1);
-          break;
         }
       }
-
-      let mKey = date ? date.substring(0, 7) : getCurrentMonthKey();
-      const mData = getMonthData(mKey);
+      const newMKey = date ? date.substring(0, 7) : state.activeMonth;
+      const mData = getMonthData(newMKey);
       mData.sales.push({
         id,
         business,
         date,
-        product,
         qty,
+        product,
+        customer,
         buyPrice,
         sellPrice,
-        customer,
-        status,
-        paidAmount
+        totalValue: sellPrice * qty,
+        paid,
+        profit,
+        status
       });
-
-      state.accounts['CRDB'] = (state.accounts['CRDB'] || 0) + paidAmount;
-
       closeModal('editSaleModal');
       saveUserData();
       renderAll();
     }
 
-    function deleteSale(id) {
-      if (!confirm('Are you sure you want to delete this sale?')) return;
+    function toggleSelectAllSales(master) {
+      document.querySelectorAll('.sale-checkbox').forEach(cb => cb.checked = master.checked);
+      updateSelectedSalesCount();
+    }
+    function updateSelectedSalesCount() {
+      const checked = document.querySelectorAll('.sale-checkbox:checked');
+      const countEl = document.getElementById('selected-count');
+      const btn = document.getElementById('bulk-delete-btn');
+      if (countEl) countEl.innerText = checked.length;
+      if (btn) {
+        if (checked.length > 0) btn.classList.remove('hidden');
+        else btn.classList.add('hidden');
+      }
+    }
+    function deleteSelectedSales() {
+      const checked = document.querySelectorAll('.sale-checkbox:checked');
+      const ids = Array.from(checked).map(cb => cb.dataset.id);
       for (const mKey in state.monthlyData) {
-        const idx = state.monthlyData[mKey].sales.findIndex(s => s.id === id);
-        if (idx !== -1) {
-          const sale = state.monthlyData[mKey].sales[idx];
-          state.accounts['CRDB'] -= sale.paidAmount;
-          state.monthlyData[mKey].sales.splice(idx, 1);
-          break;
-        }
+        state.monthlyData[mKey].sales = state.monthlyData[mKey].sales.filter(s => !ids.includes(s.id));
       }
       saveUserData();
       renderAll();
     }
 
-    function deleteSelectedSales() {
-      const checkboxes = document.querySelectorAll('.sale-checkbox:checked');
-      if (!checkboxes.length) return;
-      if (!confirm(`Delete ${checkboxes.length} selected sales?`)) return;
-
-      checkboxes.forEach(cb => {
-        const id = cb.value;
-        for (const mKey in state.monthlyData) {
-          const idx = state.monthlyData[mKey].sales.findIndex(s => s.id === id);
-          if (idx !== -1) {
-            const sale = state.monthlyData[mKey].sales[idx];
-            state.accounts['CRDB'] -= sale.paidAmount;
-            state.monthlyData[mKey].sales.splice(idx, 1);
-            break;
-          }
-        }
-      });
+    function handleProfitStartChange(val) {
+      state.profitStartSaleId = val;
       saveUserData();
       renderAll();
     }
 
-    function toggleSelectAllSales(master) {
-      document.querySelectorAll('.sale-checkbox').forEach(cb => {
-        cb.checked = master.checked;
-      });
-      updateBulkDeleteBtn();
+    // Budget & Categories
+    function handleCategoryAmountInput(catId, val) {
+      const num = parseFloat(val) || 0;
+      const cat = state.categories.find(c => c.id === catId);
+      if (cat) cat.amount = num;
+      saveUserData();
+      renderAll();
+    }
+    function handleAddCategory(e) {
+      e.preventDefault();
+      const name = document.getElementById('cat-name-input').value;
+      const amount = parseFloat(document.getElementById('cat-amount-input').value) || 0;
+      const id = 'cat_' + Date.now();
+      state.categories.push({ id, name, amount, isExpandable: false });
+      document.getElementById('cat-name-input').value = '';
+      document.getElementById('cat-amount-input').value = '';
+      closeModal('addCategoryModal');
+      saveUserData();
+      renderAll();
+    }
+    function toggleUtilitiesAccordion() {
+      const acc = document.getElementById('utilities-accordion');
+      const chevron = document.getElementById('utilities-chevron');
+      acc.classList.toggle('expanded');
+      chevron.classList.toggle('rotate-180');
     }
 
-    function updateBulkDeleteBtn() {
-      const checkedCount = document.querySelectorAll('.sale-checkbox:checked').length;
-      const btn = document.getElementById('bulk-delete-btn');
-      document.getElementById('selected-count').innerText = checkedCount;
-      if (checkedCount > 0) btn.classList.remove('hidden');
-      else btn.classList.add('hidden');
+    // Expenses & Transactions
+    function handleAddTransaction(e) {
+      e.preventDefault();
+      const name = document.getElementById('tx-name').value;
+      const category = document.getElementById('tx-category').value;
+      const account = document.getElementById('tx-account').value;
+      const amount = parseFloat(document.getElementById('tx-amount').value) || 0;
+      const date = document.getElementById('tx-date').value;
+      const mKey = date ? date.substring(0, 7) : state.expenseActiveMonth;
+      const mData = getMonthData(mKey);
+
+      mData.expenses.push({ id: 'tx_' + Date.now(), name, category, account, amount, date });
+      if (['Internet', 'Umeme', 'Taka', 'Transport'].includes(category)) {
+        mData.utilitiesSubSpent[category] = (mData.utilitiesSubSpent[category] || 0) + amount;
+      } else {
+        mData.categorySpent[category] = (mData.categorySpent[category] || 0) + amount;
+      }
+
+      if (state.accounts[account] !== undefined) {
+        state.accounts[account] -= amount;
+      }
+      closeModal('addTransactionModal');
+      saveUserData();
+      renderAll();
+    }
+
+    // Transfers & Accounts
+    function handleTransfer(e) {
+      e.preventDefault();
+      const from = document.getElementById('tr-from').value;
+      const to = document.getElementById('tr-to').value;
+      const amount = parseFloat(document.getElementById('tr-amount').value) || 0;
+      if (from === to) { alert('Cannot transfer to same account'); return; }
+      if (state.accounts[from] < amount) { alert('Insufficient funds in source account'); return; }
+      state.accounts[from] -= amount;
+      state.accounts[to] += amount;
+      closeModal('transferModal');
+      saveUserData();
+      renderAll();
+    }
+    function handleAddMoneyAccount(e) {
+      e.preventDefault();
+      const acc = document.getElementById('am-account').value;
+      const amount = parseFloat(document.getElementById('am-amount').value) || 0;
+      state.accounts[acc] = (state.accounts[acc] || 0) + amount;
+      closeModal('addMoneyModal');
+      saveUserData();
+      renderAll();
+    }
+
+    // Investments
+    function handleAddInvestmentCapital(e) {
+      e.preventDefault();
+      const amt = parseFloat(document.getElementById('inv-add-amount').value) || 0;
+      state.investments.totalInvested += amt;
+      state.investments.currentValue += amt;
+      state.investments.history.push({ id: 'inv_' + Date.now(), type: 'Capital Addition', amount: amt, date: new Date().toISOString().split('T')[0] });
+      closeModal('addInvestmentModal');
+      saveUserData();
+      renderAll();
+    }
+    function handleUpdateInvestmentValue(e) {
+      e.preventDefault();
+      const newVal = parseFloat(document.getElementById('inv-update-value').value) || 0;
+      const diff = newVal - state.investments.currentValue;
+      state.investments.currentValue = newVal;
+      state.investments.history.push({ id: 'inv_' + Date.now(), type: 'Valuation Update', amount: diff, date: new Date().toISOString().split('T')[0] });
+      closeModal('updateInvestmentModal');
+      saveUserData();
+      renderAll();
+    }
+
+    // Loans
+    function handleAddLoan(e) {
+      e.preventDefault();
+      const borrower = document.getElementById('loan-borrower').value;
+      const amount = parseFloat(document.getElementById('loan-amount').value) || 0;
+      const date = document.getElementById('loan-date').value;
+      const paid = parseFloat(document.getElementById('loan-paid').value) || 0;
+      const note = document.getElementById('loan-note').value;
+      state.loans.push({ id: 'loan_' + Date.now(), borrower, amount, date, paid, note });
+      closeModal('addLoanModal');
+      saveUserData();
+      renderAll();
+    }
+    function openUpdateLoanModal(id) {
+      const l = state.loans.find(item => item.id === id);
+      if (!l) return;
+      document.getElementById('edit-loan-id').value = l.id;
+      document.getElementById('edit-loan-paid').value = l.paid;
+      openModal('updateLoanModal');
+    }
+    function handleUpdateLoan(e) {
+      e.preventDefault();
+      const id = document.getElementById('edit-loan-id').value;
+      const paid = parseFloat(document.getElementById('edit-loan-paid').value) || 0;
+      const l = state.loans.find(item => item.id === id);
+      if (l) l.paid = paid;
+      closeModal('updateLoanModal');
+      saveUserData();
+      renderAll();
+    }
+    function deleteLoan(id) {
+      state.loans = state.loans.filter(l => l.id !== id);
+      saveUserData();
+      renderAll();
     }
 
     function handleAddBusinessOption(e) {
@@ -1755,770 +1768,366 @@
       saveUserData();
       renderAll();
     }
-
-    function handleAddLoan(e) {
-      e.preventDefault();
-      const borrower = document.getElementById('loan-borrower').value;
-      const amount = Number(document.getElementById('loan-amount').value);
-      const date = document.getElementById('loan-date').value;
-      const paid = Number(document.getElementById('loan-paid').value);
-      const note = document.getElementById('loan-note').value;
-
-      state.loans.push({
-        id: 'loan_' + Math.random().toString(36).substr(2, 9),
-        borrower,
-        amount,
-        date,
-        paid,
-        note
-      });
-
-      closeModal('addLoanModal');
-      saveUserData();
+    function switchAppearichBusiness(bName) {
+      state.activeBusiness = bName;
       renderAll();
     }
-
-    function deleteLoan(id) {
-      if (!confirm('Are you sure you want to delete this loan record?')) return;
-      state.loans = state.loans.filter(l => l.id !== id);
-      saveUserData();
-      renderAll();
-    }
-
-    function handleAddTransaction(e) {
-      e.preventDefault();
-      const name = document.getElementById('tx-name').value;
-      const category = document.getElementById('tx-category').value;
-      const account = document.getElementById('tx-account').value;
-      const amount = Number(document.getElementById('tx-amount').value);
-      const date = document.getElementById('tx-date').value;
-
-      let mKey = date ? date.substring(0, 7) : state.expenseActiveMonth;
-      const mData = getMonthData(mKey);
-
-      mData.expenses.push({
-        id: 'tx_' + Math.random().toString(36).substr(2, 9),
-        name,
-        category,
-        account,
-        amount,
-        date
-      });
-
-      if (['Internet', 'Umeme', 'Taka', 'Transport'].includes(category)) {
-        mData.utilitiesSubSpent[category] = (mData.utilitiesSubSpent[category] || 0) + amount;
-      }
-      mData.categorySpent[category] = (mData.categorySpent[category] || 0) + amount;
-
-      state.accounts[account] -= amount;
-
-      document.getElementById('tx-name').value = '';
-      document.getElementById('tx-amount').value = '';
-      closeModal('addTransactionModal');
-      saveUserData();
-      renderAll();
-    }
-
-    function editTransaction(id) {
-      let foundTx = null;
-      for (const mKey in state.monthlyData) {
-        const t = state.monthlyData[mKey].expenses.find(item => item.id === id);
-        if (t) { foundTx = t; break; }
-      }
-      if (!foundTx) return;
-
-      document.getElementById('edit-tx-id').value = foundTx.id;
-      document.getElementById('edit-tx-name').value = foundTx.name;
-      document.getElementById('edit-tx-category').value = foundTx.category;
-      document.getElementById('edit-tx-account').value = foundTx.account;
-      document.getElementById('edit-tx-amount').value = foundTx.amount;
-      document.getElementById('edit-tx-date').value = foundTx.date;
-      openModal('editTransactionModal');
-    }
-
-    function handleEditTransactionSubmit(e) {
-      e.preventDefault();
-      const id = document.getElementById('edit-tx-id').value;
-      const name = document.getElementById('edit-tx-name').value;
-      const category = document.getElementById('edit-tx-category').value;
-      const account = document.getElementById('edit-tx-account').value;
-      const amount = Number(document.getElementById('edit-tx-amount').value);
-      const date = document.getElementById('edit-tx-date').value;
-
-      for (const mKey in state.monthlyData) {
-        const idx = state.monthlyData[mKey].expenses.findIndex(item => item.id === id);
-        if (idx !== -1) {
-          const oldTx = state.monthlyData[mKey].expenses[idx];
-          // Reverse old effects
-          state.accounts[oldTx.account] += oldTx.amount;
-          if (['Internet', 'Umeme', 'Taka', 'Transport'].includes(oldTx.category)) {
-            state.monthlyData[mKey].utilitiesSubSpent[oldTx.category] -= oldTx.amount;
-          }
-          state.monthlyData[mKey].categorySpent[oldTx.category] = (state.monthlyData[mKey].categorySpent[oldTx.category] || 0) - oldTx.amount;
-
-          state.monthlyData[mKey].expenses.splice(idx, 1);
-          break;
-        }
-      }
-
-      let mKey = date ? date.substring(0, 7) : state.expenseActiveMonth;
-      const mData = getMonthData(mKey);
-      mData.expenses.push({ id, name, category, account, amount, date });
-
-      if (['Internet', 'Umeme', 'Taka', 'Transport'].includes(category)) {
-        mData.utilitiesSubSpent[category] = (mData.utilitiesSubSpent[category] || 0) + amount;
-      }
-      mData.categorySpent[category] = (mData.categorySpent[category] || 0) + amount;
-      state.accounts[account] -= amount;
-
-      closeModal('editTransactionModal');
-      saveUserData();
-      renderAll();
-    }
-
-    function deleteTransaction(id) {
-      if (!confirm('Are you sure you want to delete this expense?')) return;
-      for (const mKey in state.monthlyData) {
-        const idx = state.monthlyData[mKey].expenses.findIndex(t => t.id === id);
-        if (idx !== -1) {
-          const tx = state.monthlyData[mKey].expenses[idx];
-          state.accounts[tx.account] += tx.amount;
-          if (['Internet', 'Umeme', 'Taka', 'Transport'].includes(tx.category)) {
-            state.monthlyData[mKey].utilitiesSubSpent[tx.category] -= tx.amount;
-          }
-          state.monthlyData[mKey].categorySpent[tx.category] -= tx.amount;
-          state.monthlyData[mKey].expenses.splice(idx, 1);
-          break;
-        }
-      }
-      saveUserData();
-      renderAll();
-    }
-
-    function handleTransfer(e) {
-      e.preventDefault();
-      const from = document.getElementById('tr-from').value;
-      const to = document.getElementById('tr-to').value;
-      const amount = Number(document.getElementById('tr-amount').value);
-      if (from === to) { alert('Cannot transfer to the same account'); return; }
-
-      state.accounts[from] -= amount;
-      state.accounts[to] = (state.accounts[to] || 0) + amount;
-
-      closeModal('transferModal');
-      saveUserData();
-      renderAll();
-    }
-
-    function handleAddMoneyAccount(e) {
-      e.preventDefault();
-      const acc = document.getElementById('am-account').value;
-      const amt = Number(document.getElementById('am-amount').value);
-      state.accounts[acc] = (state.accounts[acc] || 0) + amt;
-      closeModal('addMoneyModal');
-      saveUserData();
-      renderAll();
-    }
-
-    function handleAddInvestmentCapital(e) {
-      e.preventDefault();
-      const amt = Number(document.getElementById('inv-add-amount').value);
-      state.investments.totalInvested += amt;
-      state.investments.currentValue += amt;
-      state.investments.history.push({
-        id: 'inv_' + Math.random().toString(36).substr(2, 9),
-        date: new Date().toISOString().split('T')[0],
-        type: 'CAPITAL',
-        amount: amt
-      });
-      closeModal('addInvestmentModal');
-      saveUserData();
-      renderAll();
-    }
-
-    function handleUpdateInvestmentValue(e) {
-      e.preventDefault();
-      const newVal = Number(document.getElementById('inv-update-value').value);
-      const gain = newVal - state.investments.currentValue;
-      state.investments.currentValue = newVal;
-      
-      if (gain !== 0) {
-        state.investments.history.push({
-          id: 'inv_' + Math.random().toString(36).substr(2, 9),
-          date: new Date().toISOString().split('T')[0],
-          type: 'VALUATION_UPDATE',
-          gain: gain,
-          value: newVal
-        });
-      }
-      closeModal('updateInvestmentModal');
-      saveUserData();
-      renderAll();
-    }
-
-    function deleteInvestmentEntry(id) {
-      if (!confirm('Are you sure you want to delete this investment record?')) return;
-      const idx = state.investments.history.findIndex(i => i.id === id);
-      if (idx !== -1) {
-        const item = state.investments.history[idx];
-        if (item.type === 'CAPITAL') {
-          state.investments.totalInvested -= item.amount;
-          state.investments.currentValue -= item.amount;
-        } else if (item.type === 'VALUATION_UPDATE') {
-          state.investments.currentValue -= item.gain;
-        }
-        state.investments.history.splice(idx, 1);
-        saveUserData();
-        renderAll();
-      }
-    }
-
-    function handleAddCategory(e) {
-      e.preventDefault();
-      const name = document.getElementById('cat-name-input').value;
-      const amount = Number(document.getElementById('cat-amount-input').value);
-      state.categories.push({
-        id: 'cat_' + Math.random().toString(36).substr(2, 9),
-        name,
-        amount,
-        isExpandable: false
-      });
-      closeModal('addCategoryModal');
-      saveUserData();
-      renderAll();
-    }
-
-    function deleteCategory(id) {
-      if (!confirm('Are you sure you want to delete this category?')) return;
-      state.categories = state.categories.filter(c => c.id !== id);
-      saveUserData();
-      renderAll();
-    }
-
-    function handleCategoryAmountInput(catId, val) {
-      const cat = state.categories.find(c => c.id === catId);
-      if (cat) {
-        cat.amount = Number(val) || 0;
-        saveUserData();
-        renderAll();
-      }
-    }
-
-    function toggleUtilitiesAccordion() {
-      const accordion = document.getElementById('utilities-accordion');
-      const chevron = document.getElementById('utilities-chevron');
-      accordion.classList.toggle('expanded');
-      chevron.classList.toggle('rotate-180');
-    }
-
     function switchAppearichPeriod(period) {
       state.appearichPeriod = period;
       document.querySelectorAll('.app-period-btn').forEach(btn => {
-        btn.classList.remove('bg-brand-black', 'text-white', 'active');
+        btn.classList.remove('bg-brand-black', 'text-white');
         btn.classList.add('bg-gray-100', 'text-brand-muted');
       });
       const activeBtn = document.getElementById(`app-period-${period}`);
       if (activeBtn) {
+        activeBtn.classList.add('bg-brand-black', 'text-white');
         activeBtn.classList.remove('bg-gray-100', 'text-brand-muted');
-        activeBtn.classList.add('bg-brand-black', 'text-white', 'active');
       }
-      renderAppearich();
+      renderAll();
     }
 
-    function handleHeroUpload(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        state.heroImageUrl = evt.target.result;
-        document.getElementById('hero-bg-img').style.backgroundImage = `url('${evt.target.result}')`;
-        saveUserData();
-      };
-      reader.readAsDataURL(file);
-    }
-
-    // Comprehensive Rendering Engine complying with all 7 Requirements
+    // MAIN RENDER ENGINE
     function renderAll() {
-      document.getElementById('welcome-greeting').innerText = `Welcome, ${state.userName || 'User'}`;
-      document.getElementById('hero-bg-img').style.backgroundImage = `url('${state.heroImageUrl}')`;
-
-      // 1. Total Income Calculation: Starts at 0, only increases when manually entered
-      let totalIncome = 0;
-      for (const mKey in state.monthlyData) {
-        const m = state.monthlyData[mKey];
-        if (m && m.incomes) {
-          m.incomes.forEach(i => { totalIncome += Number(i.amount || 0); });
-        }
-      }
-
-      // 2. Growth Calculation: Investment gains + Appearich sales profits
-      // Calculate investment growth (sum of all gains from valuation updates)
-      let invGrowth = 0;
-      if (state.investments && state.investments.history) {
-        state.investments.history.forEach(h => {
-          if (h.type === 'VALUATION_UPDATE' && h.gain > 0) {
-            invGrowth += h.gain;
-          }
-        });
-      }
-      // If current value > total invested, ensure at least that difference is captured if no valuation update logs exist
-      const directInvGain = Math.max(0, (state.investments.currentValue || 0) - (state.investments.totalInvested || 0));
-      const totalInvestmentGain = Math.max(invGrowth, directInvGain);
-
-      // Calculate Appearich sales profits per month and total
-      let totalGrowth = totalInvestmentGain;
-      const monthlyGrowthMap = {};
+      // Greeting
+      const greetingEl = document.getElementById('welcome-greeting');
+      if (greetingEl) greetingEl.innerText = `Welcome, ${state.userName || 'User'}`;
       
-      for (const mKey in state.monthlyData) {
-        let mGrowth = 0;
-        // Add investment gain apportioned or if latest month
-        const m = state.monthlyData[mKey];
-        if (m && m.sales) {
-          m.sales.forEach(s => {
-            const profit = (Number(s.sellPrice || 0) - Number(s.buyPrice || 0)) * Number(s.qty || 1);
-            if (profit > 0) {
-              mGrowth += profit;
-            }
-          });
-        }
-        monthlyGrowthMap[mKey] = mGrowth;
+      const heroImg = document.getElementById('hero-bg-img');
+      if (heroImg && state.heroImageUrl) {
+        heroImg.style.backgroundImage = `url('${state.heroImageUrl}')`;
       }
+
+      // Active Month Calculations
+      const activeMonthData = getMonthData(state.activeMonth);
+      let totalIncome = activeMonthData.incomes.reduce((acc, i) => acc + i.amount, 0);
+      let saleRevenueActive = activeMonthData.sales.reduce((acc, s) => acc + s.paid, 0);
       
-      // Add total investment gain to active or current month growth
-      const currentActiveGrowthMonth = state.growthActiveMonth || getCurrentMonthKey();
-      monthlyGrowthMap[currentActiveGrowthMonth] = (monthlyGrowthMap[currentActiveGrowthMonth] || 0) + totalInvestmentGain;
-
-      let selectedMonthGrowth = monthlyGrowthMap[currentActiveGrowthMonth] || 0;
-      let latestGrowth = selectedMonthGrowth; // current/latest growth
-
-      // 4. 10% Tithe Calculation on Growth
-      let titheAmount = selectedMonthGrowth * 0.10;
-      let growthAfterTithe = selectedMonthGrowth - titheAmount;
-
-      // 3. Total Money (Accounts sum)
-      let totalMoney = 0;
-      for (const acc in state.accounts) {
-        totalMoney += Number(state.accounts[acc] || 0);
-      }
-
-      // Remaining Budget Calculation
-      let totalAllocatedBudget = 0;
-      state.categories.forEach(c => { totalAllocatedBudget += Number(c.amount || 0); });
-
-      let totalExpensesSpent = 0;
-      const activeExpenseMonthData = getMonthData(state.expenseActiveMonth);
-      if (activeExpenseMonthData && activeExpenseMonthData.expenses) {
-        activeExpenseMonthData.expenses.forEach(ex => { totalExpensesSpent += Number(ex.amount || 0); });
-      }
-      let remainingBudget = totalAllocatedBudget - totalExpensesSpent;
-
-      // Update Dashboard UI
+      // GOD 10% Tithe calculation from active month income + sale revenue or specific rules
+      let godTotal = (totalIncome + saleRevenueActive) * 0.1;
+      
+      document.getElementById('income-god-total').innerText = godTotal.toLocaleString() + ' Sh';
       document.getElementById('dash-total-income').innerText = totalIncome.toLocaleString() + ' Sh';
-      document.getElementById('dash-growth-amount').innerText = latestGrowth.toLocaleString() + ' Sh';
-      document.getElementById('dash-total-money').innerText = totalMoney.toLocaleString() + ' Sh';
-      document.getElementById('dash-remaining-budget').innerText = remainingBudget.toLocaleString() + ' Sh';
+      document.getElementById('dash-god-amount').innerText = godTotal.toLocaleString() + ' Sh';
 
-      renderIncomeTab(totalIncome);
-      renderBudgetTab(totalIncome, activeExpenseMonthData);
-      renderDailyExpensesTab(activeExpenseMonthData);
-      renderInvestmentTab();
-      renderAppearich();
-      renderAccountsTab(totalMoney);
-      renderLoansTab();
-      renderGrowthTab(monthlyGrowthMap, selectedMonthGrowth, latestGrowth, titheAmount, growthAfterTital = growthAfterTithe);
-    }
-
-    function renderIncomeTab(totalIncome) {
-      document.getElementById('income-month-label').innerText = state.activeMonth;
-      const mData = getMonthData(state.activeMonth);
-      const container = document.getElementById('income-list-container');
-      container.innerHTML = '';
-
-      if (!mData.incomes.length) {
-        container.innerHTML = `<p class="text-xs text-brand-muted col-span-3">No income records for ${state.activeMonth}. Total Income starts at 0.</p>`;
-        return;
-      }
-
-      mData.incomes.forEach(inc => {
-        container.innerHTML += `
-          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-3">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-brand-muted uppercase">${inc.date || state.activeMonth}</span>
-              <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold">${inc.account || 'CRDB'}</span>
-            </div>
+      // Income List Render
+      const incomeListContainer = document.getElementById('income-list-container');
+      if (incomeListContainer) {
+        incomeListContainer.innerHTML = '';
+        activeMonthData.incomes.forEach(inc => {
+          const card = document.createElement('div');
+          card.className = 'p-5 rounded-2xl bg-white border border-gray-100 shadow-sm flex items-center justify-between';
+          card.innerHTML = `
             <div>
-              <h4 class="font-bold text-base text-brand-black">${inc.name}</h4>
-              <p class="font-display text-2xl font-extrabold text-brand-black mt-1">+${Number(inc.amount).toLocaleString()} Sh</p>
+              <p class="font-bold text-sm text-brand-black">${inc.name}</p>
+              <p class="text-[10px] text-brand-muted">${inc.date}</p>
             </div>
-            <div class="flex items-center space-x-2 pt-2 border-t border-gray-100">
-              <button onclick="editIncome('${inc.id}')" class="flex-1 py-1.5 bg-gray-50 hover:bg-gray-100 text-brand-black text-xs font-bold rounded-xl transition">Edit</button>
-              <button onclick="deleteIncome('${inc.id}')" class="flex-1 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-bold rounded-xl transition">Delete</button>
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    function renderBudgetTab(totalIncome, mData) {
-      document.getElementById('budget-pool-total').innerText = totalIncome.toLocaleString() + ' Sh';
-      
-      let totalAllocated = 0;
-      state.categories.forEach(c => { totalAllocated += Number(c.amount || 0); });
-
-      const percent = totalIncome > 0 ? Math.min(100, Math.round((totalAllocated / totalIncome) * 100)) : 0;
-      document.getElementById('budget-allocated-percent').innerText = percent + '%';
-      document.getElementById('budget-allocated-bar').style.width = percent + '%';
-
-      // Utilities category amount input & summary
-      const utilCat = state.categories.find(c => c.id === 'cat-utilities');
-      if (utilCat) {
-        document.getElementById('cat-amount-cat-utilities').value = utilCat.amount || '';
-        let utilSpent = 0;
-        if (mData && mData.utilitiesSubSpent) {
-          for (const sub in mData.utilitiesSubSpent) utilSpent += Number(mData.utilitiesSubSpent[sub] || 0);
-        }
-        let utilRem = (utilCat.amount || 0) - utilSpent;
-        document.getElementById('utilities-spent-summary').innerText = `Spent: ${utilSpent.toLocaleString()} Sh`;
-        document.getElementById('utilities-remaining-summary').innerText = `Remaining: ${utilRem.toLocaleString()} Sh`;
-
-        const subList = document.getElementById('utilities-subcategories-list');
-        subList.innerHTML = '';
-        ['Internet', 'Umeme', 'Taka', 'Transport'].forEach(sub => {
-          const sSpent = mData && mData.utilitiesSubSpent ? (mData.utilitiesSubSpent[sub] || 0) : 0;
-          subList.innerHTML += `
-            <div class="flex items-center justify-between p-3 rounded-xl bg-white border border-gray-100">
-              <span class="text-xs font-bold text-brand-black uppercase">${sub}</span>
-              <span class="text-xs font-semibold text-brand-muted">Spent: ${sSpent.toLocaleString()} Sh</span>
+            <div class="flex items-center space-x-3">
+              <span class="font-display font-bold text-brand-black">${inc.amount.toLocaleString()} Sh</span>
+              <button onclick="deleteIncome('${inc.id}')" class="text-gray-400 hover:text-red-500">&times;</button>
             </div>
           `;
+          incomeListContainer.appendChild(card);
         });
       }
 
-      // Other main categories
-      const mainList = document.getElementById('main-categories-list');
-      mainList.innerHTML = '';
-      state.categories.filter(c => c.id !== 'cat-utilities').forEach(cat => {
-        const spent = mData && mData.categorySpent ? (mData.categorySpent[cat.name] || mData.categorySpent[cat.id] || 0) : 0;
-        const rem = (cat.amount || 0) - spent;
-        mainList.innerHTML += `
-          <div class="rounded-3xl bg-white border border-gray-100 shadow-premium p-6 flex flex-col justify-between space-y-4">
+      // Accounts & Total Money
+      let totalMoney = 0;
+      const accountCardsGrid = document.getElementById('account-cards-grid');
+      if (accountCardsGrid) accountCardsGrid.innerHTML = '';
+      for (const accName in state.accounts) {
+        const bal = state.accounts[accName];
+        totalMoney += bal;
+        if (accountCardsGrid) {
+          const card = document.createElement('div');
+          card.className = 'p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between';
+          card.innerHTML = `
             <div class="flex items-center justify-between">
-              <h4 class="font-bold text-base text-brand-black uppercase">${cat.name}</h4>
-              <button onclick="deleteCategory('${cat.id}')" class="text-red-500 hover:text-red-700 text-xs font-bold">Delete</button>
+              <span class="text-xs font-bold text-brand-muted uppercase">${accName}</span>
+              <div class="w-8 h-8 rounded-xl bg-gray-50 flex items-center justify-center text-brand-black font-bold text-xs">${accName.substring(0,2)}</div>
             </div>
-            <div>
-              <label class="block text-xs font-bold text-brand-muted uppercase mb-1">Target Amount (Sh)</label>
-              <input type="number" value="${cat.amount || ''}" oninput="handleCategoryAmountInput('${cat.id}', this.value)" placeholder="Enter amount" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm font-bold text-brand-black">
+            <div class="mt-6">
+              <p class="font-display text-2xl font-bold text-brand-black">${bal.toLocaleString()} Sh</p>
             </div>
-            <div class="flex justify-between text-xs pt-2 border-t border-gray-100">
-              <span class="text-brand-muted">Spent: ${spent.toLocaleString()} Sh</span>
-              <span class="font-bold text-emerald-600">Remaining: ${rem.toLocaleString()} Sh</span>
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    function renderDailyExpensesTab(mData) {
-      document.getElementById('daily-expense-month-label').innerText = state.expenseActiveMonth;
-      const grid = document.getElementById('category-budget-comparison-grid');
-      grid.innerHTML = '';
-
-      state.categories.forEach(cat => {
-        const spent = mData && mData.categorySpent ? (mData.categorySpent[cat.name] || mData.categorySpent[cat.id] || 0) : 0;
-        const target = cat.amount || 0;
-        grid.innerHTML += `
-          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-sm space-y-2">
-            <div class="flex justify-between items-center">
-              <span class="text-xs font-bold uppercase text-brand-black">${cat.name}</span>
-              <span class="text-[11px] font-semibold text-brand-muted">Target: ${target.toLocaleString()} Sh</span>
-            </div>
-            <p class="font-display text-xl font-bold text-brand-black">${spent.toLocaleString()} Sh <span class="text-xs font-normal text-brand-muted">spent</span></p>
-          </div>
-        `;
-      });
-
-      const tbody = document.getElementById('daily-expense-table-body');
-      tbody.innerHTML = '';
-      if (!mData || !mData.expenses || !mData.expenses.length) {
-        tbody.innerHTML = `<tr><td colspan="6" class="py-4 text-center text-brand-muted">No expenses recorded for ${state.expenseActiveMonth}.</td></tr>`;
-        document.getElementById('daily-expense-log-count').innerText = '0 Expenses Recorded';
-        return;
-      }
-
-      document.getElementById('daily-expense-log-count').innerText = `${mData.expenses.length} Expenses Recorded`;
-      mData.expenses.forEach(ex => {
-        tbody.innerHTML += `
-          <tr class="border-b border-gray-50 hover:bg-gray-50/50">
-            <td class="py-3">${ex.date}</td>
-            <td class="py-3 font-bold text-brand-black">${ex.name}</td>
-            <td class="py-3"><span class="px-2 py-0.5 bg-gray-100 rounded-md font-semibold text-[10px]">${ex.category}</span></td>
-            <td class="py-3"><span class="px-2 py-0.5 bg-blue-50 text-blue-700 rounded-md font-semibold text-[10px]">${ex.account}</span></td>
-            <td class="py-3 text-right font-bold text-red-600">-${Number(ex.amount).toLocaleString()} Sh</td>
-            <td class="py-3 text-right space-x-2">
-              <button onclick="editTransaction('${ex.id}')" class="px-2 py-1 bg-gray-100 hover:bg-gray-200 text-brand-black font-bold rounded-lg text-[10px]">Edit</button>
-              <button onclick="deleteTransaction('${ex.id}')" class="px-2 py-1 bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-lg text-[10px]">Delete</button>
-            </td>
-          </tr>
-        `;
-      });
-    }
-
-    function renderInvestmentTab() {
-      const inv = state.investments;
-      const totalInv = inv.totalInvested || 0;
-      const currVal = inv.currentValue || 0;
-      const gain = currVal - totalInv;
-      const returnPct = totalInv > 0 ? (gain / totalInv) * 100 : 0;
-
-      document.getElementById('inv-total-invested').innerText = totalInv.toLocaleString() + ' Sh';
-      document.getElementById('inv-current-value').innerText = currVal.toLocaleString() + ' Sh';
-      document.getElementById('inv-gain-loss').innerText = (gain >= 0 ? '+' : '') + gain.toLocaleString() + ' Sh';
-      document.getElementById('inv-percentage-return').innerText = (returnPct >= 0 ? '+' : '') + returnPct.toFixed(2) + '%';
-
-      const historyList = document.getElementById('investment-history-list');
-      historyList.innerHTML = '';
-      if (!inv.history || !inv.history.length) {
-        historyList.innerHTML = `<p class="text-xs text-brand-muted col-span-3">No investment history recorded yet.</p>`;
-        return;
-      }
-
-      inv.history.forEach(h => {
-        historyList.innerHTML += `
-          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-sm flex flex-col justify-between space-y-2">
-            <div class="flex justify-between items-center">
-              <span class="text-[10px] font-bold text-brand-muted uppercase">${h.date}</span>
-              <span class="px-2 py-0.5 rounded-md text-[10px] font-bold ${h.type === 'CAPITAL' ? 'bg-blue-50 text-blue-700' : 'bg-emerald-50 text-emerald-700'}">${h.type}</span>
-            </div>
-            <div>
-              <p class="font-display font-bold text-xl text-brand-black">${h.type === 'CAPITAL' ? '+' + Number(h.amount).toLocaleString() + ' Sh' : 'Gain: +' + Number(h.gain).toLocaleString() + ' Sh'}</p>
-            </div>
-            <div class="pt-2 border-t border-gray-100 flex justify-end">
-              <button onclick="deleteInvestmentEntry('${h.id}')" class="text-xs font-bold text-red-600 hover:text-red-800">Delete</button>
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    function renderAppearich() {
-      const bar = document.getElementById('business-types-bar');
-      bar.innerHTML = '';
-      state.businesses.forEach(b => {
-        const active = state.activeBusiness === b;
-        bar.innerHTML += `
-          <button onclick="state.activeBusiness='${b}'; renderAll();" class="px-4 py-2 rounded-xl text-xs font-bold transition flex-shrink-0 ${active ? 'bg-brand-black text-white shadow-sm' : 'bg-gray-100 text-brand-muted hover:text-brand-black'}">
-            ${b}
-          </button>
-        `;
-      });
-
-      document.getElementById('active-business-view-label').innerText = `Active Business View: ${state.activeBusiness}`;
-      
-      let totalReceivedToday = 0;
-      let totalProfitToday = 0;
-      let monthRevenue = 0;
-      let totalOutstanding = 0;
-      let totalProfitAll = 0;
-
-      const todayStr = new Date().toISOString().split('T')[0];
-      const currentMonthStr = getCurrentMonthKey();
-
-      let periodSold = 0;
-      let periodRevenue = 0;
-      let periodCost = 0;
-
-      for (const mKey in state.monthlyData) {
-        const m = state.monthlyData[mKey];
-        if (m && m.sales) {
-          m.sales.forEach(s => {
-            if (s.business !== state.activeBusiness) return;
-            const rev = Number(s.sellPrice || 0) * Number(s.qty || 1);
-            const cost = Number(s.buyPrice || 0) * Number(s.qty || 1);
-            const profit = rev - cost;
-            const paid = Number(s.paidAmount || 0);
-
-            totalProfitAll += profit;
-            if (s.status === 'PARTIAL') {
-              totalOutstanding += (rev - paid);
-            }
-
-            if (s.date === todayStr) {
-              totalReceivedToday += paid;
-              totalProfitToday += profit;
-            }
-
-            if (mKey === currentMonthStr) {
-              monthRevenue += paid;
-            }
-
-            // Period filter check
-            periodSold += Number(s.qty || 1);
-            periodRevenue += paid;
-            periodCost += cost;
-          });
+          `;
+          accountCardsGrid.appendChild(card);
         }
       }
+      document.getElementById('accounts-total-money').innerText = totalMoney.toLocaleString() + ' Sh';
+      document.getElementById('dash-total-money').innerText = totalMoney.toLocaleString() + ' Sh';
 
-      document.getElementById('app-today-sales').innerText = totalReceivedToday.toLocaleString() + ' Sh';
-      document.getElementById('app-today-profit').innerText = totalProfitToday.toLocaleString() + ' Sh';
-      document.getElementById('app-month-revenue').innerText = monthRevenue.toLocaleString() + ' Sh';
-      document.getElementById('app-total-outstanding').innerText = totalOutstanding.toLocaleString() + ' Sh';
-      document.getElementById('app-total-profit').innerText = totalProfitAll.toLocaleString() + ' Sh';
+      // Budget Pool (90% remaining)
+      let remainingBudgetPool = totalMoney - godTotal;
+      document.getElementById('budget-pool-total').innerText = remainingBudgetPool.toLocaleString() + ' Sh';
+      document.getElementById('dash-remaining-budget').innerText = remainingBudgetPool.toLocaleString() + ' Sh';
 
-      document.getElementById('app-period-sold').innerText = periodSold;
-      document.getElementById('app-period-revenue').innerText = periodRevenue.toLocaleString() + ' Sh';
-      document.getElementById('app-period-cost').innerText = periodCost.toLocaleString() + ' Sh';
-      const margin = periodRevenue > 0 ? ((periodRevenue - periodCost) / periodRevenue) * 100 : 0;
-      document.getElementById('app-period-margin').innerText = margin.toFixed(1) + '%';
+      // Categories
+      const mainCatList = document.getElementById('main-categories-list');
+      if (mainCatList) mainCatList.innerHTML = '';
+      let totalAllocated = 0;
+      
+      state.categories.forEach(cat => {
+        totalAllocated += cat.amount;
+        if (cat.id === 'cat-utilities') {
+          document.getElementById('cat-amount-cat-utilities').value = cat.amount || '';
+          let utilSpent = Object.values(activeMonthData.utilitiesSubSpent).reduce((a, b) => a + b, 0);
+          let utilRem = cat.amount - utilSpent;
+          document.getElementById('utilities-spent-summary').innerText = `Spent: ${utilSpent.toLocaleString()} Sh`;
+          document.getElementById('utilities-remaining-summary').innerText = `Remaining: ${utilRem.toLocaleString()} Sh`;
+          let utilPct = remainingBudgetPool > 0 ? Math.round((cat.amount / remainingBudgetPool) * 100) : 0;
+          document.getElementById('utilities-percent-badge').innerText = `${utilPct}%`;
+          
+          // Subcategories
+          const subList = document.getElementById('utilities-subcategories-list');
+          if (subList) {
+            subList.innerHTML = '';
+            ['Internet', 'Umeme', 'Taka', 'Transport'].forEach(sub => {
+              const spent = activeMonthData.utilitiesSubSpent[sub] || 0;
+              const row = document.createElement('div');
+              row.className = 'flex items-center justify-between bg-white p-3 rounded-xl border border-gray-100 text-xs';
+              row.innerHTML = `<span class="font-bold">${sub}</span><span class="font-semibold text-brand-muted">Spent: ${spent.toLocaleString()} Sh</span>`;
+              subList.appendChild(row);
+            });
+          }
+        } else if (mainCatList) {
+          let spent = activeMonthData.categorySpent[cat.name] || 0;
+          let rem = cat.amount - spent;
+          let pct = remainingBudgetPool > 0 ? Math.round((cat.amount / remainingBudgetPool) * 100) : 0;
+          const card = document.createElement('div');
+          card.className = 'rounded-3xl bg-white border border-gray-100 shadow-premium p-6 space-y-4 flex flex-col justify-between';
+          card.innerHTML = `
+            <div class="flex items-center justify-between">
+              <h4 class="font-bold text-base text-brand-black">${cat.name.toUpperCase()}</h4>
+              <span class="px-2.5 py-0.5 rounded-full bg-gray-100 text-brand-black text-[11px] font-bold">${pct}%</span>
+            </div>
+            <div class="space-y-3">
+              <div>
+                <label class="block text-xs font-bold text-brand-muted uppercase mb-1">Target Amount (Sh)</label>
+                <input type="number" value="${cat.amount || ''}" oninput="handleCategoryAmountInput('${cat.id}', this.value)" placeholder="Enter amount" class="w-full px-3 py-2 rounded-xl border border-gray-200 text-sm font-bold text-brand-black">
+              </div>
+              <div class="flex justify-between text-xs pt-2 border-t border-gray-100">
+                <span class="text-brand-muted">Spent: ${spent.toLocaleString()} Sh</span>
+                <span class="font-bold text-emerald-600">Remaining: ${rem.toLocaleString()} Sh</span>
+              </div>
+            </div>
+          `;
+          mainCatList.appendChild(card);
+        }
+      });
 
-      // Render sales table
-      const tableBody = document.getElementById('appearich-sales-table');
-      tableBody.innerHTML = '';
+      let allocatedPctBar = remainingBudgetPool > 0 ? Math.min(100, Math.round((totalAllocated / remainingBudgetPool) * 100)) : 0;
+      document.getElementById('budget-allocated-percent').innerText = `${allocatedPctBar}%`;
+      document.getElementById('budget-allocated-bar').style.width = `${allocatedPctBar}%`;
+
+      // Daily Expenses Render
+      const expMonthData = getMonthData(state.expenseActiveMonth);
+      document.getElementById('daily-expense-month-label').innerText = state.expenseActiveMonth;
+      document.getElementById('daily-expense-log-count').innerText = `${expMonthData.expenses.length} Expenses Recorded`;
+      const expTableBody = document.getElementById('daily-expense-table-body');
+      if (expTableBody) {
+        expTableBody.innerHTML = '';
+        expMonthData.expenses.forEach(tx => {
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-gray-50';
+          tr.innerHTML = `
+            <td class="py-3 pr-4">${tx.date}</td>
+            <td class="py-3 pr-4 font-bold text-brand-black">${tx.name}</td>
+            <td class="py-3 pr-4"><span class="px-2 py-0.5 rounded-full bg-gray-100 text-[10px] font-bold">${tx.category}</span></td>
+            <td class="py-3 pr-4">${tx.account}</td>
+            <td class="py-3 text-right font-bold text-red-600">-${tx.amount.toLocaleString()} Sh</td>
+          `;
+          expTableBody.appendChild(tr);
+        });
+      }
+
+      // Category Budget Comparison Grid
+      const compGrid = document.getElementById('category-budget-comparison-grid');
+      if (compGrid) {
+        compGrid.innerHTML = '';
+        state.categories.forEach(cat => {
+          let spent = cat.id === 'cat-utilities' ? Object.values(expMonthData.utilitiesSubSpent).reduce((a,b)=>a+b,0) : (expMonthData.categorySpent[cat.name] || 0);
+          const card = document.createElement('div');
+          card.className = 'p-5 rounded-2xl bg-white border border-gray-100 shadow-sm space-y-2';
+          card.innerHTML = `
+            <div class="flex justify-between text-xs font-bold text-brand-black"><span>${cat.name}</span><span>Target: ${cat.amount.toLocaleString()} Sh</span></div>
+            <div class="flex justify-between text-xs text-brand-muted"><span>Actual Spent</span><span class="font-bold text-red-600">${spent.toLocaleString()} Sh</span></div>
+          `;
+          compGrid.appendChild(card);
+        });
+      }
+
+      // Investments
+      document.getElementById('inv-total-invested').innerText = state.investments.totalInvested.toLocaleString() + ' Sh';
+      document.getElementById('inv-current-value').innerText = state.investments.currentValue.toLocaleString() + ' Sh';
+      let invGain = state.investments.currentValue - state.investments.totalInvested;
+      let invRet = state.investments.totalInvested > 0 ? (invGain / state.investments.totalInvested) * 100 : 0;
+      document.getElementById('inv-gain-loss').innerText = (invGain >= 0 ? '+' : '') + invGain.toLocaleString() + ' Sh';
+      document.getElementById('inv-percentage-return').innerText = (invRet >= 0 ? '+' : '') + invRet.toFixed(2) + '%';
+
+      const invHistoryList = document.getElementById('investment-history-list');
+      if (invHistoryList) {
+        invHistoryList.innerHTML = '';
+        state.investments.history.forEach(h => {
+          const card = document.createElement('div');
+          card.className = 'p-4 rounded-2xl bg-gray-50 border border-gray-100 text-xs flex justify-between items-center';
+          card.innerHTML = `<div><p class="font-bold">${h.type}</p><p class="text-[10px] text-brand-muted">${h.date}</p></div><span class="font-bold ${h.amount >= 0 ? 'text-emerald-600' : 'text-red-600'}">${h.amount >= 0 ? '+' : ''}${h.amount.toLocaleString()} Sh</span>`;
+          invHistoryList.appendChild(card);
+        });
+      }
+
+      // Appearich Business & Sales
+      const busBar = document.getElementById('business-types-bar');
+      if (busBar) {
+        busBar.innerHTML = '';
+        state.businesses.forEach(b => {
+          const btn = document.createElement('button');
+          btn.className = `px-4 py-2 rounded-xl text-xs font-bold transition flex-shrink-0 ${state.activeBusiness === b ? 'bg-brand-black text-white shadow-sm' : 'bg-gray-100 text-brand-muted hover:text-brand-black'}`;
+          btn.innerText = b;
+          btn.onclick = () => switchAppearichBusiness(b);
+          busBar.appendChild(btn);
+        });
+      }
+      document.getElementById('active-business-view-label').innerText = `Active Business View: ${state.activeBusiness}`;
+
       let allSales = [];
       for (const mKey in state.monthlyData) {
-        const m = state.monthlyData[mKey];
-        if (m && m.sales) {
-          m.sales.forEach(s => {
-            if (s.business === state.activeBusiness) allSales.push(s);
-          });
-        }
+        allSales = allSales.concat(state.monthlyData[mKey].sales);
       }
-
-      allSales.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-      if (!allSales.length) {
-        tableBody.innerHTML = `<tr><td colspan="10" class="py-4 text-center text-brand-muted">No sales recorded for ${state.activeBusiness}.</td></tr>`;
-        return;
-      }
-
-      allSales.forEach(s => {
-        const rev = Number(s.sellPrice || 0) * Number(s.qty || 1);
-        const profit = rev - (Number(s.buyPrice || 0) * Number(s.qty || 1));
-        tableBody.innerHTML += `
-          <tr class="border-b border-gray-50 hover:bg-gray-50/50">
-            <td class="py-3"><input type="checkbox" value="${s.id}" class="sale-checkbox" onchange="updateBulkDeleteBtn()"></td>
-            <td class="py-3">${s.date}</td>
-            <td class="py-3 font-semibold">${s.business}</td>
-            <td class="py-3 font-bold text-brand-black">${s.product} (x${s.qty})</td>
-            <td class="py-3">${s.customer}</td>
-            <td class="py-3 font-bold">${rev.toLocaleString()} Sh</td>
-            <td class="py-3 text-emerald-600 font-bold">${Number(s.paidAmount || 0).toLocaleString()} Sh</td>
-            <td class="py-3 font-bold text-brand-goldDark">+${profit.toLocaleString()} Sh</td>
-            <td class="py-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${s.status === 'FULL' ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-600'}">${s.status}</span></td>
-            <td class="py-3 text-right space-x-1">
-              <button onclick="editSale('${s.id}')" class="px-2 py-1 bg-gray-100 hover:bg-gray-200 text-brand-black font-bold rounded-lg text-[10px]">Edit</button>
-              <button onclick="deleteSale('${s.id}')" class="px-2 py-1 bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-lg text-[10px]">Delete</button>
-            </td>
-          </tr>
-        `;
-      });
-    }
-
-    function renderAccountsTab(totalMoney) {
-      document.getElementById('accounts-total-money').innerText = totalMoney.toLocaleString() + ' Sh';
-      const grid = document.getElementById('account-cards-grid');
-      grid.innerHTML = '';
-
-      const icons = {
-        'CRDB': 'M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
-        'SELCOM': 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
-        'MPESA': 'M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z',
-        'LIPA NAMBA': 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4',
-        'CASH': 'M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z'
-      };
-
-      for (const acc in state.accounts) {
-        const bal = state.accounts[acc] || 0;
-        grid.innerHTML += `
-          <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4">
-            <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-brand-black">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${icons[acc] || icons['CRDB']}" /></svg>
-              </div>
-              <h4 class="font-bold text-base text-brand-black uppercase">${acc}</h4>
-            </div>
-            <div>
-              <p class="text-xs text-brand-muted uppercase font-semibold">Current Balance</p>
-              <p class="font-display text-3xl font-extrabold text-brand-black mt-1">${bal.toLocaleString()} Sh</p>
-            </div>
-          </div>
-        `;
-      }
-    }
-
-    function renderLoansTab() {
-      let totalOwed = 0;
-      state.loans.forEach(l => {
-        totalOwed += (Number(l.amount || 0) - Number(l.paid || 0));
-      });
-      document.getElementById('loan-total-owed').innerText = totalOwed.toLocaleString() + ' Sh';
-
-      const list = document.getElementById('loan-cards-list');
-      list.innerHTML = '';
-      if (!state.loans.length) {
-        list.innerHTML = `<p class="text-xs text-brand-muted col-span-3">No active loans recorded.</p>`;
-        return;
-      }
-
-      state.loans.forEach(l => {
-        const rem = Number(l.amount || 0) - Number(l.paid || 0);
-        list.innerHTML += `
-          <div class="p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4">
-            <div class="flex justify-between items-center">
-              <span class="text-xs font-bold text-brand-muted uppercase">${l.date}</span>
-              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${rem > 0 ? 'bg-yellow-50 text-yellow-700' : 'bg-emerald-50 text-emerald-700'}">${rem > 0 ? 'Active' : 'Settled'}</span>
-            </div>
-            <div>
-              <h4 class="font-bold text-base text-brand-black">${l.borrower}</h4>
-              <p class="text-xs text-brand-muted mt-0.5">${l.note || 'No note'}</p>
-              <p class="font-display text-2xl font-extrabold text-brand-black mt-2">Owed: ${rem.toLocaleString()} Sh</p>
-            </div>
-            <div class="pt-2 border-t border-gray-100 flex justify-end">
-              <button onclick="deleteLoan('${l.id}')" class="text-xs font-bold text-red-600 hover:text-red-800">Delete</button>
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    function renderGrowthTab(monthlyGrowthMap, selectedMonthGrowth, latestGrowth, titheAmount, growthAfterTithe) {
-      const activeGrowthMonth = state.growthActiveMonth || getCurrentMonthKey();
-      document.getElementById('growth-month-picker').value = activeGrowthMonth;
-      document.getElementById('growth-latest-amount').innerText = latestGrowth.toLocaleString() + ' Sh';
-      document.getElementById('growth-selected-amount').innerText = selectedMonthGrowth.toLocaleString() + ' Sh';
-      document.getElementById('growth-selected-month-label').innerText = `Growth recorded for ${activeGrowthMonth}`;
-
-      // Tithe UI updates
-      document.getElementById('tithe-monthly-growth').innerText = selectedMonthGrowth.toLocaleString() + ' Sh';
-      document.getElementById('tithe-amount').innerText = titheAmount.toLocaleString() + ' Sh';
-      document.getElementById('tithe-after-growth').innerText = growthAfterTithe.toLocaleString() + ' Sh';
-
-      // Monthly Growth Grid History
-      const grid = document.getElementById('growth-monthly-grid');
-      grid.innerHTML = '';
+      const filteredSales = allSales.filter(s => s.business === state.activeBusiness);
       
-      const allMonths = Object.keys(monthlyGrowthMap).sort().reverse();
-      if (!allMonths.length) {
-        grid.innerHTML = `<p class="text-xs text-brand-muted col-span-3">No monthly growth records yet.</p>`;
-        return;
+      let todayStr = new Date().toISOString().split('T')[0];
+      let todaySalesSum = filteredSales.filter(s => s.date === todayStr).reduce((acc, s) => acc + s.paid, 0);
+      let todayProfitSum = filteredSales.filter(s => s.date === todayStr).reduce((acc, s) => acc + s.profit, 0);
+      let monthRevSum = filteredSales.filter(s => s.date && s.date.startsWith(state.activeMonth)).reduce((acc, s) => acc + s.paid, 0);
+      let totalOut = filteredSales.reduce((acc, s) => acc + (s.totalValue - s.paid), 0);
+      let totalProfitSum = filteredSales.reduce((acc, s) => acc + s.profit, 0);
+
+      document.getElementById('app-today-sales').innerText = todaySalesSum.toLocaleString() + ' Sh';
+      document.getElementById('app-today-profit').innerText = todayProfitSum.toLocaleString() + ' Sh';
+      document.getElementById('app-month-revenue').innerText = monthRevSum.toLocaleString() + ' Sh';
+      document.getElementById('app-total-outstanding').innerText = totalOut.toLocaleString() + ' Sh';
+      document.getElementById('app-total-profit').innerText = totalProfitSum.toLocaleString() + ' Sh';
+
+      // Profit Start Select dropdown population
+      const profitSelect = document.getElementById('profit-start-select');
+      if (profitSelect) {
+        profitSelect.innerHTML = '<option value="">-- Count all sales --</option>';
+        filteredSales.forEach(s => {
+          const opt = document.createElement('option');
+          opt.value = s.id;
+          opt.innerText = `${s.date} - ${s.product} (${s.customer})`;
+          if (state.profitStartSaleId === s.id) opt.selected = true;
+          profitSelect.appendChild(opt);
+        });
       }
 
-      allMonths.forEach(mKey => {
-        const gVal = monthlyGrowthMap[mKey] || 0;
-        const tVal = gVal * 0.10;
-        const aVal = gVal - tVal;
-        grid.innerHTML += `
-          <div class="p-5 rounded-2xl bg-white border border-gray-100 shadow-sm space-y-2">
-            <div class="flex justify-between items-center">
-              <span class="text-xs font-bold uppercase text-brand-black">${mKey}</span>
-              <span class="px-2 py-0.5 bg-brand-gold/20 text-brand-goldDark rounded font-bold text-[10px]">Tithe: ${tVal.toLocaleString()} Sh</span>
+      // Sales Table Render
+      const salesTable = document.getElementById('appearich-sales-table');
+      if (salesTable) {
+        salesTable.innerHTML = '';
+        filteredSales.forEach(s => {
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-gray-50';
+          tr.innerHTML = `
+            <td class="py-3 pr-2"><input type="checkbox" class="sale-checkbox" data-id="${s.id}" onchange="updateSelectedSalesCount()"></td>
+            <td class="py-3 pr-4">${s.date}</td>
+            <td class="py-3 pr-4 font-semibold">${s.business}</td>
+            <td class="py-3 pr-4 font-bold text-brand-black">${s.product} (x${s.qty})</td>
+            <td class="py-3 pr-4">${s.customer}</td>
+            <td class="py-3 pr-4">${s.totalValue.toLocaleString()} Sh</td>
+            <td class="py-3 pr-4 font-bold text-emerald-600">${s.paid.toLocaleString()} Sh</td>
+            <td class="py-3 pr-4 font-bold text-brand-gold">+${s.profit.toLocaleString()} Sh</td>
+            <td class="py-3 pr-4"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${s.status === 'FULL' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}">${s.status}</span></td>
+            <td class="py-3 text-right space-x-2">
+              <button onclick="openEditSaleModal('${s.id}')" class="text-xs font-bold text-brand-black underline">Edit</button>
+              <button onclick="deleteSale('${s.id}')" class="text-xs font-bold text-red-500">Delete</button>
+            </td>
+          `;
+          salesTable.appendChild(tr);
+        });
+      }
+
+      // Loans
+      let totalOwed = state.loans.reduce((acc, l) => acc + (l.amount - l.paid), 0);
+      document.getElementById('loan-total-owed').innerText = totalOwed.toLocaleString() + ' Sh';
+      const loanCardsList = document.getElementById('loan-cards-list');
+      if (loanCardsList) {
+        loanCardsList.innerHTML = '';
+        state.loans.forEach(l => {
+          let rem = l.amount - l.paid;
+          const card = document.createElement('div');
+          card.className = 'p-6 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4';
+          card.innerHTML = `
+            <div>
+              <div class="flex justify-between items-center"><h4 class="font-bold text-base text-brand-black">${l.borrower}</h4><span class="text-[10px] text-brand-muted">${l.date}</span></div>
+              <p class="text-xs text-brand-muted mt-1">${l.note || 'No note'}</p>
             </div>
-            <p class="font-display text-xl font-bold text-emerald-600">${gVal.toLocaleString()} Sh <span class="text-xs font-normal text-brand-muted">growth</span></p>
-            <p class="text-xs text-brand-muted">After Tithe: <span class="font-bold text-brand-black">${aVal.toLocaleString()} Sh</span></p>
-          </div>
-        `;
+            <div class="space-y-2 pt-2 border-t border-gray-100 text-xs">
+              <div class="flex justify-between"><span>Total Lent:</span><span class="font-bold">${l.amount.toLocaleString()} Sh</span></div>
+              <div class="flex justify-between"><span>Paid Back:</span><span class="font-bold text-emerald-600">${l.paid.toLocaleString()} Sh</span></div>
+              <div class="flex justify-between"><span>Remaining:</span><span class="font-bold text-red-600">${rem.toLocaleString()} Sh</span></div>
+            </div>
+            <div class="flex justify-between pt-2">
+              <button onclick="openUpdateLoanModal('${l.id}')" class="text-xs font-bold text-brand-black underline">Update Repayment</button>
+              <button onclick="deleteLoan('${l.id}')" class="text-xs font-bold text-red-500">Delete</button>
+            </div>
+          `;
+          loanCardsList.appendChild(card);
+        });
+      }
+
+      // ==================== GROWTH (PROGRESS) TAB CALCULATIONS & RENDER ====================
+      // Growth = sum of investment returns/profits + profits from Appearich sales transactions (only actual profit counts)
+      let combinedOverallGrowth = 0;
+      let activeMonthGrowth = 0;
+      const progressMonthlyGrid = document.getElementById('progress-monthly-grid');
+      if (progressMonthlyGrid) progressMonthlyGrid.innerHTML = '';
+
+      // Collect all unique months from monthlyData and investments history
+      const allMonthsSet = new Set(Object.keys(state.monthlyData));
+      const sortedMonths = Array.from(allMonthsSet).sort();
+
+      sortedMonths.forEach(mKey => {
+        const mData = state.monthlyData[mKey] || { sales: [] };
+        // Monthly Growth = sum of sales profits for this specific month
+        let monthlySalesProfit = mData.sales.reduce((acc, s) => acc + s.profit, 0);
+        
+        // Investment returns in this month (if any recorded in history matching month)
+        let monthlyInvReturn = state.investments.history
+          .filter(h => h.date && h.date.startsWith(mKey))
+          .reduce((acc, h) => acc + (h.type === 'Valuation Update' ? h.amount : 0), 0);
+        
+        let monthlyGrowth = monthlySalesProfit + Math.max(0, monthlyInvReturn);
+        
+        // 10% Tithe calculated from that specific month's total Growth
+        let monthlyTithe = monthlyGrowth * 0.1;
+        let growthAfterTithe = monthlyGrowth - monthlyTithe;
+
+        combinedOverallGrowth += monthlyGrowth;
+        if (mKey === state.activeMonth) {
+          activeMonthGrowth = monthlyGrowth;
+        }
+
+        if (progressMonthlyGrid) {
+          const card = document.createElement('div');
+          card.className = 'p-6 rounded-2xl bg-gray-50 border border-gray-100 shadow-sm space-y-3';
+          card.innerHTML = `
+            <div class="flex justify-between items-center border-b border-gray-200 pb-2">
+              <span class="font-display font-bold text-sm text-brand-black uppercase">${mKey}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-brand-gold/20 text-brand-gold font-bold">Active Month</span>
+            </div>
+            <div class="space-y-1.5 text-xs">
+              <div class="flex justify-between"><span class="text-brand-muted">Monthly Growth:</span><span class="font-bold text-brand-black">${monthlyGrowth.toLocaleString()} Sh</span></div>
+              <div class="flex justify-between"><span class="text-brand-muted">10% Tithe:</span><span class="font-bold text-brand-gold">${monthlyTithe.toLocaleString()} Sh</span></div>
+              <div class="flex justify-between pt-1 border-t border-gray-200"><span class="font-bold text-brand-black">Growth After Tithe:</span><span class="font-bold text-emerald-600">${growthAfterTithe.toLocaleString()} Sh</span></div>
+            </div>
+          `;
+          progressMonthlyGrid.appendChild(card);
+        }
       });
+
+      document.getElementById('progress-overall-profit').innerText = combinedOverallGrowth.toLocaleString() + ' Sh';
+      document.getElementById('progress-active-month-profit').innerText = activeMonthGrowth.toLocaleString() + ' Sh';
+      document.getElementById('progress-active-month-name').innerText = `Current Month Growth (${state.activeMonth})`;
     }
   </script>
 </body>
