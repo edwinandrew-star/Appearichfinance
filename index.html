@@ -736,60 +736,17 @@
           </div>
           <div class="flex items-center space-x-3">
             <input type="month" id="growth-month-picker" onchange="handleGrowthMonthChange(event)" class="px-3 py-2 rounded-xl border border-gray-200 text-xs font-bold bg-white text-brand-black shadow-sm">
-            <button onclick="toggleIncomingProfitPanel()" class="bg-brand-black text-white px-4 py-2.5 rounded-xl font-medium text-xs flex items-center space-x-1.5 shadow-sm hover:bg-gray-800 transition">
-              <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-              <span>Incoming Profit</span>
-            </button>
           </div>
         </div>
-        <!-- INCOMING PROFIT PANEL -->
-        <div id="incoming-profit-panel" class="hidden p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-5">
-          <div class="flex items-center justify-between border-b border-gray-100 pb-4">
-            <div>
-              <h3 class="font-bold text-lg text-brand-black">Incoming Profit</h3>
-              <p class="text-xs text-brand-muted mt-1">Record profit to be received from now onward. This is completely separate from the existing/current 610,000 Sh.</p>
-            </div>
-            <button onclick="toggleIncomingProfitPanel()" class="text-gray-400 hover:text-black text-xl leading-none">&times;</button>
-          </div>
-          <form onsubmit="handleIncomingProfit(event)" class="flex flex-col sm:flex-row items-stretch sm:items-end gap-3">
-            <div class="flex-1">
-              <label class="block text-xs font-bold uppercase tracking-wider text-brand-muted mb-1">Incoming Profit Amount (Sh)</label>
-              <input id="incoming-profit-amount" type="number" min="0.01" step="0.01" required placeholder="Enter amount" class="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm font-bold text-brand-black focus:outline-none focus:border-brand-black">
-            </div>
-            <button type="submit" class="bg-brand-black text-white px-5 py-3 rounded-xl font-bold text-sm hover:bg-gray-800 transition">Add Profit</button>
-          </form>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div class="p-5 rounded-2xl bg-brand-surface border border-gray-200">
-              <p class="text-xs font-bold text-brand-muted uppercase tracking-wider">Incoming Profit Total</p>
-              <p id="incoming-profit-total" class="font-display text-2xl font-extrabold text-brand-black mt-2">0 Sh</p>
-            </div>
-            <div class="p-5 rounded-2xl bg-brand-black text-white">
-              <p class="text-xs font-bold text-brand-gold uppercase tracking-wider">Tithe — 10%</p>
-              <p id="incoming-profit-tithe" class="font-display text-2xl font-extrabold text-brand-gold mt-2">0 Sh</p>
-            </div>
-            <div class="p-5 rounded-2xl bg-white border border-emerald-200">
-              <p class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Self Love — 90%</p>
-              <p id="incoming-profit-self-love" class="font-display text-2xl font-extrabold text-emerald-600 mt-2">0 Sh</p>
-            </div>
-          </div>
-          <div class="space-y-3">
-            <div class="flex items-center justify-between">
-              <h4 class="font-bold text-base text-brand-black">Incoming Profit Records</h4>
-              <span id="incoming-profit-log-count" class="text-xs font-bold text-brand-muted">0 Entries</span>
-            </div>
-            <div id="incoming-profit-records" class="space-y-2"></div>
-          </div>
-        </div>
-
         <!-- GROWTH OVERVIEW CARDS -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="p-8 rounded-3xl bg-brand-black text-white shadow-premium flex flex-col justify-between space-y-4 relative overflow-hidden">
             <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-brand-gold/10 rounded-full blur-xl pointer-events-none"></div>
             <div>
-              <span class="text-xs font-bold text-brand-gold uppercase tracking-wider">CURRENT / LATEST TOTAL GROWTH</span>
+              <span class="text-xs font-bold text-brand-gold uppercase tracking-wider">CURRENT IMPORTED SALES PROFIT</span>
               <p id="growth-latest-total" class="font-display text-4xl font-extrabold text-white mt-2">0 Sh</p>
             </div>
-            <p class="text-xs text-gray-400">Summed cumulative profit gains from investments and business sales so far.</p>
+            <p class="text-xs text-gray-400">Existing imported transaction-sales profit fixed at 610,000 Sh. This amount is kept separate from Incoming Profit.</p>
           </div>
           <div class="p-8 rounded-3xl bg-white border border-gray-100 shadow-premium flex flex-col justify-between space-y-4">
             <div>
@@ -797,6 +754,39 @@
               <p id="growth-selected-month-total" class="font-display text-4xl font-extrabold text-emerald-600 mt-2">0 Sh</p>
             </div>
             <p id="growth-selected-month-name" class="text-xs text-brand-muted font-semibold">Growth in Selected Month</p>
+          </div>
+        </div>
+        <!-- INCOMING PROFIT CARD - NEW ONLY -->
+        <button type="button" onclick="toggleIncomingProfitSection()" class="w-full p-6 rounded-3xl bg-white border border-gray-100 shadow-premium hover:bg-gray-50 transition text-left flex items-center justify-between gap-4">
+          <div>
+            <span class="text-xs font-bold text-brand-gold uppercase tracking-wider">NEW PROFIT FROM NOW ON</span>
+            <h3 class="font-display font-bold text-xl text-brand-black mt-1">Incoming Profit</h3>
+            <p class="text-xs text-brand-muted mt-1">Record new profit separately from the existing imported sales profit.</p>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-brand-black flex-shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 5v14m7-7H5"/></svg>
+          </div>
+        </button>
+        <div id="incoming-profit-section" class="hidden p-6 rounded-3xl bg-white border border-gray-100 shadow-premium space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-gray-100 pb-4">
+            <div>
+              <h3 class="font-bold text-lg text-brand-black">Incoming Profit</h3>
+              <p class="text-xs text-brand-muted mt-1">Only profits entered here from now onward are included.</p>
+            </div>
+            <button type="button" onclick="toggleIncomingProfitSection()" class="text-xs font-semibold text-brand-muted hover:text-brand-black">Close</button>
+          </div>
+          <form onsubmit="handleIncomingProfit(event)" class="flex flex-col sm:flex-row gap-3">
+            <input id="incoming-profit-amount" type="number" min="0.01" step="0.01" required placeholder="Enter new profit amount (Sh)" class="flex-1 px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-brand-black">
+            <button type="submit" class="px-5 py-3 rounded-xl bg-brand-black text-white font-bold text-sm hover:bg-gray-800 transition">Add Profit</button>
+          </form>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="p-5 rounded-2xl bg-gray-50 border border-gray-100"><p class="text-[10px] text-brand-muted uppercase font-bold">Incoming Profit Total</p><p id="incoming-profit-total" class="font-display font-extrabold text-2xl text-brand-black mt-2">0 Sh</p></div>
+            <div class="p-5 rounded-2xl bg-brand-gold/10 border border-brand-gold/30"><p class="text-[10px] text-brand-gold uppercase font-bold">Tithe — 10%</p><p id="incoming-profit-tithe" class="font-display font-extrabold text-2xl text-brand-gold mt-2">0 Sh</p></div>
+            <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-100"><p class="text-[10px] text-emerald-600 uppercase font-bold">Self Love — 90%</p><p id="incoming-profit-self-love" class="font-display font-extrabold text-2xl text-emerald-600 mt-2">0 Sh</p></div>
+          </div>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between border-b border-gray-100 pb-3"><h4 class="font-bold text-sm text-brand-black">Incoming Profit Records</h4><span id="incoming-profit-count" class="text-xs font-bold text-brand-muted">0 Entries</span></div>
+            <div id="incoming-profit-records" class="space-y-2"></div>
           </div>
         </div>
         <!-- 10% TITHE ON GROWTH PANEL -->
@@ -2254,7 +2244,6 @@
     // SYSTEM STATE
     let state = {
       incomeEntries: [],
-      incomingProfitEntries: [],
       budgetCategories: {
         'cat-utilities': { name: 'UTILITIES', amount: 0, icon: 'bolt' },
         'cat-investment': { name: 'INVESTMENT', amount: 0, icon: 'chart' },
@@ -3293,6 +3282,7 @@
       appearichPeriod: 'day',
       profitStartId: null,
       selfLoveByMonth: {},
+      incomingProfitEntries: [],
       heroImage: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1600&auto=format&fit=crop'
     };
     // INITIALIZATION & SUPABASE AUTH / PERSISTENCE
@@ -3333,7 +3323,8 @@
           state.accounts = { ...state.accounts, ...(saved.accounts || {}) };
         }
 
-        const profileName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
+        if (!Array.isArray(state.incomingProfitEntries)) state.incomingProfitEntries = [];
+      const profileName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
         const greeting = document.getElementById('welcome-greeting');
         if (greeting) greeting.innerText = 'Welcome, ' + profileName;
 
@@ -3572,73 +3563,6 @@
         </div>
       `).join('');
     }
-    // INCOMING PROFIT SYSTEM — completely separate from existing/current growth calculations.
-    function toggleIncomingProfitPanel() {
-      const panel = document.getElementById('incoming-profit-panel');
-      if (!panel) return;
-      panel.classList.toggle('hidden');
-      if (!panel.classList.contains('hidden')) {
-        renderIncomingProfitSection();
-        const input = document.getElementById('incoming-profit-amount');
-        if (input) input.focus();
-      }
-    }
-
-    function handleIncomingProfit(e) {
-      e.preventDefault();
-      const input = document.getElementById('incoming-profit-amount');
-      const amount = Number(input?.value);
-      if (!Number.isFinite(amount) || amount <= 0) {
-        alert('Please enter a valid incoming profit amount.');
-        return;
-      }
-
-      if (!Array.isArray(state.incomingProfitEntries)) state.incomingProfitEntries = [];
-      state.incomingProfitEntries.push({
-        id: `incoming-profit-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-        date: new Date().toISOString().slice(0, 10),
-        amount
-      });
-
-      if (input) input.value = '';
-      renderIncomingProfitSection();
-      saveUserState();
-    }
-
-    function renderIncomingProfitSection() {
-      const entries = Array.isArray(state.incomingProfitEntries) ? state.incomingProfitEntries : [];
-      const total = entries.reduce((sum, entry) => sum + (Number(entry.amount) || 0), 0);
-      const tithe = total * 0.10;
-      const selfLove = total * 0.90;
-
-      const totalEl = document.getElementById('incoming-profit-total');
-      const titheEl = document.getElementById('incoming-profit-tithe');
-      const selfLoveEl = document.getElementById('incoming-profit-self-love');
-      const countEl = document.getElementById('incoming-profit-log-count');
-      const recordsEl = document.getElementById('incoming-profit-records');
-
-      if (totalEl) totalEl.innerText = formatSh(total);
-      if (titheEl) titheEl.innerText = formatSh(tithe);
-      if (selfLoveEl) selfLoveEl.innerText = formatSh(selfLove);
-      if (countEl) countEl.innerText = `${entries.length} Entries`;
-
-      if (!recordsEl) return;
-      if (!entries.length) {
-        recordsEl.innerHTML = '<p class="py-5 text-center text-xs text-brand-muted">No incoming profit recorded yet.</p>';
-        return;
-      }
-
-      recordsEl.innerHTML = entries.slice().reverse().map((entry) => `
-        <div class="flex items-center justify-between gap-4 p-4 rounded-2xl bg-brand-surface border border-gray-100">
-          <div>
-            <p class="text-xs font-bold text-brand-black">Incoming Profit</p>
-            <p class="text-[10px] text-brand-muted mt-1">${entry.date}</p>
-          </div>
-          <p class="font-display font-bold text-emerald-600">+${formatSh(Number(entry.amount) || 0)}</p>
-        </div>
-      `).join('');
-    }
-
     // 2 & 3 & 4. GROWTH & MONTHLY GROWTH & 10% TITHE ON GROWTH SYSTEM
     function handleGrowthMonthChange(e) {
       state.selectedGrowthMonth = e.target.value;
@@ -3696,7 +3620,9 @@
     function renderGrowthSection() {
       const selectedMonth = state.selectedGrowthMonth;
       const { monthEntries, monthlyTotal, overallTotal } = getGrowthDataForMonth(selectedMonth);
-      document.getElementById('growth-latest-total').innerText = formatSh(overallTotal);
+      // Existing imported transaction-sales profit is fixed separately at 610,000 Sh.
+      // It is intentionally NOT combined with Incoming Profit.
+      document.getElementById('growth-latest-total').innerText = formatSh(610000);
       document.getElementById('growth-selected-month-total').innerText = formatSh(monthlyTotal);
       document.getElementById('growth-selected-month-name').innerText = `Growth in ${selectedMonth}`;
       // 10% Tithe Calculation on Monthly Growth — always calculated first
@@ -3737,6 +3663,70 @@
         </tr>
       `).join('');
     }
+    // INCOMING PROFIT — NEW PROFIT ONLY, COMPLETELY SEPARATE FROM THE FIXED 610,000 SH
+    function toggleIncomingProfitSection() {
+      const section = document.getElementById('incoming-profit-section');
+      if (!section) return;
+      section.classList.toggle('hidden');
+      if (!section.classList.contains('hidden')) {
+        const input = document.getElementById('incoming-profit-amount');
+        if (input) input.focus();
+        renderIncomingProfit();
+      }
+    }
+
+    function handleIncomingProfit(e) {
+      e.preventDefault();
+      const input = document.getElementById('incoming-profit-amount');
+      const amount = Number(input?.value);
+      if (!Number.isFinite(amount) || amount <= 0) {
+        alert('Please enter a valid incoming profit amount.');
+        return;
+      }
+      if (!state.incomingProfitEntries) state.incomingProfitEntries = [];
+      state.incomingProfitEntries.push({
+        id: 'incoming-profit-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8),
+        date: new Date().toISOString().slice(0, 10),
+        amount
+      });
+      input.value = '';
+      renderIncomingProfit();
+      saveUserState();
+    }
+
+    function deleteIncomingProfit(id) {
+      if (!confirm('Delete this Incoming Profit record?')) return;
+      state.incomingProfitEntries = (state.incomingProfitEntries || []).filter(entry => entry.id !== id);
+      renderIncomingProfit();
+      saveUserState();
+    }
+
+    function renderIncomingProfit() {
+      const entries = Array.isArray(state.incomingProfitEntries) ? state.incomingProfitEntries : [];
+      const total = entries.reduce((sum, entry) => sum + (Number(entry.amount) || 0), 0);
+      const tithe = total * 0.10;
+      const selfLove = total * 0.90;
+      const totalEl = document.getElementById('incoming-profit-total');
+      const titheEl = document.getElementById('incoming-profit-tithe');
+      const selfLoveEl = document.getElementById('incoming-profit-self-love');
+      const countEl = document.getElementById('incoming-profit-count');
+      const recordsEl = document.getElementById('incoming-profit-records');
+      if (!totalEl) return;
+      totalEl.innerText = formatSh(total);
+      titheEl.innerText = formatSh(tithe);
+      selfLoveEl.innerText = formatSh(selfLove);
+      countEl.innerText = `${entries.length} Entries`;
+      if (!entries.length) {
+        recordsEl.innerHTML = '<p class="py-4 text-center text-xs text-brand-muted">No Incoming Profit records yet.</p>';
+        return;
+      }
+      recordsEl.innerHTML = entries.slice().reverse().map(entry => `
+        <div class="flex items-center justify-between gap-3 p-3 rounded-xl bg-gray-50 border border-gray-100">
+          <div><p class="text-xs font-semibold text-brand-black">${entry.date}</p><p class="text-[10px] text-brand-muted">Incoming Profit</p></div>
+          <div class="flex items-center gap-3"><p class="text-sm font-bold text-emerald-600">+${formatSh(Number(entry.amount) || 0)}</p><button type="button" onclick="deleteIncomingProfit('${entry.id}')" class="text-[10px] font-semibold text-red-500 hover:text-red-700">Delete</button></div>
+        </div>`).join('');
+    }
+
     // 5. BUDGET CATEGORY MANAGEMENT (Including Appearich Category)
     function handleCategoryAmountInput(catKey, value) {
       const amount = parseFloat(value) || 0;
@@ -4252,7 +4242,7 @@
       renderDashboard();
       renderIncomeSection();
       renderGrowthSection();
-      renderIncomingProfitSection();
+      renderIncomingProfit();
       renderBudgetSection();
       renderDailyExpensesSection();
       renderInvestmentSection();
