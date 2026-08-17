@@ -3924,7 +3924,7 @@
             <td class="py-3 font-semibold text-emerald-600">${formatSh(sale.paidAmount)}</td>
             <td class="py-3 font-bold text-emerald-600">+${formatSh(profit)}</td>
             <td class="py-3">
-              <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${sale.(paymentStatus === 'FULL' || paymentStatus === 'SOLD') ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'}">
+              <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${sale.paymentStatus === 'FULL' || sale.paymentStatus === 'SOLD' ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'}">
                 ${sale.paymentStatus}
               </span>
             </td>
